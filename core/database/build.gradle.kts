@@ -1,13 +1,13 @@
 @Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
-  id("susu.android.library")
-  id("susu.android.hilt")
+  alias(libs.plugins.susu.android.library)
+  alias(libs.plugins.susu.android.hilt)
   alias(libs.plugins.ksp)
   alias(libs.plugins.protobuf)
 }
 
 android {
-    namespace = "com.susu.core.database"
+  namespace = "com.susu.core.database"
 }
 
 protobuf {
