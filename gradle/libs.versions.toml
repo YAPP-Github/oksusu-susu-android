@@ -55,6 +55,7 @@ androidx-test-ext-junit = "1.1.5"
 
 protobuf-plugin = "0.9.4"
 protobuf = "3.24.4"
+junit-junit = "4.13.2"
 
 [plugins]
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
@@ -153,6 +154,7 @@ androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version
 
 protobuf-kotlin-lite = { group = "com.google.protobuf", name = "protobuf-kotlin-lite", version.ref = "protobuf" }
 protobuf-protoc = { group = "com.google.protobuf", name = "protoc", version.ref = "protobuf" }
+junit-junit = { group = "junit", name = "junit", version.ref = "junit-junit" }
 
 [bundles]
 firebase = ["firebase-analytics"]
