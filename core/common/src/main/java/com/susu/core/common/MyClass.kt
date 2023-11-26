@@ -1,4 +1,3 @@
 package com.susu.core.common
 
-class MyClass {
-}
+class MyClass

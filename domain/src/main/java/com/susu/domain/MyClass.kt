@@ -1,4 +1,3 @@
 package com.susu.domain
 
-class MyClass {
-}
+class MyClass

@@ -10,4 +10,3 @@ android {
 dependencies {
   implementation(projects.domain)
 }
-
