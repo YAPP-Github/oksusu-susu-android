@@ -20,3 +20,4 @@ dependencyResolutionManagement {
 rootProject.name = "Susu"
 include(":app")
 include(":core:model")
+include(":core:common")
