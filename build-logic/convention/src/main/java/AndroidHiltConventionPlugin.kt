@@ -5,19 +5,19 @@ import org.gradle.kotlin.dsl.dependencies
 
 @Suppress("UNUSED")
 class AndroidHiltConventionPlugin : Plugin<Project> {
-    override fun apply(target: Project) {
-        with(target) {
-            with(pluginManager) {
-                apply("com.google.devtools.ksp")
-                apply("dagger.hilt.android.plugin")
-            }
+  override fun apply(target: Project) {
+    with(target) {
+      with(pluginManager) {
+        apply("com.google.devtools.ksp")
+        apply("dagger.hilt.android.plugin")
+      }
 
-            dependencies {
-                "implementation"(libs.findLibrary("hilt.android").get())
-                "ksp"(libs.findLibrary("hilt.compiler").get())
-                "testImplementation"(libs.findLibrary("hilt.testing").get())
-                "kspTest"(libs.findLibrary("hilt.testing.compiler").get())
-            }
-        }
+      dependencies {
+        "implementation"(libs.findLibrary("hilt.android").get())
+        "ksp"(libs.findLibrary("hilt.compiler").get())
+        "testImplementation"(libs.findLibrary("hilt.testing").get())
+        "kspTest"(libs.findLibrary("hilt.testing.compiler").get())
+      }
     }
+  }
 }
