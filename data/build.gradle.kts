@@ -6,3 +6,7 @@ plugins {
 android {
   namespace = "com.susu.data"
 }
+
+dependencies {
+  implementation(projects.domain)
+}

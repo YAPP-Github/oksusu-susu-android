@@ -8,3 +8,7 @@ android {
   namespace = "com.susu.feature"
 }
 
+dependencies {
+  implementation(projects.domain)
+}
+

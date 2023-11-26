@@ -2,6 +2,7 @@ import com.susu.buildlogic.convention.libs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.dependencies
+import org.gradle.kotlin.dsl.project
 
 @Suppress("UNUSED")
 internal class DataConventionPlugin : Plugin<Project> {
@@ -14,6 +15,7 @@ internal class DataConventionPlugin : Plugin<Project> {
       }
 
       dependencies {
+        "implementation"(project(":core:model"))
         "implementation"(libs.findBundle("coroutine").get())
 
         "androidTestImplementation"(libs.findLibrary("junit").get())
