@@ -1,12 +1,12 @@
 @Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
-  alias(libs.plugins.susu.android.feature.compose)
+    alias(libs.plugins.susu.android.feature.compose)
 }
 
 android {
-  namespace = "com.susu.feature"
+    namespace = "com.susu.feature"
 }
 
 dependencies {
-  implementation(projects.domain)
+    implementation(projects.domain)
 }

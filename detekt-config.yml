@@ -27,17 +27,17 @@ formatting:
   MultiLineIfElse:
     active: false
   Indentation:
-    indentSize: 2
+    indentSize: 4
   ParameterListWrapping:
     active: false
   ArgumentListWrapping:
-    indentSize: 2
+    indentSize: 4
     maxLineLength: 150
   KdocWrapping:
     active: true
-    indentSize: 2
+    indentSize: 4
   Wrapping:
-    indentSize: 2
+    indentSize: 4
     active: false
   CommentWrapping:
     active: false

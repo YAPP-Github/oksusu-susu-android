@@ -7,22 +7,22 @@ import org.gradle.kotlin.dsl.project
 @Suppress("UNUSED")
 internal class RemoteConventionPlugin : Plugin<Project> {
 
-  override fun apply(target: Project) {
-    with(target) {
-      with(pluginManager) {
-        apply("susu.android.library")
-        apply("susu.android.hilt")
-      }
+    override fun apply(target: Project) {
+        with(target) {
+            with(pluginManager) {
+                apply("susu.android.library")
+                apply("susu.android.hilt")
+            }
 
-      dependencies {
-        "implementation"(project(":core:model"))
-        "implementation"(project(":core:network"))
+            dependencies {
+                "implementation"(project(":core:model"))
+                "implementation"(project(":core:network"))
 
-        "implementation"(libs.findBundle("coroutine").get())
+                "implementation"(libs.findBundle("coroutine").get())
 
-        "androidTestImplementation"(libs.findLibrary("junit").get())
-        "implementation"(libs.findLibrary("timber").get())
-      }
+                "androidTestImplementation"(libs.findLibrary("junit").get())
+                "implementation"(libs.findLibrary("timber").get())
+            }
+        }
     }
-  }
 }

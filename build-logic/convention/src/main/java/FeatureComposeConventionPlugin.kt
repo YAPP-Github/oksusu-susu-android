@@ -7,24 +7,24 @@ import org.gradle.kotlin.dsl.project
 @Suppress("UNUSED")
 internal class FeatureComposeConventionPlugin : Plugin<Project> {
 
-  override fun apply(target: Project) {
-    with(target) {
-      with(pluginManager) {
-        apply("susu.android.library")
-        apply("susu.android.library.compose")
-        apply("susu.android.hilt")
-      }
+    override fun apply(target: Project) {
+        with(target) {
+            with(pluginManager) {
+                apply("susu.android.library")
+                apply("susu.android.library.compose")
+                apply("susu.android.hilt")
+            }
 
-      dependencies {
-        "implementation"(project(":core:model"))
-        "implementation"(project(":core:ui"))
+            dependencies {
+                "implementation"(project(":core:model"))
+                "implementation"(project(":core:ui"))
 
-        "implementation"(libs.findLibrary("kotlinx.coroutines.android").get())
-        "implementation"(libs.findLibrary("kotlinx.coroutines.core").get())
+                "implementation"(libs.findLibrary("kotlinx.coroutines.android").get())
+                "implementation"(libs.findLibrary("kotlinx.coroutines.core").get())
 
-        "androidTestImplementation"(libs.findLibrary("junit").get())
-        "implementation"(libs.findLibrary("timber").get())
-      }
+                "androidTestImplementation"(libs.findLibrary("junit").get())
+                "implementation"(libs.findLibrary("timber").get())
+            }
+        }
     }
-  }
 }

@@ -6,15 +6,15 @@ import org.gradle.kotlin.dsl.configure
 
 @Suppress("UNUSED")
 class AndroidLibraryComposeConventionPlugin : Plugin<Project> {
-  override fun apply(target: Project) {
-    with(target) {
-      with(pluginManager) {
-        apply("com.android.library")
-      }
+    override fun apply(target: Project) {
+        with(target) {
+            with(pluginManager) {
+                apply("com.android.library")
+            }
 
-      extensions.configure<LibraryExtension> {
-        configureAndroidCompose(this)
-      }
+            extensions.configure<LibraryExtension> {
+                configureAndroidCompose(this)
+            }
+        }
     }
-  }
 }
