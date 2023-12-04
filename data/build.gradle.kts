@@ -2,15 +2,40 @@
 plugins {
     alias(libs.plugins.susu.android.library)
     alias(libs.plugins.susu.android.hilt)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.protobuf)
 }
 
 android {
     namespace = "com.susu.data"
 }
 
+protobuf {
+    protoc {
+        artifact = libs.protobuf.protoc.get().toString()
+    }
+    generateProtoTasks {
+        all().forEach { task ->
+            task.builtins {
+                register("java") {
+                    option("lite")
+                }
+            }
+        }
+    }
+}
+
 dependencies {
     implementation(projects.core.model)
     implementation(projects.domain)
+
+    ksp(libs.room.compiler)
+    implementation(libs.room.runtime)
+    implementation(libs.room.ktx)
+
+    implementation(libs.androidx.datastore.core)
+    implementation(libs.androidx.datastore.preferences)
+    implementation(libs.protobuf.kotlin.lite)
 
     implementation(libs.bundles.coroutine)
     implementation(libs.kotlinx.serialization.json)
