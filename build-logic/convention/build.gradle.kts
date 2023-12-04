@@ -50,9 +50,5 @@ gradlePlugin {
             id = "susu.android.remote"
             implementationClass = "RemoteConventionPlugin"
         }
-        register("data") {
-            id = "susu.android.data"
-            implementationClass = "DataConventionPlugin"
-        }
     }
 }
