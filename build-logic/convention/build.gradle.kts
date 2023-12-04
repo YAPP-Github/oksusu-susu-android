@@ -46,9 +46,5 @@ gradlePlugin {
             id = "susu.android.feature.compose"
             implementationClass = "FeatureComposeConventionPlugin"
         }
-        register("remote") {
-            id = "susu.android.remote"
-            implementationClass = "RemoteConventionPlugin"
-        }
     }
 }
