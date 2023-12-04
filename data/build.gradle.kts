@@ -2,6 +2,7 @@
 plugins {
     alias(libs.plugins.susu.android.library)
     alias(libs.plugins.susu.android.hilt)
+    alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.ksp)
     alias(libs.plugins.protobuf)
 }
@@ -36,6 +37,10 @@ dependencies {
     implementation(libs.androidx.datastore.core)
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.protobuf.kotlin.lite)
+
+    ksp(libs.encrypted.datastore.preference.ksp)
+    implementation(libs.encrypted.datastore.preference.ksp.annotations)
+    implementation(libs.encrypted.datastore.preference.security)
 
     implementation(libs.bundles.coroutine)
     implementation(libs.kotlinx.serialization.json)
