@@ -3,3 +3,8 @@
 plugins {
     alias(libs.plugins.susu.java.library)
 }
+
+dependencies {
+    implementation(libs.hilt.core)
+    implementation(libs.kotlinx.coroutines.core)
+}

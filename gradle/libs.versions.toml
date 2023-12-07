@@ -78,8 +78,6 @@ susu-android-library-compose = { id = "susu.android.library.compose", version = 
 susu-android-hilt = { id = "susu.android.hilt", version = "unspecified" }
 susu-java-library = { id = "susu.java.library", version = "unspecified" }
 susu-android-feature-compose = { id = "susu.android.feature.compose", version = "unspecified" }
-susu-android-remote = { id = "susu.android.remote", version = "unspecified" }
-susu-android-data = { id = "susu.android.data", version = "unspecified" }
 
 
 [libraries]
