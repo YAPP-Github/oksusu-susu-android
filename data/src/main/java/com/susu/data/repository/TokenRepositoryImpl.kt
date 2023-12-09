@@ -49,6 +49,11 @@ class TokenRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun refreshAccessToken(): String? {
+        TODO("Update Access Token by Refresh Token & return true when sucess")
+        TODO("If token refresh failed, make user login again")
+    }
+
     companion object {
         private val ACCESS_TOKEN = stringPreferencesKey("accessToken")
         private val REFRESH_TOKEN = stringPreferencesKey("refreshToken")

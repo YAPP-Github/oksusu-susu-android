@@ -9,4 +9,5 @@ interface TokenRepository {
     suspend fun saveRefreshToken(refreshToken: String)
     suspend fun deleteAccessToken()
     suspend fun deleteRefreshToken()
+    suspend fun refreshAccessToken(): String?
 }
