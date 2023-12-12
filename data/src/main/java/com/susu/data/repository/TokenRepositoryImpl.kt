@@ -4,9 +4,10 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
+import com.susu.data.security.secureEdit
+import com.susu.data.security.secureMap
 import com.susu.domain.repository.TokenRepository
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class TokenRepositoryImpl @Inject constructor(
@@ -14,26 +15,27 @@ class TokenRepositoryImpl @Inject constructor(
 ) : TokenRepository {
 
     override fun getAccessToken(): Flow<String?> {
-        return dataStore.data.map { preference ->
+        return dataStore.data.secureMap { preference ->
             preference[ACCESS_TOKEN]
         }
     }
 
     override fun getRefreshToken(): Flow<String?> {
-        return dataStore.data.map { preference ->
+        return dataStore.data.secureMap { preference ->
             preference[REFRESH_TOKEN]
         }
     }
 
     override suspend fun saveAccessToken(accessToken: String) {
-        dataStore.edit { preference ->
-            preference[ACCESS_TOKEN] = accessToken
+        dataStore.secureEdit(accessToken) { preference, encrypted ->
+            println(encrypted)
+            preference[ACCESS_TOKEN] = encrypted
         }
     }
 
     override suspend fun saveRefreshToken(refreshToken: String) {
-        dataStore.edit { preference ->
-            preference[REFRESH_TOKEN] = refreshToken
+        dataStore.secureEdit(refreshToken) { preference, encrypted ->
+            preference[REFRESH_TOKEN] = encrypted
         }
     }
 
@@ -50,7 +52,7 @@ class TokenRepositoryImpl @Inject constructor(
     }
 
     override suspend fun refreshAccessToken(): String? {
-        TODO("Update Access Token by Refresh Token & return true when sucess")
+        TODO("Update Access Token by Refresh Token")
         TODO("If token refresh failed, make user login again")
     }
 
