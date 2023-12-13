@@ -23,9 +23,9 @@ object DataStoreModule {
     fun provideDataStore(@ApplicationContext context: Context): DataStore<Preferences> {
         return PreferenceDataStoreFactory.create(
             corruptionHandler = ReplaceFileCorruptionHandler(
-                produceNewData = { emptyPreferences() }
+                produceNewData = { emptyPreferences() },
             ),
-            produceFile = { context.preferencesDataStoreFile(DATASTORE_NAME) }
+            produceFile = { context.preferencesDataStoreFile(DATASTORE_NAME) },
         )
     }
 
