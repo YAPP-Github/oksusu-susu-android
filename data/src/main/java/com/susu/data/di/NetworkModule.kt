@@ -50,8 +50,9 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun provideRetrofit(): Retrofit = Retrofit.Builder()
+    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
         .baseUrl(BASE_URL)
         .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
+        .client(okHttpClient)
         .build()
 }
