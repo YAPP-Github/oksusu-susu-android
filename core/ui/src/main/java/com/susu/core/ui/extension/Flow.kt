@@ -1,4 +1,4 @@
-package com.susu.core.ui.base.extension
+package com.susu.core.ui.extension
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
