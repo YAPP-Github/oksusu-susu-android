@@ -3,7 +3,6 @@ package com.susu.data.di
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.susu.data.network.TokenAuthenticator
 import com.susu.data.network.TokenInterceptor
-import com.susu.domain.repository.TokenRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -37,16 +36,6 @@ object NetworkModule {
             .authenticator(tokenAuthenticator)
             .build()
     }
-
-    @Singleton
-    @Provides
-    fun provideTokenInterceptor(tokenRepository: TokenRepository): TokenInterceptor =
-        TokenInterceptor(tokenRepository)
-
-    @Singleton
-    @Provides
-    fun provideTokenAuthenticator(tokenRepository: TokenRepository): TokenAuthenticator =
-        TokenAuthenticator(tokenRepository)
 
     @Singleton
     @Provides
