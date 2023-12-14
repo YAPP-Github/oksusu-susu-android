@@ -39,14 +39,9 @@ class TokenRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun deleteAccessToken() {
+    override suspend fun deleteTokens() {
         dataStore.edit { preference ->
             preference.remove(ACCESS_TOKEN)
-        }
-    }
-
-    override suspend fun deleteRefreshToken() {
-        dataStore.edit { preference ->
             preference.remove(REFRESH_TOKEN)
         }
     }
