@@ -26,8 +26,8 @@ inline fun <reified T> Flow<Preferences>.secureMap(
     crossinline fetchValue: (Preferences) -> String?,
 ): Flow<T?> {
     return map { pref ->
-        fetchValue(pref)?.let {
-            val decryptedValue = SecurityUtil.decrypt(it.split(SEPARATOR).map { it.toByte() }.toByteArray())
+        fetchValue(pref)?.let { encryptedString ->
+            val decryptedValue = SecurityUtil.decrypt(encryptedString.split(SEPARATOR).map { it.toByte() }.toByteArray())
             json.decodeFromString(decryptedValue)
         }
     }
