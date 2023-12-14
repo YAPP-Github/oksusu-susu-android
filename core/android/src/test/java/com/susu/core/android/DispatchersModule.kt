@@ -1,4 +1,4 @@
-package com.susu.core.common
+package com.susu.core.android
 
 import dagger.Module
 import dagger.Provides
