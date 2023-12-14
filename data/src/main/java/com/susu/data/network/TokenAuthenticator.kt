@@ -1,7 +1,7 @@
 package com.susu.data.network
 
 import com.susu.domain.repository.TokenRepository
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.runBlocking
 import okhttp3.Authenticator
 import okhttp3.Request
@@ -14,7 +14,7 @@ class TokenAuthenticator @Inject constructor(
 ) : Authenticator {
     override fun authenticate(route: Route?, response: Response): Request? {
         // 1. refresh token으로 갱신 요청
-        val refreshToken = runBlocking { tokenRepository.getRefreshToken().first() }
+        val refreshToken = runBlocking { tokenRepository.getRefreshToken().firstOrNull() }
 
         if (refreshToken == null) {
             response.close()

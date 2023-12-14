@@ -1,7 +1,7 @@
 package com.susu.data.network
 
 import com.susu.domain.repository.TokenRepository
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Response
@@ -12,7 +12,7 @@ class TokenInterceptor @Inject constructor(
 ) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val token = runBlocking {
-            tokenRepository.getAccessToken().first()
+            tokenRepository.getAccessToken().firstOrNull()
         }
         val request = chain.request().newBuilder().apply {
             addHeader("Authorization", "Bearer $token")
