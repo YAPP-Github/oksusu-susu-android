@@ -4,7 +4,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.MutablePreferences
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
-import com.susu.data.Singleton
+import com.susu.data.JsonSingleton
 import com.susu.data.security.SecurityUtil
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -29,7 +29,7 @@ inline fun <reified T> Flow<Preferences>.secureMap(
     return map { pref ->
         fetchValue(pref)?.let { encryptedString ->
             val decryptedValue = SecurityUtil.decrypt(encryptedString.split(SEPARATOR).map { it.toByte() }.toByteArray())
-            Singleton.json.decodeFromString(decryptedValue)
+            JsonSingleton.instance.decodeFromString(decryptedValue)
         }
     }
 }
