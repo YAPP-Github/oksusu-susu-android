@@ -4,9 +4,9 @@ import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFact
 import com.susu.data.Constants.RETROFIT_TAG
 import com.susu.data.extension.isJsonArray
 import com.susu.data.extension.isJsonObject
+import com.susu.data.extension.json
 import com.susu.data.network.TokenAuthenticator
 import com.susu.data.network.TokenInterceptor
-import com.susu.data.extension.json
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
