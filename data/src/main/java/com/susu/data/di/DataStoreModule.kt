@@ -29,5 +29,5 @@ object DataStoreModule {
         )
     }
 
-    private const val DATASTORE_NAME = "datastore"
+    private const val DATASTORE_NAME = "susu-datastore"
 }
