@@ -4,8 +4,8 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
-import com.susu.data.security.secureEdit
-import com.susu.data.security.secureMap
+import com.susu.data.extension.secureEdit
+import com.susu.data.extension.secureMap
 import com.susu.domain.repository.TokenRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
