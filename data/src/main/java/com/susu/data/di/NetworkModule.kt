@@ -3,7 +3,6 @@ package com.susu.data.di
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.susu.data.Constants.RETROFIT_TAG
 import com.susu.data.extension.isJsonArray
-
 import com.susu.data.extension.isJsonObject
 import com.susu.data.network.TokenAuthenticator
 import com.susu.data.network.TokenInterceptor
