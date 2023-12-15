@@ -28,8 +28,7 @@ class TokenAuthenticator @Inject constructor(
             // 2-1. 정상적으로 받지 못하면 request token 까지 만료된 것.
             if (refreshedAccessToken == null) {
                 // 삭제하여 다시 로그인하도록 유도
-                tokenRepository.deleteRefreshToken()
-                tokenRepository.deleteAccessToken()
+                tokenRepository.deleteTokens()
                 response.close()
                 null
             } else {
