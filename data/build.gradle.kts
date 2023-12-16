@@ -9,6 +9,9 @@ plugins {
 
 android {
     namespace = "com.susu.data"
+    defaultConfig {
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
 }
 
 protobuf {

@@ -27,5 +27,7 @@ dependencies {
 
     implementation(projects.feature.loginsignup)
 
+    implementation(projects.domain)
+    implementation(projects.data)
     implementation(libs.timber)
 }
