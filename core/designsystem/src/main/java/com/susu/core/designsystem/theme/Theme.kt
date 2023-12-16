@@ -11,8 +11,9 @@ fun SusuTheme(
     content: @Composable () -> Unit,
 ) {
     CompositionLocalProvider(
-        LocalColorScheme provides LightColorScheme,
         LocalTypography provides Typography,
+        LocalColorScheme provides LightColorScheme,
+        LocalSpacing provides Spacing,
     ) {
         MaterialTheme(
             colorScheme = lightColorScheme(
@@ -33,4 +34,9 @@ object SusuTheme {
         @Composable
         @ReadOnlyComposable
         get() = LocalColorScheme.current
+
+    val spacing: SusuSpacing
+        @Composable
+        @ReadOnlyComposable
+        get() = LocalSpacing.current
 }
