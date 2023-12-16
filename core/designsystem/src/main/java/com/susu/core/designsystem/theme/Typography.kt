@@ -40,71 +40,71 @@ private val pretendardTextStyle = pretendardStyle.copy(
 
 internal val Typography = SusuTypography(
     title_xxxxl = pretendardTitleStyle.copy(
-        fontSize = 40.sp
+        fontSize = 40.sp,
     ),
     title_xxxl = pretendardTitleStyle.copy(
-        fontSize = 36.sp
+        fontSize = 36.sp,
     ),
     title_xxl = pretendardTitleStyle.copy(
-        fontSize = 32.sp
+        fontSize = 32.sp,
     ),
     title_xl = pretendardTitleStyle.copy(
-        fontSize = 28.sp
+        fontSize = 28.sp,
     ),
     title_l = pretendardTitleStyle.copy(
-        fontSize = 24.sp
+        fontSize = 24.sp,
     ),
     title_m = pretendardTitleStyle.copy(
-        fontSize = 20.sp
+        fontSize = 20.sp,
     ),
     title_s = pretendardTitleStyle.copy(
-        fontSize = 18.sp
+        fontSize = 18.sp,
     ),
     title_xs = pretendardTitleStyle.copy(
-        fontSize = 16.sp
+        fontSize = 16.sp,
     ),
     title_xxs = pretendardTitleStyle.copy(
-        fontSize = 14.sp
+        fontSize = 14.sp,
     ),
     title_xxxs = pretendardTitleStyle.copy(
-        fontSize = 12.sp
+        fontSize = 12.sp,
     ),
     title_xxxxs = pretendardTitleStyle.copy(
-        fontSize = 10.sp
+        fontSize = 10.sp,
     ),
 
     text_xxxxl = pretendardTextStyle.copy(
-        fontSize = 40.sp
+        fontSize = 40.sp,
     ),
     text_xxxl = pretendardTextStyle.copy(
-        fontSize = 36.sp
+        fontSize = 36.sp,
     ),
     text_xxl = pretendardTextStyle.copy(
-        fontSize = 32.sp
+        fontSize = 32.sp,
     ),
     text_xl = pretendardTextStyle.copy(
-        fontSize = 28.sp
+        fontSize = 28.sp,
     ),
     text_l = pretendardTextStyle.copy(
-        fontSize = 24.sp
+        fontSize = 24.sp,
     ),
     text_m = pretendardTextStyle.copy(
-        fontSize = 20.sp
+        fontSize = 20.sp,
     ),
     text_s = pretendardTextStyle.copy(
-        fontSize = 18.sp
+        fontSize = 18.sp,
     ),
     text_xs = pretendardTextStyle.copy(
-        fontSize = 16.sp
+        fontSize = 16.sp,
     ),
     text_xxs = pretendardTextStyle.copy(
-        fontSize = 14.sp
+        fontSize = 14.sp,
     ),
     text_xxxs = pretendardTextStyle.copy(
-        fontSize = 12.sp
+        fontSize = 12.sp,
     ),
     text_xxxxs = pretendardTextStyle.copy(
-        fontSize = 10.sp
+        fontSize = 10.sp,
     ),
 )
 
