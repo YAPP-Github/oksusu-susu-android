@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.susu.feature.signup"
+    namespace = "com.susu.feature.loginsignup"
 }
 
 dependencies {
