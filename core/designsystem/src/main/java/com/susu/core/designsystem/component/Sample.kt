@@ -12,6 +12,7 @@ fun Sample() {
         Text(
             text = "title_xxxxl",
             style = SusuTheme.typography.title_xxxxl,
+            color = SusuTheme.colorScheme.accent,
         )
     }
 }

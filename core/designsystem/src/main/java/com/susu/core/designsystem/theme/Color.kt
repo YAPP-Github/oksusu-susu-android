@@ -1,5 +1,7 @@
 package com.susu.core.designsystem.theme
 
+import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 
 val Gray10 = Color(0xFFFFFFFF)
@@ -48,3 +50,30 @@ val Red70 = Color(0xFFCF3200)
 val Red80 = Color(0xFFA62800)
 val Red90 = Color(0xFF761C00)
 val Red100 = Color(0xFF4B1200)
+
+internal val LightColorScheme = SusuColorScheme(
+    background10 = Gray10,
+    background15 = Gray15,
+    primary = Orange60,
+    accent = Blue60,
+    error = Red60,
+)
+
+@Immutable
+data class SusuColorScheme(
+    val background10: Color,
+    val background15: Color,
+    val primary: Color,
+    val accent: Color,
+    val error: Color,
+)
+
+val LocalColorScheme = staticCompositionLocalOf {
+    SusuColorScheme(
+        background10 = Color.Unspecified,
+        background15 = Color.Unspecified,
+        primary = Color.Unspecified,
+        accent = Color.Unspecified,
+        error = Color.Unspecified,
+    )
+}
