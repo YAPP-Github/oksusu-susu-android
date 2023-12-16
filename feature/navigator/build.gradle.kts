@@ -6,3 +6,12 @@ plugins {
 android {
     namespace = "com.susu.feature.navigator"
 }
+
+dependencies {
+    implementation(projects.feature.community)
+    implementation(projects.feature.loginsignup)
+    implementation(projects.feature.mypage)
+    implementation(projects.feature.received)
+    implementation(projects.feature.sent)
+    implementation(projects.feature.statistics)
+}
