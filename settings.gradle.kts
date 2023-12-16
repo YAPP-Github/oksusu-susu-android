@@ -19,12 +19,11 @@ dependencyResolutionManagement {
 
 rootProject.name = "Susu"
 include(":app")
+include(":core:android")
 include(":core:model")
 include(":core:common")
 include(":core:designsystem")
 include(":core:ui")
 include(":data")
 include(":domain")
-include(":feature")
-include(":core:android")
 include(":feature:loginsignup")
