@@ -20,7 +20,7 @@ internal val pretendardFamily = FontFamily(
 
 private val pretendardStyle = TextStyle(
     fontFamily = pretendardFamily,
-    letterSpacing = TextUnit(0.98f, TextUnitType.Sp),
+    letterSpacing = TextUnit(-0.02f, TextUnitType.Sp),
     platformStyle = PlatformTextStyle(
         includeFontPadding = false,
     ),
