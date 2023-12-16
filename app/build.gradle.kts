@@ -16,6 +16,16 @@ android {
 }
 
 dependencies {
+    implementation(projects.core.android)
+    implementation(projects.core.common)
+    implementation(projects.core.designsystem)
+    implementation(projects.core.model)
+    implementation(projects.core.ui)
+
+    implementation(projects.data)
+    implementation(projects.domain)
+
+    implementation(projects.feature.loginsignup)
 
     implementation(libs.timber)
 }
