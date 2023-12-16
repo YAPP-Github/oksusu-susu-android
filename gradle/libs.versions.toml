@@ -117,6 +117,7 @@ hilt-testing-compiler = { module = "com.google.dagger:hilt-android-compiler", ve
 
 kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinx-coroutines" }
 kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
+kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinx-coroutines"}
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
 kotlinx-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "kotlinx-datetime" }
 
@@ -166,10 +167,11 @@ protobuf-kotlin-lite = { group = "com.google.protobuf", name = "protobuf-kotlin-
 protobuf-protoc = { group = "com.google.protobuf", name = "protoc", version.ref = "protobuf" }
 junit-junit = { group = "junit", name = "junit", version.ref = "junit-junit" }
 
+
 [bundles]
 firebase = ["firebase-analytics"]
 androidx-lifecycle = ["androidx-lifecycle-runtime-ktx", "androidx-lifecycle-viewmodel-ktx"]
 androidx-navigation = ["navigation-fragment-ktx", "navigation-ui-ktx"]
-coroutine = ["kotlinx-coroutines-android", "kotlinx-coroutines-core"]
+coroutine = ["kotlinx-coroutines-android", "kotlinx-coroutines-core", "kotlinx-coroutines-test"]
 compose = ["ui", "ui-graphics", "ui-tooling-preview", "material3-compose", "coil-compose", "ui-foundation", "activity-compose", "lifecycle-compose", "navigation-compose"]
 compose-debug = ["ui-tooling", "ui-test-manifest" ]
