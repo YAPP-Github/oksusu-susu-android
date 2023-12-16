@@ -6,7 +6,3 @@ plugins {
 android {
     namespace = "com.susu.feature.loginsignup"
 }
-
-dependencies {
-    implementation(projects.domain)
-}
