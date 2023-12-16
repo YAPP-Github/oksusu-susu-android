@@ -108,6 +108,7 @@ internal val Typography = SusuTypography(
     ),
 )
 
+@Suppress("ConstructorParameterNaming")
 @Immutable
 data class SusuTypography(
     val title_xxxxl: TextStyle,
