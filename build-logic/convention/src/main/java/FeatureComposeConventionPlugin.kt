@@ -18,6 +18,8 @@ internal class FeatureComposeConventionPlugin : Plugin<Project> {
             dependencies {
                 "implementation"(project(":core:model"))
                 "implementation"(project(":core:ui"))
+                "implementation"(project(":core:designsystem"))
+                "implementation"(project(":domain"))
 
                 "implementation"(libs.findLibrary("kotlinx.coroutines.android").get())
                 "implementation"(libs.findLibrary("kotlinx.coroutines.core").get())

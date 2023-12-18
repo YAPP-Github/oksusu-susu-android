@@ -1,7 +1,6 @@
 @Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
     alias(libs.plugins.susu.android.application)
-    alias(libs.plugins.susu.android.application.compose)
     alias(libs.plugins.susu.android.hilt)
 }
 
@@ -16,8 +15,6 @@ android {
 }
 
 dependencies {
-
-    implementation(projects.domain)
-    implementation(projects.data)
+    implementation(projects.feature.navigator)
     implementation(libs.timber)
 }
