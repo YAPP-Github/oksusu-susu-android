@@ -2,8 +2,6 @@
 plugins {
     alias(libs.plugins.susu.android.application)
     alias(libs.plugins.susu.android.hilt)
-    alias(libs.plugins.google.services)
-    alias(libs.plugins.firebase.crashlytics)
 }
 
 android {
@@ -22,6 +20,7 @@ android {
 
 dependencies {
     implementation(projects.feature.navigator)
+    implementation(libs.kakao.sdk.user)
 
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.crashlytics)
