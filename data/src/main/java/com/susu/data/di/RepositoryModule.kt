@@ -1,6 +1,8 @@
 package com.susu.data.di
 
+import com.susu.data.repository.AuthRepositoryImpl
 import com.susu.data.repository.TokenRepositoryImpl
+import com.susu.domain.repository.AuthRepository
 import com.susu.domain.repository.TokenRepository
 import dagger.Binds
 import dagger.Module
@@ -15,4 +17,9 @@ abstract class RepositoryModule {
     abstract fun bindTokenRepository(
         tokenRepositoryImpl: TokenRepositoryImpl,
     ): TokenRepository
+
+    @Binds
+    abstract fun bindAuthRepository(
+        authRepositoryImpl: AuthRepositoryImpl,
+    ): AuthRepository
 }
