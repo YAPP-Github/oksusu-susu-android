@@ -8,16 +8,46 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.susu.core.designsystem.R
-import com.susu.core.designsystem.component.button.basic.BasicFilledButton
-import com.susu.core.designsystem.component.button.basic.FilledButtonColor
+import com.susu.core.designsystem.component.button.basic.BasicButton
+import com.susu.core.designsystem.theme.Gray10
+import com.susu.core.designsystem.theme.Gray100
+import com.susu.core.designsystem.theme.Gray30
+import com.susu.core.designsystem.theme.Orange20
+import com.susu.core.designsystem.theme.Orange60
 import com.susu.core.designsystem.theme.SusuTheme
+
+enum class FilledButtonColor(
+    val activeContentColor: Color,
+    val inactiveContentColor: Color,
+    val activeBackgroundColor: Color,
+    val inactiveBackgroundColor: Color,
+    val rippleColor: Color,
+) {
+    Black(
+        activeContentColor = Gray10,
+        inactiveContentColor = Gray10,
+        activeBackgroundColor = Gray100,
+        inactiveBackgroundColor = Gray30,
+        rippleColor = Gray10,
+    ),
+    Orange(
+        activeContentColor = Gray10,
+        inactiveContentColor = Gray10,
+        activeBackgroundColor = Orange60,
+        inactiveBackgroundColor = Orange20,
+        rippleColor = Color.Unspecified,
+    )
+}
 
 @Composable
 fun SusuFilledButton(
     modifier: Modifier = Modifier,
+    shape: Shape = RoundedCornerShape(4.dp),
     text: String = "",
     color: FilledButtonColor,
     style: @Composable () -> ButtonStyle,
@@ -29,21 +59,25 @@ fun SusuFilledButton(
     onClick: () -> Unit = {},
 ) {
     val (paddingValues, iconSpacing, textStyle) = style()
-    BasicFilledButton(
-        modifier = modifier,
-        shape = RoundedCornerShape(4.dp),
-        text = text,
-        color = color,
-        padding = paddingValues,
-        textStyle = textStyle,
-        leftIcon = leftIcon,
-        leftIconContentDescription = leftIconContentDescription,
-        rightIcon = rightIcon,
-        rightIconContentDescription = rightIconContentDescription,
-        iconSpacing = iconSpacing,
-        isActive = isActive,
-        onClick = onClick,
-    )
+    color.run {
+        BasicButton(
+            modifier = modifier,
+            shape = shape,
+            text = text,
+            textStyle = textStyle,
+            contentColor = if (isActive) activeContentColor else inactiveContentColor,
+            rippleColor = rippleColor,
+            backgroundColor = if (isActive) activeBackgroundColor else inactiveBackgroundColor,
+            leftIcon = leftIcon,
+            leftIconContentDescription = leftIconContentDescription,
+            rightIcon = rightIcon,
+            rightIconContentDescription = rightIconContentDescription,
+            padding = paddingValues,
+            iconSpacing = iconSpacing,
+            isActive = isActive,
+            onClick = onClick,
+        )
+    }
 }
 
 @Preview(showBackground = true)
