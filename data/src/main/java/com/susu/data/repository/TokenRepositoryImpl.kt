@@ -4,6 +4,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
+import com.susu.core.model.Token
 import com.susu.data.extension.secureEdit
 import com.susu.data.extension.secureMap
 import com.susu.domain.repository.TokenRepository
@@ -26,15 +27,12 @@ class TokenRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun saveAccessToken(accessToken: String) {
-        dataStore.secureEdit(accessToken) { preference, encrypted ->
+    override suspend fun saveTokens(token: Token) {
+        dataStore.secureEdit(token.accessToken) { preference, encrypted ->
             println(encrypted)
             preference[ACCESS_TOKEN] = encrypted
         }
-    }
-
-    override suspend fun saveRefreshToken(refreshToken: String) {
-        dataStore.secureEdit(refreshToken) { preference, encrypted ->
+        dataStore.secureEdit(token.refreshToken) { preference, encrypted ->
             preference[REFRESH_TOKEN] = encrypted
         }
     }
@@ -44,11 +42,6 @@ class TokenRepositoryImpl @Inject constructor(
             preference.remove(ACCESS_TOKEN)
             preference.remove(REFRESH_TOKEN)
         }
-    }
-
-    override suspend fun refreshAccessToken(): String? {
-        TODO("Update Access Token by Refresh Token")
-        TODO("If token refresh failed, make user login again")
     }
 
     companion object {
