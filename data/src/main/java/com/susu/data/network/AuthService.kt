@@ -9,6 +9,7 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface AuthService {
     @POST("oauth/{provider}/login")
@@ -20,6 +21,7 @@ interface AuthService {
     @POST("oauth/{provider}/sign-up")
     suspend fun signUp(
         @Path("provider") provider: String,
+        @Query("accessToken") accessToken: String,
         @Body user: UserEntity,
     ): TokenEntity
 

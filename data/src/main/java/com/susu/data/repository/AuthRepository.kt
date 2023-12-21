@@ -23,10 +23,12 @@ class AuthRepositoryImpl @Inject constructor(
     }
 
     override suspend fun signUp(
+        snsAccessToken: String,
         user: User,
     ) = runCatching {
         authService.signUp(
             provider = SnsProviders.Kakao.name,
+            accessToken = snsAccessToken,
             user = user.toData(),
         ).toDomain()
     }
@@ -46,7 +48,7 @@ class AuthRepositoryImpl @Inject constructor(
 
     override suspend fun refreshAccessToken(refreshToken: String) = runCatching {
         authService.refreshAccessToken(
-            refreshTokenRequest = RefreshTokenRequest(refreshToken)
+            refreshTokenRequest = RefreshTokenRequest(refreshToken),
         ).toDomain()
     }
 }
