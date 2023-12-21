@@ -41,70 +41,92 @@ private val pretendardTextStyle = pretendardStyle.copy(
 internal val Typography = SusuTypography(
     title_xxxxl = pretendardTitleStyle.copy(
         fontSize = 40.sp,
+        lineHeight = 56.sp,
     ),
     title_xxxl = pretendardTitleStyle.copy(
         fontSize = 36.sp,
+        lineHeight = 52.sp,
     ),
     title_xxl = pretendardTitleStyle.copy(
         fontSize = 32.sp,
+        lineHeight = 48.sp,
     ),
     title_xl = pretendardTitleStyle.copy(
         fontSize = 28.sp,
+        lineHeight = 44.sp,
     ),
     title_l = pretendardTitleStyle.copy(
         fontSize = 24.sp,
+        lineHeight = 40.sp,
     ),
     title_m = pretendardTitleStyle.copy(
         fontSize = 20.sp,
+        lineHeight = 32.sp,
     ),
     title_s = pretendardTitleStyle.copy(
         fontSize = 18.sp,
+        lineHeight = 30.sp,
     ),
     title_xs = pretendardTitleStyle.copy(
         fontSize = 16.sp,
+        lineHeight = 28.sp,
     ),
     title_xxs = pretendardTitleStyle.copy(
         fontSize = 14.sp,
+        lineHeight = 24.sp,
     ),
     title_xxxs = pretendardTitleStyle.copy(
         fontSize = 12.sp,
+        lineHeight = 20.sp,
     ),
     title_xxxxs = pretendardTitleStyle.copy(
         fontSize = 10.sp,
+        lineHeight = 16.sp,
     ),
 
     text_xxxxl = pretendardTextStyle.copy(
         fontSize = 40.sp,
+        lineHeight = 56.sp,
     ),
     text_xxxl = pretendardTextStyle.copy(
         fontSize = 36.sp,
+        lineHeight = 52.sp,
     ),
     text_xxl = pretendardTextStyle.copy(
         fontSize = 32.sp,
+        lineHeight = 48.sp,
     ),
     text_xl = pretendardTextStyle.copy(
         fontSize = 28.sp,
+        lineHeight = 44.sp,
     ),
     text_l = pretendardTextStyle.copy(
         fontSize = 24.sp,
+        lineHeight = 40.sp,
     ),
     text_m = pretendardTextStyle.copy(
         fontSize = 20.sp,
+        lineHeight = 32.sp,
     ),
     text_s = pretendardTextStyle.copy(
         fontSize = 18.sp,
+        lineHeight = 30.sp,
     ),
     text_xs = pretendardTextStyle.copy(
         fontSize = 16.sp,
+        lineHeight = 28.sp,
     ),
     text_xxs = pretendardTextStyle.copy(
         fontSize = 14.sp,
+        lineHeight = 24.sp,
     ),
     text_xxxs = pretendardTextStyle.copy(
         fontSize = 12.sp,
+        lineHeight = 20.sp,
     ),
     text_xxxxs = pretendardTextStyle.copy(
         fontSize = 10.sp,
+        lineHeight = 16.sp,
     ),
 )
 
