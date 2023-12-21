@@ -14,11 +14,11 @@ class AuthRepositoryImpl @Inject constructor(
     private val authService: AuthService,
 ) : AuthRepository {
     override suspend fun login(
-        snsAccessToken: String,
+        accessToken: String,
     ) = kotlin.runCatching {
         authService.login(
             provider = SnsProviders.Kakao.name,
-            accessTokenRequest = AccessTokenRequest(snsAccessToken),
+            accessTokenRequest = AccessTokenRequest(accessToken),
         ).toDomain()
     }
 
@@ -34,11 +34,11 @@ class AuthRepositoryImpl @Inject constructor(
     }
 
     override suspend fun canRegister(
-        snsAccessToken: String,
+        accessToken: String,
     ): Boolean {
         return authService.checkValidRegister(
             provider = SnsProviders.Kakao.name,
-            accessTokenRequest = AccessTokenRequest(snsAccessToken),
+            accessTokenRequest = AccessTokenRequest(accessToken),
         ).canRegister
     }
 
