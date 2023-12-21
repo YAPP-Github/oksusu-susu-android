@@ -4,6 +4,7 @@ import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFact
 import com.susu.data.Constants.RETROFIT_TAG
 import com.susu.data.extension.isJsonArray
 import com.susu.data.extension.isJsonObject
+import com.susu.data.network.AuthService
 import com.susu.data.network.TokenAuthenticator
 import com.susu.data.network.TokenInterceptor
 import dagger.Module
@@ -23,7 +24,7 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 
-    private const val BASE_URL = ""
+    private const val BASE_URL = "https://api.oksusu.site/api/v1/"
 
     @Singleton
     @Provides
@@ -73,5 +74,11 @@ object NetworkModule {
             coerceInputValues = true
             ignoreUnknownKeys = true
         }
+    }
+
+    @Singleton
+    @Provides
+    fun provideAuthService(retrofit: Retrofit): AuthService {
+        return retrofit.create(AuthService::class.java)
     }
 }
