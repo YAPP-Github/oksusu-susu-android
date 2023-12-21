@@ -1,20 +1,17 @@
 package com.susu.core.designsystem.component.button
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowLeft
-import androidx.compose.material.icons.filled.KeyboardArrowRight
-import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.susu.core.designsystem.R
 import com.susu.core.designsystem.component.button.basic.BasicBlackFilledButton
-import com.susu.core.designsystem.theme.Gray10
 import com.susu.core.designsystem.theme.SusuTheme
 
 @Composable
@@ -22,8 +19,10 @@ fun SusuBlackFilledButton(
     modifier: Modifier = Modifier,
     text: String = "",
     style: @Composable () -> ButtonStyle,
-    leftIcon: (@Composable () -> Unit)? = null,
-    rightIcon: (@Composable () -> Unit)? = null,
+    @DrawableRes leftIcon: Int? = null,
+    leftIconContentDescription: String? = null,
+    @DrawableRes rightIcon: Int? = null,
+    rightIconContentDescription: String? = null,
     isActive: Boolean = true,
     onClick: () -> Unit = {},
 ) {
@@ -35,7 +34,9 @@ fun SusuBlackFilledButton(
         padding = paddingValues,
         textStyle = textStyle,
         leftIcon = leftIcon,
+        leftIconContentDescription = leftIconContentDescription,
         rightIcon = rightIcon,
+        rightIconContentDescription = rightIconContentDescription,
         iconSpacing = iconSpacing,
         isActive = isActive,
         onClick = onClick,
@@ -81,20 +82,8 @@ private fun SusuBlackFilledButtonPreview(
             SusuBlackFilledButton(
                 style = large,
                 text = "Button",
-                rightIcon = {
-                    Icon(
-                        imageVector = Icons.Default.KeyboardArrowRight,
-                        contentDescription = null,
-                        tint = Gray10,
-                    )
-                },
-                leftIcon = {
-                    Icon(
-                        imageVector = Icons.Default.KeyboardArrowLeft,
-                        contentDescription = null,
-                        tint = Gray10,
-                    )
-                },
+                rightIcon = R.drawable.ic_arrow_left,
+                leftIcon = R.drawable.ic_arrow_left,
             )
 
             SusuBlackFilledButton(

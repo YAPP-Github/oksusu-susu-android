@@ -5,12 +5,12 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -19,6 +19,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -32,14 +33,16 @@ fun BasicButton(
     shape: Shape = RectangleShape,
     text: String = "",
     textStyle: TextStyle = TextStyle.Default,
-    textColor: Color = Color.Unspecified,
+    contentColor: Color = Color.Unspecified,
     rippleColor: Color = Color.Unspecified,
     borderColor: Color = Color.Unspecified,
     borderWidth: Dp = 0.dp,
     backgroundColor: Color = Color.Unspecified,
     padding: PaddingValues = PaddingValues(0.dp),
-    leftIcon: (@Composable () -> Unit)? = null,
-    rightIcon: (@Composable () -> Unit)? = null,
+    @DrawableRes leftIcon: Int? = null,
+    leftIconContentDescription: String? = null,
+    @DrawableRes rightIcon: Int? = null,
+    rightIconContentDescription: String? = null,
     iconSpacing: Dp = 0.dp,
     isActive: Boolean = true,
     onClick: () -> Unit = {},
@@ -67,15 +70,29 @@ fun BasicButton(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(iconSpacing),
         ) {
-            leftIcon?.invoke()
+            leftIcon?.let {
+                Icon(
+                    modifier = Modifier.height(textStyle.lineHeight.value.dp),
+                    painter = painterResource(id = it),
+                    contentDescription = leftIconContentDescription,
+                    tint = contentColor,
+                )
+            }
 
             Text(
                 text = text,
                 style = textStyle,
-                color = textColor,
+                color = contentColor,
             )
 
-            rightIcon?.invoke()
+            rightIcon?.let {
+                Icon(
+                    modifier = Modifier.height(textStyle.lineHeight.value.dp),
+                    painter = painterResource(id = it),
+                    contentDescription = rightIconContentDescription,
+                    tint = contentColor,
+                )
+            }
         }
     }
 }

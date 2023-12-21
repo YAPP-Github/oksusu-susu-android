@@ -1,5 +1,6 @@
 package com.susu.core.designsystem.component.button.basic
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -20,8 +21,10 @@ fun BasicBlackFilledButton(
     shape: Shape = RectangleShape,
     text: String = "",
     textStyle: TextStyle = TextStyle.Default,
-    leftIcon: (@Composable () -> Unit)? = null,
-    rightIcon: (@Composable () -> Unit)? = null,
+    @DrawableRes leftIcon: Int? = null,
+    leftIconContentDescription: String? = null,
+    @DrawableRes rightIcon: Int? = null,
+    rightIconContentDescription: String? = null,
     iconSpacing: Dp = 0.dp,
     padding: PaddingValues = PaddingValues(0.dp),
     isActive: Boolean = true,
@@ -32,11 +35,13 @@ fun BasicBlackFilledButton(
         shape = shape,
         text = text,
         textStyle = textStyle,
-        textColor = Gray10,
+        contentColor = Gray10,
         rippleColor = Gray10,
         backgroundColor = if (isActive) Gray100 else Gray30,
         leftIcon = leftIcon,
+        leftIconContentDescription = leftIconContentDescription,
         rightIcon = rightIcon,
+        rightIconContentDescription = rightIconContentDescription,
         padding = padding,
         iconSpacing = iconSpacing,
         isActive = isActive,
