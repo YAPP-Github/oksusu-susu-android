@@ -6,31 +6,31 @@ import com.kakao.sdk.common.model.AuthError
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
+import com.susu.domain.util.KakaoLoginProvider
 import dagger.hilt.android.qualifiers.ApplicationContext
+import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class KakaoLoginHelper(
+class KakaoLoginProviderImpl @Inject constructor(
     @ApplicationContext private val context: Context,
-) {
+) : KakaoLoginProvider {
 
-    fun hasKakaoLoginHistory(): Boolean {
+    override fun hasKakaoLoginHistory(): Boolean {
         return AuthApiClient.instance.hasToken()
     }
 
-    fun login(
+    override fun login(
         onSuccess: (String) -> Unit,
         onFailed: (Throwable?) -> Unit,
     ) {
         if (UserApiClient.instance.isKakaoTalkLoginAvailable(context)) {
             loginWithKakaoTalk(
-                context = context,
                 onSuccess = onSuccess,
                 onFailed = { error ->
                     // 의도적인 사용자의 로그인 취소를 제외한 경우에는 카카오계정 로그인으로 재시도
                     if (error is AuthError || (error is ClientError && error.reason != ClientErrorCause.Cancelled)) {
                         loginWithKakaoAccount(
-                            context = context,
                             onSuccess = onSuccess,
                             onFailed = onFailed,
                         )
@@ -39,15 +39,13 @@ class KakaoLoginHelper(
             )
         } else { // 카카오톡 미설치 시 카카오계정 로그인 시도
             loginWithKakaoAccount(
-                context = context,
                 onSuccess = onSuccess,
                 onFailed = onFailed,
             )
         }
     }
 
-    private fun loginWithKakaoTalk(
-        context: Context,
+    override fun loginWithKakaoTalk(
         onSuccess: (String) -> Unit,
         onFailed: (Throwable?) -> Unit,
     ) {
@@ -60,8 +58,7 @@ class KakaoLoginHelper(
         }
     }
 
-    private fun loginWithKakaoAccount(
-        context: Context,
+    override fun loginWithKakaoAccount(
         onSuccess: (String) -> Unit,
         onFailed: (Throwable?) -> Unit,
     ) {
@@ -74,7 +71,7 @@ class KakaoLoginHelper(
         }
     }
 
-    fun logout() = runCatching {
+    override fun logout() = runCatching {
         UserApiClient.instance.logout { error ->
             if (error != null) {
                 throw error
@@ -82,7 +79,7 @@ class KakaoLoginHelper(
         }
     }
 
-    fun unlink() = runCatching {
+    override fun unlink() = runCatching {
         UserApiClient.instance.unlink { error ->
             if (error != null) {
                 throw error
