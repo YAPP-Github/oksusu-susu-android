@@ -35,6 +35,31 @@ object SusuTheme {
         @ReadOnlyComposable
         get() = LocalColorScheme.current
 
+    /**
+     * spacing_xxxxxs = 2.dp,
+     *
+     * spacing_xxxxs = 4.dp,
+     *
+     * spacing_xxxs = 6.dp,
+     *
+     * spacing_xxs = 8.dp,
+     *
+     * spacing_xs = 10.dp,
+     *
+     * spacing_s = 12.dp,
+     *
+     * spacing_m = 16.dp,
+     *
+     * spacing_l = 20.dp,
+     *
+     * spacing_xl = 24.dp,
+     *
+     * spacing_xxl = 32.dp,
+     *
+     * spacing_xxxl = 36.dp,
+     *
+     * spacing_xxxxl = 40.dp,
+     */
     val spacing: SusuSpacing
         @Composable
         @ReadOnlyComposable
