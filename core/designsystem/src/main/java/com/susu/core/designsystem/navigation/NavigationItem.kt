@@ -32,5 +32,5 @@ enum class NavigationItem(
         selectedIcon = R.drawable.ic_my_page_filled,
         unselectedIcon = R.drawable.ic_my_page_outlined,
         tabName = "마이페이지",
-    )
+    ),
 }

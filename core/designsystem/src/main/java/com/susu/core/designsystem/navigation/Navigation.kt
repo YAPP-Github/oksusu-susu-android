@@ -69,12 +69,12 @@ fun SusuNavigationBar(
     Column {
         Divider(
             thickness = DIVIDER_THICKNESS.dp,
-            color = Gray20
+            color = Gray20,
         )
         Row(
             modifier = modifier
                 .height(NAVIGATION_HEIGHT.dp)
-                .background(color = SusuTheme.colorScheme.background10)
+                .background(color = SusuTheme.colorScheme.background10),
         ) {
             tabs.forEachIndexed { index, item ->
                 SusuNavigationItem(
