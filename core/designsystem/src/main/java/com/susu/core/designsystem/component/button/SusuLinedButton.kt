@@ -47,7 +47,7 @@ enum class LinedButtonColor(
         activeBorderColor = Orange60,
         inactiveBorderColor = Orange20,
         rippleColor = Color.Unspecified,
-    )
+    ),
 }
 
 @Composable

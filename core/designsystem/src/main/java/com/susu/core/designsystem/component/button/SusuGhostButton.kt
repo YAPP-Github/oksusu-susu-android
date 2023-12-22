@@ -40,7 +40,7 @@ enum class GhostButtonColor(
         activeBackgroundColor = Gray10,
         inactiveBackgroundColor = Gray10,
         rippleColor = Color.Unspecified,
-    )
+    ),
 }
 
 @Composable

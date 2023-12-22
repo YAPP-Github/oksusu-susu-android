@@ -40,7 +40,7 @@ enum class FilledButtonColor(
         activeBackgroundColor = Orange60,
         inactiveBackgroundColor = Orange20,
         rippleColor = Color.Unspecified,
-    )
+    ),
 }
 
 @Composable
