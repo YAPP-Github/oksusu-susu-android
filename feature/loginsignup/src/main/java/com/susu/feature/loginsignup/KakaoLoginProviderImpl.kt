@@ -9,12 +9,11 @@ import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
 import com.susu.domain.util.KakaoLoginProvider
 import dagger.hilt.android.qualifiers.ApplicationContext
+import timber.log.Timber
 import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
 class KakaoLoginProviderImpl @Inject constructor(
-    @ApplicationContext private val context: Context,
+    @ApplicationContext val context: Context,
 ) : KakaoLoginProvider {
 
     override fun hasKakaoLoginHistory(): Boolean {
@@ -30,6 +29,7 @@ class KakaoLoginProviderImpl @Inject constructor(
         onFailed: (Throwable?) -> Unit,
     ) {
         if (UserApiClient.instance.isKakaoTalkLoginAvailable(context)) {
+            Timber.tag("AUTH").d("카카오톡 설치 확인")
             loginWithKakaoTalk(
                 onSuccess = onSuccess,
                 onFailed = { error ->
@@ -43,6 +43,7 @@ class KakaoLoginProviderImpl @Inject constructor(
                 },
             )
         } else { // 카카오톡 미설치 시 카카오계정 로그인 시도
+            Timber.tag("AUTH").d("카카오톡 미설치")
             loginWithKakaoAccount(
                 onSuccess = onSuccess,
                 onFailed = onFailed,
@@ -55,6 +56,7 @@ class KakaoLoginProviderImpl @Inject constructor(
         onFailed: (Throwable?) -> Unit,
     ) {
         UserApiClient.instance.loginWithKakaoTalk(context) { token, error ->
+            Timber.tag("AUTH").d("카카오톡 로그인 결과 $token $error")
             if (token != null) {
                 onSuccess(token.accessToken)
             } else {

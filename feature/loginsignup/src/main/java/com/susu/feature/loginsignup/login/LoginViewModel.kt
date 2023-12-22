@@ -7,6 +7,7 @@ import com.susu.domain.repository.TokenRepository
 import com.susu.domain.util.KakaoLoginProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -18,16 +19,22 @@ class LoginViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
+            intent { copy(isLoading = true) }
+            Timber.tag("AUTH").d("카카오 로그인 이력 확인")
             // 1. 과거 카톡 로그인 이력 확인
             if (!kakaoLoginProvider.hasKakaoLoginHistory()) {
                 // 1-1. 신규 유저
-                intent { copy(showVote = true) }
+                intent { copy(isLoading = false, showVote = true) }
+                Timber.tag("AUTH").d("신규유져")
             } else {
                 // 2. 카카오 access token 존재 시 로그인 시도
+                Timber.d("수수 로그인 시도")
                 kakaoLoginProvider.getAccessToken()?.let {
                     authRepository.login(it).onSuccess {
+                        Timber.tag("AUTH").d("수수 로그인 성공")
                         postSideEffect(LoginContract.LoginEffect.NavigateToReceived)
                     }
+                    intent { copy(isLoading = false) }
                 }
                 // 3. 카카오 로그인 필요
             }
@@ -35,24 +42,33 @@ class LoginViewModel @Inject constructor(
     }
 
     fun login() {
+        Timber.tag("AUTH").d("카카오 로그인 시도")
         kakaoLoginProvider.login(
             onSuccess = { accessToken ->
+                Timber.tag("AUTH").d("카카오 로그인 성공")
                 viewModelScope.launch {
+                    intent { copy(isLoading = true) }
                     // 수수 서버에 가입되지 않은 회원이라면 -> 회원 정보 기입 후 수수 회원가입
                     if (authRepository.canRegister(accessToken)) {
+                        Timber.tag("AUTH").d("수수 가입 가능")
                         postSideEffect(LoginContract.LoginEffect.NavigateToSignUp)
                     } else {
                         authRepository.login(accessToken).onSuccess { token ->
+                            Timber.tag("AUTH").d("수수 로그인 성공")
                             tokenRepository.saveTokens(token)
                             postSideEffect(LoginContract.LoginEffect.NavigateToReceived)
                         }.onFailure {
-                            postSideEffect(LoginContract.LoginEffect.ExitProcess(it))
+                            Timber.tag("AUTH").d("수수 로그인 실패 ${it.message}")
+                            postSideEffect(LoginContract.LoginEffect.ShowToast(it.message ?: "수수 로그인 실패"))
                         }
                     }
+                    intent { copy(isLoading = false) }
                 }
             },
             onFailed = {
-                postSideEffect(LoginContract.LoginEffect.ExitProcess(it))
+                Timber.tag("AUTH").d("카카오 로그인 실패 ${it?.message}")
+                postSideEffect(LoginContract.LoginEffect.ShowToast(it?.message ?: "카카오 로그인 실패"))
+                intent { copy(isLoading = false) }
             },
         )
     }
