@@ -1,5 +1,5 @@
 package com.susu.data.model
 
-enum class SnsProviders(name: String) {
+enum class SnsProviders(val path: String) {
     Kakao("KAKAO")
 }

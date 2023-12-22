@@ -27,7 +27,7 @@ interface ApiService {
     @GET("oauth/{provider}/sign-up/valid")
     suspend fun checkValidRegister(
         @Path("provider") provider: String,
-        @Body accessTokenRequest: AccessTokenRequest,
+        @Query("accessToken") accessToken: String,
     ): ValidRegisterResponse
 
     @POST("auth/logout")

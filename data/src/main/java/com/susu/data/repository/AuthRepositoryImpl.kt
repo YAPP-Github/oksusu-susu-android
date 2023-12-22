@@ -16,7 +16,7 @@ class AuthRepositoryImpl @Inject constructor(
         accessToken: String,
     ) = kotlin.runCatching {
         apiService.login(
-            provider = SnsProviders.Kakao.name,
+            provider = SnsProviders.Kakao.path,
             accessTokenRequest = AccessTokenRequest(accessToken),
         ).toDomain()
     }
@@ -26,7 +26,7 @@ class AuthRepositoryImpl @Inject constructor(
         user: User,
     ) = runCatching {
         apiService.signUp(
-            provider = SnsProviders.Kakao.name,
+            provider = SnsProviders.Kakao.path,
             accessToken = snsAccessToken,
             user = user.toData(),
         ).toDomain()
@@ -36,8 +36,8 @@ class AuthRepositoryImpl @Inject constructor(
         accessToken: String,
     ): Boolean {
         return apiService.checkValidRegister(
-            provider = SnsProviders.Kakao.name,
-            accessTokenRequest = AccessTokenRequest(accessToken),
+            provider = SnsProviders.Kakao.path,
+            accessToken = accessToken,
         ).canRegister
     }
 
