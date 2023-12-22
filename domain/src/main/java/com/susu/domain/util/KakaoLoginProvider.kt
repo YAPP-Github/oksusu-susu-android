@@ -2,6 +2,7 @@ package com.susu.domain.util
 
 interface KakaoLoginProvider {
     fun hasKakaoLoginHistory(): Boolean
+    fun getAccessToken(): String?
 
     fun login(
         onSuccess: (String) -> Unit,

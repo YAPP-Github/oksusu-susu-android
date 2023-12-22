@@ -2,6 +2,7 @@ package com.susu.feature.loginsignup
 
 import android.content.Context
 import com.kakao.sdk.auth.AuthApiClient
+import com.kakao.sdk.auth.TokenManagerProvider
 import com.kakao.sdk.common.model.AuthError
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
@@ -18,6 +19,10 @@ class KakaoLoginProviderImpl @Inject constructor(
 
     override fun hasKakaoLoginHistory(): Boolean {
         return AuthApiClient.instance.hasToken()
+    }
+
+    override fun getAccessToken(): String? {
+        return TokenManagerProvider.instance.manager.getToken()?.accessToken
     }
 
     override fun login(
