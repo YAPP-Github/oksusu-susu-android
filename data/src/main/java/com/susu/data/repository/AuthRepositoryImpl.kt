@@ -3,20 +3,19 @@ package com.susu.data.repository
 import com.susu.core.model.User
 import com.susu.data.model.SnsProviders
 import com.susu.data.model.request.AccessTokenRequest
-import com.susu.data.model.request.RefreshTokenRequest
 import com.susu.data.model.toData
 import com.susu.data.model.toDomain
-import com.susu.data.network.AuthService
+import com.susu.data.network.ApiService
 import com.susu.domain.repository.AuthRepository
 import javax.inject.Inject
 
 class AuthRepositoryImpl @Inject constructor(
-    private val authService: AuthService,
+    private val apiService: ApiService,
 ) : AuthRepository {
     override suspend fun login(
         accessToken: String,
     ) = kotlin.runCatching {
-        authService.login(
+        apiService.login(
             provider = SnsProviders.Kakao.name,
             accessTokenRequest = AccessTokenRequest(accessToken),
         ).toDomain()
@@ -26,7 +25,7 @@ class AuthRepositoryImpl @Inject constructor(
         snsAccessToken: String,
         user: User,
     ) = runCatching {
-        authService.signUp(
+        apiService.signUp(
             provider = SnsProviders.Kakao.name,
             accessToken = snsAccessToken,
             user = user.toData(),
@@ -36,19 +35,13 @@ class AuthRepositoryImpl @Inject constructor(
     override suspend fun canRegister(
         accessToken: String,
     ): Boolean {
-        return authService.checkValidRegister(
+        return apiService.checkValidRegister(
             provider = SnsProviders.Kakao.name,
             accessTokenRequest = AccessTokenRequest(accessToken),
         ).canRegister
     }
 
     override suspend fun logout() {
-        authService.logout()
-    }
-
-    override suspend fun refreshAccessToken(refreshToken: String) = runCatching {
-        authService.refreshAccessToken(
-            refreshTokenRequest = RefreshTokenRequest(refreshToken),
-        ).toDomain()
+        apiService.logout()
     }
 }

@@ -4,6 +4,7 @@ import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFact
 import com.susu.data.Constants.RETROFIT_TAG
 import com.susu.data.extension.isJsonArray
 import com.susu.data.extension.isJsonObject
+import com.susu.data.network.ApiService
 import com.susu.data.network.AuthService
 import com.susu.data.network.TokenAuthenticator
 import com.susu.data.network.TokenInterceptor
@@ -68,6 +69,44 @@ object NetworkModule {
 
     @Singleton
     @Provides
+    @AuthOkHttpClient
+    fun provideAuthOkHttpClient(
+        json: Json,
+    ): OkHttpClient {
+        val loggingInterceptor = HttpLoggingInterceptor { message ->
+            when {
+                !message.isJsonObject() && !message.isJsonArray() ->
+                    Timber.tag(RETROFIT_TAG).d("CONNECTION INFO -> $message")
+
+                else -> kotlin.runCatching {
+                    json.encodeToString(Json.parseToJsonElement(message))
+                }.onSuccess {
+                    Timber.tag(RETROFIT_TAG).d(it)
+                }.onFailure {
+                    Timber.tag(RETROFIT_TAG).d(message)
+                }
+            }
+        }
+
+        return OkHttpClient.Builder()
+            .addInterceptor(loggingInterceptor)
+            .build()
+    }
+
+    @Singleton
+    @Provides
+    @AuthRetrofit
+    fun provideAuthRetrofit(
+        @AuthOkHttpClient okHttpClient: OkHttpClient,
+        json: Json,
+    ): Retrofit = Retrofit.Builder()
+        .baseUrl(BASE_URL)
+        .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
+        .client(okHttpClient)
+        .build()
+
+    @Singleton
+    @Provides
     fun provideJson(): Json {
         return Json {
             prettyPrint = true
@@ -78,7 +117,13 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun provideAuthService(retrofit: Retrofit): AuthService {
+    fun provideApiService(retrofit: Retrofit): ApiService {
+        return retrofit.create(ApiService::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideAuthService(@AuthRetrofit retrofit: Retrofit): AuthService {
         return retrofit.create(AuthService::class.java)
     }
 }
