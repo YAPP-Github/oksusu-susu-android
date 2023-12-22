@@ -16,39 +16,46 @@ import com.susu.core.designsystem.R
 import com.susu.core.designsystem.theme.Gray10
 import com.susu.core.designsystem.theme.Gray100
 import com.susu.core.designsystem.theme.Gray30
+import com.susu.core.designsystem.theme.Gray90
 import com.susu.core.designsystem.theme.Orange20
 import com.susu.core.designsystem.theme.Orange60
 import com.susu.core.designsystem.theme.SusuTheme
 
-enum class FilledButtonColor(
+enum class LinedButtonColor(
     val activeContentColor: Color,
     val inactiveContentColor: Color,
     val activeBackgroundColor: Color,
     val inactiveBackgroundColor: Color,
+    val activeBorderColor: Color,
+    val inactiveBorderColor: Color,
     val rippleColor: Color,
 ) {
     Black(
-        activeContentColor = Gray10,
-        inactiveContentColor = Gray10,
-        activeBackgroundColor = Gray100,
-        inactiveBackgroundColor = Gray30,
-        rippleColor = Gray10,
+        activeContentColor = Gray100,
+        inactiveContentColor = Gray30,
+        activeBackgroundColor = Gray10,
+        inactiveBackgroundColor = Gray10,
+        activeBorderColor = Gray90,
+        inactiveBorderColor = Gray30,
+        rippleColor = Color.Unspecified,
     ),
     Orange(
-        activeContentColor = Gray10,
-        inactiveContentColor = Gray10,
-        activeBackgroundColor = Orange60,
-        inactiveBackgroundColor = Orange20,
+        activeContentColor = Orange60,
+        inactiveContentColor = Orange20,
+        activeBackgroundColor = Gray10,
+        inactiveBackgroundColor = Gray10,
+        activeBorderColor = Orange60,
+        inactiveBorderColor = Orange20,
         rippleColor = Color.Unspecified,
     )
 }
 
 @Composable
-fun SusuFilledButton(
+fun SusuLinedButton(
     modifier: Modifier = Modifier,
     shape: Shape = RoundedCornerShape(4.dp),
     text: String = "",
-    color: FilledButtonColor,
+    color: LinedButtonColor,
     style: @Composable () -> ButtonStyle,
     @DrawableRes leftIcon: Int? = null,
     leftIconContentDescription: String? = null,
@@ -64,6 +71,8 @@ fun SusuFilledButton(
             shape = shape,
             text = text,
             textStyle = textStyle,
+            borderWidth = 1.dp,
+            borderColor = if (isActive) activeBorderColor else inactiveBorderColor,
             contentColor = if (isActive) activeContentColor else inactiveContentColor,
             rippleColor = rippleColor,
             backgroundColor = if (isActive) activeBackgroundColor else inactiveBackgroundColor,
@@ -81,34 +90,34 @@ fun SusuFilledButton(
 
 @Preview(showBackground = true)
 @Composable
-fun SusuBlackFilledButtonPreview() {
+fun SusuBlackLinedButtonPreview() {
     SusuTheme {
-        val color = FilledButtonColor.Black
+        val color = LinedButtonColor.Black
         Column(
             verticalArrangement = Arrangement.spacedBy(20.dp),
         ) {
-            SusuFilledButtonPreview(
+            SusuLinedButtonPreview(
                 large = LargeButtonStyle.height62,
                 medium = LargeButtonStyle.height54,
                 small = LargeButtonStyle.height46,
                 color = color,
             )
 
-            SusuFilledButtonPreview(
+            SusuLinedButtonPreview(
                 large = MediumButtonStyle.height60,
                 medium = MediumButtonStyle.height52,
                 small = MediumButtonStyle.height44,
                 color = color,
             )
 
-            SusuFilledButtonPreview(
+            SusuLinedButtonPreview(
                 large = SmallButtonStyle.height48,
                 medium = SmallButtonStyle.height40,
                 small = SmallButtonStyle.height32,
                 color = color,
             )
 
-            SusuFilledButtonPreview(
+            SusuLinedButtonPreview(
                 large = XSmallButtonStyle.height44,
                 medium = XSmallButtonStyle.height36,
                 small = XSmallButtonStyle.height28,
@@ -120,34 +129,34 @@ fun SusuBlackFilledButtonPreview() {
 
 @Preview(showBackground = true)
 @Composable
-fun SusuOrangeFilledButtonPreview() {
+fun SusuOrangeLinedButtonPreview() {
     SusuTheme {
-        val color = FilledButtonColor.Orange
+        val color = LinedButtonColor.Orange
         Column(
             verticalArrangement = Arrangement.spacedBy(20.dp),
         ) {
-            SusuFilledButtonPreview(
+            SusuLinedButtonPreview(
                 large = LargeButtonStyle.height62,
                 medium = LargeButtonStyle.height54,
                 small = LargeButtonStyle.height46,
                 color = color,
             )
 
-            SusuFilledButtonPreview(
+            SusuLinedButtonPreview(
                 large = MediumButtonStyle.height60,
                 medium = MediumButtonStyle.height52,
                 small = MediumButtonStyle.height44,
                 color = color,
             )
 
-            SusuFilledButtonPreview(
+            SusuLinedButtonPreview(
                 large = SmallButtonStyle.height48,
                 medium = SmallButtonStyle.height40,
                 small = SmallButtonStyle.height32,
                 color = color,
             )
 
-            SusuFilledButtonPreview(
+            SusuLinedButtonPreview(
                 large = XSmallButtonStyle.height44,
                 medium = XSmallButtonStyle.height36,
                 small = XSmallButtonStyle.height28,
@@ -158,16 +167,16 @@ fun SusuOrangeFilledButtonPreview() {
 }
 
 @Composable
-private fun SusuFilledButtonPreview(
+private fun SusuLinedButtonPreview(
     large: @Composable () -> ButtonStyle,
     medium: @Composable () -> ButtonStyle,
     small: @Composable () -> ButtonStyle,
-    color: FilledButtonColor,
+    color: LinedButtonColor,
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(20.dp),
     ) {
-        SusuFilledButton(
+        SusuLinedButton(
             modifier = Modifier.fillMaxWidth(),
             style = large,
             color = color,
@@ -177,7 +186,7 @@ private fun SusuFilledButtonPreview(
         Row(
             horizontalArrangement = Arrangement.spacedBy(10.dp),
         ) {
-            SusuFilledButton(
+            SusuLinedButton(
                 style = large,
                 color = color,
                 text = "Button",
@@ -185,7 +194,7 @@ private fun SusuFilledButtonPreview(
                 leftIcon = R.drawable.ic_arrow_left,
             )
 
-            SusuFilledButton(
+            SusuLinedButton(
                 style = large,
                 color = color,
                 text = "Button",
@@ -196,13 +205,13 @@ private fun SusuFilledButtonPreview(
         Row(
             horizontalArrangement = Arrangement.spacedBy(10.dp),
         ) {
-            SusuFilledButton(
+            SusuLinedButton(
                 style = medium,
                 color = color,
                 text = "Button",
             )
 
-            SusuFilledButton(
+            SusuLinedButton(
                 style = medium,
                 color = color,
                 text = "Button",
@@ -213,13 +222,13 @@ private fun SusuFilledButtonPreview(
         Row(
             horizontalArrangement = Arrangement.spacedBy(10.dp),
         ) {
-            SusuFilledButton(
+            SusuLinedButton(
                 style = small,
                 color = color,
                 text = "Button",
             )
 
-            SusuFilledButton(
+            SusuLinedButton(
                 style = small,
                 color = color,
                 text = "Button",

@@ -1,4 +1,4 @@
-package com.susu.core.designsystem.component.button.basic
+package com.susu.core.designsystem.component.button
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
