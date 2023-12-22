@@ -20,6 +20,7 @@ android {
 
 dependencies {
     implementation(projects.feature.navigator)
+    implementation(projects.data)
     implementation(libs.kakao.sdk.user)
 
     implementation(platform(libs.firebase.bom))
