@@ -7,7 +7,7 @@ class LoginContract {
     sealed class LoginEffect : SideEffect {
         data object NavigateToReceived : LoginEffect()
         data object NavigateToSignUp : LoginEffect()
-        data class ExitProcess(val error: Throwable?) : LoginEffect()
+        data class ShowToast(val msg: String) : LoginEffect()
     }
 
     data class LoginState(
