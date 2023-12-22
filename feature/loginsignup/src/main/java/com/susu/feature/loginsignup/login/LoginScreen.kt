@@ -13,15 +13,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.susu.feature.loginsignup.KakaoLoginHelper
 import com.susu.feature.loginsignup.R
 
 @Composable
 fun LoginScreen(
     viewModel: LoginViewModel = hiltViewModel(),
+    kakaoLoginHelper: KakaoLoginHelper,
 ) {
     val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsState()
@@ -45,16 +48,23 @@ fun LoginScreen(
     }
 
     Box(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize(),
     ) {
         if (uiState.showVote) {
             SplashVote(onClick = viewModel::selectSignUpVote)
         } else {
-            KakaoLogin(onClick = viewModel::login)
+            KakaoLogin(
+                onClick = {
+                    kakaoLoginHelper.login(
+                        onSuccess = { viewModel.login(it) },
+                        onFailed = { viewModel.showToast(it) },
+                    )
+                },
+            )
         }
 
         if (uiState.isLoading) {
-            CircularProgressIndicator()
+            CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
         }
     }
 }

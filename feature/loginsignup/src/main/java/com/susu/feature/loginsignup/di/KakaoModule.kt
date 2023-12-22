@@ -1,7 +1,7 @@
 package com.susu.feature.loginsignup.di
 
-import com.susu.domain.util.KakaoLoginProvider
-import com.susu.feature.loginsignup.KakaoLoginProviderImpl
+import com.susu.domain.util.KakaoSdkProvider
+import com.susu.feature.loginsignup.KakaoSdkProviderImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -15,6 +15,7 @@ abstract class KakaoModule {
     @Binds
     @Singleton
     abstract fun bindsKakaoLoginProvider(
-        kakaoLoginProviderImpl: KakaoLoginProviderImpl
-    ): KakaoLoginProvider
+        kakaoLoginProviderImpl: KakaoSdkProviderImpl
+    ): KakaoSdkProvider
 }
+

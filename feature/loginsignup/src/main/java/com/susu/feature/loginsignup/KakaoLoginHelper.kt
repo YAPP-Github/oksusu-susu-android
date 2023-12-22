@@ -1,30 +1,17 @@
 package com.susu.feature.loginsignup
 
 import android.content.Context
-import com.kakao.sdk.auth.AuthApiClient
-import com.kakao.sdk.auth.TokenManagerProvider
 import com.kakao.sdk.common.model.AuthError
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
-import com.susu.domain.util.KakaoLoginProvider
-import dagger.hilt.android.qualifiers.ApplicationContext
 import timber.log.Timber
-import javax.inject.Inject
 
-class KakaoLoginProviderImpl @Inject constructor(
-    @ApplicationContext val context: Context,
-) : KakaoLoginProvider {
+class KakaoLoginHelper(
+    private val context: Context
+) {
 
-    override fun hasKakaoLoginHistory(): Boolean {
-        return AuthApiClient.instance.hasToken()
-    }
-
-    override fun getAccessToken(): String? {
-        return TokenManagerProvider.instance.manager.getToken()?.accessToken
-    }
-
-    override fun login(
+    fun login(
         onSuccess: (String) -> Unit,
         onFailed: (Throwable?) -> Unit,
     ) {
@@ -51,7 +38,7 @@ class KakaoLoginProviderImpl @Inject constructor(
         }
     }
 
-    override fun loginWithKakaoTalk(
+    private fun loginWithKakaoTalk(
         onSuccess: (String) -> Unit,
         onFailed: (Throwable?) -> Unit,
     ) {
@@ -65,7 +52,7 @@ class KakaoLoginProviderImpl @Inject constructor(
         }
     }
 
-    override fun loginWithKakaoAccount(
+    private fun loginWithKakaoAccount(
         onSuccess: (String) -> Unit,
         onFailed: (Throwable?) -> Unit,
     ) {
@@ -74,22 +61,6 @@ class KakaoLoginProviderImpl @Inject constructor(
                 onSuccess(token.accessToken)
             } else {
                 onFailed(error)
-            }
-        }
-    }
-
-    override fun logout() = runCatching {
-        UserApiClient.instance.logout { error ->
-            if (error != null) {
-                throw error
-            }
-        }
-    }
-
-    override fun unlink() = runCatching {
-        UserApiClient.instance.unlink { error ->
-            if (error != null) {
-                throw error
             }
         }
     }
