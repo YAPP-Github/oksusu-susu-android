@@ -10,5 +10,8 @@ class LoginContract {
         data class ExitProcess(val error: Throwable?) : LoginEffect()
     }
 
-    object LoginState : UiState
+    data class LoginState(
+        val isLoading: Boolean = false,
+        val showVote: Boolean = false
+    ) : UiState
 }
