@@ -7,7 +7,8 @@ google-service = "4.3.15"
 firebase-bom = "32.6.0"
 
 compose-compiler = "1.5.3"
-compose-bom = "2023.10.01"
+# compose-bom = "2023.10.01"
+compose-bom = "2023.12.00-alpha04"
 compose-material3 = "1.2.0-alpha07"
 activity-compose = "1.7.2"
 androidx-hilt-navigation-compose = "1.1.0"
@@ -97,7 +98,8 @@ oss-licenses-plugin = { group = "com.google.android.gms", name = "oss-licenses-p
 detekt-plugin-formatting = { group = "io.gitlab.arturbosch.detekt", name = "detekt-formatting", version.ref = "detekt" }
 
 # compose
-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose-bom" }
+# compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose-bom" }
+compose-bom = { group = "dev.chrisbanes.compose", name = "compose-bom", version.ref = "compose-bom" }
 ui = { group = "androidx.compose.ui", name = "ui" }
 ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
 ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
