@@ -19,6 +19,7 @@ internal class FeatureComposeConventionPlugin : Plugin<Project> {
                 "implementation"(project(":core:model"))
                 "implementation"(project(":core:ui"))
                 "implementation"(project(":core:designsystem"))
+                "implementation"(project(":core:android"))
                 "implementation"(project(":domain"))
 
                 "implementation"(libs.findLibrary("kotlinx.immutable").get())
