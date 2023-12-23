@@ -5,9 +5,10 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideIn
 import androidx.compose.animation.slideOut
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.IntOffset
@@ -29,7 +30,6 @@ internal fun MainScreen(
 ) {
     Scaffold(
         modifier = modifier,
-        topBar = {},
         content = { innerPadding ->
             NavHost(
                 navController = navigator.navController,
@@ -61,8 +61,9 @@ internal fun MainScreen(
         bottomBar = {
             MainBottomBar(
                 visible = navigator.shouldShowBottomBar(),
-                navigator = navigator,
+                currentTab = navigator.currentTab,
                 entries = MainNavigationTab.entries,
+                onClickItem = navigator::navigate,
             )
         },
     )
@@ -71,8 +72,9 @@ internal fun MainScreen(
 @Composable
 private fun MainBottomBar(
     visible: Boolean,
-    navigator: MainNavigator,
+    currentTab: MainNavigationTab?,
     entries: EnumEntries<MainNavigationTab>,
+    onClickItem: (MainNavigationTab) -> Unit,
 ) {
     AnimatedVisibility(
         visible = visible,
@@ -83,11 +85,11 @@ private fun MainBottomBar(
             entries.forEach { tab ->
                 tab.run {
                     SusuNavigationItem(
-                        selected = tab == navigator.currentTab,
+                        selected = tab == currentTab,
                         label = stringResource(id = labelId),
                         selectedIcon = selectedIconId,
                         unselectedIcon = unselectedIconId,
-                        onClick = { navigator.navigate(tab) },
+                        onClick = { onClickItem(tab) },
                     )
                 }
             }
