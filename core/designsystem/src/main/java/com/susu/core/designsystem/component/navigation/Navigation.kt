@@ -22,6 +22,7 @@ import com.susu.core.designsystem.theme.Gray100
 import com.susu.core.designsystem.theme.Gray20
 import com.susu.core.designsystem.theme.Gray40
 import com.susu.core.designsystem.theme.SusuTheme
+import com.susu.core.ui.extension.susuClickable
 
 @Composable
 fun SusuNavigationBar(
@@ -54,11 +55,13 @@ fun RowScope.SusuNavigationItem(
     label: String,
     @DrawableRes selectedIcon: Int,
     @DrawableRes unselectedIcon: Int,
+    onClick: () -> Unit,
 ) {
     Column(
         modifier = modifier
             .weight(1f)
-            .fillMaxHeight(),
+            .fillMaxHeight()
+            .susuClickable(rippleEnabled = false, onClick = onClick),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
