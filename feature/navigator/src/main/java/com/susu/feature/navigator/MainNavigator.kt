@@ -9,6 +9,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.susu.feature.community.navigation.navigateCommunity
+import com.susu.feature.loginsignup.navigation.LoginSignupRoute
 import com.susu.feature.mypage.navigation.navigateMyPage
 import com.susu.feature.received.navigation.navigateReceived
 import com.susu.feature.sent.navigation.SentRoute
@@ -22,7 +23,7 @@ internal class MainNavigator(
         @Composable get() = navController
             .currentBackStackEntryAsState().value?.destination
 
-    val startDestination = SentRoute.route
+    val startDestination = LoginSignupRoute.route
 
     val currentTab: MainNavigationTab?
         @Composable get() = currentDestination
