@@ -21,6 +21,10 @@ import com.susu.feature.mypage.navigation.myPageNavGraph
 import com.susu.feature.received.navigation.receivedNavGraph
 import com.susu.feature.sent.navigation.sentNavGraph
 import com.susu.feature.statistics.navigation.statisticsNavGraph
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.PersistentList
+import kotlinx.collections.immutable.toImmutableList
+import kotlinx.collections.immutable.toPersistentList
 import kotlin.enums.EnumEntries
 
 @Composable
@@ -62,7 +66,7 @@ internal fun MainScreen(
             MainBottomBar(
                 visible = navigator.shouldShowBottomBar(),
                 currentTab = navigator.currentTab,
-                entries = MainNavigationTab.entries,
+                entries = MainNavigationTab.entries.toImmutableList(),
                 onClickItem = navigator::navigate,
             )
         },
@@ -73,7 +77,7 @@ internal fun MainScreen(
 private fun MainBottomBar(
     visible: Boolean,
     currentTab: MainNavigationTab?,
-    entries: EnumEntries<MainNavigationTab>,
+    entries: ImmutableList<MainNavigationTab>,
     onClickItem: (MainNavigationTab) -> Unit,
 ) {
     AnimatedVisibility(
