@@ -12,6 +12,6 @@ class LoginContract {
 
     data class LoginState(
         val isLoading: Boolean = false,
-        val showVote: Boolean = false
+        val showVote: Boolean = false,
     ) : UiState
 }

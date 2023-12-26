@@ -5,9 +5,9 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import com.susu.feature.loginsignup.test.TestScreen
 import com.susu.feature.loginsignup.login.LoginScreen
 import com.susu.feature.loginsignup.signup.SignUpScreen
+import com.susu.feature.loginsignup.test.TestScreen
 
 @Suppress("unused")
 fun NavController.navigateLoginSignup(navOptions: NavOptions) {

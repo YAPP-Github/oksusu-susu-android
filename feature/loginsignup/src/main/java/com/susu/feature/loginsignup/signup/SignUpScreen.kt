@@ -36,9 +36,14 @@ fun SignUpScreen(
     }
 
     Column {
-        TextField(value = uiState.name, onValueChange = viewModel::updateName, label = { Text(text = "이름") })
         TextField(
-            value = uiState.gender, onValueChange = viewModel::updateGender,
+            value = uiState.name,
+            onValueChange = viewModel::updateName,
+            label = { Text(text = "이름") },
+        )
+        TextField(
+            value = uiState.gender,
+            onValueChange = viewModel::updateGender,
             label = {
                 Text(text = "성별 (M/F)")
             },
