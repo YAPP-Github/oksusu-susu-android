@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="bottom_navigation_item_label_sent">보내요</string>
+    <string name="bottom_navigation_item_label_received">받아요</string>
+    <string name="bottom_navigation_item_label_statistics">통계</string>
+    <string name="bottom_navigation_item_label_community">투표</string>
+    <string name="bottom_navigation_item_label_my_page">마이페이지</string>
+</resources>

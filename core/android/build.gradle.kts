@@ -7,3 +7,8 @@ plugins {
 android {
     namespace = "com.susu.core.android"
 }
+
+dependencies {
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.crashlytics)
+}

@@ -5,12 +5,15 @@ espresso = "3.4.0"
 ksp = "1.9.10-1.0.13"
 google-service = "4.3.15"
 firebase-bom = "32.6.0"
+firebase-crashlytics = "2.9.9"
 
 compose-compiler = "1.5.3"
-compose-bom = "2023.10.01"
+# compose-bom = "2023.10.01"
+compose-bom = "2023.12.00-alpha04"
 compose-material3 = "1.2.0-alpha07"
 activity-compose = "1.7.2"
 androidx-hilt-navigation-compose = "1.1.0"
+compose-stable-marker = "1.0.3"
 
 androidx-app-compat = "1.6.1"
 androidx-core = "1.12.0"
@@ -27,6 +30,8 @@ kotlin = "1.9.10"
 kotlinx-coroutines = "1.7.3"
 kotlinx-serialization-json = "1.6.0"
 kotlinx-datetime = "0.4.1"
+kotlinx-immutable = "0.3.6"
+
 ktlint = "11.5.1"
 detekt = "1.23.1"
 
@@ -69,6 +74,8 @@ android-library = { id = "com.android.library", version.ref = "android-gradle-pl
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 google-services = { id = "com.google.gms.google-services", version.ref = "google-service" }
 protobuf = { id = "com.google.protobuf", version.ref = "protobuf-plugin" }
+firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebase-crashlytics" }
+
 
 # Plugins defined by this project
 susu-android-application = { id = "susu.android.application", version = "unspecified" }
@@ -94,7 +101,8 @@ oss-licenses-plugin = { group = "com.google.android.gms", name = "oss-licenses-p
 detekt-plugin-formatting = { group = "io.gitlab.arturbosch.detekt", name = "detekt-formatting", version.ref = "detekt" }
 
 # compose
-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose-bom" }
+# compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose-bom" }
+compose-bom = { group = "dev.chrisbanes.compose", name = "compose-bom", version.ref = "compose-bom" }
 ui = { group = "androidx.compose.ui", name = "ui" }
 ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
 ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
@@ -108,6 +116,7 @@ activity-compose = { group = "androidx.activity", name = "activity-compose", ver
 lifecycle-compose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "androidx-lifecycle" }
 navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "androidx-navigation" }
 hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "androidx-hilt-navigation-compose" }
+compose-stable-marker = { group = "com.github.skydoves", name = "compose-stable-marker", version.ref = "compose-stable-marker" }
 
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
@@ -120,6 +129,7 @@ kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-cor
 kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinx-coroutines"}
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
 kotlinx-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "kotlinx-datetime" }
+kotlinx-immutable = { group = "org.jetbrains.kotlinx", name = "kotlinx-collections-immutable", version.ref = "kotlinx-immutable" }
 
 retrofit-core = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 retrofit-kotlin-serialization = { group = "com.jakewharton.retrofit", name = "retrofit2-kotlinx-serialization-converter", version.ref = "retrofit-kotlinx-serialization-json" }
@@ -149,6 +159,7 @@ encrypted-datastore-preference-security = { group = "tech.thdev", name = "useful
 
 firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebase-bom" }
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics-ktx" }
+firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics-ktx" }
 
 ted-permission = { group = "io.github.ParkSangGwon", name = "tedpermission-normal", version.ref = "ted-permission" }
 coil = { group = "io.coil-kt", name = "coil", version.ref = "coil" }

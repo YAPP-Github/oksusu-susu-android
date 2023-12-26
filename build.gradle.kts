@@ -1,7 +1,10 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     alias(libs.plugins.detekt)
     alias(libs.plugins.ktlint)
+    alias(libs.plugins.firebase.crashlytics) apply false
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.android.library) apply false
     alias(libs.plugins.kotlin.android) apply false
@@ -14,6 +17,8 @@ plugins {
 }
 
 allprojects {
+    val projectPath = rootProject.file(".").absolutePath
+
     apply {
         plugin(rootProject.libs.plugins.detekt.get().pluginId)
         plugin(rootProject.libs.plugins.ktlint.get().pluginId)
@@ -25,6 +30,23 @@ allprojects {
             buildUponDefaultConfig = true
             toolVersion = libs.versions.detekt.get()
             config.setFrom(files("$rootDir/detekt-config.yml"))
+        }
+    }
+
+    tasks.withType<KotlinCompile> {
+        kotlinOptions {
+            freeCompilerArgs = freeCompilerArgs + listOf(
+                "-opt-in=kotlin.OptIn",
+                "-opt-in=kotlin.RequiresOptIn",
+            )
+            freeCompilerArgs = freeCompilerArgs + listOf(
+                "-P",
+                "plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination=$projectPath/report/compose-metrics",
+            )
+            freeCompilerArgs = freeCompilerArgs + listOf(
+                "-P",
+                "plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=$projectPath/report/compose-reports",
+            )
         }
     }
 }

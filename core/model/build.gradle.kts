@@ -4,3 +4,7 @@
 plugins {
     alias(libs.plugins.susu.java.library)
 }
+
+dependencies {
+    compileOnly(libs.compose.stable.marker)
+}
