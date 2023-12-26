@@ -36,7 +36,7 @@ internal fun MainScreen(
                 navController = navigator.navController,
                 startDestination = navigator.startDestination,
             ) {
-                loginSignupNavGraph()
+                loginSignupNavGraph(navigator.navController)
 
                 sentNavGraph(
                     padding = innerPadding,
