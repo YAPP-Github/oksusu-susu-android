@@ -22,25 +22,28 @@ class LoginViewModel @Inject constructor(
         viewModelScope.launch {
             intent { copy(isLoading = true) }
             Timber.tag("AUTH").d("카카오 로그인 이력 확인")
-            // 1. 과거 카톡 로그인 이력 확인
+            // 1. 카카오 토큰 존재 여부
             if (!kakaoSdkProvider.hasKakaoLoginHistory()) {
                 // 1-1. 신규 유저
                 intent { copy(isLoading = false, showVote = true) }
                 Timber.tag("AUTH").d("신규유져")
             } else {
                 // 2. 카카오 access token 존재 시 로그인 시도
-                Timber.d("수수 로그인 시도")
-                kakaoSdkProvider.getAccessToken()?.let {
-                    authRepository.login(it).onSuccess { token ->
-                        Timber.tag("AUTH").d("수수 로그인 성공")
-                        runBlocking {
-                            tokenRepository.saveTokens(token)
+                Timber.tag("AUTH").d("수수 로그인 시도")
+                kakaoSdkProvider.getAccessToken {
+                    it?.let { accessToken ->
+                        viewModelScope.launch {
+                            authRepository.login(accessToken).onSuccess { token ->
+                                Timber.tag("AUTH").d("수수 로그인 성공")
+                                runBlocking {
+                                    tokenRepository.saveTokens(token)
+                                }
+                                postSideEffect(LoginContract.LoginEffect.NavigateToReceived)
+                            }
+                            intent { copy(isLoading = false) }
                         }
-                        postSideEffect(LoginContract.LoginEffect.NavigateToReceived)
                     }
-                    intent { copy(isLoading = false) }
                 }
-                // 3. 카카오 로그인 필요
             }
         }
     }

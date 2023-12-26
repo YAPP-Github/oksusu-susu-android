@@ -12,8 +12,17 @@ class KakaoSdkProviderImpl @Inject constructor() : KakaoSdkProvider {
         return AuthApiClient.instance.hasToken()
     }
 
-    override fun getAccessToken(): String? {
-        return TokenManagerProvider.instance.manager.getToken()?.accessToken
+    override fun getAccessToken(
+        callback: (String?) -> Unit,
+    ) {
+        UserApiClient.instance.accessTokenInfo { _, error ->
+            if (error != null) {
+                callback(null)
+            } else {
+                // 토큰 유효성 체크 성공(필요 시 토큰 갱신됨)
+                callback(TokenManagerProvider.instance.manager.getToken()?.accessToken)
+            }
+        }
     }
 
     override fun logout() = runCatching {
