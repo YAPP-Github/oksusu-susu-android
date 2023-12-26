@@ -36,7 +36,7 @@ class TokenAuthenticator @Inject constructor(
             } else {
                 // 3. 헤더에 토큰을 교체한 request 생성
                 response.request.newBuilder()
-                    .header("Authorization", "Bearer ${tokenResponse.body()!!.accessToken}")
+                    .header("X-SUSU-AUTH-TOKEN", tokenResponse.body()!!.accessToken)
                     .build()
             }
         }
