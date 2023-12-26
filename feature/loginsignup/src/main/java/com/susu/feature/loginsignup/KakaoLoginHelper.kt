@@ -8,7 +8,7 @@ import com.kakao.sdk.user.UserApiClient
 import timber.log.Timber
 
 class KakaoLoginHelper(
-    private val context: Context
+    private val context: Context,
 ) {
 
     fun login(

@@ -57,7 +57,7 @@ class LoginViewModel @Inject constructor(
                 postSideEffect(LoginContract.LoginEffect.NavigateToSignUp)
             } else {
                 authRepository.login(accessToken).onSuccess { token ->
-                    Timber.tag("AUTH").d("수수 로그인 성공")
+                    Timber.tag("AUTH").d("수수 로그인 성공 ${token.accessToken}")
                     runBlocking {
                         tokenRepository.saveTokens(token)
                     }
