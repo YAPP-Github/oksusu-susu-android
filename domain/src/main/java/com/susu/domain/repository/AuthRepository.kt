@@ -8,4 +8,5 @@ interface AuthRepository {
     suspend fun signUp(snsAccessToken: String, user: User): Result<Token>
     suspend fun canRegister(accessToken: String): Boolean
     suspend fun logout()
+    suspend fun withdraw()
 }

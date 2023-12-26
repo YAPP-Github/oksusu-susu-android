@@ -4,6 +4,7 @@ import com.susu.data.model.TokenEntity
 import com.susu.data.model.UserEntity
 import com.susu.data.model.request.AccessTokenRequest
 import com.susu.data.model.response.ValidRegisterResponse
+import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -31,5 +32,8 @@ interface ApiService {
     ): ValidRegisterResponse
 
     @POST("auth/logout")
-    suspend fun logout()
+    suspend fun logout(): Response<Unit?>
+
+    @POST("auth/withdraw")
+    suspend fun withdraw(): Response<Unit?>
 }

@@ -44,4 +44,8 @@ class AuthRepositoryImpl @Inject constructor(
     override suspend fun logout() {
         apiService.logout()
     }
+
+    override suspend fun withdraw() {
+        apiService.withdraw()
+    }
 }
