@@ -15,7 +15,6 @@ abstract class KakaoModule {
     @Binds
     @Singleton
     abstract fun bindsKakaoLoginProvider(
-        kakaoLoginProviderImpl: KakaoSdkProviderImpl
+        kakaoLoginProviderImpl: KakaoSdkProviderImpl,
     ): KakaoSdkProvider
 }
-

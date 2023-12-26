@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 class TokenAuthenticator @Inject constructor(
     private val tokenRepository: TokenRepository,
-    private val authService: AuthService
+    private val authService: AuthService,
 ) : Authenticator {
     override fun authenticate(route: Route?, response: Response): Request? {
         // 1. refresh token으로 갱신 요청
