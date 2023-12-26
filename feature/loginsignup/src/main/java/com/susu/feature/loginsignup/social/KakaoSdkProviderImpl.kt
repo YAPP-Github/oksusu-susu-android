@@ -1,4 +1,4 @@
-package com.susu.feature.loginsignup
+package com.susu.feature.loginsignup.social
 
 import com.kakao.sdk.auth.AuthApiClient
 import com.kakao.sdk.auth.TokenManagerProvider

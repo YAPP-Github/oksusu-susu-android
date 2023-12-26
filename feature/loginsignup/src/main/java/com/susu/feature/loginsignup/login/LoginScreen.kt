@@ -21,7 +21,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.susu.core.ui.extension.susuClickable
-import com.susu.feature.loginsignup.KakaoLoginHelper
+import com.susu.feature.loginsignup.social.KakaoLoginHelper
 import com.susu.feature.loginsignup.R
 
 @Composable

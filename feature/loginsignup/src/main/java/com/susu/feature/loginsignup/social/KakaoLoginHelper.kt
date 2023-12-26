@@ -1,4 +1,4 @@
-package com.susu.feature.loginsignup
+package com.susu.feature.loginsignup.social
 
 import android.content.Context
 import com.kakao.sdk.common.model.AuthError

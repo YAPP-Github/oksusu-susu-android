@@ -1,7 +1,7 @@
 package com.susu.feature.loginsignup.di
 
 import com.susu.domain.util.KakaoSdkProvider
-import com.susu.feature.loginsignup.KakaoSdkProviderImpl
+import com.susu.feature.loginsignup.social.KakaoSdkProviderImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
