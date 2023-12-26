@@ -31,8 +31,11 @@ class LoginViewModel @Inject constructor(
                 // 2. 카카오 access token 존재 시 로그인 시도
                 Timber.d("수수 로그인 시도")
                 kakaoSdkProvider.getAccessToken()?.let {
-                    authRepository.login(it).onSuccess {
+                    authRepository.login(it).onSuccess { token ->
                         Timber.tag("AUTH").d("수수 로그인 성공")
+                        runBlocking {
+                            tokenRepository.saveTokens(token)
+                        }
                         postSideEffect(LoginContract.LoginEffect.NavigateToReceived)
                     }
                     intent { copy(isLoading = false) }
