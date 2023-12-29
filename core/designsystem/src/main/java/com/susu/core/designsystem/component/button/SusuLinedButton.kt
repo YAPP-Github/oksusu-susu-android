@@ -1,15 +1,17 @@
 package com.susu.core.designsystem.component.button
 
-import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.susu.core.designsystem.R
@@ -54,13 +56,11 @@ enum class LinedButtonColor(
 fun SusuLinedButton(
     modifier: Modifier = Modifier,
     shape: Shape = RoundedCornerShape(4.dp),
-    text: String = "",
+    text: String? = null,
     color: LinedButtonColor,
     style: @Composable () -> ButtonStyle,
-    @DrawableRes leftIcon: Int? = null,
-    leftIconContentDescription: String? = null,
-    @DrawableRes rightIcon: Int? = null,
-    rightIconContentDescription: String? = null,
+    leftIcon: (@Composable () -> Unit)? = null,
+    rightIcon: (@Composable () -> Unit)? = null,
     isActive: Boolean = true,
     onClick: () -> Unit = {},
 ) {
@@ -77,9 +77,7 @@ fun SusuLinedButton(
             rippleColor = rippleColor,
             backgroundColor = if (isActive) activeBackgroundColor else inactiveBackgroundColor,
             leftIcon = leftIcon,
-            leftIconContentDescription = leftIconContentDescription,
             rightIcon = rightIcon,
-            rightIconContentDescription = rightIconContentDescription,
             padding = paddingValues,
             iconSpacing = iconSpacing,
             isActive = isActive,
@@ -190,8 +188,20 @@ private fun SusuLinedButtonPreview(
                 style = large,
                 color = color,
                 text = "Button",
-                rightIcon = R.drawable.ic_arrow_left,
-                leftIcon = R.drawable.ic_arrow_left,
+                leftIcon = {
+                    Icon(
+                        modifier = Modifier.size(16.dp),
+                        painter = painterResource(id = R.drawable.ic_arrow_left),
+                        contentDescription = "", tint = color.activeContentColor,
+                    )
+                },
+                rightIcon = {
+                    Icon(
+                        modifier = Modifier.size(16.dp),
+                        painter = painterResource(id = R.drawable.ic_arrow_left),
+                        contentDescription = "", tint = color.activeContentColor,
+                    )
+                },
             )
 
             SusuLinedButton(
