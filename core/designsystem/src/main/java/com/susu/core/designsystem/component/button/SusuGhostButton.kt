@@ -1,6 +1,5 @@
 package com.susu.core.designsystem.component.button
 
-import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -184,16 +183,18 @@ private fun SusuGhostButtonPreview(
                     Icon(
                         modifier = Modifier.size(16.dp),
                         painter = painterResource(id = R.drawable.ic_arrow_left),
-                        contentDescription = "", tint = color.activeContentColor,
+                        contentDescription = "",
+                        tint = color.activeContentColor,
                     )
                 },
                 rightIcon = {
                     Icon(
                         modifier = Modifier.size(16.dp),
                         painter = painterResource(id = R.drawable.ic_arrow_left),
-                        contentDescription = "", tint = color.activeContentColor,
+                        contentDescription = "",
+                        tint = color.activeContentColor,
                     )
-                }
+                },
             )
 
             SusuGhostButton(

@@ -183,16 +183,18 @@ private fun SusuFilledButtonPreview(
                     Icon(
                         modifier = Modifier.size(16.dp),
                         painter = painterResource(id = R.drawable.ic_arrow_left),
-                        contentDescription = "", tint = color.activeContentColor,
+                        contentDescription = "",
+                        tint = color.activeContentColor,
                     )
                 },
                 rightIcon = {
                     Icon(
                         modifier = Modifier.size(16.dp),
                         painter = painterResource(id = R.drawable.ic_arrow_left),
-                        contentDescription = "", tint = color.activeContentColor,
+                        contentDescription = "",
+                        tint = color.activeContentColor,
                     )
-                }
+                },
             )
 
             SusuFilledButton(
