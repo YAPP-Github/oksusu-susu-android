@@ -44,12 +44,13 @@ fun BasicAppBar(
         modifier = modifier
             .fillMaxWidth()
             .height(containerHeight)
-            .background(Gray10),
+            .background(Gray10), // TODO: 디자인 시스템에서는 투명, Preview에서 확인하기 위해 설정 (지울 예정)
         contentAlignment = Alignment.Center,
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
         ) {
+            // TODO: AppBar의 왼쪽 영역은 거의 고정이라 생각되어 Basic으로 뺌 (지울 예정)
             when (leftIconType) {
                 LeftIconType.LOGO -> {
                     Image(

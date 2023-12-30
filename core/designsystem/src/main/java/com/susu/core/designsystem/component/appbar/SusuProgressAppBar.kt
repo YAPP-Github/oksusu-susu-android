@@ -35,7 +35,7 @@ fun SusuProgressBarAppBar(
     currentPercentage: Float,
     progressBarColor: Color = SusuTheme.colorScheme.primary,
     progressTrackColor: Color = Orange30,
-    progressBarWidth: Dp = 72.dp,
+    progressBarWidth: Dp = 72.dp, // TODO: 디자인시스템과 최종시안이 다름, 현재 확인 중 (지울 예정)
     progressBarHeight: Dp = 4.dp,
     progressBarStrokeCap: StrokeCap = StrokeCap.Round,
     onClickBackButton: () -> Unit = {},
@@ -66,6 +66,7 @@ fun SusuProgressBarAppBar(
 @Preview(showBackground = true)
 @Composable
 fun SusuProgressAppBarPreview() {
+    // TODO: 애니메이션 부분 + 버튼은 단순히 확인 용으로 추가함 (지울 예정)
     val currentPage = 6
     val increasePercent = 1f / currentPage
     var progress by remember { mutableStateOf(increasePercent) }
