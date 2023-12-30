@@ -59,6 +59,7 @@ fun BasicAppBar(
                         modifier = modifier.padding(leftIconPadding),
                     )
                 }
+
                 LeftIconType.BACKBUTTON -> {
                     Box(
                         modifier = modifier

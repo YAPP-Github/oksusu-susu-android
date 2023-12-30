@@ -77,7 +77,7 @@ fun SusuDefaultAppBar(
                                 rippleEnabled = false,
                                 onClick = onClickRightStartButton,
                             ),
-                        contentAlignment = Alignment.Center
+                        contentAlignment = Alignment.Center,
                     ) {
                         rightStartIcon?.let {
                             Icon(
@@ -94,7 +94,7 @@ fun SusuDefaultAppBar(
                                 rippleEnabled = false,
                                 onClick = onClickRightEndButton,
                             ),
-                        contentAlignment = Alignment.Center
+                        contentAlignment = Alignment.Center,
                     ) {
                         rightEndIcon?.let {
                             Icon(
@@ -105,6 +105,7 @@ fun SusuDefaultAppBar(
                         }
                     }
                 }
+
                 RightActionsType.TEXT -> {
                     rightStartText?.let {
                         Text(
@@ -115,8 +116,8 @@ fun SusuDefaultAppBar(
                                 .padding(end = rightTextPadding)
                                 .susuClickable(
                                     rippleEnabled = false,
-                                    onClick = onClickRightStartButton
-                                )
+                                    onClick = onClickRightStartButton,
+                                ),
                         )
                     }
                     rightEndText?.let {
@@ -128,11 +129,12 @@ fun SusuDefaultAppBar(
                                 .padding(end = rightTextPadding)
                                 .susuClickable(
                                     rippleEnabled = false,
-                                    onClick = onClickRightEndButton
-                                )
+                                    onClick = onClickRightEndButton,
+                                ),
                         )
                     }
                 }
+
                 RightActionsType.NONE -> {}
             }
         },
@@ -145,7 +147,7 @@ fun SusuDefaultAppBar(
 fun SusuDefaultAppBarPreview() {
     SusuTheme {
         Column(
-            verticalArrangement = Arrangement.spacedBy(20.dp)
+            verticalArrangement = Arrangement.spacedBy(20.dp),
         ) {
             // 왼쪽 로고 + 타이틀 + 오른쪽 아이콘 2개
             SusuDefaultAppBar(
@@ -158,7 +160,7 @@ fun SusuDefaultAppBarPreview() {
                 rightEndIcon = R.drawable.ic_statistics_filled,
                 rightEndIconContentDescription = "알림",
                 onClickRightStartButton = { /*TODO*/ },
-                onClickRightEndButton = { /*TODO*/ }
+                onClickRightEndButton = { /*TODO*/ },
             )
 
             // 왼쪽 로고 + 오른쪽 아이콘 2개
@@ -171,7 +173,7 @@ fun SusuDefaultAppBarPreview() {
                 rightEndIcon = R.drawable.ic_statistics_filled,
                 rightEndIconContentDescription = "알림",
                 onClickRightStartButton = { /*TODO*/ },
-                onClickRightEndButton = { /*TODO*/ }
+                onClickRightEndButton = { /*TODO*/ },
             )
 
             // 왼쪽 뒤로가기 + 타이틀 + 오른쪽 아이콘 2개
@@ -186,7 +188,7 @@ fun SusuDefaultAppBarPreview() {
                 rightEndIcon = R.drawable.ic_statistics_filled,
                 rightEndIconContentDescription = "알림",
                 onClickRightStartButton = { /*TODO*/ },
-                onClickRightEndButton = { /*TODO*/ }
+                onClickRightEndButton = { /*TODO*/ },
             )
 
             // 왼쪽 뒤로가기 + 타이틀
@@ -205,7 +207,7 @@ fun SusuDefaultAppBarPreview() {
                 rightActionsType = RightActionsType.ICON,
                 title = "타이틀",
                 rightEndIcon = R.drawable.ic_statistics_filled,
-                rightEndItemColor = Gray50
+                rightEndItemColor = Gray50,
             )
 
             // 왼쪽 뒤로가기 + 타이틀 + 오른쪽 텍스트 1개
@@ -226,7 +228,7 @@ fun SusuDefaultAppBarPreview() {
                 title = "타이틀",
                 rightActionsType = RightActionsType.TEXT,
                 rightStartText = "편집",
-                rightEndText = "삭제"
+                rightEndText = "삭제",
             )
 
             // 왼쪽 뒤로가기 + 오른쪽 텍스트 2개
@@ -236,7 +238,7 @@ fun SusuDefaultAppBarPreview() {
                 onClickBackButton = { /*TODO*/ },
                 rightActionsType = RightActionsType.TEXT,
                 rightStartText = "편집",
-                rightEndText = "삭제"
+                rightEndText = "삭제",
             )
 
             // 왼쪽 뒤로가기

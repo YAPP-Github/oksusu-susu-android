@@ -56,7 +56,7 @@ fun SusuProgressBarAppBar(
                         width = progressBarWidth,
                         height = progressBarHeight,
                     ),
-                strokeCap = progressBarStrokeCap
+                strokeCap = progressBarStrokeCap,
             )
         },
         onClickBackButton = { onClickBackButton },
@@ -73,7 +73,8 @@ fun SusuProgressAppBarPreview() {
 
     val progressAnimation by animateFloatAsState(
         targetValue = progress,
-        animationSpec = tween(durationMillis = 1000, easing = FastOutSlowInEasing), label = ""
+        animationSpec = tween(durationMillis = 1000, easing = FastOutSlowInEasing),
+        label = "",
     )
 
     SusuTheme {
@@ -83,13 +84,13 @@ fun SusuProgressAppBarPreview() {
             SusuProgressBarAppBar(
                 leftIconType = LeftIconType.BACKBUTTON,
                 leftIcon = R.drawable.ic_arrow_left,
-                currentPercentage = progressAnimation
+                currentPercentage = progressAnimation,
             )
 
             Button(
                 onClick = {
                     progress += increasePercent
-                }
+                },
             ) {
                 Text(text = "다음")
             }
