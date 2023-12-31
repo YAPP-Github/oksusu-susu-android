@@ -35,10 +35,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.susu.core.designsystem.R
 import com.susu.core.designsystem.component.textfieldbutton.style.InnerButtonStyle
 import com.susu.core.designsystem.component.textfieldbutton.style.LargeTextFieldButtonStyle
+import com.susu.core.designsystem.component.textfieldbutton.style.SmallTextFieldButtonStyle
 import com.susu.core.designsystem.component.textfieldbutton.style.TextFieldButtonStyle
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.ui.extension.disabledHorizontalPointerInputScroll
@@ -141,6 +143,8 @@ fun SusuTextFieldFillMaxButton(
                         isActive = text.isNotEmpty(),
                         color = color.buttonColor,
                         buttonStyle = innerButtonStyle,
+                        clearIconSize = clearIconSize,
+                        closeIconSize = closeIconSize,
                         onClickClearIcon = onClickClearIcon,
                         onClickCloseIcon = onClickCloseIcon,
                         onClickButton = onClickButton,
@@ -253,6 +257,8 @@ fun SusuTextFieldWrapContentButton(
                 isActive = text.isNotEmpty(),
                 color = color.buttonColor,
                 buttonStyle = innerButtonStyle,
+                clearIconSize = clearIconSize,
+                closeIconSize = closeIconSize,
                 onClickClearIcon = onClickClearIcon,
                 onClickCloseIcon = onClickCloseIcon,
                 onClickButton = onClickButton,
@@ -270,6 +276,8 @@ private fun InnerButtons(
     showCloseIcon: Boolean = true,
     showClearIcon: Boolean = true,
     color: TextButtonInnerButtonColor,
+    clearIconSize: Dp = 0.dp,
+    closeIconSize: Dp = 0.dp,
     buttonStyle: @Composable () -> InnerButtonStyle,
     onClickClearIcon: () -> Unit = {},
     onClickCloseIcon: () -> Unit = {},
@@ -284,17 +292,22 @@ private fun InnerButtons(
     }
 
     if (isSaved.not()) {
-        Box(modifier = Modifier.size(24.dp)) {
+        Box(modifier = Modifier.size(clearIconSize)) {
             if (showClearIcon) {
                 Image(
                     modifier = Modifier
                         .clip(CircleShape)
+                        .size(clearIconSize)
                         .susuClickable(onClick = onClickClearIcon),
                     painter = painterResource(id = R.drawable.ic_clear),
                     contentDescription = "",
                 )
             }
         }
+    }
+
+    if (isSaved && showCloseIcon.not()) {
+        Box(modifier = Modifier.size(closeIconSize))
     }
 
     with(buttonStyle()) {
@@ -321,6 +334,7 @@ private fun InnerButtons(
         Image(
             modifier = Modifier
                 .clip(CircleShape)
+                .size(closeIconSize)
                 .susuClickable(onClick = onClickCloseIcon),
             painter = painterResource(id = R.drawable.ic_close),
             contentDescription = "",
@@ -381,6 +395,8 @@ fun TextFieldButtonPreview() {
                 placeholder = "Button",
                 maxLines = 1,
                 minLines = 1,
+                showClearIcon = false,
+                showCloseIcon = false,
                 color = TextFieldButtonColor.Orange,
                 style = LargeTextFieldButtonStyle.height46,
                 onClickButton = { isSaved = isSaved.not() },
@@ -400,7 +416,7 @@ fun TextFieldButtonPreview() {
                 maxLines = 1,
                 minLines = 1,
                 color = TextFieldButtonColor.Orange,
-                style = LargeTextFieldButtonStyle.height46,
+                style = SmallTextFieldButtonStyle.height32,
                 onClickButton = { isSaved = isSaved.not() },
                 onClickClearIcon = { text = "" },
                 isSaved = isSaved,
