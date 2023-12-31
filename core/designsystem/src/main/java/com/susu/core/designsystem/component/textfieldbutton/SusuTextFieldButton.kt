@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.CircleShape
@@ -17,6 +18,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -31,6 +33,7 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.susu.core.designsystem.R
@@ -50,12 +53,15 @@ fun SusuTextFieldFillMaxButton(
     placeholder: String = "",
     maxLines: Int = 1,
     minLines: Int = 1,
+    overflow: TextOverflow = TextOverflow.Clip,
     style: @Composable () -> TextFieldButtonStyle,
     color: TextFieldButtonColor = TextFieldButtonColor.Black,
     isSaved: Boolean = false,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+    showCloseIcon: Boolean = true,
+    showClearIcon: Boolean = true,
     onClickClearIcon: () -> Unit = {},
     onClickCloseIcon: () -> Unit = {},
     onClickButton: () -> Unit = {},
@@ -109,6 +115,9 @@ fun SusuTextFieldFillMaxButton(
                                 color = textColor,
                                 style = textStyle,
                                 textAlign = TextAlign.Start,
+                                overflow = overflow,
+                                maxLines = maxLines,
+                                minLines = minLines,
                             )
                         }
 
@@ -118,11 +127,16 @@ fun SusuTextFieldFillMaxButton(
                                 color = color.placeholderColor,
                                 style = textStyle,
                                 textAlign = TextAlign.Center,
+                                overflow = overflow,
+                                maxLines = maxLines,
+                                minLines = minLines,
                             )
                         }
                     }
 
                     InnerButtons(
+                        showCloseIcon = showCloseIcon,
+                        showClearIcon = showClearIcon,
                         isSaved = isSaved,
                         isActive = text.isNotEmpty(),
                         color = color.buttonColor,
@@ -146,12 +160,15 @@ fun SusuTextFieldWrapContentButton(
     placeholder: String = "",
     maxLines: Int = 1,
     minLines: Int = 1,
+    overflow: TextOverflow = TextOverflow.Clip,
     style: @Composable () -> TextFieldButtonStyle,
     color: TextFieldButtonColor = TextFieldButtonColor.Black,
     isSaved: Boolean = false,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+    showCloseIcon: Boolean = true,
+    showClearIcon: Boolean = true,
     onClickClearIcon: () -> Unit = {},
     onClickCloseIcon: () -> Unit = {},
     onClickButton: () -> Unit = {},
@@ -208,7 +225,9 @@ fun SusuTextFieldWrapContentButton(
                             text = text,
                             color = textColor,
                             style = textStyle,
-                            textAlign = TextAlign.Center,
+                            overflow = overflow,
+                            maxLines = maxLines,
+                            minLines = minLines,
                         )
                         innerTextField()
                     },
@@ -220,11 +239,16 @@ fun SusuTextFieldWrapContentButton(
                         color = color.placeholderColor,
                         style = textStyle,
                         textAlign = TextAlign.Center,
+                        overflow = overflow,
+                        maxLines = maxLines,
+                        minLines = minLines,
                     )
                 }
             }
 
             InnerButtons(
+                showCloseIcon = showCloseIcon,
+                showClearIcon = showClearIcon,
                 isSaved = isSaved,
                 isActive = text.isNotEmpty(),
                 color = color.buttonColor,
@@ -243,6 +267,8 @@ private fun InnerButtons(
     shape: Shape = RoundedCornerShape(4.dp),
     isSaved: Boolean,
     isActive: Boolean,
+    showCloseIcon: Boolean = true,
+    showClearIcon: Boolean = true,
     color: TextButtonInnerButtonColor,
     buttonStyle: @Composable () -> InnerButtonStyle,
     onClickClearIcon: () -> Unit = {},
@@ -258,13 +284,17 @@ private fun InnerButtons(
     }
 
     if (isSaved.not()) {
-        Image(
-            modifier = Modifier
-                .clip(CircleShape)
-                .susuClickable(onClick = onClickClearIcon),
-            painter = painterResource(id = R.drawable.ic_clear),
-            contentDescription = "",
-        )
+        Box(modifier = Modifier.size(24.dp)) {
+            if (showClearIcon) {
+                Image(
+                    modifier = Modifier
+                        .clip(CircleShape)
+                        .susuClickable(onClick = onClickClearIcon),
+                    painter = painterResource(id = R.drawable.ic_clear),
+                    contentDescription = "",
+                )
+            }
+        }
     }
 
     with(buttonStyle()) {
@@ -287,7 +317,7 @@ private fun InnerButtons(
         }
     }
 
-    if (isSaved) {
+    if (isSaved && showCloseIcon) {
         Image(
             modifier = Modifier
                 .clip(CircleShape)
@@ -313,11 +343,28 @@ fun TextFieldButtonPreview() {
         Column(
             verticalArrangement = Arrangement.spacedBy(10.dp),
         ) {
+            Text(text = "텍스트 길이에 딱 맞는 너비 (wrap)")
             SusuTextFieldWrapContentButton(
                 text = text,
                 onTextChange = { text = it },
                 placeholder = "",
-                maxLines = 1,
+                maxLines = 2,
+                minLines = 1,
+                showClearIcon = true,
+                style = LargeTextFieldButtonStyle.height46,
+                onClickButton = { isSaved = isSaved.not() },
+                onClickClearIcon = { text = "" },
+                isSaved = isSaved,
+            )
+
+            HorizontalDivider()
+
+            Text(text = "최대 너비 (fillMaxWidth)")
+            SusuTextFieldFillMaxButton(
+                text = text,
+                onTextChange = { text = it },
+                placeholder = "Button",
+                maxLines = 2,
                 minLines = 1,
                 style = LargeTextFieldButtonStyle.height46,
                 onClickButton = { isSaved = isSaved.not() },
@@ -325,23 +372,14 @@ fun TextFieldButtonPreview() {
                 isSaved = isSaved,
             )
 
-            SusuTextFieldFillMaxButton(
-                text = text,
-                onTextChange = { text = it },
-                placeholder = "Button",
-                maxLines = 1,
-                minLines = 1,
-                style = LargeTextFieldButtonStyle.height46,
-                onClickButton = { isSaved = isSaved.not() },
-                onClickClearIcon = { text = "" },
-                isSaved = isSaved.not(),
-            )
+            HorizontalDivider()
 
+            Text(text = "텍스트가 없는 경우 : placeHolder 길이에 딱 맞는 너비\n텍스트가 있는 경우 : 텍스트가 차지하는 너비")
             SusuTextFieldWrapContentButton(
                 text = text,
                 onTextChange = { text = it },
                 placeholder = "Button",
-                maxLines = 1,
+                maxLines = 2,
                 minLines = 1,
                 color = TextFieldButtonColor.Orange,
                 style = LargeTextFieldButtonStyle.height46,
@@ -350,17 +388,22 @@ fun TextFieldButtonPreview() {
                 isSaved = isSaved,
             )
 
+            HorizontalDivider()
+
+            Text(text = "고정된 너비 : 200dp")
             SusuTextFieldFillMaxButton(
+                modifier = Modifier.width(200.dp),
                 text = text,
+                overflow = TextOverflow.Ellipsis,
                 onTextChange = { text = it },
                 placeholder = "Button",
-                maxLines = 1,
+                maxLines = 2,
                 minLines = 1,
                 color = TextFieldButtonColor.Orange,
                 style = LargeTextFieldButtonStyle.height46,
                 onClickButton = { isSaved = isSaved.not() },
                 onClickClearIcon = { text = "" },
-                isSaved = isSaved.not(),
+                isSaved = isSaved,
             )
         }
     }
