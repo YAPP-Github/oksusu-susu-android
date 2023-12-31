@@ -1,7 +1,8 @@
 package com.susu.data.di
 
-import com.susu.data.network.ApiService
-import com.susu.data.network.AuthService
+import com.susu.data.network.service.UserService
+import com.susu.data.network.service.TokenService
+import com.susu.data.network.service.SignUpService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,13 +16,19 @@ object ServiceModule {
 
     @Singleton
     @Provides
-    fun provideApiService(retrofit: Retrofit): ApiService {
-        return retrofit.create(ApiService::class.java)
+    fun provideUserService(retrofit: Retrofit): UserService {
+        return retrofit.create(UserService::class.java)
     }
 
     @Singleton
     @Provides
-    fun provideAuthService(@AuthRetrofit retrofit: Retrofit): AuthService {
-        return retrofit.create(AuthService::class.java)
+    fun provideSignUpService(retrofit: Retrofit): SignUpService {
+        return retrofit.create(SignUpService::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideTokenService(@AuthRetrofit retrofit: Retrofit): TokenService {
+        return retrofit.create(TokenService::class.java)
     }
 }
