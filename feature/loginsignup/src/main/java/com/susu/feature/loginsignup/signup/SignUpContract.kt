@@ -3,7 +3,7 @@ package com.susu.feature.loginsignup.signup
 import com.susu.core.ui.base.SideEffect
 import com.susu.core.ui.base.UiState
 
-class SignUpContract {
+sealed interface SignUpContract {
     sealed class SignUpEffect : SideEffect {
         data object NavigateToReceived : SignUpEffect()
         data class ShowToast(val msg: String) : SignUpEffect()
