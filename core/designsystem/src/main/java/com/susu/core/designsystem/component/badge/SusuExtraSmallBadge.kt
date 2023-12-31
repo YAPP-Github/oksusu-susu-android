@@ -26,18 +26,17 @@ import com.susu.core.designsystem.theme.SusuTheme
 fun SusuExtraSmallBadge(
     modifier: Modifier = Modifier,
     shape: Shape = RoundedCornerShape(4.dp),
-    backgroundColor: Color,
-    textColor: Color,
+    color: BadgeColor,
     text: String,
     horizontalPadding: Dp = SusuTheme.spacing.spacing_xxs,
 ) {
     Box(
-        modifier = modifier.background(backgroundColor, shape),
+        modifier = modifier.background(color.backgroundColor, shape),
     ) {
         Text(
             text = text,
             style = SusuTheme.typography.title_xxxs,
-            color = textColor,
+            color = color.textColor,
             modifier = modifier.padding(horizontal = horizontalPadding),
         )
     }
@@ -52,38 +51,31 @@ fun SusuExtraSmallBadgePreview() {
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             SusuExtraSmallBadge(
-                backgroundColor = Gray20,
-                textColor = Gray70,
+                color = BadgeColor.BadgeGray20,
                 text = "전체 100,000원",
             )
             SusuExtraSmallBadge(
-                backgroundColor = SusuTheme.colorScheme.primary,
-                textColor = SusuTheme.colorScheme.background10,
+                color = BadgeColor.BadgeOrange60,
                 text = "가족",
             )
             SusuExtraSmallBadge(
-                backgroundColor = SusuTheme.colorScheme.accent,
-                textColor = SusuTheme.colorScheme.background10,
+                color = BadgeColor.BadgeBlue60,
                 text = "미방문",
             )
             SusuExtraSmallBadge(
-                backgroundColor = Gray90,
-                textColor = SusuTheme.colorScheme.background10,
+                color = BadgeColor.BadgeGray90,
                 text = "선물 O",
             )
             SusuExtraSmallBadge(
-                backgroundColor = Gray40,
-                textColor = SusuTheme.colorScheme.background10,
+                color = BadgeColor.BadgeGray40,
                 text = "선물 O",
             )
             SusuExtraSmallBadge(
-                backgroundColor = Gray30,
-                textColor = Gray70,
+                color = BadgeColor.BadgeGray30,
                 text = "전체 100,000원",
             )
             SusuExtraSmallBadge(
-                backgroundColor = SusuTheme.colorScheme.error,
-                textColor = SusuTheme.colorScheme.background10,
+                color = BadgeColor.BadgeRed60,
                 text = "미방문",
             )
         }
