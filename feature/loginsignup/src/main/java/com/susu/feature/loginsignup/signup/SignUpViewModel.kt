@@ -5,7 +5,7 @@ import com.susu.core.model.User
 import com.susu.core.ui.base.BaseViewModel
 import com.susu.domain.repository.AuthRepository
 import com.susu.domain.repository.TokenRepository
-import com.susu.domain.util.KakaoSdkProvider
+import com.susu.feature.loginsignup.social.KakaoLoginHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -13,7 +13,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
-    private val kakaoSdkProvider: KakaoSdkProvider,
     private val authRepository: AuthRepository,
     private val tokenRepository: TokenRepository,
 ) : BaseViewModel<SignUpContract.SignUpState, SignUpContract.SignUpEffect>(SignUpContract.SignUpState()) {
@@ -31,7 +30,7 @@ class SignUpViewModel @Inject constructor(
     }
 
     fun signUp() {
-        kakaoSdkProvider.getAccessToken {
+        KakaoLoginHelper.getAccessToken {
             viewModelScope.launch {
                 if (it != null) {
                     authRepository.signUp(

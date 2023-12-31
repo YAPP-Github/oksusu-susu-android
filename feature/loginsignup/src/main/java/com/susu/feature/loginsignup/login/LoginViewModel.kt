@@ -4,7 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.susu.core.ui.base.BaseViewModel
 import com.susu.domain.repository.AuthRepository
 import com.susu.domain.repository.TokenRepository
-import com.susu.domain.util.KakaoSdkProvider
+import com.susu.feature.loginsignup.social.KakaoLoginHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -13,7 +13,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val kakaoSdkProvider: KakaoSdkProvider,
     private val authRepository: AuthRepository,
     private val tokenRepository: TokenRepository,
 ) : BaseViewModel<LoginContract.LoginState, LoginContract.LoginEffect>(LoginContract.LoginState()) {
@@ -23,14 +22,14 @@ class LoginViewModel @Inject constructor(
             intent { copy(isLoading = true) }
             Timber.tag("AUTH").d("카카오 로그인 이력 확인")
             // 1. 카카오 토큰 존재 여부
-            if (!kakaoSdkProvider.hasKakaoLoginHistory()) {
+            if (!KakaoLoginHelper.hasKakaoLoginHistory()) {
                 // 1-1. 신규 유저
                 intent { copy(isLoading = false, showVote = true) }
                 Timber.tag("AUTH").d("신규유져")
             } else {
                 // 2. 카카오 access token 존재 시 로그인 시도
                 Timber.tag("AUTH").d("수수 로그인 시도")
-                kakaoSdkProvider.getAccessToken {
+                KakaoLoginHelper.getAccessToken {
                     it?.let { accessToken ->
                         viewModelScope.launch {
                             authRepository.login(accessToken).onSuccess { token ->

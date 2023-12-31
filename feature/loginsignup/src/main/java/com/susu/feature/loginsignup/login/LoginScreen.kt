@@ -31,7 +31,6 @@ fun LoginScreen(
     navigateToSignUp: () -> Unit,
 ) {
     val context = LocalContext.current
-    val kakaoLoginHelper = KakaoLoginHelper(context)
     val uiState by viewModel.uiState.collectAsState()
 
     LaunchedEffect(key1 = viewModel.sideEffect) {
@@ -62,7 +61,8 @@ fun LoginScreen(
         } else {
             KakaoLogin(
                 onClick = {
-                    kakaoLoginHelper.login(
+                    KakaoLoginHelper.login(
+                        context = context,
                         onSuccess = { viewModel.login(it) },
                         onFailed = { viewModel.showToast(it) },
                     )
