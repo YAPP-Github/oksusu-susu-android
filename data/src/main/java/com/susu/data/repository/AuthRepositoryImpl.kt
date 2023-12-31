@@ -24,12 +24,12 @@ class AuthRepositoryImpl @Inject constructor(
     }
 
     override suspend fun signUp(
-        snsAccessToken: String,
+        oauthAccessToken: String,
         user: User,
     ) = runCatching {
         signUpService.signUp(
             provider = SnsProviders.Kakao.path,
-            accessToken = snsAccessToken,
+            accessToken = oauthAccessToken,
             user = user.toData(),
         ).toDomain()
     }

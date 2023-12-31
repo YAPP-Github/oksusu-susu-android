@@ -34,7 +34,7 @@ class SignUpViewModel @Inject constructor(
             viewModelScope.launch {
                 if (it != null) {
                     authRepository.signUp(
-                        snsAccessToken = it,
+                        oauthAccessToken = it,
                         user = User(
                             name = uiState.value.name,
                             gender = uiState.value.gender,
