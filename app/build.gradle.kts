@@ -1,3 +1,5 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+
 @Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
     alias(libs.plugins.susu.android.application)
@@ -11,6 +13,7 @@ android {
         applicationId = "com.oksusu.susu"
         versionCode = 1
         versionName = "1.0"
+        buildConfigField("String", "KAKAO_APP_KEY", getApiKey("KAKAO_APP_KEY"))
     }
 
     buildFeatures {
@@ -28,4 +31,8 @@ dependencies {
     implementation(libs.firebase.analytics)
 
     implementation(libs.timber)
+}
+
+fun getApiKey(propertyKey: String): String {
+    return gradleLocalProperties(rootDir).getProperty(propertyKey)
 }

@@ -14,6 +14,6 @@ class SUSUApplication : Application() {
             Timber.plant(CustomTimberTree())
         }
 
-        KakaoSdk.init(this, getString(R.string.kakao_app_key))
+        KakaoSdk.init(this, BuildConfig.KAKAO_APP_KEY)
     }
 }
