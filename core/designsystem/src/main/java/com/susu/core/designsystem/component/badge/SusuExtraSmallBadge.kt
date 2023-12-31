@@ -10,16 +10,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.susu.core.designsystem.theme.Gray20
-import com.susu.core.designsystem.theme.Gray30
-import com.susu.core.designsystem.theme.Gray40
-import com.susu.core.designsystem.theme.Gray70
-import com.susu.core.designsystem.theme.Gray90
 import com.susu.core.designsystem.theme.SusuTheme
 
 @Composable
@@ -28,7 +21,7 @@ fun SusuExtraSmallBadge(
     shape: Shape = RoundedCornerShape(4.dp),
     color: BadgeColor,
     text: String,
-    horizontalPadding: Dp = SusuTheme.spacing.spacing_xxs,
+    padding: BadgePadding = BadgePadding.ExtraSmallBadgePadding,
 ) {
     Box(
         modifier = modifier.background(color.backgroundColor, shape),
@@ -37,7 +30,10 @@ fun SusuExtraSmallBadge(
             text = text,
             style = SusuTheme.typography.title_xxxs,
             color = color.textColor,
-            modifier = modifier.padding(horizontal = horizontalPadding),
+            modifier = modifier.padding(
+                horizontal = padding.horizontalPadding,
+                vertical = padding.verticalPadding,
+            ),
         )
     }
 }

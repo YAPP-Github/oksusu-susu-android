@@ -12,7 +12,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.susu.core.designsystem.theme.SusuTheme
 
@@ -22,8 +21,7 @@ fun SusuSmallBadge(
     shape: Shape = RoundedCornerShape(4.dp),
     color: BadgeColor,
     text: String,
-    horizontalPadding: Dp = SusuTheme.spacing.spacing_xxs,
-    verticalPadding: Dp = SusuTheme.spacing.spacing_xxxxxs,
+    padding: BadgePadding = BadgePadding.SmallBadgePadding,
 ) {
     Box(
         modifier = modifier.background(color.backgroundColor, shape),
@@ -32,7 +30,10 @@ fun SusuSmallBadge(
             text = text,
             style = SusuTheme.typography.title_xxxs,
             color = color.textColor,
-            modifier = modifier.padding(horizontal = horizontalPadding, vertical = verticalPadding),
+            modifier = modifier.padding(
+                horizontal = padding.horizontalPadding,
+                vertical = padding.verticalPadding,
+            ),
         )
     }
 }
