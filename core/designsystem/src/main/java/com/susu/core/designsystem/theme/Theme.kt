@@ -48,6 +48,8 @@ object SusuTheme {
      *
      * spacing_s = 12.dp,
      *
+     * spacing_xm = 14.dp,
+     *
      * spacing_m = 16.dp,
      *
      * spacing_l = 20.dp,
