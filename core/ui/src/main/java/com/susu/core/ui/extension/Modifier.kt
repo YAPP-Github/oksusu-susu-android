@@ -7,7 +7,12 @@ import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.input.nestedscroll.NestedScrollSource
+import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.unit.Velocity
 import com.susu.core.ui.util.MultipleEventsCutter
 import com.susu.core.ui.util.get
 
@@ -55,4 +60,13 @@ fun Modifier.susuClickable(
             interactionSource = remember { MutableInteractionSource() },
         )
     }
+}
+
+// https://stackoverflow.com/questions/73309395/strange-scroll-in-the-basictextfield-with-intrinsicsize-min
+fun Modifier.disabledHorizontalPointerInputScroll(disabled: Boolean = true) =
+    if (disabled) this.nestedScroll(HorizontalScrollConsumer) else this
+
+private val HorizontalScrollConsumer = object : NestedScrollConnection {
+    override fun onPreScroll(available: Offset, source: NestedScrollSource) = available.copy(y = 0f)
+    override suspend fun onPreFling(available: Velocity) = available.copy(y = 0f)
 }
