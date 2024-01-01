@@ -3,6 +3,7 @@ package com.susu.core.designsystem.component.badge
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.Dp
 import com.susu.core.designsystem.theme.SusuTheme
+
 data class BadgePadding(
     val horizontalPadding: Dp,
     val verticalPadding: Dp,

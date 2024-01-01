@@ -36,7 +36,7 @@ fun SusuBadge(
             modifier = modifier.padding(
                 horizontal = horizontalPadding,
                 vertical = verticalPadding,
-            )
+            ),
         )
     }
 }
@@ -46,7 +46,7 @@ fun SusuBadge(
 fun SusuSmallBadgePreview() {
     SusuTheme {
         Row(
-            horizontalArrangement = Arrangement.spacedBy(20.dp)
+            horizontalArrangement = Arrangement.spacedBy(20.dp),
         ) {
             Column(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
