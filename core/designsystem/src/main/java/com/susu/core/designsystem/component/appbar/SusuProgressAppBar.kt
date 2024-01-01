@@ -17,7 +17,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -28,8 +27,8 @@ import com.susu.core.ui.extension.susuClickable
 @Composable
 fun SusuProgressAppBar(
     modifier: Modifier = Modifier,
-    @DrawableRes leftIcon: Int = R.drawable.ic_arrow_left,
-    leftIconContentDescription: String = stringResource(R.string.app_bar_back_button),
+    @DrawableRes leftIcon: Int? = null,
+    leftIconContentDescription: String? = null,
     leftIconPadding: Dp = SusuTheme.spacing.spacing_xs,
     currentStep: Int,
     entireStep: Int,
@@ -39,16 +38,18 @@ fun SusuProgressAppBar(
     BasicAppBar(
         modifier = modifier,
         leftIcon = {
-            Icon(
-                painter = painterResource(id = leftIcon),
-                contentDescription = leftIconContentDescription,
-                modifier = Modifier
-                    .susuClickable(
-                        rippleEnabled = true,
-                        onClick = onClickBackButton,
-                    )
-                    .padding(leftIconPadding),
-            )
+            leftIcon?.let {
+                Icon(
+                    painter = painterResource(id = leftIcon),
+                    contentDescription = leftIconContentDescription,
+                    modifier = Modifier
+                        .susuClickable(
+                            rippleEnabled = true,
+                            onClick = onClickBackButton,
+                        )
+                        .padding(leftIconPadding),
+                )
+            }
         },
         title = {
             LinearProgressIndicator(
@@ -77,6 +78,8 @@ fun SusuProgressAppBarPreview() {
             verticalArrangement = Arrangement.spacedBy(20.dp),
         ) {
             SusuProgressAppBar(
+                leftIcon = R.drawable.ic_arrow_left,
+                leftIconContentDescription = "뒤로가기",
                 currentStep = currentStep,
                 entireStep = entireStep,
                 onClickBackButton = {

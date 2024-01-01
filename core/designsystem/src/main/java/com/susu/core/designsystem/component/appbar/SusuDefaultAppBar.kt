@@ -22,7 +22,7 @@ import com.susu.core.ui.extension.susuClickable
 @Composable
 fun SusuDefaultAppBar(
     modifier: Modifier = Modifier,
-    leftIcon: @Composable () -> Unit,
+    leftIcon: @Composable () -> Unit = {},
     title: String? = null,
     actions: @Composable () -> Unit = {},
 ) {
