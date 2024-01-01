@@ -1,14 +1,24 @@
 package com.susu.core.designsystem.component.badge
 
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
+import com.susu.core.designsystem.theme.SusuTheme
+data class BadgePadding(
+    val horizontalPadding: Dp,
+    val verticalPadding: Dp,
+)
 
-enum class BadgePadding(
-    val horizontalPadding: Dp = 8.dp,
-    val verticalPadding: Dp = 0.dp,
-) {
-    SmallBadgePadding(
-        verticalPadding = 2.dp
-    ),
-    ExtraSmallBadgePadding,
+object BadgeStyle {
+    val smallBadge: @Composable () -> BadgePadding = {
+        BadgePadding(
+            horizontalPadding = SusuTheme.spacing.spacing_xxs,
+            verticalPadding = SusuTheme.spacing.spacing_xxxxxs,
+        )
+    }
+    val extraSmallBadge: @Composable () -> BadgePadding = {
+        BadgePadding(
+            horizontalPadding = SusuTheme.spacing.spacing_xxs,
+            verticalPadding = SusuTheme.spacing.spacing_xxxxxs,
+        )
+    }
 }

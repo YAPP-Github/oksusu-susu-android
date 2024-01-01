@@ -21,8 +21,11 @@ fun SusuBadge(
     shape: Shape = RoundedCornerShape(4.dp),
     color: BadgeColor,
     text: String,
-    padding: BadgePadding,
+    padding: @Composable () -> BadgePadding,
 ) {
+    val horizontalPadding = padding().horizontalPadding
+    val verticalPadding = padding().verticalPadding
+
     Box(
         modifier = modifier.background(color.backgroundColor, shape),
     ) {
@@ -31,9 +34,9 @@ fun SusuBadge(
             style = SusuTheme.typography.title_xxxs,
             color = color.textColor,
             modifier = modifier.padding(
-                horizontal = padding.horizontalPadding,
-                vertical = padding.verticalPadding,
-            ),
+                horizontal = horizontalPadding,
+                vertical = verticalPadding,
+            )
         )
     }
 }
@@ -51,37 +54,37 @@ fun SusuSmallBadgePreview() {
                 SusuBadge(
                     color = BadgeColor.Gray20,
                     text = "전체 100,000원",
-                    padding = BadgePadding.SmallBadgePadding,
+                    padding = BadgeStyle.smallBadge,
                 )
                 SusuBadge(
                     color = BadgeColor.Orange60,
                     text = "가족",
-                    padding = BadgePadding.SmallBadgePadding,
+                    padding = BadgeStyle.smallBadge,
                 )
                 SusuBadge(
                     color = BadgeColor.Blue60,
                     text = "미방문",
-                    padding = BadgePadding.SmallBadgePadding,
+                    padding = BadgeStyle.smallBadge,
                 )
                 SusuBadge(
                     color = BadgeColor.Gray90,
                     text = "선물 O",
-                    padding = BadgePadding.SmallBadgePadding,
+                    padding = BadgeStyle.smallBadge,
                 )
                 SusuBadge(
                     color = BadgeColor.Gray40,
                     text = "선물 O",
-                    padding = BadgePadding.SmallBadgePadding,
+                    padding = BadgeStyle.smallBadge,
                 )
                 SusuBadge(
                     color = BadgeColor.Gray30,
                     text = "전체 100,000원",
-                    padding = BadgePadding.SmallBadgePadding,
+                    padding = BadgeStyle.smallBadge,
                 )
                 SusuBadge(
                     color = BadgeColor.Red60,
                     text = "미방문",
-                    padding = BadgePadding.SmallBadgePadding,
+                    padding = BadgeStyle.smallBadge,
                 )
             }
 
@@ -91,37 +94,37 @@ fun SusuSmallBadgePreview() {
                 SusuBadge(
                     color = BadgeColor.Gray20,
                     text = "전체 100,000원",
-                    padding = BadgePadding.ExtraSmallBadgePadding,
+                    padding = BadgeStyle.extraSmallBadge,
                 )
                 SusuBadge(
                     color = BadgeColor.Orange60,
                     text = "가족",
-                    padding = BadgePadding.ExtraSmallBadgePadding,
+                    padding = BadgeStyle.extraSmallBadge,
                 )
                 SusuBadge(
                     color = BadgeColor.Blue60,
                     text = "미방문",
-                    padding = BadgePadding.ExtraSmallBadgePadding,
+                    padding = BadgeStyle.extraSmallBadge,
                 )
                 SusuBadge(
                     color = BadgeColor.Gray90,
                     text = "선물 O",
-                    padding = BadgePadding.ExtraSmallBadgePadding,
+                    padding = BadgeStyle.extraSmallBadge,
                 )
                 SusuBadge(
                     color = BadgeColor.Gray40,
                     text = "선물 O",
-                    padding = BadgePadding.ExtraSmallBadgePadding,
+                    padding = BadgeStyle.extraSmallBadge,
                 )
                 SusuBadge(
                     color = BadgeColor.Gray30,
                     text = "전체 100,000원",
-                    padding = BadgePadding.ExtraSmallBadgePadding,
+                    padding = BadgeStyle.extraSmallBadge,
                 )
                 SusuBadge(
                     color = BadgeColor.Red60,
                     text = "미방문",
-                    padding = BadgePadding.ExtraSmallBadgePadding,
+                    padding = BadgeStyle.extraSmallBadge,
                 )
             }
         }
