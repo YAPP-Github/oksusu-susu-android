@@ -47,31 +47,31 @@ fun SusuExtraSmallBadgePreview() {
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             SusuExtraSmallBadge(
-                color = BadgeColor.BadgeGray20,
+                color = BadgeColor.Gray20,
                 text = "전체 100,000원",
             )
             SusuExtraSmallBadge(
-                color = BadgeColor.BadgeOrange60,
+                color = BadgeColor.Orange60,
                 text = "가족",
             )
             SusuExtraSmallBadge(
-                color = BadgeColor.BadgeBlue60,
+                color = BadgeColor.Blue60,
                 text = "미방문",
             )
             SusuExtraSmallBadge(
-                color = BadgeColor.BadgeGray90,
+                color = BadgeColor.Gray90,
                 text = "선물 O",
             )
             SusuExtraSmallBadge(
-                color = BadgeColor.BadgeGray40,
+                color = BadgeColor.Gray40,
                 text = "선물 O",
             )
             SusuExtraSmallBadge(
-                color = BadgeColor.BadgeGray30,
+                color = BadgeColor.Gray30,
                 text = "전체 100,000원",
             )
             SusuExtraSmallBadge(
-                color = BadgeColor.BadgeRed60,
+                color = BadgeColor.Red60,
                 text = "미방문",
             )
         }
