@@ -80,7 +80,7 @@ private fun LogoWithTwoIconsPreview(
     SusuDefaultAppBar(
         leftIcon = {
             Image(
-                painter = painterResource(id = R.drawable.ic_received_filled),
+                painter = painterResource(id = R.drawable.ic_arrow_left),
                 contentDescription = "로고",
                 modifier = modifier.padding(clickPadding),
             )
@@ -88,7 +88,7 @@ private fun LogoWithTwoIconsPreview(
         title = "타이틀",
         actions = {
             Icon(
-                painter = painterResource(id = R.drawable.ic_community_filled),
+                painter = painterResource(id = R.drawable.ic_arrow_left),
                 contentDescription = null,
                 modifier = modifier
                     .susuClickable(
@@ -100,7 +100,7 @@ private fun LogoWithTwoIconsPreview(
                     .padding(clickPadding),
             )
             Icon(
-                painter = painterResource(id = R.drawable.ic_my_page_filled),
+                painter = painterResource(id = R.drawable.ic_arrow_left),
                 contentDescription = null,
                 modifier = modifier
                     .susuClickable(
