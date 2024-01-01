@@ -37,12 +37,12 @@ fun SusuProgressAppBar(
     onClickBackButton: () -> Unit,
 ) {
     BasicAppBar(
-        modifier = Modifier,
+        modifier = modifier,
         leftIcon = {
             Icon(
                 painter = painterResource(id = leftIcon),
                 contentDescription = leftIconContentDescription,
-                modifier = modifier
+                modifier = Modifier
                     .susuClickable(
                         rippleEnabled = true,
                         onClick = onClickBackButton,
