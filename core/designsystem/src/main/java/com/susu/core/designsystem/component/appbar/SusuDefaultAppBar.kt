@@ -3,7 +3,6 @@ package com.susu.core.designsystem.component.appbar
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
@@ -88,7 +87,9 @@ private fun LogoWithTwoIconsPreview(
         },
         title = "타이틀",
         actions = {
-            Box(
+            Icon(
+                painter = painterResource(id = R.drawable.ic_community_filled),
+                contentDescription = null,
                 modifier = modifier
                     .susuClickable(
                         rippleEnabled = true, // 클릭 영역 확인을 위해 true로 설정
@@ -97,13 +98,10 @@ private fun LogoWithTwoIconsPreview(
                         },
                     )
                     .padding(clickPadding),
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_community_filled),
-                    contentDescription = null,
-                )
-            }
-            Box(
+            )
+            Icon(
+                painter = painterResource(id = R.drawable.ic_my_page_filled),
+                contentDescription = null,
                 modifier = modifier
                     .susuClickable(
                         rippleEnabled = true, // 클릭 영역 확인을 위해 true로 설정
@@ -112,12 +110,7 @@ private fun LogoWithTwoIconsPreview(
                         },
                     )
                     .padding(clickPadding),
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_my_page_filled),
-                    contentDescription = null,
-                )
-            }
+            )
         },
     )
 }
@@ -130,7 +123,9 @@ private fun BackBtnWithTwoTextPreview(
 ) {
     SusuDefaultAppBar(
         leftIcon = {
-            Box(
+            Icon(
+                painter = painterResource(id = R.drawable.ic_arrow_left),
+                contentDescription = "뒤로가기",
                 modifier = modifier
                     .susuClickable(
                         rippleEnabled = true,
@@ -139,12 +134,7 @@ private fun BackBtnWithTwoTextPreview(
                         },
                     )
                     .padding(clickPadding),
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_arrow_left),
-                    contentDescription = "뒤로가기",
-                )
-            }
+            )
         },
         title = "타이틀",
         actions = {
