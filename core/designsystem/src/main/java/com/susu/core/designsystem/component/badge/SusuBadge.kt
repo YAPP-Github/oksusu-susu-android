@@ -23,21 +23,20 @@ fun SusuBadge(
     text: String,
     padding: @Composable () -> BadgePadding,
 ) {
-    val horizontalPadding = padding().horizontalPadding
-    val verticalPadding = padding().verticalPadding
-
-    Box(
-        modifier = modifier.background(color.backgroundColor, shape),
-    ) {
-        Text(
-            text = text,
-            style = SusuTheme.typography.title_xxxs,
-            color = color.textColor,
-            modifier = modifier.padding(
-                horizontal = horizontalPadding,
-                vertical = verticalPadding,
-            ),
-        )
+    with(padding()) {
+        Box(
+            modifier = modifier.background(color.backgroundColor, shape),
+        ) {
+            Text(
+                text = text,
+                style = SusuTheme.typography.title_xxxs,
+                color = color.textColor,
+                modifier = modifier.padding(
+                    horizontal = horizontalPadding,
+                    vertical = verticalPadding,
+                ),
+            )
+        }
     }
 }
 
