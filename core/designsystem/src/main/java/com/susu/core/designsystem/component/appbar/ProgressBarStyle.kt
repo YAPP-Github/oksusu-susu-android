@@ -20,5 +20,5 @@ enum class ProgressBarStyle(
         progressBarWidth = 72.dp,
         progressBarHeight = 4.dp,
         progressBarStrokeCap = StrokeCap.Round,
-    )
+    ),
 }
