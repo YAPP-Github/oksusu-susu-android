@@ -27,6 +27,7 @@ import com.susu.feature.navigator.initialization.MainViewModel
 import com.susu.feature.received.navigation.ReceivedRoute
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -44,6 +45,7 @@ class MainActivity : ComponentActivity() {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect {
                     uiState = it
+                    Timber.d(uiState.toString())
                 }
             }
         }
@@ -66,6 +68,7 @@ class MainActivity : ComponentActivity() {
                         startDestination = when (uiState.initialRoute) {
                             InitialRoute.SIGNUP_VOTE -> LoginSignupRoute.Parent.Vote.route
                             InitialRoute.LOGIN -> LoginSignupRoute.Parent.Login.route
+                            InitialRoute.SIGNUP -> LoginSignupRoute.Parent.SignUp.route
                             InitialRoute.RECEIVED -> ReceivedRoute.route
                             InitialRoute.NONE -> LoginSignupRoute.Parent.route
                         },
