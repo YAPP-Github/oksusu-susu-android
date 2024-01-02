@@ -2,68 +2,33 @@ package com.susu.feature.loginsignup.login
 
 import androidx.lifecycle.viewModelScope
 import com.susu.core.ui.base.BaseViewModel
-import com.susu.domain.repository.AuthRepository
-import com.susu.domain.repository.TokenRepository
-import com.susu.feature.loginsignup.social.KakaoLoginHelper
+import com.susu.domain.usecase.CheckCanRegisterUseCase
+import com.susu.domain.usecase.LoginUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val authRepository: AuthRepository,
-    private val tokenRepository: TokenRepository,
+    private val checkCanRegisterUseCase: CheckCanRegisterUseCase,
+    private val loginUseCase: LoginUseCase,
 ) : BaseViewModel<LoginContract.LoginState, LoginContract.LoginEffect>(LoginContract.LoginState()) {
 
-    init {
-        viewModelScope.launch {
-            intent { copy(isLoading = true) }
-            Timber.tag("AUTH").d("카카오 로그인 이력 확인")
-            // 1. 카카오 토큰 존재 여부
-            if (!KakaoLoginHelper.hasKakaoLoginHistory()) {
-                // 1-1. 신규 유저
-                intent { copy(isLoading = false, showVote = true) }
-                Timber.tag("AUTH").d("신규유져")
-            } else {
-                // 2. 카카오 access token 존재 시 로그인 시도
-                Timber.tag("AUTH").d("수수 로그인 시도")
-                KakaoLoginHelper.getAccessToken {
-                    it?.let { accessToken ->
-                        viewModelScope.launch {
-                            authRepository.login(accessToken).onSuccess { token ->
-                                Timber.tag("AUTH").d("수수 로그인 성공")
-                                runBlocking {
-                                    tokenRepository.saveTokens(token)
-                                }
-                                postSideEffect(LoginContract.LoginEffect.NavigateToReceived)
-                            }
-                            intent { copy(isLoading = false) }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    fun login(accessToken: String) {
+    fun login(oauthAccessToken: String) {
         viewModelScope.launch {
             intent { copy(isLoading = true) }
             // 수수 서버에 가입되지 않은 회원이라면 -> 회원 정보 기입 후 수수 회원가입
-            if (authRepository.canRegister(accessToken)) {
-                Timber.tag("AUTH").d("수수 가입 가능")
-                postSideEffect(LoginContract.LoginEffect.NavigateToSignUp)
-            } else {
-                authRepository.login(accessToken).onSuccess { token ->
-                    Timber.tag("AUTH").d("수수 로그인 성공 ${token.accessToken}")
-                    runBlocking {
-                        tokenRepository.saveTokens(token)
-                    }
-                    postSideEffect(LoginContract.LoginEffect.NavigateToReceived)
-                }.onFailure {
-                    Timber.tag("AUTH").d("수수 로그인 실패 ${it.message}")
-                    postSideEffect(LoginContract.LoginEffect.ShowToast(it.message ?: "수수 로그인 실패"))
+            checkCanRegisterUseCase(oauthAccessToken = oauthAccessToken).onSuccess { canRegister ->
+                if (canRegister) {
+                    postSideEffect(LoginContract.LoginEffect.NavigateToSignUp)
+                } else {
+                    loginUseCase(oauthAccessToken = oauthAccessToken)
+                        .onSuccess {
+                            postSideEffect(LoginContract.LoginEffect.NavigateToReceived)
+                        }
+                        .onFailure {
+                            postSideEffect(LoginContract.LoginEffect.ShowToast(it.message ?: "수수 로그인 실패"))
+                        }
                 }
             }
             intent { copy(isLoading = false) }

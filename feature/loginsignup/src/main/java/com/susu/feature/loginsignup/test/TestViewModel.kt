@@ -2,7 +2,8 @@ package com.susu.feature.loginsignup.test
 
 import androidx.lifecycle.viewModelScope
 import com.susu.core.ui.base.BaseViewModel
-import com.susu.domain.repository.AuthRepository
+import com.susu.domain.repository.LoginRepository
+import com.susu.domain.repository.SignUpRepository
 import com.susu.domain.repository.TokenRepository
 import com.susu.feature.loginsignup.social.KakaoLoginHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -13,12 +14,12 @@ import javax.inject.Inject
 // 마이페이지에 들어갈 기능입니다.
 @HiltViewModel
 class TestViewModel @Inject constructor(
-    private val authRepository: AuthRepository,
+    private val loginRepository: LoginRepository,
     private val tokenRepository: TokenRepository,
 ) : BaseViewModel<TestContract.TestState, TestContract.TestEffect>(TestContract.TestState) {
     fun logout() {
         viewModelScope.launch {
-            authRepository.logout()
+            loginRepository.logout()
             KakaoLoginHelper.logout()
             tokenRepository.deleteTokens()
         }
@@ -28,7 +29,7 @@ class TestViewModel @Inject constructor(
     fun withdraw() {
         KakaoLoginHelper.unlink().onSuccess {
             viewModelScope.launch {
-                runBlocking { authRepository.withdraw() }
+                runBlocking { loginRepository.withdraw() }
                 tokenRepository.deleteTokens()
             }
         }

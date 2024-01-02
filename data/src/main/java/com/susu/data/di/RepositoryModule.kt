@@ -1,8 +1,10 @@
 package com.susu.data.di
 
-import com.susu.data.repository.AuthRepositoryImpl
+import com.susu.data.repository.LoginRepositoryImpl
+import com.susu.data.repository.SignUpRepositoryImpl
 import com.susu.data.repository.TokenRepositoryImpl
-import com.susu.domain.repository.AuthRepository
+import com.susu.domain.repository.LoginRepository
+import com.susu.domain.repository.SignUpRepository
 import com.susu.domain.repository.TokenRepository
 import dagger.Binds
 import dagger.Module
@@ -19,7 +21,12 @@ abstract class RepositoryModule {
     ): TokenRepository
 
     @Binds
-    abstract fun bindAuthRepository(
-        authRepositoryImpl: AuthRepositoryImpl,
-    ): AuthRepository
+    abstract fun bindSignUpRepository(
+        signUpRepositoryImpl: SignUpRepositoryImpl,
+    ): SignUpRepository
+
+    @Binds
+    abstract fun bindLoginRepository(
+        loginRepositoryImpl: LoginRepositoryImpl,
+    ): LoginRepository
 }
