@@ -35,6 +35,7 @@ dependencies {
     implementation(libs.timber)
 }
 
+@Suppress
 fun getApiKey(propertyKey: String): String {
     return gradleLocalProperties(rootDir).getProperty(propertyKey)
 }
