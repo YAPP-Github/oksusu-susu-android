@@ -1,6 +1,6 @@
 package com.susu.data.network.service
 
-import com.susu.data.model.TokenEntity
+import com.susu.data.model.TokenResponse
 import com.susu.data.model.UserEntity
 import com.susu.data.model.response.ValidRegisterResponse
 import retrofit2.http.Body
@@ -15,7 +15,7 @@ interface SignUpService {
         @Path("provider") provider: String,
         @Query("accessToken") accessToken: String,
         @Body user: UserEntity,
-    ): TokenEntity
+    ): TokenResponse
 
     @GET("oauth/{provider}/sign-up/valid")
     suspend fun checkValidRegister(

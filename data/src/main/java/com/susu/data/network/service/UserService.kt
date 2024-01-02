@@ -1,6 +1,6 @@
 package com.susu.data.network.service
 
-import com.susu.data.model.TokenEntity
+import com.susu.data.model.TokenResponse
 import com.susu.data.model.request.AccessTokenRequest
 import retrofit2.Response
 import retrofit2.http.Body
@@ -12,7 +12,7 @@ interface UserService {
     suspend fun login(
         @Path("provider") provider: String,
         @Body accessTokenRequest: AccessTokenRequest,
-    ): TokenEntity
+    ): TokenResponse
 
     @POST("auth/logout")
     suspend fun logout(): Response<Unit?>
