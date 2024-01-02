@@ -9,7 +9,7 @@ import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
 import timber.log.Timber
 
-internal object KakaoLoginHelper {
+object KakaoLoginHelper {
 
     fun login(
         context: Context,

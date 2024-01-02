@@ -7,8 +7,6 @@ import androidx.compose.animation.slideIn
 import androidx.compose.animation.slideOut
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.IntOffset
@@ -27,6 +25,7 @@ import kotlinx.collections.immutable.toImmutableList
 @Composable
 internal fun MainScreen(
     modifier: Modifier = Modifier,
+    startDestination: String,
     navigator: MainNavigator = rememberMainNavigator(),
 ) {
     Scaffold(
@@ -34,7 +33,7 @@ internal fun MainScreen(
         content = { innerPadding ->
             NavHost(
                 navController = navigator.navController,
-                startDestination = navigator.startDestination,
+                startDestination = startDestination,
             ) {
                 loginSignupNavGraph(navigator.navController)
 

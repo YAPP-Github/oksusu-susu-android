@@ -5,8 +5,8 @@ import com.susu.core.ui.base.UiState
 
 sealed interface MainContract {
     object MainEffect : SideEffect
-    sealed class MainState : UiState {
-        data object Loading : MainState()
-        data class Initialized(val initialRoute: InitialRoute) : MainState()
-    }
+    data class MainState(
+        val isLoading: Boolean = true,
+        val initialRoute: InitialRoute = InitialRoute.NONE
+    ) : UiState
 }

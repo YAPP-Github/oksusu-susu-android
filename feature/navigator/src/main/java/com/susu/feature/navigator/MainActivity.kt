@@ -20,10 +20,12 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.susu.core.designsystem.theme.SusuTheme
+import com.susu.feature.loginsignup.navigation.LoginSignupRoute
+import com.susu.feature.navigator.initialization.InitialRoute
 import com.susu.feature.navigator.initialization.MainContract
 import com.susu.feature.navigator.initialization.MainViewModel
+import com.susu.feature.received.navigation.ReceivedRoute
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -35,7 +37,7 @@ class MainActivity : ComponentActivity() {
         val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
 
-        var uiState: MainContract.MainState by mutableStateOf(MainContract.MainState.Loading)
+        var uiState: MainContract.MainState by mutableStateOf(MainContract.MainState())
 
         // Update the uiState
         lifecycleScope.launch {
@@ -46,26 +48,29 @@ class MainActivity : ComponentActivity() {
             }
         }
 
-        splashScreen.setKeepOnScreenCondition {
-            when (uiState) {
-                MainContract.MainState.Loading -> true
-                is MainContract.MainState.Initialized -> false
-            }
-        }
+        splashScreen.setKeepOnScreenCondition { uiState.isLoading }
 
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
         setContent {
             SusuTheme {
-                MainScreen(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .windowInsetsPadding(
-                            WindowInsets.systemBars.only(
-                                WindowInsetsSides.Vertical,
+                if (uiState.isLoading.not()) {
+                    MainScreen(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .windowInsetsPadding(
+                                WindowInsets.systemBars.only(
+                                    WindowInsetsSides.Vertical,
+                                ),
                             ),
-                        ),
-                )
+                        startDestination = when (uiState.initialRoute) {
+                            InitialRoute.SIGNUP_VOTE -> LoginSignupRoute.Parent.route
+                            InitialRoute.LOGIN -> LoginSignupRoute.Parent.route
+                            InitialRoute.RECEIVED -> ReceivedRoute.route
+                            InitialRoute.NONE -> LoginSignupRoute.Parent.route
+                        },
+                    )
+                }
             }
         }
     }
