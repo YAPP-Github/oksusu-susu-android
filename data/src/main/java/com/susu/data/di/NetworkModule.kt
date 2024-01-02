@@ -72,7 +72,6 @@ object NetworkModule {
     @AuthOkHttpClient
     fun provideAuthOkHttpClient(
         loggingInterceptor: HttpLoggingInterceptor,
-        json: Json,
     ): OkHttpClient = OkHttpClient.Builder()
         .addInterceptor(loggingInterceptor)
         .build()

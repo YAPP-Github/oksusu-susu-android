@@ -64,8 +64,8 @@ class MainActivity : ComponentActivity() {
                                 ),
                             ),
                         startDestination = when (uiState.initialRoute) {
-                            InitialRoute.SIGNUP_VOTE -> LoginSignupRoute.Parent.route
-                            InitialRoute.LOGIN -> LoginSignupRoute.Parent.route
+                            InitialRoute.SIGNUP_VOTE -> LoginSignupRoute.Parent.Vote.route
+                            InitialRoute.LOGIN -> LoginSignupRoute.Parent.Login.route
                             InitialRoute.RECEIVED -> ReceivedRoute.route
                             InitialRoute.NONE -> LoginSignupRoute.Parent.route
                         },

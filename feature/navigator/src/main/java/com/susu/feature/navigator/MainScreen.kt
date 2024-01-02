@@ -14,6 +14,7 @@ import androidx.navigation.compose.NavHost
 import com.susu.core.designsystem.component.navigation.SusuNavigationBar
 import com.susu.core.designsystem.component.navigation.SusuNavigationItem
 import com.susu.feature.community.navigation.communityNavGraph
+import com.susu.feature.loginsignup.navigation.LoginSignupRoute
 import com.susu.feature.loginsignup.navigation.loginSignupNavGraph
 import com.susu.feature.mypage.navigation.myPageNavGraph
 import com.susu.feature.received.navigation.receivedNavGraph
@@ -35,7 +36,14 @@ internal fun MainScreen(
                 navController = navigator.navController,
                 startDestination = startDestination,
             ) {
-                loginSignupNavGraph(navigator.navController)
+                loginSignupNavGraph(
+                    navController = navigator.navController,
+                    navigateToReceived = {
+                        // TODO: 이쪽으로 수정
+                        // navigator.navController.navigateReceived(navOptions = NavOptions())
+                        navigator.navigate(MainNavigationTab.RECEIVED)
+                    },
+                )
 
                 sentNavGraph(
                     padding = innerPadding,
@@ -55,6 +63,7 @@ internal fun MainScreen(
 
                 myPageNavGraph(
                     padding = innerPadding,
+                    navigateToLogin = { navigator.navController.navigate(LoginSignupRoute.Parent.Login.route) },
                 )
             }
         },

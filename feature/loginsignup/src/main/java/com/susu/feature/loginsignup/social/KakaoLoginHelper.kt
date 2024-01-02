@@ -26,7 +26,7 @@ object KakaoLoginHelper {
                         loginWithKakaoAccount(
                             onSuccess = onSuccess,
                             onFailed = onFailed,
-                            context = context
+                            context = context,
                         )
                     }
                 },
@@ -84,23 +84,6 @@ object KakaoLoginHelper {
             } else {
                 // 토큰 유효성 체크 성공(필요 시 토큰 갱신됨)
                 callback(TokenManagerProvider.instance.manager.getToken()?.accessToken)
-            }
-        }
-    }
-
-    // 기능 테스트를 위함.
-    fun logout() = runCatching {
-        UserApiClient.instance.logout { error ->
-            if (error != null) {
-                throw error
-            }
-        }
-    }
-
-    fun unlink() = runCatching {
-        UserApiClient.instance.unlink { error ->
-            if (error != null) {
-                throw error
             }
         }
     }
