@@ -1,0 +1,87 @@
+package com.susu.core.designsystem.component.textfield
+
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.tooling.preview.Preview
+import com.susu.core.designsystem.theme.Gray100
+import com.susu.core.designsystem.theme.Gray40
+import com.susu.core.designsystem.theme.SusuTheme
+
+enum class SusuTextFieldColor(
+    val textColor: Color,
+    val placeholderColor: Color,
+) {
+    Default(textColor = Gray100, placeholderColor = Gray40),
+}
+
+@Composable
+fun SusuBasicTextField(
+    modifier: Modifier = Modifier,
+    text: String = "",
+    onTextChange: (String) -> Unit = {},
+    placeholder: String = "",
+    color: SusuTextFieldColor = SusuTextFieldColor.Default,
+    enabled: Boolean = true,
+    textStyle: TextStyle = SusuTheme.typography.title_xl,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
+    maxLines: Int = 1,
+    minLines: Int = 1,
+    visualTransformation: VisualTransformation = VisualTransformation.None,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+    cursorBrush: Brush = SolidColor(Color.Black),
+) {
+    BasicTextField(
+        modifier = modifier,
+        value = text,
+        onValueChange = onTextChange,
+        enabled = enabled,
+        textStyle = textStyle.copy(color = color.textColor),
+        keyboardActions = keyboardActions,
+        keyboardOptions = keyboardOptions,
+        maxLines = maxLines,
+        minLines = minLines,
+        visualTransformation = visualTransformation,
+        interactionSource = interactionSource,
+        cursorBrush = cursorBrush,
+    ) { innerTextField ->
+        if (text.isEmpty()) {
+            Text(
+                text = placeholder,
+                style = textStyle.copy(color = color.placeholderColor),
+            )
+        } else {
+            innerTextField()
+        }
+    }
+}
+
+@Composable
+@Preview
+fun SusuBasicTextFieldPreview() {
+    SusuTheme {
+        var text by remember { mutableStateOf("") }
+        Column {
+            SusuBasicTextField(
+                text = text,
+                onTextChange = { text = it },
+                placeholder = "이름을 입력해주세요",
+            )
+        }
+    }
+}
