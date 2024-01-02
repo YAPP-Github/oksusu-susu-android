@@ -1,4 +1,4 @@
-package com.susu.data.model
+package com.susu.data.model.response
 
 import com.susu.core.model.Token
 import kotlinx.serialization.Serializable

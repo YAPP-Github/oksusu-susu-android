@@ -1,6 +1,6 @@
 package com.susu.data.network.service
 
-import com.susu.data.model.TokenResponse
+import com.susu.data.model.response.TokenResponse
 import com.susu.data.model.request.RefreshTokenRequest
 import retrofit2.Response
 import retrofit2.http.Body

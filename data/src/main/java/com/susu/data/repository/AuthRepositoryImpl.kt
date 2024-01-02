@@ -3,8 +3,8 @@ package com.susu.data.repository
 import com.susu.core.model.User
 import com.susu.data.model.SnsProviders
 import com.susu.data.model.request.AccessTokenRequest
-import com.susu.data.model.toData
-import com.susu.data.model.toDomain
+import com.susu.data.model.request.toData
+import com.susu.data.model.response.toDomain
 import com.susu.data.network.service.SignUpService
 import com.susu.data.network.service.UserService
 import com.susu.domain.repository.AuthRepository
