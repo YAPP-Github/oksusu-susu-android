@@ -12,10 +12,10 @@ class SignUpUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(
         oauthAccessToken: String,
-        user: User
+        user: User,
     ) = runCatchingIgnoreCancelled {
         tokenRepository.saveTokens(
-            token = signUpRepository.signUp(oauthAccessToken = oauthAccessToken, user = user)
+            token = signUpRepository.signUp(oauthAccessToken = oauthAccessToken, user = user),
         )
     }
 }

@@ -6,7 +6,7 @@ import androidx.compose.runtime.Composable
 
 @Composable
 fun VoteScreen(
-    navigateToLogin: () -> Unit
+    navigateToLogin: () -> Unit,
 ) {
     Button(onClick = navigateToLogin) {
         Text("대충 회원가입 투표")

@@ -7,6 +7,6 @@ sealed interface MainContract {
     object MainEffect : SideEffect
     data class MainState(
         val isLoading: Boolean = true,
-        val initialRoute: InitialRoute = InitialRoute.NONE
+        val initialRoute: InitialRoute = InitialRoute.NONE,
     ) : UiState
 }

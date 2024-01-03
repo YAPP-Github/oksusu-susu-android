@@ -1,7 +1,7 @@
 package com.susu.data.network.service
 
-import com.susu.data.model.response.TokenResponse
 import com.susu.data.model.request.UserRequest
+import com.susu.data.model.response.TokenResponse
 import com.susu.data.model.response.ValidRegisterResponse
 import retrofit2.http.Body
 import retrofit2.http.GET

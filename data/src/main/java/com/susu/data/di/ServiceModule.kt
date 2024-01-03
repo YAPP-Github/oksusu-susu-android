@@ -1,8 +1,8 @@
 package com.susu.data.di
 
-import com.susu.data.network.service.UserService
-import com.susu.data.network.service.TokenService
 import com.susu.data.network.service.SignUpService
+import com.susu.data.network.service.TokenService
+import com.susu.data.network.service.UserService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

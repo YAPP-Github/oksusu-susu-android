@@ -24,14 +24,16 @@ fun MyPageScreen(
             when (sideEffect) {
                 MyPageContract.MyPageEffect.NavigateToLogin -> navigateToLogin()
                 is MyPageContract.MyPageEffect.ShowToast -> {
-                    //TODO: UI 작업 시 에러 메세지 표시
+                    // TODO: UI 작업 시 에러 메세지 표시
                     navigateToLogin()
                 }
             }
         }
     }
 
-    Column {
+    Column(
+        modifier = Modifier.padding(padding),
+    ) {
         Button(onClick = viewModel::logout) {
             Text(text = "로그아웃")
         }
