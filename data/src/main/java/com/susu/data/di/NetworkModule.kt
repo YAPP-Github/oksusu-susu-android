@@ -23,41 +23,64 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 
-    private const val BASE_URL = ""
+    private const val BASE_URL = "https://api.oksusu.site/api/v1/"
+
+    @Singleton
+    @Provides
+    fun provideLoggingInterceptor(
+        json: Json,
+    ): HttpLoggingInterceptor = HttpLoggingInterceptor { message ->
+        when {
+            !message.isJsonObject() && !message.isJsonArray() ->
+                Timber.tag(RETROFIT_TAG).d("CONNECTION INFO -> $message")
+
+            else -> kotlin.runCatching {
+                json.encodeToString(Json.parseToJsonElement(message))
+            }.onSuccess {
+                Timber.tag(RETROFIT_TAG).d(it)
+            }.onFailure {
+                Timber.tag(RETROFIT_TAG).d(message)
+            }
+        }
+    }.apply { level = HttpLoggingInterceptor.Level.BODY }
 
     @Singleton
     @Provides
     fun provideOkHttpClient(
         tokenInterceptor: TokenInterceptor,
         tokenAuthenticator: TokenAuthenticator,
-        json: Json,
-    ): OkHttpClient {
-        val loggingInterceptor = HttpLoggingInterceptor { message ->
-            when {
-                !message.isJsonObject() && !message.isJsonArray() ->
-                    Timber.tag(RETROFIT_TAG).d("CONNECTION INFO -> $message")
-
-                else -> kotlin.runCatching {
-                    json.encodeToString(Json.parseToJsonElement(message))
-                }.onSuccess {
-                    Timber.tag(RETROFIT_TAG).d(it)
-                }.onFailure {
-                    Timber.tag(RETROFIT_TAG).d(message)
-                }
-            }
-        }
-
-        return OkHttpClient.Builder()
-            .addInterceptor(tokenInterceptor)
-            .addInterceptor(loggingInterceptor)
-            .authenticator(tokenAuthenticator)
-            .build()
-    }
+        loggingInterceptor: HttpLoggingInterceptor,
+    ): OkHttpClient = OkHttpClient.Builder()
+        .addInterceptor(tokenInterceptor)
+        .addInterceptor(loggingInterceptor)
+        .authenticator(tokenAuthenticator)
+        .build()
 
     @Singleton
     @Provides
     fun provideRetrofit(
         okHttpClient: OkHttpClient,
+        json: Json,
+    ): Retrofit = Retrofit.Builder()
+        .baseUrl(BASE_URL)
+        .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
+        .client(okHttpClient)
+        .build()
+
+    @Singleton
+    @Provides
+    @AuthOkHttpClient
+    fun provideAuthOkHttpClient(
+        loggingInterceptor: HttpLoggingInterceptor,
+    ): OkHttpClient = OkHttpClient.Builder()
+        .addInterceptor(loggingInterceptor)
+        .build()
+
+    @Singleton
+    @Provides
+    @AuthRetrofit
+    fun provideAuthRetrofit(
+        @AuthOkHttpClient okHttpClient: OkHttpClient,
         json: Json,
     ): Retrofit = Retrofit.Builder()
         .baseUrl(BASE_URL)

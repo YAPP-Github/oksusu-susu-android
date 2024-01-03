@@ -62,6 +62,8 @@ protobuf-plugin = "0.9.4"
 protobuf = "3.24.4"
 junit-junit = "4.13.2"
 
+kakao-user = "2.18.0"
+
 [plugins]
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
@@ -178,11 +180,12 @@ protobuf-kotlin-lite = { group = "com.google.protobuf", name = "protobuf-kotlin-
 protobuf-protoc = { group = "com.google.protobuf", name = "protoc", version.ref = "protobuf" }
 junit-junit = { group = "junit", name = "junit", version.ref = "junit-junit" }
 
+kakao-sdk-user = { group = "com.kakao.sdk", name = "v2-user", version.ref = "kakao-user"}
 
 [bundles]
 firebase = ["firebase-analytics"]
 androidx-lifecycle = ["androidx-lifecycle-runtime-ktx", "androidx-lifecycle-viewmodel-ktx"]
 androidx-navigation = ["navigation-fragment-ktx", "navigation-ui-ktx"]
 coroutine = ["kotlinx-coroutines-android", "kotlinx-coroutines-core", "kotlinx-coroutines-test"]
-compose = ["ui", "ui-graphics", "ui-tooling-preview", "material3-compose", "coil-compose", "ui-foundation", "activity-compose", "lifecycle-compose", "navigation-compose"]
+compose = ["ui", "ui-graphics", "ui-tooling-preview", "material3-compose", "coil-compose", "ui-foundation", "activity-compose", "lifecycle-compose", "navigation-compose", "hilt-navigation-compose"]
 compose-debug = ["ui-tooling", "ui-test-manifest" ]

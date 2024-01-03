@@ -14,4 +14,6 @@ dependencies {
     implementation(projects.feature.received)
     implementation(projects.feature.sent)
     implementation(projects.feature.statistics)
+
+    implementation(libs.androidx.splashscreen)
 }
