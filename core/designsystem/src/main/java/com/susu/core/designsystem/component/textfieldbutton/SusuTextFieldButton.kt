@@ -297,7 +297,7 @@ private fun InnerButtons(
             if (showClearIcon) {
                 ClearIconButton(
                     iconSize = clearIconSize,
-                    onClick = onClickClearIcon
+                    onClick = onClickClearIcon,
                 )
             }
         }

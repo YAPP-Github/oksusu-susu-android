@@ -94,7 +94,9 @@ fun SusuUnderlineTextField(
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     cursorBrush: Brush = SolidColor(Color.Black),
 ) {
-    val textFieldColor = if (isError) SusuUnderlineTextFieldColor.Error else {
+    val textFieldColor = if (isError) {
+        SusuUnderlineTextFieldColor.Error
+    } else {
         if (text.isEmpty()) {
             SusuUnderlineTextFieldColor.Unactive
         } else {
