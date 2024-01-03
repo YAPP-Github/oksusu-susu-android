@@ -5,7 +5,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
-import com.susu.feature.received.ReceivedScreen
+import com.susu.feature.received.ReceivedRoute
 
 fun NavController.navigateReceived(navOptions: NavOptions) {
     navigate(ReceivedRoute.route, navOptions)
@@ -15,7 +15,7 @@ fun NavGraphBuilder.receivedNavGraph(
     padding: PaddingValues,
 ) {
     composable(route = ReceivedRoute.route) {
-        ReceivedScreen(padding)
+        ReceivedRoute(padding)
     }
 }
 
