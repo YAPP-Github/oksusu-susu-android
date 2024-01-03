@@ -42,6 +42,7 @@ import com.susu.core.designsystem.component.textfieldbutton.style.InnerButtonSty
 import com.susu.core.designsystem.component.textfieldbutton.style.LargeTextFieldButtonStyle
 import com.susu.core.designsystem.component.textfieldbutton.style.SmallTextFieldButtonStyle
 import com.susu.core.designsystem.component.textfieldbutton.style.TextFieldButtonStyle
+import com.susu.core.designsystem.component.util.ClearIconButton
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.ui.extension.disabledHorizontalPointerInputScroll
 import com.susu.core.ui.extension.susuClickable
@@ -294,13 +295,9 @@ private fun InnerButtons(
     if (isSaved.not()) {
         Box(modifier = Modifier.size(clearIconSize)) {
             if (showClearIcon) {
-                Image(
-                    modifier = Modifier
-                        .clip(CircleShape)
-                        .size(clearIconSize)
-                        .susuClickable(onClick = onClickClearIcon),
-                    painter = painterResource(id = R.drawable.ic_clear),
-                    contentDescription = "",
+                ClearIconButton(
+                    iconSize = clearIconSize,
+                    onClick = onClickClearIcon
                 )
             }
         }
