@@ -23,20 +23,14 @@ import com.susu.core.designsystem.theme.Gray100
 import com.susu.core.designsystem.theme.Gray40
 import com.susu.core.designsystem.theme.SusuTheme
 
-enum class SusuTextFieldColor(
-    val textColor: Color,
-    val placeholderColor: Color,
-) {
-    Default(textColor = Gray100, placeholderColor = Gray40),
-}
-
 @Composable
 fun SusuBasicTextField(
     modifier: Modifier = Modifier,
     text: String = "",
     onTextChange: (String) -> Unit = {},
     placeholder: String = "",
-    color: SusuTextFieldColor = SusuTextFieldColor.Default,
+    textColor: Color = Gray100,
+    placeholderColor: Color = Gray40,
     enabled: Boolean = true,
     textStyle: TextStyle = SusuTheme.typography.title_xl,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
@@ -52,7 +46,7 @@ fun SusuBasicTextField(
         value = text,
         onValueChange = onTextChange,
         enabled = enabled,
-        textStyle = textStyle.copy(color = color.textColor),
+        textStyle = textStyle.copy(color = textColor),
         keyboardActions = keyboardActions,
         keyboardOptions = keyboardOptions,
         maxLines = maxLines,
@@ -64,7 +58,7 @@ fun SusuBasicTextField(
         if (text.isEmpty()) {
             Text(
                 text = placeholder,
-                style = textStyle.copy(color = color.placeholderColor),
+                style = textStyle.copy(color = placeholderColor),
             )
         } else {
             innerTextField()
@@ -78,7 +72,8 @@ fun SusuPriceTextField(
     text: String = "",
     onTextChange: (String) -> Unit = {},
     placeholder: String = "",
-    color: SusuTextFieldColor = SusuTextFieldColor.Default,
+    textColor: Color = Gray100,
+    placeholderColor: Color = Gray40,
     enabled: Boolean = true,
     textStyle: TextStyle = SusuTheme.typography.title_xl,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
@@ -92,7 +87,8 @@ fun SusuPriceTextField(
         text = text,
         onTextChange = onTextChange,
         placeholder = placeholder,
-        color = color,
+        textColor = textColor,
+        placeholderColor = placeholderColor,
         enabled = enabled,
         textStyle = textStyle,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
