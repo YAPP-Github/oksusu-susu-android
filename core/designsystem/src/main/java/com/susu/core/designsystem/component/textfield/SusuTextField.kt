@@ -16,6 +16,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import com.susu.core.designsystem.theme.Gray100
@@ -72,15 +73,54 @@ fun SusuBasicTextField(
 }
 
 @Composable
+fun SusuPriceTextField(
+    modifier: Modifier = Modifier,
+    text: String = "",
+    onTextChange: (String) -> Unit = {},
+    placeholder: String = "",
+    color: SusuTextFieldColor = SusuTextFieldColor.Default,
+    enabled: Boolean = true,
+    textStyle: TextStyle = SusuTheme.typography.title_xl,
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
+    maxLines: Int = 1,
+    minLines: Int = 1,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+    cursorBrush: Brush = SolidColor(Color.Black),
+) {
+    SusuBasicTextField(
+        modifier = modifier,
+        text = text,
+        onTextChange = onTextChange,
+        placeholder = placeholder,
+        color = color,
+        enabled = enabled,
+        textStyle = textStyle,
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+        keyboardActions = keyboardActions,
+        maxLines = maxLines,
+        minLines = minLines,
+        interactionSource = interactionSource,
+        cursorBrush = cursorBrush,
+        visualTransformation = PriceVisualTransformation(),
+    )
+}
+
+@Composable
 @Preview
 fun SusuBasicTextFieldPreview() {
     SusuTheme {
         var text by remember { mutableStateOf("") }
+        var price by remember { mutableStateOf("") }
         Column {
             SusuBasicTextField(
                 text = text,
                 onTextChange = { text = it },
                 placeholder = "이름을 입력해주세요",
+            )
+            SusuPriceTextField(
+                text = price,
+                onTextChange = { price = it },
+                placeholder = "금액을 입력해주세요",
             )
         }
     }
