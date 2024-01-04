@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -72,8 +73,10 @@ fun ReceiveScreen(
                 leftIcon = {
                     Image(
                         modifier = Modifier
-                            .width(56.dp)
-                            .height(24.dp),
+                            .size(
+                                width = 56.dp,
+                                height = 24.dp,
+                            ),
                         painter = painterResource(id = com.susu.core.ui.R.drawable.ic_app_bar_logo),
                         contentDescription = stringResource(R.string.content_description_logo_image),
                     )
@@ -182,15 +185,12 @@ fun ReceiveScreen(
             color = Gray50,
         )
 
-        Box(
+        SusuFloatingButton(
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .padding(SusuTheme.spacing.spacing_l),
-        ) {
-            SusuFloatingButton(
-                onClick = onClickFloatingAddButton,
-            )
-        }
+            onClick = onClickFloatingAddButton,
+        )
 
         // TODO State 변환
         var isSheetOpen by remember {

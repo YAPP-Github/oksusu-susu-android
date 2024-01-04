@@ -64,8 +64,10 @@ fun SusuBottomSheet(
             ) {
                 Spacer(
                     modifier = Modifier
-                        .width(56.dp)
-                        .height(6.dp)
+                        .size(
+                            width = 56.dp,
+                            height = 6.dp
+                        )
                         .clip(RoundedCornerShape(100.dp))
                         .background(Gray20),
                 )
