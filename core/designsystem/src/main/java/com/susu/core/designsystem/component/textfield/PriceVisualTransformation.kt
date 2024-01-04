@@ -18,18 +18,24 @@ class PriceVisualTransformation : VisualTransformation {
                     if (offset <= 1) return offset
 
                     val entireCommaCount = if (amount.length % 3 == 0) amount.length / 3 - 1 else amount.length / 3
-                    val commaBeforeOffsetCount = formatAmount.substring(0 until offset + entireCommaCount).count { it == ',' }
+                    val sliceUntil = if (offset + entireCommaCount <= formatAmount.length) offset + entireCommaCount else formatAmount.length
+                    val commaBeforeOffsetCount = formatAmount.substring(0 until sliceUntil).count { it == ',' }
 
                     return offset + commaBeforeOffsetCount
                 }
 
                 override fun transformedToOriginal(offset: Int): Int {
-                    if (offset <= 1) return offset
+                    return when (offset) {
+                        in 0..1 -> offset
+                        in 2 until formatAmount.length -> {
+                            val entireCommaCount = if (amount.length % 3 == 0) amount.length / 3 - 1 else amount.length / 3
+                            val sliceUntil = if (offset + entireCommaCount <= formatAmount.length) offset + entireCommaCount else formatAmount.length
+                            val commaBeforeOffsetCount = formatAmount.substring(0 until sliceUntil).count { it == ',' }
+                            offset - commaBeforeOffsetCount
+                        }
 
-                    val entireCommaCount = if (amount.length % 3 == 0) amount.length / 3 - 1 else amount.length / 3
-                    val commaBeforeOffsetCount = formatAmount.substring(0 until offset + entireCommaCount).count { it == ',' }
-
-                    return offset - commaBeforeOffsetCount
+                        else -> amount.length
+                    }
                 }
             },
         )
