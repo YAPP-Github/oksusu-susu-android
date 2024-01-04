@@ -2,7 +2,7 @@ package com.susu.data.network.service
 
 import com.susu.data.model.request.AccessTokenRequest
 import com.susu.data.model.response.TokenResponse
-import retrofit2.Response
+import com.susu.data.retrofit.ApiResult
 import retrofit2.http.Body
 import retrofit2.http.POST
 import retrofit2.http.Path
@@ -12,11 +12,11 @@ interface UserService {
     suspend fun login(
         @Path("provider") provider: String,
         @Body accessTokenRequest: AccessTokenRequest,
-    ): TokenResponse
+    ): ApiResult<TokenResponse>
 
     @POST("auth/logout")
-    suspend fun logout(): Response<Unit?>
+    suspend fun logout(): ApiResult<Unit>
 
     @POST("auth/withdraw")
-    suspend fun withdraw(): Response<Unit?>
+    suspend fun withdraw(): ApiResult<Unit>
 }

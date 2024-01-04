@@ -15,13 +15,13 @@ class LoginRepositoryImpl @Inject constructor(
     ) = userService.login(
         provider = SnsProviders.Kakao.path,
         accessTokenRequest = AccessTokenRequest(oauthAccessToken),
-    ).toDomain()
+    ).getOrThrow().toDomain()
 
     override suspend fun logout() {
-        userService.logout()
+        userService.logout().getOrThrow()
     }
 
     override suspend fun withdraw() {
-        userService.withdraw()
+        userService.withdraw().getOrThrow()
     }
 }
