@@ -9,7 +9,7 @@ import java.text.DecimalFormat
 class PriceVisualTransformation : VisualTransformation {
     override fun filter(text: AnnotatedString): TransformedText {
         val amount = text.text
-        val formatAmount = if (amount.isEmpty()) "" else DecimalFormat("#,###").format(amount.toLong())
+        val formatAmount = if (amount.isEmpty()) "" else DecimalFormat("#,###").format(amount.toBigDecimal())
 
         return TransformedText(
             text = AnnotatedString("${formatAmount}원"),
