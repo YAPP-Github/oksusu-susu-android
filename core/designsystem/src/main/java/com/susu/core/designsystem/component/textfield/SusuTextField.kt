@@ -60,9 +60,8 @@ fun SusuBasicTextField(
                 text = placeholder,
                 style = textStyle.copy(color = placeholderColor),
             )
-        } else {
-            innerTextField()
         }
+        innerTextField()
     }
 }
 
