@@ -21,7 +21,6 @@ class TokenAuthenticator @Inject constructor(
         val accessToken = runBlocking { tokenRepository.getAccessToken().firstOrNull() }
 
         if (refreshToken == null || accessToken == null) {
-            response.close()
             return null
         }
 
@@ -35,7 +34,6 @@ class TokenAuthenticator @Inject constructor(
             if (tokenResponse.isSuccessful.not() || tokenResponse.body() == null) {
                 // 삭제하여 다시 로그인하도록 유도
                 tokenRepository.deleteTokens()
-                response.close()
                 null
             } else {
                 // 3. 헤더에 토큰을 교체한 request 생성

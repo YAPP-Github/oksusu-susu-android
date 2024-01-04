@@ -1,7 +1,5 @@
 package com.susu.core.model.exception
 
-import java.io.IOException
-
 class RequestFailException(
     override val message: String = "요청을 처리하지 못했어요.",
 ) : RuntimeException()
@@ -21,7 +19,3 @@ class NetworkException(
 class UnknownException(
     override val message: String = "알 수 없는 에러가 발생했어요.",
 ) : RuntimeException()
-
-class RefreshTokenExpiredException(
-    override val message: String = "다시 로그인 해주세요."
-) : IOException()
