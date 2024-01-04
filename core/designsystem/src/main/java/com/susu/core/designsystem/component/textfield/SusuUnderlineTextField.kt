@@ -83,7 +83,7 @@ fun SusuUnderlineTextField(
     onTextChange: (String) -> Unit = {},
     placeholder: String = "",
     placeholderColor: Color = Gray30,
-    description: String = "",
+    description: String? = null,
     isError: Boolean = false,
     lengthLimit: Int = 20,
     onClickClearIcon: () -> Unit = {},
@@ -148,8 +148,8 @@ fun SusuUnderlineTextField(
                     style = limitationTextStyle.copy(color = textFieldColor.limitationColor),
                 )
             }
-            if (description.isNotEmpty()) {
-                Text(text = description, style = descriptionTextStyle.copy(color = textFieldColor.descriptionColor))
+            description?.let { descriptionText ->
+                Text(text = descriptionText, style = descriptionTextStyle.copy(color = textFieldColor.descriptionColor))
             }
         }
     }
