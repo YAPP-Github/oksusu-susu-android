@@ -3,6 +3,7 @@ package com.susu.data.network.service
 import com.susu.data.model.request.UserRequest
 import com.susu.data.model.response.TokenResponse
 import com.susu.data.model.response.ValidRegisterResponse
+import com.susu.data.retrofit.ApiResult
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -15,11 +16,11 @@ interface SignUpService {
         @Path("provider") provider: String,
         @Query("accessToken") accessToken: String,
         @Body user: UserRequest,
-    ): TokenResponse
+    ): ApiResult<TokenResponse>
 
     @GET("oauth/{provider}/sign-up/valid")
     suspend fun checkValidRegister(
         @Path("provider") provider: String,
         @Query("accessToken") accessToken: String,
-    ): ValidRegisterResponse
+    ): ApiResult<ValidRegisterResponse>
 }

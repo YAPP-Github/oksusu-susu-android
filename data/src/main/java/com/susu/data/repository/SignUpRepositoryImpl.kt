@@ -19,7 +19,7 @@ class SignUpRepositoryImpl @Inject constructor(
         provider = SnsProviders.Kakao.path,
         accessToken = oauthAccessToken,
         user = user.toData(),
-    ).toDomain()
+    ).getOrThrow().toDomain()
 
     override suspend fun canRegister(
         oauthAccessToken: String,
@@ -27,6 +27,6 @@ class SignUpRepositoryImpl @Inject constructor(
         return signUpService.checkValidRegister(
             provider = SnsProviders.Kakao.path,
             accessToken = oauthAccessToken,
-        ).canRegister
+        ).getOrThrow().canRegister
     }
 }

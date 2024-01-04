@@ -6,6 +6,7 @@ import com.susu.data.extension.isJsonArray
 import com.susu.data.extension.isJsonObject
 import com.susu.data.network.TokenAuthenticator
 import com.susu.data.network.TokenInterceptor
+import com.susu.data.retrofit.ResultCallAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -63,6 +64,7 @@ object NetworkModule {
         json: Json,
     ): Retrofit = Retrofit.Builder()
         .baseUrl(BASE_URL)
+        .addCallAdapterFactory(ResultCallAdapterFactory())
         .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
         .client(okHttpClient)
         .build()
@@ -84,6 +86,7 @@ object NetworkModule {
         json: Json,
     ): Retrofit = Retrofit.Builder()
         .baseUrl(BASE_URL)
+        .addCallAdapterFactory(ResultCallAdapterFactory())
         .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
         .client(okHttpClient)
         .build()
