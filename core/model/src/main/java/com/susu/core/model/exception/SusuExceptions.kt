@@ -1,6 +1,6 @@
 package com.susu.core.model.exception
 
-enum class SusuServerException(val exception: Exception) {
+enum class SusuServerError(val exception: Exception) {
     /** Common Error Code */
     BAD_REQUEST_ERROR(BadRequestException()),
     INVALID_INPUT_VALUE_ERROR(InvalidInputValueException()),
