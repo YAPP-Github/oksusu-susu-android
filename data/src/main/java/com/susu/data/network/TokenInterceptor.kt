@@ -1,10 +1,12 @@
 package com.susu.data.network
 
+import com.susu.core.model.exception.RefreshTokenExpiredException
 import com.susu.domain.repository.TokenRepository
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Response
+import java.io.IOException
 import javax.inject.Inject
 
 class TokenInterceptor @Inject constructor(
@@ -14,9 +16,14 @@ class TokenInterceptor @Inject constructor(
         val token = runBlocking {
             tokenRepository.getAccessToken().firstOrNull()
         }
-        val request = chain.request().newBuilder().apply {
-            addHeader("X-SUSU-AUTH-TOKEN", token ?: "")
+
+        return try {
+            val request = chain.request().newBuilder().apply {
+                addHeader("X-SUSU-AUTH-TOKEN", token ?: "")
+            }
+            chain.proceed(request.build())
+        } catch (e: Exception) {
+            throw RefreshTokenExpiredException()
         }
-        return chain.proceed(request.build())
     }
 }
