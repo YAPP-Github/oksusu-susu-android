@@ -15,7 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
@@ -83,7 +83,7 @@ fun SusuPriceTextField(
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     cursorBrush: Brush = SolidColor(Color.Black),
 ) {
-    val moneyUnitString = LocalContext.current.resources.getString(R.string.money_unit)
+    val moneyUnitString = stringResource(R.string.money_unit)
     SusuBasicTextField(
         modifier = modifier,
         text = text,
