@@ -39,7 +39,7 @@ fun SusuSelectionBottomSheet(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .verticalScroll(scrollState)
+                .verticalScroll(scrollState),
         ) {
             items.forEachIndexed { index, name ->
                 SusuGhostButton(
@@ -49,7 +49,7 @@ fun SusuSelectionBottomSheet(
                     isActive = index == selectedItemPosition,
                     isClickable = true,
                     text = name,
-                    onClick = { onClickItem(index) }
+                    onClick = { onClickItem(index) },
                 )
             }
         }

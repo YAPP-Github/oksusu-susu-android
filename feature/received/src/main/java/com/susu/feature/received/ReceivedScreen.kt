@@ -39,7 +39,6 @@ import com.susu.core.ui.alignList
 import com.susu.core.ui.extension.susuClickable
 import com.susu.feature.received.component.LedgerAddCard
 import com.susu.feature.received.component.LedgerCard
-import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 
 @Composable
@@ -179,7 +178,8 @@ fun ReceiveScreen(
         Text(
             modifier = Modifier.align(Alignment.Center),
             text = stringResource(R.string.received_screen_empty_ledger),
-            style = SusuTheme.typography.text_s, color = Gray50,
+            style = SusuTheme.typography.text_s,
+            color = Gray50,
         )
 
         Box(

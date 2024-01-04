@@ -47,7 +47,8 @@ fun LedgerAddCard(
         Canvas(
             Modifier
                 .fillMaxSize()
-                .padding(strokeWidthDp / 2)) {
+                .padding(strokeWidthDp / 2),
+        ) {
             drawRoundRect(color = Gray40, style = stroke)
         }
 
