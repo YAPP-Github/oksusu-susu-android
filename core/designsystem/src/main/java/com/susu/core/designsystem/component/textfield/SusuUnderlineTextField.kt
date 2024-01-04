@@ -40,7 +40,7 @@ enum class SusuUnderlineTextFieldColor(
     val limitationColor: Color,
     val descriptionColor: Color,
 ) {
-    Unactive(
+    Inactive(
         textColor = Gray30,
         underlineColor = Gray50,
         limitationColor = Gray30,
@@ -94,14 +94,10 @@ fun SusuUnderlineTextField(
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     cursorBrush: Brush = SolidColor(Color.Black),
 ) {
-    val textFieldColor = if (isError) {
-        SusuUnderlineTextFieldColor.Error
-    } else {
-        if (text.isEmpty()) {
-            SusuUnderlineTextFieldColor.Unactive
-        } else {
-            SusuUnderlineTextFieldColor.Active
-        }
+    val textFieldColor = when {
+        isError -> SusuUnderlineTextFieldColor.Error
+        text.isEmpty() -> SusuUnderlineTextFieldColor.Inactive
+        else -> SusuUnderlineTextFieldColor.Active
     }
 
     with(textStyle()) {
