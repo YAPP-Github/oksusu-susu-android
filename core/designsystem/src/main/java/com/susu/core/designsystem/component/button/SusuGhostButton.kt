@@ -55,6 +55,7 @@ fun SusuGhostButton(
     leftIcon: (@Composable () -> Unit)? = null,
     rightIcon: (@Composable () -> Unit)? = null,
     isActive: Boolean = true,
+    isClickable: Boolean = true,
     onClick: () -> Unit = {},
 ) {
     val (paddingValues, iconSpacing, textStyle) = style()
@@ -71,7 +72,7 @@ fun SusuGhostButton(
             rightIcon = rightIcon,
             padding = paddingValues,
             iconSpacing = iconSpacing,
-            isActive = isActive,
+            isClickable = isClickable,
             onClick = onClick,
         )
     }
