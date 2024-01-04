@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -24,6 +25,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -77,31 +79,31 @@ fun ReceiveScreen(
                                 width = 56.dp,
                                 height = 24.dp,
                             ),
-                        painter = painterResource(id = com.susu.core.ui.R.drawable.ic_app_bar_logo),
+                        painter = painterResource(id = com.susu.core.ui.R.drawable.ic_logo),
                         contentDescription = stringResource(R.string.content_description_logo_image),
                     )
                 },
                 title = stringResource(R.string.received_screen_appbar_title),
                 actions = {
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_l),
-                    ) {
+                    Row {
                         Icon(
                             modifier = Modifier
+                                .clip(CircleShape)
                                 .susuClickable(
-                                    rippleEnabled = false,
                                     onClick = onClickSearchIcon,
-                                ),
+                                )
+                                .padding(SusuTheme.spacing.spacing_xs),
                             painter = painterResource(id = com.susu.core.ui.R.drawable.ic_appbar_search),
                             contentDescription = stringResource(R.string.content_description_search_icon),
                         )
 
                         Icon(
                             modifier = Modifier
+                                .clip(CircleShape)
                                 .susuClickable(
-                                    rippleEnabled = false,
                                     onClick = onClickNotificationIcon,
-                                ),
+                                )
+                                .padding(SusuTheme.spacing.spacing_xs),
                             painter = painterResource(id = com.susu.core.ui.R.drawable.ic_appbar_notification),
                             contentDescription = stringResource(R.string.content_description_notification_icon),
                         )
@@ -194,7 +196,7 @@ fun ReceiveScreen(
 
         // TODO State 변환
         var isSheetOpen by remember {
-            mutableStateOf(true)
+            mutableStateOf(false)
         }
 
         if (isSheetOpen) {
