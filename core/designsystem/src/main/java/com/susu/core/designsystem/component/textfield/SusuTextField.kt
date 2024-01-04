@@ -15,10 +15,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
+import com.susu.core.designsystem.R
 import com.susu.core.designsystem.theme.Gray100
 import com.susu.core.designsystem.theme.Gray40
 import com.susu.core.designsystem.theme.SusuTheme
@@ -81,6 +83,7 @@ fun SusuPriceTextField(
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     cursorBrush: Brush = SolidColor(Color.Black),
 ) {
+    val moneyUnitString = LocalContext.current.resources.getString(R.string.money_unit)
     SusuBasicTextField(
         modifier = modifier,
         text = text,
@@ -96,7 +99,7 @@ fun SusuPriceTextField(
         minLines = minLines,
         interactionSource = interactionSource,
         cursorBrush = cursorBrush,
-        visualTransformation = PriceVisualTransformation(),
+        visualTransformation = PriceVisualTransformation(postfix = moneyUnitString),
     )
 }
 

@@ -6,7 +6,9 @@ import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
 import java.text.DecimalFormat
 
-class PriceVisualTransformation : VisualTransformation {
+class PriceVisualTransformation(
+    private val postfix: String,
+) : VisualTransformation {
     override fun filter(text: AnnotatedString): TransformedText {
         val amount = text.text
 
@@ -17,7 +19,7 @@ class PriceVisualTransformation : VisualTransformation {
         val formatAmount = DecimalFormat("#,###").format(amount.toBigDecimal())
 
         return TransformedText(
-            text = AnnotatedString("${formatAmount}원"),
+            text = AnnotatedString(formatAmount + postfix),
             offsetMapping = object : OffsetMapping {
                 override fun originalToTransformed(offset: Int): Int {
                     if (offset <= 1) return offset
