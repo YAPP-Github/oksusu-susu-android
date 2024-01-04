@@ -63,127 +63,126 @@ enum class SusuServerError(val exception: Exception) {
 
 /** Common Exception Code */
 class BadRequestException(
-    override val message: String = "bad request"
+    override val message: String = "bad request",
 ) : RuntimeException()
 class InvalidInputValueException(
-    override val message: String = "input is invalid value"
+    override val message: String = "input is invalid value",
 ) : RuntimeException()
 class InvalidTypeValueException(
-    override val message: String = "invalid type value"
+    override val message: String = "invalid type value",
 ) : RuntimeException()
 class MethodNotAllowedException(
-    override val message: String = "Method type is invalid"
+    override val message: String = "Method type is invalid",
 ) : RuntimeException()
 class InvalidMediaTypeException(
-    override val message: String = "invalid media type"
+    override val message: String = "invalid media type",
 ) : RuntimeException()
 class QueryDslNotExistsException(
-    override val message: String = "not found query dsl"
+    override val message: String = "not found query dsl",
 ) : RuntimeException()
 class CoroutineCancellationException(
-    override val message: String = "coroutine cancellation Exception"
+    override val message: String = "coroutine cancellation Exception",
 ) : RuntimeException()
 class NoAuthorityException(
-    override val message: String = "수정 권한이 없습니다."
+    override val message: String = "수정 권한이 없습니다.",
 ) : RuntimeException()
 
 /** Auth Exception Code */
 class FailToVerifyTokenException(
-    override val message: String = "fail to verify token"
+    override val message: String = "fail to verify token",
 ) : RuntimeException()
 class NotAccessTokenException(
-    override val message: String = "엑세스 토큰이 아닙니다."
+    override val message: String = "엑세스 토큰이 아닙니다.",
 ) : RuntimeException()
 class NotRefreshTokenException(
-    override val message: String = "리프레시 토큰이 아닙니다."
+    override val message: String = "리프레시 토큰이 아닙니다.",
 ) : RuntimeException()
 
 /** User Exception Code */
 class UserNotFoundException(
-    override val message: String = "유저 정보를 찾을 수 없습니다."
+    override val message: String = "유저 정보를 찾을 수 없습니다.",
 ) : RuntimeException()
 class AlreadyRegisteredUserException(
-    override val message: String = "이미 가입된 유저입니다."
+    override val message: String = "이미 가입된 유저입니다.",
 ) : RuntimeException()
 class FailToCreateUserException(
-    override val message: String = "유저 생성을 실패했습니다."
+    override val message: String = "유저 생성을 실패했습니다.",
 ) : RuntimeException()
 
 /** Ledger Exception Code */
 class LedgerInvalidDueDateException(
-    override val message: String = "잘못된 일정 등록 요청입니다."
+    override val message: String = "잘못된 일정 등록 요청입니다.",
 ) : RuntimeException()
 class FailToCreateLedgerException(
-    override val message: String = "장부 생성을 실패했습니다."
+    override val message: String = "장부 생성을 실패했습니다.",
 ) : RuntimeException()
 class NotFoundLedgerException(
-    override val message: String = "장부 정보가 없습니다."
+    override val message: String = "장부 정보가 없습니다.",
 ) : RuntimeException()
 
 /** Category Exception Code */
 class NotFoundCategoryException(
-    override val message: String = "카테고리 정보를 찾을 수 없습니다."
+    override val message: String = "카테고리 정보를 찾을 수 없습니다.",
 ) : RuntimeException()
 
 /** Category Assignment Exception Code */
 class NotFoundCategoryAssignmentException(
-    override val message: String = "카테고리 매핑 정보를 찾을 수 없습니다."
+    override val message: String = "카테고리 매핑 정보를 찾을 수 없습니다.",
 ) : RuntimeException()
 
 /** Relationship Exception Code */
 class NotFoundRelationshipException(
-    override val message: String = "관계 정보를 찾을 수 없습니다."
+    override val message: String = "관계 정보를 찾을 수 없습니다.",
 ) : RuntimeException()
 
 /** Friend Exception Code */
 class NotFoundFriendException(
-    override val message: String = "친구 정보를 찾을 수 없습니다."
+    override val message: String = "친구 정보를 찾을 수 없습니다.",
 ) : RuntimeException()
 
 class AlreadyRegisteredFriendPhoneNumberException(
-    override val message: String = "이미 등록된 전화번호 입니다."
+    override val message: String = "이미 등록된 전화번호 입니다.",
 ) : RuntimeException()
 class FailToCreateFriendException(
-    override val message: String = "친구 생성을 실패했습니다."
+    override val message: String = "친구 생성을 실패했습니다.",
 ) : RuntimeException()
 
 /** Envelope Exception Code */
 class FailToCreateEnvelopeException(
-    override val message: String = "봉투 생성을 실패했습니다."
+    override val message: String = "봉투 생성을 실패했습니다.",
 ) : RuntimeException()
 class NotFoundEnvelopeException(
-    override val message: String = "봉투 정보를 찾을 수 없습니다."
+    override val message: String = "봉투 정보를 찾을 수 없습니다.",
 ) : RuntimeException()
 
 /** Post Exception Code */
 class NotFoundPostException(
-    override val message: String = "게시글 정보를 찾을 수 없습니다."
+    override val message: String = "게시글 정보를 찾을 수 없습니다.",
 ) : RuntimeException()
 class InvalidVoteOptionSequenceException(
-    override val message: String = "투표 옵션 순서가 잘못되었습니다."
+    override val message: String = "투표 옵션 순서가 잘못되었습니다.",
 ) : RuntimeException()
 class FailToCreatePostException(
-    override val message: String = "게시글 생성을 실패했습니다."
+    override val message: String = "게시글 생성을 실패했습니다.",
 ) : RuntimeException()
 class NotFoundVoteException(
-    override val message: String = "투표 정보를 찾을 수 없습니다."
+    override val message: String = "투표 정보를 찾을 수 없습니다.",
 ) : RuntimeException()
 class DuplicatedVoteException(
-    override val message: String = "중복 투표를 할 수 없습니다."
+    override val message: String = "중복 투표를 할 수 없습니다.",
 ) : RuntimeException()
 
 /** Post Category Exception Code */
 class NotFoundPostCategoryException(
-    override val message: String = "카테고리 정보를 찾을 수 없습니다."
+    override val message: String = "카테고리 정보를 찾을 수 없습니다.",
 ) : RuntimeException()
 
 /** Term Exception Code */
 class NotFoundTermException(
-    override val message: String = "약관 정보를 찾을 수 없습니다."
+    override val message: String = "약관 정보를 찾을 수 없습니다.",
 ) : RuntimeException()
 
 /** Vote History Exception Code */
 class AlreadyVotedPostException(
-    override val message: String = "이미 진행된 투표입니다."
+    override val message: String = "이미 진행된 투표입니다.",
 ) : RuntimeException()
-
