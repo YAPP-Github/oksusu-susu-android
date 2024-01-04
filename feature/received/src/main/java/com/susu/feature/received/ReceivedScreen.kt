@@ -13,9 +13,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -23,15 +28,19 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.susu.core.designsystem.component.appbar.SusuDefaultAppBar
+import com.susu.core.designsystem.component.bottomsheet.SusuSelectionBottomSheet
 import com.susu.core.designsystem.component.button.GhostButtonColor
 import com.susu.core.designsystem.component.button.SmallButtonStyle
 import com.susu.core.designsystem.component.button.SusuFloatingButton
 import com.susu.core.designsystem.component.button.SusuGhostButton
 import com.susu.core.designsystem.theme.Gray50
 import com.susu.core.designsystem.theme.SusuTheme
+import com.susu.core.ui.alignList
 import com.susu.core.ui.extension.susuClickable
 import com.susu.feature.received.component.LedgerAddCard
 import com.susu.feature.received.component.LedgerCard
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 
 @Composable
 fun ReceivedRoute(
@@ -40,6 +49,7 @@ fun ReceivedRoute(
     ReceiveScreen(padding = padding)
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ReceiveScreen(
     padding: PaddingValues,
@@ -65,7 +75,7 @@ fun ReceiveScreen(
                         modifier = Modifier
                             .width(56.dp)
                             .height(24.dp),
-                        painter = painterResource(id = R.drawable.ic_app_bar_logo),
+                        painter = painterResource(id = com.susu.core.ui.R.drawable.ic_app_bar_logo),
                         contentDescription = stringResource(R.string.content_description_logo_image),
                     )
                 },
@@ -80,7 +90,7 @@ fun ReceiveScreen(
                                     rippleEnabled = false,
                                     onClick = onClickSearchIcon,
                                 ),
-                            painter = painterResource(id = R.drawable.ic_appbar_search),
+                            painter = painterResource(id = com.susu.core.ui.R.drawable.ic_appbar_search),
                             contentDescription = stringResource(R.string.content_description_search_icon),
                         )
 
@@ -90,7 +100,7 @@ fun ReceiveScreen(
                                     rippleEnabled = false,
                                     onClick = onClickNotificationIcon,
                                 ),
-                            painter = painterResource(id = R.drawable.ic_appbar_notification),
+                            painter = painterResource(id = com.susu.core.ui.R.drawable.ic_appbar_notification),
                             contentDescription = stringResource(R.string.content_description_notification_icon),
                         )
                     }
@@ -107,10 +117,10 @@ fun ReceiveScreen(
                     SusuGhostButton(
                         color = GhostButtonColor.Black,
                         style = SmallButtonStyle.height32,
-                        text = stringResource(R.string.word_align_recent),
+                        text = alignList[0], // TODO State 변환
                         leftIcon = {
                             Icon(
-                                painter = painterResource(id = R.drawable.ic_align),
+                                painter = painterResource(id = com.susu.core.ui.R.drawable.ic_align),
                                 contentDescription = stringResource(R.string.content_description_align_icon),
                             )
                         },
@@ -122,7 +132,7 @@ fun ReceiveScreen(
                         text = stringResource(R.string.word_filter),
                         leftIcon = {
                             Icon(
-                                painter = painterResource(id = R.drawable.ic_filter),
+                                painter = painterResource(id = com.susu.core.ui.R.drawable.ic_filter),
                                 contentDescription = stringResource(R.string.content_description_filter_icon),
                             )
                         },
@@ -179,6 +189,21 @@ fun ReceiveScreen(
         ) {
             SusuFloatingButton(
                 onClick = onClickFloatingAddButton,
+            )
+        }
+
+        // TODO State 변환
+        var isSheetOpen by remember {
+            mutableStateOf(true)
+        }
+
+        if (isSheetOpen) {
+            SusuSelectionBottomSheet(
+                onDismissRequest = { isSheetOpen = false },
+                containerHeight = 250.dp,
+                items = alignList.toImmutableList(),
+                selectedItemPosition = 0, // TODO State 변환
+                onClickItem = {},
             )
         }
     }
