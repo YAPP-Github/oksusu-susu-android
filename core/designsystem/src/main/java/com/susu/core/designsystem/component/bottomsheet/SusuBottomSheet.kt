@@ -66,7 +66,7 @@ fun SusuBottomSheet(
                     modifier = Modifier
                         .size(
                             width = 56.dp,
-                            height = 6.dp
+                            height = 6.dp,
                         )
                         .clip(RoundedCornerShape(100.dp))
                         .background(Gray20),
