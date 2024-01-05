@@ -16,6 +16,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.susu.core.designsystem.component.appbar.SusuDefaultAppBar
+import com.susu.core.designsystem.component.searchbar.SusuSearchBar
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.ui.extension.susuClickable
 import com.susu.feature.received.R
@@ -38,7 +39,6 @@ fun LedgerSearchScreen(
     ) {
         Column {
             SusuDefaultAppBar(
-                modifier = Modifier.padding(horizontal = SusuTheme.spacing.spacing_xs),
                 leftIcon = {
                     Image(
                         modifier = Modifier
@@ -52,6 +52,16 @@ fun LedgerSearchScreen(
                     )
                 },
             )
+
+            Column(
+                modifier = Modifier.padding(
+                    top = SusuTheme.spacing.spacing_xxs,
+                    start = SusuTheme.spacing.spacing_m,
+                    end = SusuTheme.spacing.spacing_m,
+                )
+            ) {
+                SusuSearchBar(value = "", placeholder = "찾고 싶은 장부를 검색해보세요")
+            }
         }
     }
 }
