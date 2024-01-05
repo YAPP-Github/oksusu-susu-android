@@ -18,21 +18,22 @@ class TokenAuthenticator @Inject constructor(
     override fun authenticate(route: Route?, response: Response): Request? {
         // 1. refresh token으로 갱신 요청
         val refreshToken = runBlocking { tokenRepository.getRefreshToken().firstOrNull() }
+        val accessToken = runBlocking { tokenRepository.getAccessToken().firstOrNull() }
 
-        if (refreshToken == null) {
-            response.close()
+        if (refreshToken == null || accessToken == null) {
             return null
         }
 
         return runBlocking {
             // 2. access token 갱신
-            val tokenResponse = tokenService.refreshAccessToken(RefreshTokenRequest(refreshToken))
+            val tokenResponse = tokenService.refreshAccessToken(
+                RefreshTokenRequest(accessToken = accessToken, refreshToken = refreshToken),
+            )
 
             // 2-1. 정상적으로 받지 못하면 request token 까지 만료된 것.
             if (tokenResponse.isSuccessful.not() || tokenResponse.body() == null) {
                 // 삭제하여 다시 로그인하도록 유도
                 tokenRepository.deleteTokens()
-                response.close()
                 null
             } else {
                 // 3. 헤더에 토큰을 교체한 request 생성
