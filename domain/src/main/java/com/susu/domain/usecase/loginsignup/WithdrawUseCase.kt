@@ -1,16 +1,16 @@
-package com.susu.domain.usecase
+package com.susu.domain.usecase.loginsignup
 
 import com.susu.core.common.runCatchingIgnoreCancelled
 import com.susu.domain.repository.LoginRepository
 import com.susu.domain.repository.TokenRepository
 import javax.inject.Inject
 
-class LogoutUseCase @Inject constructor(
+class WithdrawUseCase @Inject constructor(
     private val loginRepository: LoginRepository,
     private val tokenRepository: TokenRepository,
 ) {
     suspend operator fun invoke() = runCatchingIgnoreCancelled {
-        loginRepository.logout()
+        loginRepository.withdraw()
         tokenRepository.deleteTokens()
     }
 }

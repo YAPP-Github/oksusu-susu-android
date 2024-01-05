@@ -13,17 +13,17 @@ interface LedgerRecentSearchDao {
     fun getSearchList(count: Int): List<LedgerRecentSearchEntity>
 
     @Query("SELECT COUNT(*) FROM ${EntityTable.LEDGER_RECENT_SEARCH}")
-    fun getSearchesCount(): Int
+    fun getSearchListCount(): Int
 
     @Query("DELETE FROM ${EntityTable.LEDGER_RECENT_SEARCH} WHERE search = :search")
-    fun deleteBySearch(search: String): Int
+    fun deleteBySearch(search: String)
 
     @Insert(onConflict = REPLACE)
     fun upsert(recentSearchEntity: LedgerRecentSearchEntity)
 
     @Query(
         "DELETE FROM ${EntityTable.LEDGER_RECENT_SEARCH} WHERE saveTime IN" +
-            "(SELECT saveTime FROM ${EntityTable.LEDGER_RECENT_SEARCH} ORDER BY saveTime ASC LIMIT :count)",
+            "(SELECT saveTime FROM ${EntityTable.LEDGER_RECENT_SEARCH} ORDER BY saveTime ASC LIMIT 1)",
     )
-    fun deleteOldestSearch(count: Int): Int
+    fun deleteOldestSearch()
 }

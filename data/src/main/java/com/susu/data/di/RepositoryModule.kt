@@ -1,8 +1,10 @@
 package com.susu.data.di
 
+import com.susu.data.repository.LedgerRecentSearchRepositoryImpl
 import com.susu.data.repository.LoginRepositoryImpl
 import com.susu.data.repository.SignUpRepositoryImpl
 import com.susu.data.repository.TokenRepositoryImpl
+import com.susu.domain.repository.LedgerRecentSearchRepository
 import com.susu.domain.repository.LoginRepository
 import com.susu.domain.repository.SignUpRepository
 import com.susu.domain.repository.TokenRepository
@@ -29,4 +31,9 @@ abstract class RepositoryModule {
     abstract fun bindLoginRepository(
         loginRepositoryImpl: LoginRepositoryImpl,
     ): LoginRepository
+
+    @Binds
+    abstract fun bindLedgerRecentSearchRepository(
+        ledgerRecentSearchRepositoryImpl: LedgerRecentSearchRepositoryImpl,
+    ): LedgerRecentSearchRepository
 }

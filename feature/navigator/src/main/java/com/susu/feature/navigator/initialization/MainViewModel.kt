@@ -2,8 +2,8 @@ package com.susu.feature.navigator.initialization
 
 import androidx.lifecycle.viewModelScope
 import com.susu.core.ui.base.BaseViewModel
-import com.susu.domain.usecase.CheckCanRegisterUseCase
-import com.susu.domain.usecase.LoginUseCase
+import com.susu.domain.usecase.loginsignup.CheckCanRegisterUseCase
+import com.susu.domain.usecase.loginsignup.LoginUseCase
 import com.susu.feature.loginsignup.social.KakaoLoginHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch

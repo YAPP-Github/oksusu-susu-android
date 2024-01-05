@@ -1,4 +1,4 @@
-package com.susu.domain.usecase
+package com.susu.domain.usecase.loginsignup
 
 import com.susu.core.common.runCatchingIgnoreCancelled
 import com.susu.domain.repository.LoginRepository
