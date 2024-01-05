@@ -1,9 +1,9 @@
 package com.susu.data.repository
 
-import com.susu.data.model.SnsProviders
-import com.susu.data.model.request.AccessTokenRequest
-import com.susu.data.model.response.toDomain
-import com.susu.data.network.service.UserService
+import com.susu.data.remote.model.SnsProviders
+import com.susu.data.remote.model.request.AccessTokenRequest
+import com.susu.data.remote.model.response.toDomain
+import com.susu.data.remote.api.UserService
 import com.susu.domain.repository.LoginRepository
 import javax.inject.Inject
 
