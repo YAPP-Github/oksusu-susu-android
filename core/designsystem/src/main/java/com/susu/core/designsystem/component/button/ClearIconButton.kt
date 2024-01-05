@@ -1,4 +1,4 @@
-package com.susu.core.designsystem.component.util
+package com.susu.core.designsystem.component.button
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.size

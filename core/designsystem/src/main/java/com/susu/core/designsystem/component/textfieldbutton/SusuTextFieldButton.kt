@@ -42,7 +42,7 @@ import com.susu.core.designsystem.component.textfieldbutton.style.InnerButtonSty
 import com.susu.core.designsystem.component.textfieldbutton.style.LargeTextFieldButtonStyle
 import com.susu.core.designsystem.component.textfieldbutton.style.SmallTextFieldButtonStyle
 import com.susu.core.designsystem.component.textfieldbutton.style.TextFieldButtonStyle
-import com.susu.core.designsystem.component.util.ClearIconButton
+import com.susu.core.designsystem.component.button.ClearIconButton
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.ui.extension.disabledHorizontalPointerInputScroll
 import com.susu.core.ui.extension.susuClickable
