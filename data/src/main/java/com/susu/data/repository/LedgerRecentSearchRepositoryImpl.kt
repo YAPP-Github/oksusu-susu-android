@@ -27,7 +27,12 @@ class LedgerRecentSearchRepositoryImpl @Inject constructor(
         dao.deleteBySearch(search)
     }
 
-    override suspend fun upsert(recentSearch: RecentSearch) = withContext(ioDispatcher) {
+    override suspend fun upsert(search: String) = withContext(ioDispatcher) {
+        val recentSearch = RecentSearch(
+            search = search,
+            saveTime = System.currentTimeMillis(),
+        )
+
         dao.upsert(recentSearch.toData())
     }
 

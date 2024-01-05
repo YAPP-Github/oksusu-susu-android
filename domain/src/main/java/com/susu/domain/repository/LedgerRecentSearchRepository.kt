@@ -9,7 +9,7 @@ interface LedgerRecentSearchRepository {
 
     suspend fun deleteBySearch(search: String)
 
-    suspend fun upsert(recentSearch: RecentSearch)
+    suspend fun upsert(search: String)
 
     suspend fun deleteOldestSearch()
 }
