@@ -25,6 +25,7 @@ import com.susu.feature.navigator.initialization.InitialRoute
 import com.susu.feature.navigator.initialization.MainContract
 import com.susu.feature.navigator.initialization.MainViewModel
 import com.susu.feature.received.navigation.ReceivedRoute
+import com.susu.feature.sent.navigation.SentRoute
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -69,7 +70,7 @@ class MainActivity : ComponentActivity() {
                             InitialRoute.SIGNUP_VOTE -> LoginSignupRoute.Parent.Vote.route
                             InitialRoute.LOGIN -> LoginSignupRoute.Parent.Login.route
                             InitialRoute.SIGNUP -> LoginSignupRoute.Parent.SignUp.route
-                            InitialRoute.RECEIVED -> ReceivedRoute.route
+                            InitialRoute.SENT -> SentRoute.route
                             InitialRoute.NONE -> LoginSignupRoute.Parent.route
                         },
                     )

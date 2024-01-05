@@ -1,4 +1,4 @@
-package com.susu.feature.received
+package com.susu.feature.received.received
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -8,10 +8,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.CircleShape
@@ -40,15 +38,20 @@ import com.susu.core.designsystem.theme.Gray50
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.ui.alignList
 import com.susu.core.ui.extension.susuClickable
-import com.susu.feature.received.component.LedgerAddCard
-import com.susu.feature.received.component.LedgerCard
+import com.susu.feature.received.R
+import com.susu.feature.received.received.component.LedgerAddCard
+import com.susu.feature.received.received.component.LedgerCard
 import kotlinx.collections.immutable.toImmutableList
 
 @Composable
 fun ReceivedRoute(
     padding: PaddingValues,
+    navigateLedgerSearch: () -> Unit,
 ) {
-    ReceiveScreen(padding = padding)
+    ReceiveScreen(
+        padding = padding,
+        onClickSearchIcon = navigateLedgerSearch, // TODO SideEffect로 변경
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -196,7 +199,7 @@ fun ReceiveScreen(
 
         // TODO State 변환
         var isSheetOpen by remember {
-            mutableStateOf(false)
+            mutableStateOf(true)
         }
 
         if (isSheetOpen) {

@@ -40,7 +40,7 @@ class MainViewModel @Inject constructor(
     private suspend fun login(oauthAccessToken: String) {
         loginUseCase(oauthAccessToken = oauthAccessToken)
             .onSuccess {
-                intent { copy(isLoading = false, initialRoute = InitialRoute.RECEIVED) }
+                intent { copy(isLoading = false, initialRoute = InitialRoute.SENT) }
             }.onFailure {
                 intent { copy(isLoading = false, initialRoute = InitialRoute.LOGIN) }
             }
