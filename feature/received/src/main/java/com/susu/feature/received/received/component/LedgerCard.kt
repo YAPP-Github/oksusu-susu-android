@@ -1,4 +1,4 @@
-package com.susu.feature.received.component
+package com.susu.feature.received.received.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column

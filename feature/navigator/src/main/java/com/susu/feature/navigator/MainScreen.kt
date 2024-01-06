@@ -51,6 +51,7 @@ internal fun MainScreen(
 
                 receivedNavGraph(
                     padding = innerPadding,
+                    navigateLedgerDetail = navigator::navigateLedgerDetail,
                 )
 
                 statisticsNavGraph(
