@@ -44,7 +44,7 @@ fun SusuBottomSheet(
         dragHandle = null,
     ) {
         Box(
-            modifier = Modifier.fillMaxWidth().height(containerHeight),
+            modifier = Modifier.fillMaxWidth().height(containerHeight + 7.dp),
         ) {
             Column(
                 modifier = Modifier
@@ -52,11 +52,11 @@ fun SusuBottomSheet(
                         color = Gray30,
                         spread = 0.1.dp,
                         borderRadius = cornerRadius,
-                        blurRadius = 8.dp,
+                        blurRadius = 10.dp,
                     )
                     .clip(RoundedCornerShape(topStart = cornerRadius, topEnd = cornerRadius))
                     .fillMaxWidth()
-                    .height(containerHeight - 5.dp)
+                    .height(containerHeight)
                     .background(Gray10)
                     .padding(16.dp)
                     .align(Alignment.BottomCenter),
