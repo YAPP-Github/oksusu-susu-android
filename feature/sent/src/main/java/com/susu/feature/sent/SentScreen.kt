@@ -44,7 +44,7 @@ fun SentScreen(
     clickPadding: Dp = SusuTheme.spacing.spacing_xs,
 ) {
     // TODO: 수정 필요
-    var isEmpty by remember { mutableStateOf(false) }
+    var isEmpty by remember { mutableStateOf(true) }
 
     Box(
         modifier = Modifier
@@ -150,7 +150,7 @@ fun SentScreen(
             modifier = modifier
                 .align(Alignment.BottomEnd)
                 .padding(SusuTheme.spacing.spacing_l),
-            onClick = {}
+            onClick = {},
         )
     }
 }
