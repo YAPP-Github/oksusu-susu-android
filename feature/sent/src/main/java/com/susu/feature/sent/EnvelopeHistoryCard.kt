@@ -78,15 +78,19 @@ fun EnvelopeDetailItem(
     isSent: Boolean = true,
 ) {
     Row(
-        modifier = modifier.fillMaxWidth().background(Gray10),
+        modifier = modifier
+            .fillMaxWidth()
+            .background(Gray10),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(
-            painter = if (isSent) {
-                painterResource(id = R.drawable.ic_round_arrow_sent)
-            } else {
-                painterResource(id = R.drawable.ic_round_arrow_received)
-            },
+            painter = painterResource(
+                id = if (isSent) {
+                    R.drawable.ic_round_arrow_sent
+                } else {
+                    R.drawable.ic_round_arrow_received
+                },
+            ),
             contentDescription = stringResource(R.string.envelope_hisotry_arrow),
             tint = if (isSent) Orange60 else Gray40,
         )
