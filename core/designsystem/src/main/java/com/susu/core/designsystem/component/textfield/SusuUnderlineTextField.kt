@@ -27,7 +27,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.susu.core.designsystem.component.util.ClearIconButton
+import com.susu.core.designsystem.component.button.ClearIconButton
 import com.susu.core.designsystem.theme.Gray100
 import com.susu.core.designsystem.theme.Gray30
 import com.susu.core.designsystem.theme.Gray50

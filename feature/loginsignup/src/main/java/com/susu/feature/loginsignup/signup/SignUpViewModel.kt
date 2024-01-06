@@ -3,7 +3,7 @@ package com.susu.feature.loginsignup.signup
 import androidx.lifecycle.viewModelScope
 import com.susu.core.model.User
 import com.susu.core.ui.base.BaseViewModel
-import com.susu.domain.usecase.SignUpUseCase
+import com.susu.domain.usecase.loginsignup.SignUpUseCase
 import com.susu.feature.loginsignup.social.KakaoLoginHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
