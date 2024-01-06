@@ -22,7 +22,7 @@ fun NavGraphBuilder.loginSignupNavGraph(
             navigateToLogin = {
                 navController.navigate(LoginSignupRoute.Parent.Login.route) {
                     popUpTo(
-                        route = LoginSignupRoute.Parent.Vote.route
+                        route = LoginSignupRoute.Parent.Vote.route,
                     ) {
                         inclusive = true
                     }
@@ -36,7 +36,7 @@ fun NavGraphBuilder.loginSignupNavGraph(
             navigateToSignUp = {
                 navController.navigate(LoginSignupRoute.Parent.SignUp.route) {
                     popUpTo(
-                        route = LoginSignupRoute.Parent.SignUp.route
+                        route = LoginSignupRoute.Parent.SignUp.route,
                     ) {
                         inclusive = true
                     }

@@ -132,7 +132,7 @@ fun LoginScreen(
             if (uiState.isLoading) {
                 CircularProgressIndicator(
                     modifier = Modifier.align(Alignment.Center),
-                    color = SusuTheme.colorScheme.primary
+                    color = SusuTheme.colorScheme.primary,
                 )
             }
         }
