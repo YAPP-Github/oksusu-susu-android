@@ -9,7 +9,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.susu.feature.received.ledgerdetail.LedgerDetailRoute
 import com.susu.feature.received.received.ReceivedRoute
-import com.susu.feature.received.received.ReceivedRoute
 import com.susu.feature.received.search.LedgerSearchRoute
 
 fun NavController.navigateReceived(navOptions: NavOptions) {
@@ -34,6 +33,7 @@ fun NavGraphBuilder.receivedNavGraph(
         ReceivedRoute(
             padding = padding,
             navigateLedgerDetail = navigateLedgerDetail,
+            navigateLedgerSearch = navigateLedgerSearch,
         )
     }
 
@@ -47,10 +47,6 @@ fun NavGraphBuilder.receivedNavGraph(
         ),
     ) {
         LedgerDetailRoute()
-        ReceivedRoute(
-            padding = padding,
-            navigateLedgerSearch = navigateLedgerSearch,
-        )
     }
 
     composable(route = ReceivedRoute.ledgerSearchRoute) {
