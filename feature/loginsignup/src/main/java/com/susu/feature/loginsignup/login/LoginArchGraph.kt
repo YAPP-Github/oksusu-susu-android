@@ -10,6 +10,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.susu.core.designsystem.theme.Orange20
 import com.susu.core.designsystem.theme.Orange50
@@ -19,9 +20,11 @@ import kotlinx.coroutines.launch
 @Composable
 fun LoginArchGraph(
     modifier: Modifier = Modifier,
-    outlineWidth: Float = 16f,
+    outlineWidth: Dp = 8.dp,
     fillFrom: Float = 0f,
     fillUntil: Float = 0.87f,
+    delay: Int = 1500,
+    duration: Int = 1000,
 ) {
     val fillAngle = remember { Animatable(fillFrom) }
 
@@ -30,8 +33,8 @@ fun LoginArchGraph(
             fillAngle.animateTo(
                 targetValue = fillUntil,
                 animationSpec = tween(
-                    delayMillis = 300,
-                    durationMillis = 1000,
+                    delayMillis = delay,
+                    durationMillis = duration,
                     easing = EaseInOutCubic,
                 ),
             )
@@ -50,7 +53,7 @@ fun LoginArchGraph(
             drawCircle(
                 color = Orange20,
                 alpha = 0.48f,
-                radius = size.minDimension / 2.0f - outlineWidth,
+                radius = size.minDimension / 2.0f - outlineWidth.toPx(),
             )
         },
     )
