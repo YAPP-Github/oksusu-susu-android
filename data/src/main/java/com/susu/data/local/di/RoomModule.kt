@@ -19,9 +19,10 @@ object RoomModule {
     @Provides
     @Singleton
     fun provideRoomDataBase(
-        @ApplicationContext context: Context
+        @ApplicationContext context: Context,
     ) = Room.databaseBuilder(
         context,
-        RoomDataBase::class.java, DB_NAME
+        RoomDataBase::class.java,
+        DB_NAME,
     ).build()
 }

@@ -24,7 +24,6 @@ import com.susu.feature.loginsignup.navigation.LoginSignupRoute
 import com.susu.feature.navigator.initialization.InitialRoute
 import com.susu.feature.navigator.initialization.MainContract
 import com.susu.feature.navigator.initialization.MainViewModel
-import com.susu.feature.received.navigation.ReceivedRoute
 import com.susu.feature.sent.navigation.SentRoute
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch

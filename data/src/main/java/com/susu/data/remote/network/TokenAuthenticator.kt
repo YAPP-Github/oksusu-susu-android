@@ -1,7 +1,7 @@
 package com.susu.data.remote.network
 
-import com.susu.data.remote.model.request.RefreshTokenRequest
 import com.susu.data.remote.api.TokenService
+import com.susu.data.remote.model.request.RefreshTokenRequest
 import com.susu.domain.repository.TokenRepository
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.runBlocking

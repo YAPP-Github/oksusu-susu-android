@@ -49,7 +49,7 @@ fun SusuRecentSearchContainer(
         Text(
             modifier = Modifier.weight(1f),
             text = text,
-            style = SusuTheme.typography.title_s
+            style = SusuTheme.typography.title_s,
         )
 
         if (typeIconId == null) {

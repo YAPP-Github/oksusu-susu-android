@@ -55,7 +55,7 @@ fun LedgerSearchRoute(
         onSearchDone = {
             viewModel.upsertLedgerRecentSearch(it)
             viewModel.updateSearch("")
-        }
+        },
     )
 }
 
@@ -91,9 +91,12 @@ fun LedgerSearchScreen(
                     value = uiState.search,
                     onValueChange = onValueChangeSearchBar,
                     placeholder = stringResource(R.string.ledger_search_screen_search_placeholder),
-                    keyboardActions = KeyboardActions(onDone = {
-                        onSearchDone(uiState.search)
-                    }), // TODO REMOVE -> 테스트 용
+                    keyboardActions = KeyboardActions(
+                        onDone = {
+                            // TODO REMOVE -> 테스트 용
+                            onSearchDone(uiState.search)
+                        },
+                    ),
                 )
 
                 if (uiState.searchList.isEmpty()) {
@@ -150,7 +153,7 @@ private fun RecentSearchScreen(
             SusuRecentSearchContainer(
                 text = name,
                 onClick = { onClickItem(name) },
-                onClickCloseIcon = { onClickCloseIcon(name) }
+                onClickCloseIcon = { onClickCloseIcon(name) },
             )
         }
     }
