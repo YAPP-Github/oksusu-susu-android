@@ -27,7 +27,7 @@ class LoginViewModel @Inject constructor(
                             postSideEffect(LoginContract.LoginEffect.NavigateToReceived)
                         }
                         .onFailure {
-                            postSideEffect(LoginContract.LoginEffect.ShowToast(it.message ?: "수수 로그인 실패"))
+                            postSideEffect(LoginContract.LoginEffect.ShowToast(it.message ?: "수수 로그인에 실패했어요"))
                         }
                 }
             }
@@ -35,11 +35,7 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    fun selectSignUpVote() {
-        intent { copy(showVote = false) }
-    }
-
     fun showToast(error: Throwable?) {
-        postSideEffect(LoginContract.LoginEffect.ShowToast(error?.message ?: "에러"))
+        postSideEffect(LoginContract.LoginEffect.ShowToast(error?.message ?: "알 수 없는 에러가 발생했습니다."))
     }
 }
