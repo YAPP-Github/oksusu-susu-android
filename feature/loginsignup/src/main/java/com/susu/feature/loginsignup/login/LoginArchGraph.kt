@@ -15,7 +15,6 @@ import androidx.compose.ui.unit.dp
 import com.susu.core.designsystem.theme.Orange20
 import com.susu.core.designsystem.theme.Orange50
 import com.susu.core.designsystem.theme.SusuTheme
-import kotlinx.coroutines.launch
 
 @Composable
 fun LoginArchGraph(
@@ -28,17 +27,15 @@ fun LoginArchGraph(
 ) {
     val fillAngle = remember { Animatable(fillFrom) }
 
-    LaunchedEffect(key1 = fillAngle) {
-        launch {
-            fillAngle.animateTo(
-                targetValue = fillUntil,
-                animationSpec = tween(
-                    delayMillis = delay,
-                    durationMillis = duration,
-                    easing = EaseInOutCubic,
-                ),
-            )
-        }
+    LaunchedEffect(key1 = Unit) {
+        fillAngle.animateTo(
+            targetValue = fillUntil,
+            animationSpec = tween(
+                delayMillis = delay,
+                durationMillis = duration,
+                easing = EaseInOutCubic,
+            ),
+        )
     }
 
     Canvas(
