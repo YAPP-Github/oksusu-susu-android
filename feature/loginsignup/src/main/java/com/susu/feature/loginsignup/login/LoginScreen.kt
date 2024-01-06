@@ -175,10 +175,12 @@ fun KakaoLoginButton(
             .background(color = Color(0xFFFEE500), shape = RoundedCornerShape(4.dp))
             .fillMaxWidth()
             .susuClickable(
-                rippleEnabled = true, onClick = onClick,
+                rippleEnabled = true,
+                onClick = onClick,
             )
             .padding(
-                horizontal = SusuTheme.spacing.spacing_m, vertical = SusuTheme.spacing.spacing_xm,
+                horizontal = SusuTheme.spacing.spacing_m,
+                vertical = SusuTheme.spacing.spacing_xm,
             ),
         verticalAlignment = Alignment.CenterVertically,
     ) {
