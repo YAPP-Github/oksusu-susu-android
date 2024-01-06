@@ -57,7 +57,7 @@ fun SentScreen(
                 leftIcon = {
                     Image(
                         painter = painterResource(id = R.drawable.ic_susu_app),
-                        contentDescription = stringResource(R.string.app_bar_logo),
+                        contentDescription = null,
                         modifier = modifier
                             .size(
                                 width = 56.dp,
