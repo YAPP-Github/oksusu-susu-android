@@ -6,6 +6,6 @@ import androidx.room.PrimaryKey
 @Entity(tableName = EntityTable.LEDGER_RECENT_SEARCH)
 data class LedgerRecentSearchEntity(
     @PrimaryKey
-    val search: String,
+    val searchKeyword: String,
     val saveTime: Long,
 )

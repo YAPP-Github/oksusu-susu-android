@@ -5,9 +5,9 @@ interface LedgerRecentSearchRepository {
 
     suspend fun getSearchListCount(): Int
 
-    suspend fun deleteBySearch(search: String)
+    suspend fun deleteBySearchKeyword(searchKeyword: String)
 
-    suspend fun upsert(search: String)
+    suspend fun upsert(searchKeyword: String)
 
-    suspend fun deleteOldestSearch(count: Int)
+    suspend fun deleteOldestSearchKeyword(count: Int)
 }

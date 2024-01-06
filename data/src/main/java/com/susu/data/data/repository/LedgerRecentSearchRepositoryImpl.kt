@@ -14,27 +14,27 @@ class LedgerRecentSearchRepositoryImpl @Inject constructor(
     @Dispatcher(SusuDispatchers.IO) private val ioDispatcher: CoroutineDispatcher,
 ) : LedgerRecentSearchRepository {
     override suspend fun getSearchList(count: Int): List<String> = withContext(ioDispatcher) {
-        dao.getSearchList(count).map { it.search }
+        dao.getSearchList(count).map { it.searchKeyword }
     }
 
     override suspend fun getSearchListCount(): Int = withContext(ioDispatcher) {
         dao.getSearchListCount()
     }
 
-    override suspend fun deleteBySearch(search: String) = withContext(ioDispatcher) {
-        dao.deleteBySearch(search)
+    override suspend fun deleteBySearchKeyword(searchKeyword: String) = withContext(ioDispatcher) {
+        dao.deleteBySearch(searchKeyword)
     }
 
-    override suspend fun upsert(search: String) = withContext(ioDispatcher) {
+    override suspend fun upsert(searchKeyword: String) = withContext(ioDispatcher) {
         val recentSearch = LedgerRecentSearchEntity(
-            search = search,
+            searchKeyword = searchKeyword,
             saveTime = System.currentTimeMillis(),
         )
 
         dao.upsert(recentSearch)
     }
 
-    override suspend fun deleteOldestSearch(count: Int) = withContext(ioDispatcher) {
+    override suspend fun deleteOldestSearchKeyword(count: Int) = withContext(ioDispatcher) {
         dao.deleteOldestSearch(count)
     }
 }

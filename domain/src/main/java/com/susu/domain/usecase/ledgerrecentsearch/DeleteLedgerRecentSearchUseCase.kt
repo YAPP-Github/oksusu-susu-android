@@ -8,9 +8,9 @@ import javax.inject.Inject
 class DeleteLedgerRecentSearchUseCase @Inject constructor(
     private val ledgerRecentSearchRepository: LedgerRecentSearchRepository,
 ) {
-    suspend operator fun invoke(search: String) = runCatchingIgnoreCancelled {
+    suspend operator fun invoke(searchKeyword: String) = runCatchingIgnoreCancelled {
         with(ledgerRecentSearchRepository) {
-            deleteBySearch(search)
+            deleteBySearchKeyword(searchKeyword)
             getSearchList(LEDGER_SEARCH_MAX_COUNT)
         }
     }

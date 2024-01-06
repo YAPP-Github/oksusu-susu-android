@@ -88,22 +88,22 @@ fun LedgerSearchScreen(
                 ),
             ) {
                 SusuSearchBar(
-                    value = uiState.search,
+                    value = uiState.searchKeyword,
                     onValueChange = onValueChangeSearchBar,
                     placeholder = stringResource(R.string.ledger_search_screen_search_placeholder),
                     keyboardActions = KeyboardActions(
                         onDone = {
                             // TODO REMOVE -> 테스트 용
-                            onSearchDone(uiState.search)
+                            onSearchDone(uiState.searchKeyword)
                         },
                     ),
                 )
 
-                if (uiState.searchList.isEmpty()) {
+                if (uiState.searchKeywordList.isEmpty()) {
                     RecentSearchEmptyScreen()
                 } else {
                     RecentSearchScreen(
-                        recentSearchList = uiState.searchList,
+                        recentSearchList = uiState.searchKeywordList,
                         onClickItem = onClickRecentSearchContainer,
                         onClickCloseIcon = onClickRecentSearchContainerCloseIcon,
                     )

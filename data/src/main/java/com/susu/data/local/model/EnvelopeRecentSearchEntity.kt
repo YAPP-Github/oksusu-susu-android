@@ -6,6 +6,6 @@ import androidx.room.PrimaryKey
 @Entity(tableName = EntityTable.ENVELOPE_RECENT_SEARCH)
 data class EnvelopeRecentSearchEntity(
     @PrimaryKey
-    val search: String,
+    val searchKeyword: String,
     val saveTime: Long,
 )

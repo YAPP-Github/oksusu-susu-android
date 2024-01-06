@@ -15,7 +15,7 @@ interface LedgerRecentSearchDao {
     @Query("SELECT COUNT(*) FROM ${EntityTable.LEDGER_RECENT_SEARCH}")
     fun getSearchListCount(): Int
 
-    @Query("DELETE FROM ${EntityTable.LEDGER_RECENT_SEARCH} WHERE search = :search")
+    @Query("DELETE FROM ${EntityTable.LEDGER_RECENT_SEARCH} WHERE searchKeyword = :search")
     fun deleteBySearch(search: String)
 
     @Insert(onConflict = REPLACE)

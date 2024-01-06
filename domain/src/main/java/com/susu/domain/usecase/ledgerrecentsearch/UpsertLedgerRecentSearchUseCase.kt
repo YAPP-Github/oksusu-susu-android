@@ -8,12 +8,12 @@ import javax.inject.Inject
 class UpsertLedgerRecentSearchUseCase @Inject constructor(
     private val ledgerRecentSearchRepository: LedgerRecentSearchRepository,
 ) {
-    suspend operator fun invoke(search: String) = runCatchingIgnoreCancelled {
+    suspend operator fun invoke(searchKeyword: String) = runCatchingIgnoreCancelled {
         with(ledgerRecentSearchRepository) {
-            upsert(search)
+            upsert(searchKeyword)
             val searchListCount = getSearchListCount()
             if (searchListCount > LEDGER_SEARCH_MAX_COUNT) {
-                deleteOldestSearch(searchListCount - LEDGER_SEARCH_MAX_COUNT)
+                deleteOldestSearchKeyword(searchListCount - LEDGER_SEARCH_MAX_COUNT)
             }
             getSearchList(LEDGER_SEARCH_MAX_COUNT)
         }
