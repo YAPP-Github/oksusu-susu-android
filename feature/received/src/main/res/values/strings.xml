@@ -2,9 +2,6 @@
 <resources>
     <string name="ledger_card_total_money">전체 %s원</string>
     <string name="ledger_card_total_count">총 %d개</string>
-    <string name="content_description_logo_image">로고 이미지</string>
-    <string name="content_description_search_icon">검색 아이콘</string>
-    <string name="content_description_notification_icon">알림 아이콘</string>
     <string name="content_description_align_icon">정렬 아이콘</string>
     <string name="content_description_filter_icon">필터 아이콘</string>
     <string name="received_screen_empty_ledger">아직 받은 장부가 없어요</string>
