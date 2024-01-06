@@ -1,9 +1,7 @@
 package com.susu.domain.repository
 
-import com.susu.core.model.RecentSearch
-
 interface LedgerRecentSearchRepository {
-    suspend fun getSearchList(count: Int): List<RecentSearch>
+    suspend fun getSearchList(count: Int): List<String>
 
     suspend fun getSearchListCount(): Int
 
@@ -11,5 +9,5 @@ interface LedgerRecentSearchRepository {
 
     suspend fun upsert(search: String)
 
-    suspend fun deleteOldestSearch()
+    suspend fun deleteOldestSearch(count: Int)
 }

@@ -5,4 +5,5 @@
     <string name="word_align_high_amount">금액 높은 순</string>
     <string name="word_align_low_amount">금액 낮은 순</string>
     <string name="content_description_back_icon">뒤로가기 아이콘</string>
+    <string name="word_recent_search">최근 검색</string>
 </resources>

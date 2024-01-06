@@ -24,11 +24,9 @@ import com.susu.core.ui.extension.susuClickable
 @Composable
 fun SusuRecentSearchContainer(
     modifier: Modifier = Modifier,
-    @DrawableRes typeIconId: Int,
-    typeIconContentDescription: String,
+    @DrawableRes typeIconId: Int? = null,
+    typeIconContentDescription: String? = null,
     text: String = "",
-    showTypeIcon: Boolean = false,
-    showCloseIcon: Boolean = true,
     onClickCloseIcon: () -> Unit = {},
     onClick: () -> Unit = {},
 ) {
@@ -40,7 +38,7 @@ fun SusuRecentSearchContainer(
         horizontalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_m),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        if (showTypeIcon) {
+        if (typeIconId != null) {
             Image(
                 modifier = Modifier.size(24.dp),
                 painter = painterResource(id = typeIconId),
@@ -54,7 +52,7 @@ fun SusuRecentSearchContainer(
             style = SusuTheme.typography.title_s
         )
 
-        if (showCloseIcon) {
+        if (typeIconId == null) {
             Image(
                 modifier = Modifier
                     .size(24.dp)

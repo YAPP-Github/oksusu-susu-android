@@ -2,10 +2,8 @@ package com.susu.data.repository
 
 import com.susu.core.android.Dispatcher
 import com.susu.core.android.SusuDispatchers
-import com.susu.core.model.RecentSearch
 import com.susu.data.local.dao.LedgerRecentSearchDao
-import com.susu.data.local.model.toData
-import com.susu.data.local.model.toModel
+import com.susu.data.local.model.LedgerRecentSearchEntity
 import com.susu.domain.repository.LedgerRecentSearchRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
@@ -15,8 +13,8 @@ class LedgerRecentSearchRepositoryImpl @Inject constructor(
     private val dao: LedgerRecentSearchDao,
     @Dispatcher(SusuDispatchers.IO) private val ioDispatcher: CoroutineDispatcher,
 ) : LedgerRecentSearchRepository {
-    override suspend fun getSearchList(count: Int): List<RecentSearch> = withContext(ioDispatcher) {
-        dao.getSearchList(count).map { it.toModel() }
+    override suspend fun getSearchList(count: Int): List<String> = withContext(ioDispatcher) {
+        dao.getSearchList(count).map { it.search }
     }
 
     override suspend fun getSearchListCount(): Int = withContext(ioDispatcher) {
@@ -28,15 +26,15 @@ class LedgerRecentSearchRepositoryImpl @Inject constructor(
     }
 
     override suspend fun upsert(search: String) = withContext(ioDispatcher) {
-        val recentSearch = RecentSearch(
+        val recentSearch = LedgerRecentSearchEntity(
             search = search,
             saveTime = System.currentTimeMillis(),
         )
 
-        dao.upsert(recentSearch.toData())
+        dao.upsert(recentSearch)
     }
 
-    override suspend fun deleteOldestSearch() = withContext(ioDispatcher) {
-        dao.deleteOldestSearch()
+    override suspend fun deleteOldestSearch(count: Int) = withContext(ioDispatcher) {
+        dao.deleteOldestSearch(count)
     }
 }

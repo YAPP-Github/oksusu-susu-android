@@ -23,7 +23,7 @@ interface LedgerRecentSearchDao {
 
     @Query(
         "DELETE FROM ${EntityTable.LEDGER_RECENT_SEARCH} WHERE saveTime IN" +
-            "(SELECT saveTime FROM ${EntityTable.LEDGER_RECENT_SEARCH} ORDER BY saveTime ASC LIMIT 1)",
+            "(SELECT saveTime FROM ${EntityTable.LEDGER_RECENT_SEARCH} ORDER BY saveTime ASC LIMIT :count)",
     )
-    fun deleteOldestSearch()
+    fun deleteOldestSearch(count: Int)
 }
