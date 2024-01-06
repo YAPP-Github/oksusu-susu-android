@@ -7,6 +7,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,8 +17,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Text
@@ -28,6 +27,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.layout.ContentScale
@@ -37,7 +37,6 @@ import androidx.compose.ui.unit.dp
 import com.susu.core.designsystem.component.badge.BadgeColor
 import com.susu.core.designsystem.component.badge.BadgeStyle
 import com.susu.core.designsystem.component.badge.SusuBadge
-import com.susu.core.designsystem.theme.Gray10
 import com.susu.core.designsystem.theme.Gray100
 import com.susu.core.designsystem.theme.Gray60
 import com.susu.core.designsystem.theme.Gray90
@@ -54,93 +53,90 @@ fun EnvelopeCard(
     val degrees by animateFloatAsState(if (expanded) 180f else 0f, label = "")
     val historyCount = 3
 
-    Card(
-        colors = CardDefaults.cardColors(
-            containerColor = Gray10,
-        ),
-        shape = RoundedCornerShape(4.dp),
+    Box(
+        modifier = modifier
+            .clip(shape = RoundedCornerShape(4.dp))
+            .fillMaxWidth()
+            .background(SusuTheme.colorScheme.background10),
     ) {
-        Box(
-            modifier = modifier.fillMaxWidth(),
+        Image(
+            painter = painterResource(id = R.drawable.ic_envelope),
+            contentDescription = stringResource(R.string.envelope_card),
+            contentScale = ContentScale.Crop,
+        )
+        Column(
+            modifier = modifier
+                .padding(SusuTheme.spacing.spacing_m),
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.ic_envelope),
-                contentDescription = stringResource(R.string.envelope_card),
-                contentScale = ContentScale.Crop,
-            )
-            Column(
-                modifier = modifier.padding(SusuTheme.spacing.spacing_m),
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
             ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Text(
-                        text = "김철수",
-                        style = SusuTheme.typography.title_xs,
-                        color = Gray100,
-                    )
-                    Spacer(modifier = modifier.size(SusuTheme.spacing.spacing_s))
-                    SusuBadge(
-                        color = BadgeColor.Gray20,
-                        text = "전체 100,000원",
-                        padding = BadgeStyle.smallBadge,
-                    )
-                    Spacer(modifier = modifier.weight(1f))
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_arrow_down),
-                        contentDescription = stringResource(R.string.envelope_show_detail),
-                        tint = Gray100,
-                        modifier = modifier
-                            .susuClickable {
-                                expanded = !expanded
-                            }
-                            .rotate(degrees = degrees),
-                    )
-                }
-                Spacer(modifier = modifier.size(SusuTheme.spacing.spacing_m))
-                Row(
-                    modifier = modifier
-                        .fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                ) {
-                    Text(
-                        text = stringResource(R.string.envelope_sent),
-                        style = SusuTheme.typography.title_xxxs,
-                        color = Gray90,
-                    )
-                    Text(
-                        text = stringResource(R.string.envelope_received),
-                        style = SusuTheme.typography.title_xxxs,
-                        color = Gray60,
-                    )
-                }
-                LinearProgressIndicator(
-                    progress = { 0.7f },
-                    color = SusuTheme.colorScheme.primary,
-                    trackColor = Orange20,
-                    strokeCap = StrokeCap.Round,
-                    modifier = modifier
-                        .fillMaxWidth()
-                        .padding(vertical = SusuTheme.spacing.spacing_xxxxs),
+                Text(
+                    text = "김철수",
+                    style = SusuTheme.typography.title_xs,
+                    color = Gray100,
                 )
-                Row(
+                Spacer(modifier = modifier.size(SusuTheme.spacing.spacing_s))
+                SusuBadge(
+                    color = BadgeColor.Gray20,
+                    text = "전체 100,000원",
+                    padding = BadgeStyle.smallBadge,
+                )
+                Spacer(modifier = modifier.weight(1f))
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_arrow_down),
+                    contentDescription = stringResource(R.string.envelope_show_detail),
+                    tint = Gray100,
                     modifier = modifier
-                        .fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                ) {
-                    Text(
-                        text = "70,000원",
-                        style = SusuTheme.typography.title_xxxs,
-                        color = Gray90,
-                    )
-                    Text(
-                        text = "30,000원",
-                        style = SusuTheme.typography.title_xxxs,
-                        color = Gray60,
-                    )
-                }
+                        .susuClickable {
+                            expanded = !expanded
+                        }
+                        .rotate(degrees = degrees),
+                )
+            }
+            Spacer(modifier = modifier.size(SusuTheme.spacing.spacing_m))
+            Row(
+                modifier = modifier
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
+            ) {
+                Text(
+                    text = stringResource(R.string.envelope_sent),
+                    style = SusuTheme.typography.title_xxxs,
+                    color = Gray90,
+                )
+                Text(
+                    text = stringResource(R.string.envelope_received),
+                    style = SusuTheme.typography.title_xxxs,
+                    color = Gray60,
+                )
+            }
+            LinearProgressIndicator(
+                progress = { 0.7f },
+                color = SusuTheme.colorScheme.primary,
+                trackColor = Orange20,
+                strokeCap = StrokeCap.Round,
+                modifier = modifier
+                    .fillMaxWidth()
+                    .padding(vertical = SusuTheme.spacing.spacing_xxxxs),
+            )
+            Row(
+                modifier = modifier
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
+            ) {
+                Text(
+                    text = "70,000원",
+                    style = SusuTheme.typography.title_xxxs,
+                    color = Gray90,
+                )
+                Text(
+                    text = "30,000원",
+                    style = SusuTheme.typography.title_xxxs,
+                    color = Gray60,
+                )
             }
         }
     }
