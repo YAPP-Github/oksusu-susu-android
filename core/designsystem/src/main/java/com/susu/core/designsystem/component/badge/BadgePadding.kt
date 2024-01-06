@@ -2,6 +2,7 @@ package com.susu.core.designsystem.component.badge
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import com.susu.core.designsystem.theme.SusuTheme
 
 data class BadgePadding(
@@ -19,7 +20,7 @@ object BadgeStyle {
     val extraSmallBadge: @Composable () -> BadgePadding = {
         BadgePadding(
             horizontalPadding = SusuTheme.spacing.spacing_xxs,
-            verticalPadding = SusuTheme.spacing.spacing_xxxxxs,
+            verticalPadding = 0.dp,
         )
     }
 }

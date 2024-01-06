@@ -17,7 +17,7 @@ enum class ProgressBarStyle(
     SusuProgressBar(
         progressBarColor = Orange60,
         progressBarTrackColor = Orange30,
-        progressBarWidth = 72.dp,
+        progressBarWidth = 96.dp,
         progressBarHeight = 4.dp,
         progressBarStrokeCap = StrokeCap.Round,
     ),
