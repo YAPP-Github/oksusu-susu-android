@@ -17,6 +17,7 @@ import com.susu.feature.community.navigation.communityNavGraph
 import com.susu.feature.loginsignup.navigation.LoginSignupRoute
 import com.susu.feature.loginsignup.navigation.loginSignupNavGraph
 import com.susu.feature.mypage.navigation.myPageNavGraph
+import com.susu.feature.received.navigation.ReceivedRoute
 import com.susu.feature.received.navigation.receivedNavGraph
 import com.susu.feature.sent.navigation.sentNavGraph
 import com.susu.feature.statistics.navigation.statisticsNavGraph
@@ -39,9 +40,11 @@ internal fun MainScreen(
                 loginSignupNavGraph(
                     navController = navigator.navController,
                     navigateToReceived = {
-                        // TODO: 이쪽으로 수정
-                        // navigator.navController.navigateReceived(navOptions = NavOptions())
-                        navigator.navigate(MainNavigationTab.RECEIVED)
+                        navigator.navController.navigate(ReceivedRoute.route) {
+                            popUpTo(navigator.navController.graph.id) {
+                                inclusive = true
+                            }
+                        }
                     },
                 )
 

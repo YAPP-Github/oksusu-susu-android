@@ -19,13 +19,29 @@ fun NavGraphBuilder.loginSignupNavGraph(
 ) {
     composable(route = LoginSignupRoute.Parent.Vote.route) {
         VoteRoute(
-            navigateToLogin = { navController.navigate(LoginSignupRoute.Parent.Login.route) },
+            navigateToLogin = {
+                navController.navigate(LoginSignupRoute.Parent.Login.route) {
+                    popUpTo(
+                        route = LoginSignupRoute.Parent.Vote.route
+                    ) {
+                        inclusive = true
+                    }
+                }
+            },
         )
     }
     composable(route = LoginSignupRoute.Parent.Login.route) {
         LoginRoute(
             navigateToReceived = navigateToReceived,
-            navigateToSignUp = { navController.navigate(LoginSignupRoute.Parent.SignUp.route) },
+            navigateToSignUp = {
+                navController.navigate(LoginSignupRoute.Parent.SignUp.route) {
+                    popUpTo(
+                        route = LoginSignupRoute.Parent.SignUp.route
+                    ) {
+                        inclusive = true
+                    }
+                }
+            },
         )
     }
     composable(route = LoginSignupRoute.Parent.SignUp.route) {
