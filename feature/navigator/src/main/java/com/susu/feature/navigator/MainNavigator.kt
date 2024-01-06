@@ -11,6 +11,7 @@ import androidx.navigation.navOptions
 import com.susu.feature.community.navigation.navigateCommunity
 import com.susu.feature.mypage.navigation.navigateMyPage
 import com.susu.feature.received.navigation.navigateLedgerDetail
+import com.susu.feature.received.navigation.navigateLedgerSearch
 import com.susu.feature.received.navigation.navigateReceived
 import com.susu.feature.sent.navigation.SentRoute
 import com.susu.feature.sent.navigation.navigateSent
@@ -48,6 +49,10 @@ internal class MainNavigator(
 
     fun navigateLedgerDetail(id: Int) {
         navController.navigateLedgerDetail(id)
+    }
+
+    fun navigateLedgerSearch() {
+        navController.navigateLedgerSearch()
     }
 
     fun popBackStackIfNotHome() {

@@ -2,8 +2,8 @@ package com.susu.feature.loginsignup.login
 
 import androidx.lifecycle.viewModelScope
 import com.susu.core.ui.base.BaseViewModel
-import com.susu.domain.usecase.CheckCanRegisterUseCase
-import com.susu.domain.usecase.LoginUseCase
+import com.susu.domain.usecase.loginsignup.CheckCanRegisterUseCase
+import com.susu.domain.usecase.loginsignup.LoginUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject

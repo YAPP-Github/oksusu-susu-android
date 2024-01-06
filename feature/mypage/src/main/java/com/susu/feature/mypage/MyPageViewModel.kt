@@ -3,8 +3,8 @@ package com.susu.feature.mypage
 import androidx.lifecycle.viewModelScope
 import com.kakao.sdk.user.UserApiClient
 import com.susu.core.ui.base.BaseViewModel
-import com.susu.domain.usecase.LogoutUseCase
-import com.susu.domain.usecase.WithdrawUseCase
+import com.susu.domain.usecase.loginsignup.LogoutUseCase
+import com.susu.domain.usecase.loginsignup.WithdrawUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject

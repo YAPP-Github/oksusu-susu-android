@@ -2,8 +2,8 @@ package com.susu.feature.navigator.initialization
 
 import androidx.lifecycle.viewModelScope
 import com.susu.core.ui.base.BaseViewModel
-import com.susu.domain.usecase.CheckCanRegisterUseCase
-import com.susu.domain.usecase.LoginUseCase
+import com.susu.domain.usecase.loginsignup.CheckCanRegisterUseCase
+import com.susu.domain.usecase.loginsignup.LoginUseCase
 import com.susu.feature.loginsignup.social.KakaoLoginHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -40,7 +40,7 @@ class MainViewModel @Inject constructor(
     private suspend fun login(oauthAccessToken: String) {
         loginUseCase(oauthAccessToken = oauthAccessToken)
             .onSuccess {
-                intent { copy(isLoading = false, initialRoute = InitialRoute.RECEIVED) }
+                intent { copy(isLoading = false, initialRoute = InitialRoute.SENT) }
             }.onFailure {
                 intent { copy(isLoading = false, initialRoute = InitialRoute.LOGIN) }
             }
