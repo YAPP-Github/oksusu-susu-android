@@ -19,7 +19,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -36,6 +35,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.susu.core.designsystem.component.util.LoadingScreen
 import com.susu.core.designsystem.theme.Gray10
 import com.susu.core.designsystem.theme.Gray50
 import com.susu.core.designsystem.theme.Orange60
@@ -132,9 +132,8 @@ fun LoginScreen(
             }
 
             if (uiState.isLoading) {
-                CircularProgressIndicator(
+                LoadingScreen(
                     modifier = Modifier.align(Alignment.Center),
-                    color = SusuTheme.colorScheme.primary,
                 )
             }
         }
@@ -172,11 +171,13 @@ fun KakaoLoginButton(
     onClick: () -> Unit,
 ) {
     Row(
-        modifier = Modifier.background(color = Color(0xFFFEE500), shape = RoundedCornerShape(4.dp))
+        modifier = Modifier
+            .background(color = Color(0xFFFEE500), shape = RoundedCornerShape(4.dp))
             .fillMaxWidth()
             .susuClickable(
                 rippleEnabled = true, onClick = onClick,
-            ).padding(
+            )
+            .padding(
                 horizontal = SusuTheme.spacing.spacing_m, vertical = SusuTheme.spacing.spacing_xm,
             ),
         verticalAlignment = Alignment.CenterVertically,
