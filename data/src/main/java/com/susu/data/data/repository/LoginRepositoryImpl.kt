@@ -1,4 +1,4 @@
-package com.susu.data.repository
+package com.susu.data.data.repository
 
 import com.susu.data.remote.model.SnsProviders
 import com.susu.data.remote.model.request.AccessTokenRequest

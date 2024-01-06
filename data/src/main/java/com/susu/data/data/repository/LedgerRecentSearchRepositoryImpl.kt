@@ -1,4 +1,4 @@
-package com.susu.data.repository
+package com.susu.data.data.repository
 
 import com.susu.core.android.Dispatcher
 import com.susu.core.android.SusuDispatchers

@@ -1,9 +1,9 @@
-package com.susu.data.di
+package com.susu.data.data.di
 
-import com.susu.data.repository.LedgerRecentSearchRepositoryImpl
-import com.susu.data.repository.LoginRepositoryImpl
-import com.susu.data.repository.SignUpRepositoryImpl
-import com.susu.data.repository.TokenRepositoryImpl
+import com.susu.data.data.repository.LedgerRecentSearchRepositoryImpl
+import com.susu.data.data.repository.LoginRepositoryImpl
+import com.susu.data.data.repository.SignUpRepositoryImpl
+import com.susu.data.data.repository.TokenRepositoryImpl
 import com.susu.domain.repository.LedgerRecentSearchRepository
 import com.susu.domain.repository.LoginRepository
 import com.susu.domain.repository.SignUpRepository
