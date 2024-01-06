@@ -94,7 +94,9 @@ fun LoginScreen(
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
             Column(
-                modifier = Modifier.fillMaxSize().padding(horizontal = SusuTheme.spacing.spacing_m),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = SusuTheme.spacing.spacing_m),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Spacer(modifier = Modifier.height(56.dp))
@@ -119,7 +121,7 @@ fun LoginScreen(
                     Text(text = stringResource(R.string.login_statistics_3), style = SusuTheme.typography.title_s)
                 }
                 Spacer(modifier = Modifier.height(64.dp))
-                KakaoLogin(onClick = onLoginClick)
+                KakaoLoginButton(onClick = onLoginClick)
                 Spacer(modifier = Modifier.weight(1f))
                 Image(
                     modifier = Modifier.align(Alignment.CenterHorizontally),
@@ -148,7 +150,9 @@ fun LoginBlankText(
     state: MutableTransitionState<Boolean>,
 ) {
     Box(
-        modifier = modifier.background(color = Gray10, shape = RoundedCornerShape(4.dp)).padding(horizontal = SusuTheme.spacing.spacing_s),
+        modifier = modifier
+            .background(color = Gray10, shape = RoundedCornerShape(4.dp))
+            .padding(horizontal = SusuTheme.spacing.spacing_s),
     ) {
         AnimatedVisibility(
             visibleState = state,
@@ -164,37 +168,31 @@ fun LoginBlankText(
 }
 
 @Composable
-fun KakaoLogin(
+fun KakaoLoginButton(
     onClick: () -> Unit,
 ) {
-    Box(
-        modifier = Modifier
-            .background(color = Color(0xFFFEE500), shape = RoundedCornerShape(4.dp))
+    Row(
+        modifier = Modifier.background(color = Color(0xFFFEE500), shape = RoundedCornerShape(4.dp))
             .fillMaxWidth()
             .susuClickable(
-                rippleEnabled = false,
-            ) {
-                onClick()
-            }
-            .padding(horizontal = SusuTheme.spacing.spacing_m, vertical = SusuTheme.spacing.spacing_xm),
+                rippleEnabled = true, onClick = onClick,
+            ).padding(
+                horizontal = SusuTheme.spacing.spacing_m, vertical = SusuTheme.spacing.spacing_xm,
+            ),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Image(
-                modifier = Modifier.size(36.dp),
-                painter = painterResource(id = R.drawable.ic_kakao_login),
-                contentDescription = null,
-            )
-            Text(
-                modifier = Modifier.weight(1f),
-                text = stringResource(R.string.login_with_kakao),
-                style = SusuTheme.typography.text_xs,
-                color = Color.Black,
-                textAlign = TextAlign.Center,
-            )
-        }
+        Image(
+            modifier = Modifier.size(36.dp),
+            painter = painterResource(id = R.drawable.ic_kakao_login),
+            contentDescription = null,
+        )
+        Text(
+            modifier = Modifier.weight(1f),
+            text = stringResource(R.string.login_with_kakao),
+            style = SusuTheme.typography.text_xs,
+            color = Color.Black,
+            textAlign = TextAlign.Center,
+        )
     }
 }
 
