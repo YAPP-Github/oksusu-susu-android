@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import com.susu.core.designsystem.component.appbar.SusuDefaultAppBar
 import com.susu.core.designsystem.component.button.GhostButtonColor
 import com.susu.core.designsystem.component.button.SmallButtonStyle
+import com.susu.core.designsystem.component.button.SusuFloatingButton
 import com.susu.core.designsystem.component.button.SusuGhostButton
 import com.susu.core.designsystem.theme.Gray100
 import com.susu.core.designsystem.theme.Gray50
@@ -144,6 +145,13 @@ fun SentScreen(
                 EmptyView()
             }
         }
+
+        SusuFloatingButton(
+            modifier = modifier
+                .align(Alignment.BottomEnd)
+                .padding(SusuTheme.spacing.spacing_l),
+            onClick = {}
+        )
     }
 }
 
