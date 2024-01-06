@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="word_align_recently">최신 순</string>
+    <string name="word_align_outdated">오래된 순</string>
+    <string name="word_align_high_amount">금액 높은 순</string>
+    <string name="word_align_low_amount">금액 낮은 순</string>
+</resources>

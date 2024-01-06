@@ -14,8 +14,9 @@ class TokenInterceptor @Inject constructor(
         val token = runBlocking {
             tokenRepository.getAccessToken().firstOrNull()
         }
+
         val request = chain.request().newBuilder().apply {
-            addHeader("Authorization", "Bearer $token")
+            addHeader("X-SUSU-AUTH-TOKEN", token ?: "")
         }
         return chain.proceed(request.build())
     }

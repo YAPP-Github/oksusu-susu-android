@@ -6,3 +6,7 @@ plugins {
 android {
     namespace = "com.susu.feature.loginsignup"
 }
+
+dependencies {
+    implementation(libs.kakao.sdk.user)
+}

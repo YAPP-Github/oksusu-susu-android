@@ -7,8 +7,6 @@ import androidx.compose.animation.slideIn
 import androidx.compose.animation.slideOut
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.IntOffset
@@ -16,6 +14,7 @@ import androidx.navigation.compose.NavHost
 import com.susu.core.designsystem.component.navigation.SusuNavigationBar
 import com.susu.core.designsystem.component.navigation.SusuNavigationItem
 import com.susu.feature.community.navigation.communityNavGraph
+import com.susu.feature.loginsignup.navigation.LoginSignupRoute
 import com.susu.feature.loginsignup.navigation.loginSignupNavGraph
 import com.susu.feature.mypage.navigation.myPageNavGraph
 import com.susu.feature.received.navigation.receivedNavGraph
@@ -27,6 +26,7 @@ import kotlinx.collections.immutable.toImmutableList
 @Composable
 internal fun MainScreen(
     modifier: Modifier = Modifier,
+    startDestination: String,
     navigator: MainNavigator = rememberMainNavigator(),
 ) {
     Scaffold(
@@ -34,9 +34,16 @@ internal fun MainScreen(
         content = { innerPadding ->
             NavHost(
                 navController = navigator.navController,
-                startDestination = navigator.startDestination,
+                startDestination = startDestination,
             ) {
-                loginSignupNavGraph()
+                loginSignupNavGraph(
+                    navController = navigator.navController,
+                    navigateToReceived = {
+                        // TODO: 이쪽으로 수정
+                        // navigator.navController.navigateReceived(navOptions = NavOptions())
+                        navigator.navigate(MainNavigationTab.RECEIVED)
+                    },
+                )
 
                 sentNavGraph(
                     padding = innerPadding,
@@ -56,6 +63,7 @@ internal fun MainScreen(
 
                 myPageNavGraph(
                     padding = innerPadding,
+                    navigateToLogin = { navigator.navController.navigate(LoginSignupRoute.Parent.Login.route) },
                 )
             }
         },

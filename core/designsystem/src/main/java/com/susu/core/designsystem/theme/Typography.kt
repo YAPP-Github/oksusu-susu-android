@@ -28,6 +28,7 @@ private val pretendardStyle = TextStyle(
         alignment = LineHeightStyle.Alignment.Center,
         trim = LineHeightStyle.Trim.None,
     ),
+    color = Gray100,
 )
 
 private val pretendardTitleStyle = pretendardStyle.copy(
