@@ -54,7 +54,7 @@ fun EnvelopeHistoryCard(
                 ),
         ) {
             // 내역
-            for (i in 0 until historyCount) {
+            repeat(historyCount) {
                 EnvelopeDetailItem(isSent = true)
                 Spacer(modifier = modifier.size(SusuTheme.spacing.spacing_xxs))
             }
