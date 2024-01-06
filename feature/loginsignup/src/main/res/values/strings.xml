@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="signup_vote_unit_3">3만원</string>
+    <string name="signup_vote_unit_5">5만원</string>
+    <string name="signup_vote_unit_10">10만원</string>
+    <string name="signup_vote_unit_20">20만원</string>
+    <string name="login_header">받은 마음과 보낸 마음</string>
+    <string name="login_sub_header">잊지말고 수수에서 챙기세요</string>
+    <string name="login_with_kakao">카카오톡으로 계속하기</string>
+    <string name="login_statistics_1">수수 가입자</string>
+    <string name="login_statistics_2">는</string>
+    <string name="login_statistics_3">이 적당하다고 답했어요</string>
+    <string name="signup_vote_question_1">친구의 결혼식,</string>
+    <string name="signup_vote_question_2">축의금</string>
+    <string name="signup_vote_question_3">"은 "</string>
+    <string name="signup_vote_question_4">얼마가 적당하다</string>
+    <string name="signup_vote_question_5">고\n생각하시나요</string>
+</resources>
