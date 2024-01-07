@@ -1,4 +1,4 @@
-package com.susu.core.designsystem.component.util
+package com.susu.core.designsystem.component.screen
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
