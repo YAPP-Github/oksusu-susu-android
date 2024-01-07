@@ -143,7 +143,7 @@ fun LedgerDetailScreen(
                 if (showEmptyScreen) {
                     item {
                         Column(
-                            modifier = Modifier.fillMaxWidth().padding(top = 103.dp),
+                            modifier = Modifier.fillMaxWidth().padding(top = 104.dp),
                             horizontalAlignment = Alignment.CenterHorizontally,
                             verticalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_m),
                         ) {
