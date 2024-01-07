@@ -109,7 +109,7 @@ fun ReceiveScreen(
                     SusuGhostButton(
                         color = GhostButtonColor.Black,
                         style = SmallButtonStyle.height32,
-                        text = stringResource(R.string.word_filter),
+                        text = stringResource(com.susu.core.ui.R.string.word_filter),
                         leftIcon = {
                             Icon(
                                 painter = painterResource(id = com.susu.core.ui.R.drawable.ic_filter),
@@ -131,7 +131,7 @@ fun ReceiveScreen(
                         LedgerCard(
                             ledgerType = "결혼식",
                             title = "나의 결혼식",
-                            currency = 4335000,
+                            money = 4335000,
                             count = 164,
                             onClick = { onClickLedgerCard(1) },
                         )
@@ -141,7 +141,7 @@ fun ReceiveScreen(
                         LedgerCard(
                             ledgerType = "결혼식",
                             title = "나의 결혼식",
-                            currency = 4335000,
+                            money = 4335000,
                             count = 164,
                             onClick = { onClickLedgerCard(1) },
                         )

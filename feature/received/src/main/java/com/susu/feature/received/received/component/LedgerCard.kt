@@ -19,20 +19,14 @@ import com.susu.core.designsystem.theme.Gray50
 import com.susu.core.designsystem.theme.Gray70
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.ui.extension.susuClickable
-import com.susu.feature.received.R
-import java.text.DecimalFormat
-
-fun Int.toCurrencyFormat(): String {
-    // DecimalFormat은 Thread Safe하지 않으므로 지역 변수로 사용함.
-    return DecimalFormat("#,###").format(this)
-}
+import com.susu.core.ui.extension.toMoneyFormat
 
 @Composable
 fun LedgerCard(
     modifier: Modifier = Modifier,
     ledgerType: String, // TODO LedgerType에 따라 Badger 색상 변경 필요
     title: String,
-    currency: Int,
+    money: Int,
     count: Int,
     onClick: () -> Unit = {},
 ) {
@@ -59,7 +53,7 @@ fun LedgerCard(
         Spacer(modifier = Modifier.weight(1f))
 
         Text(
-            text = stringResource(R.string.ledger_card_total_money, currency.toCurrencyFormat()),
+            text = stringResource(com.susu.core.ui.R.string.word_total_money, money.toMoneyFormat()),
             style = SusuTheme.typography.title_xxxs,
             color = Gray70,
         )
@@ -67,7 +61,7 @@ fun LedgerCard(
         Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_xxxxs))
 
         Text(
-            text = stringResource(R.string.ledger_card_total_count, count),
+            text = stringResource(com.susu.core.ui.R.string.word_total_count, count),
             style = SusuTheme.typography.title_xxxs,
             color = Gray50,
         )
@@ -81,7 +75,7 @@ fun LedgerCardPreview() {
         LedgerCard(
             ledgerType = "결혼식",
             title = "나의 결혼식",
-            currency = 4335000,
+            money = 4335000,
             count = 164,
         )
     }

@@ -14,8 +14,4 @@ class LedgerDetailViewModel @Inject constructor(
     LedgerDetailState(),
 ) {
     private val id = savedStateHandle.get<String>(ReceivedRoute.LEDGER_DETAIL_ARGUMENT_NAME)!!.toInt()
-
-    init {
-        Timber.tag("테스트").d("$id")
-    }
 }
