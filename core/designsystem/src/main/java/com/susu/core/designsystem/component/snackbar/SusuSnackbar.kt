@@ -32,6 +32,7 @@ import com.susu.core.ui.extension.susuClickable
 
 @Composable
 fun SusuSnackbar(
+    modifier: Modifier = Modifier,
     visible: Boolean,
     message: String,
     @DrawableRes actionIconId: Int? = null,
@@ -45,9 +46,8 @@ fun SusuSnackbar(
         exit = fadeOut(),
     ) {
         Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(bottom = 70.dp),
+            modifier = modifier
+                .fillMaxSize(),
             contentAlignment = Alignment.BottomCenter,
         ) {
             SusuSnackbarContent(

@@ -1,12 +1,15 @@
 package com.susu.feature.navigator
 
 import androidx.lifecycle.viewModelScope
+import com.susu.core.ui.SnackbarToken
 import com.susu.core.ui.base.BaseViewModel
 import com.susu.domain.usecase.loginsignup.CheckCanRegisterUseCase
 import com.susu.domain.usecase.loginsignup.LoginUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import javax.inject.Inject
 
 @HiltViewModel
@@ -15,7 +18,18 @@ class MainViewModel @Inject constructor(
     private val checkCanRegisterUseCase: CheckCanRegisterUseCase,
 ) : BaseViewModel<MainState, MainSideEffect>(MainState()) {
     companion object {
-        const val NAVIGATE_DELAY = 500L
+        private const val NAVIGATE_DELAY = 500L
+        private const val SHOW_TOAST_LENGTH = 2750L
+    }
+
+    private val mutex = Mutex()
+
+    fun onShowToast(snackbarToken: SnackbarToken) = viewModelScope.launch {
+        mutex.withLock {
+            intent { copy(snackbarToken = snackbarToken, snackbarVisible = true) }
+            delay(SHOW_TOAST_LENGTH)
+            intent { copy(snackbarVisible = false) }
+        }
     }
 
     fun navigate(hasKakaoLoginHistory: Boolean, kakaoAccessToken: String?) = viewModelScope.launch {
