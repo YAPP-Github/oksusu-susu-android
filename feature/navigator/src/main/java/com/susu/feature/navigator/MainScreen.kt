@@ -13,11 +13,10 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.navigation.compose.NavHost
 import com.susu.core.designsystem.component.navigation.SusuNavigationBar
 import com.susu.core.designsystem.component.navigation.SusuNavigationItem
+import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.feature.community.navigation.communityNavGraph
-import com.susu.feature.loginsignup.navigation.LoginSignupRoute
 import com.susu.feature.loginsignup.navigation.loginSignupNavGraph
 import com.susu.feature.mypage.navigation.myPageNavGraph
-import com.susu.feature.received.navigation.ReceivedRoute
 import com.susu.feature.received.navigation.receivedNavGraph
 import com.susu.feature.sent.navigation.sentNavGraph
 import com.susu.feature.statistics.navigation.statisticsNavGraph
@@ -27,25 +26,27 @@ import kotlinx.collections.immutable.toImmutableList
 @Composable
 internal fun MainScreen(
     modifier: Modifier = Modifier,
-    startDestination: String,
+    viewModel: MainViewModel,
     navigator: MainNavigator = rememberMainNavigator(),
 ) {
+    viewModel.sideEffect.collectWithLifecycle { sideEffect ->
+        when (sideEffect) {
+            MainSideEffect.NavigateLogin -> navigator.navigateLogin()
+            MainSideEffect.NavigateSent -> navigator.navigateSent()
+            MainSideEffect.NavigateSignup -> navigator.navigateSignup()
+        }
+    }
+
     Scaffold(
         modifier = modifier,
         content = { innerPadding ->
             NavHost(
                 navController = navigator.navController,
-                startDestination = startDestination,
+                startDestination = navigator.startDestination,
             ) {
                 loginSignupNavGraph(
                     navController = navigator.navController,
-                    navigateToReceived = {
-                        navigator.navController.navigate(ReceivedRoute.route) {
-                            popUpTo(navigator.navController.graph.id) {
-                                inclusive = true
-                            }
-                        }
-                    },
+                    navigateToReceived = navigator::navigateSent,
                 )
 
                 sentNavGraph(
@@ -68,7 +69,7 @@ internal fun MainScreen(
 
                 myPageNavGraph(
                     padding = innerPadding,
-                    navigateToLogin = { navigator.navController.navigate(LoginSignupRoute.Parent.Login.route) },
+                    navigateToLogin = navigator::navigateLogin,
                 )
             }
         },

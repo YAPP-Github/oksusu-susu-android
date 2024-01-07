@@ -9,6 +9,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.susu.feature.community.navigation.navigateCommunity
+import com.susu.feature.loginsignup.navigation.LoginSignupRoute
 import com.susu.feature.mypage.navigation.navigateMyPage
 import com.susu.feature.received.navigation.navigateLedgerSearch
 import com.susu.feature.received.navigation.navigateReceived
@@ -19,6 +20,7 @@ import com.susu.feature.statistics.navigation.navigateStatistics
 internal class MainNavigator(
     val navController: NavHostController,
 ) {
+    val startDestination = LoginSignupRoute.Parent.Vote.route
     private val currentDestination: NavDestination?
         @Composable get() = navController
             .currentBackStackEntryAsState().value?.destination
@@ -43,6 +45,26 @@ internal class MainNavigator(
             MainNavigationTab.STATISTICS -> navController.navigateStatistics(navOptions)
             MainNavigationTab.COMMUNITY -> navController.navigateCommunity(navOptions)
             MainNavigationTab.MY_PAGE -> navController.navigateMyPage(navOptions)
+        }
+    }
+
+    fun navigateSent() {
+        navController.navigate(SentRoute.route) {
+            popUpTo(navController.graph.id) {
+                inclusive = true
+            }
+        }
+    }
+
+    fun navigateLogin() {
+        navController.navigate(LoginSignupRoute.Parent.Login.route)
+    }
+
+    fun navigateSignup() {
+        navController.navigate(LoginSignupRoute.Parent.SignUp.route) {
+            popUpTo(id = navController.graph.id) {
+                inclusive = true
+            }
         }
     }
 
