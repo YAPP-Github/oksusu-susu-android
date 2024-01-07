@@ -56,8 +56,11 @@ class MainViewModel @Inject constructor(
     }
 
     private suspend fun handleCanRegisterSuccess(canRegister: Boolean, kakaoAccessToken: String) {
-        if (canRegister) postSideEffect(MainSideEffect.NavigateSignup)
-        else login(kakaoAccessToken)
+        if (canRegister) {
+            postSideEffect(MainSideEffect.NavigateSignup)
+        } else {
+            login(kakaoAccessToken)
+        }
     }
 
     private suspend fun login(oauthAccessToken: String) {
