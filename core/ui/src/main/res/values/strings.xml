@@ -6,8 +6,8 @@
     <string name="word_align_low_amount">금액 낮은 순</string>
     <string name="word_recent_search">최근 검색</string>
 
-    <string name="word_filter_latest">최신 순</string>
-    <string name="word_sort">정렬</string>
+    <string name="word_sort_latest">최신 순</string>
+    <string name="word_filter">필터</string>
 
     <string name="app_bar_search">검색</string>
     <string name="app_bar_notification">알림</string>

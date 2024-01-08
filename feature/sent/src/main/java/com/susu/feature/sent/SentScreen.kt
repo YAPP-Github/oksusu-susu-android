@@ -36,6 +36,7 @@ import com.susu.core.designsystem.theme.Gray100
 import com.susu.core.designsystem.theme.Gray50
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.ui.extension.susuClickable
+import com.susu.feature.sent.component.EnvelopeCard
 
 @Composable
 fun SentScreen(
@@ -102,11 +103,11 @@ fun SentScreen(
                 SusuGhostButton(
                     color = GhostButtonColor.Black,
                     style = SmallButtonStyle.height32,
-                    text = stringResource(com.susu.core.ui.R.string.word_filter_latest),
+                    text = stringResource(com.susu.core.ui.R.string.word_sort_latest),
                     leftIcon = {
                         Icon(
                             painter = painterResource(id = R.drawable.ic_sort),
-                            contentDescription = stringResource(com.susu.core.ui.R.string.word_filter_latest),
+                            contentDescription = stringResource(com.susu.core.ui.R.string.word_sort_latest),
                             tint = Gray100,
                             modifier = modifier.size(16.dp),
                         )
@@ -115,11 +116,11 @@ fun SentScreen(
                 SusuGhostButton(
                     color = GhostButtonColor.Black,
                     style = SmallButtonStyle.height32,
-                    text = stringResource(com.susu.core.ui.R.string.word_filter_latest),
+                    text = stringResource(com.susu.core.ui.R.string.word_filter),
                     leftIcon = {
                         Icon(
                             painter = painterResource(id = R.drawable.ic_filter),
-                            contentDescription = stringResource(com.susu.core.ui.R.string.word_filter_latest),
+                            contentDescription = stringResource(com.susu.core.ui.R.string.word_filter),
                             tint = Gray100,
                             modifier = modifier.size(16.dp),
                         )
