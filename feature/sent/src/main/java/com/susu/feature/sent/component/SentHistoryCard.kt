@@ -1,5 +1,6 @@
 package com.susu.feature.sent.component
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,6 +17,7 @@ import com.susu.core.designsystem.component.button.FilledButtonColor
 import com.susu.core.designsystem.component.button.SusuFilledButton
 import com.susu.core.designsystem.component.button.XSmallButtonStyle
 import com.susu.core.designsystem.theme.Gray10
+import com.susu.core.designsystem.theme.Gray20
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.feature.sent.R
 
@@ -32,6 +34,10 @@ fun SentHistoryCard(
             containerColor = Gray10,
         ),
         shape = RoundedCornerShape(4.dp),
+        border = BorderStroke(
+            width = 1.dp,
+            color = Gray20,
+        )
     ) {
         Column(
             modifier = modifier

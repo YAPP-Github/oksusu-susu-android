@@ -64,6 +64,7 @@ fun SentCard(
             painter = painterResource(id = R.drawable.ic_envelope),
             contentDescription = null,
             contentScale = ContentScale.Crop,
+            modifier = modifier.fillMaxWidth(),
         )
         Column(
             modifier = modifier
