@@ -22,7 +22,7 @@ import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.feature.sent.R
 
 @Composable
-fun EnvelopeHistoryItem(
+fun SentHistoryItem(
     modifier: Modifier = Modifier,
     isSent: Boolean = true,
 ) {

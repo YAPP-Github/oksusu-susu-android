@@ -46,7 +46,7 @@ import com.susu.core.ui.extension.susuClickable
 import com.susu.feature.sent.R
 
 @Composable
-fun EnvelopeCard(
+fun SentCard(
     modifier: Modifier = Modifier,
 ) {
     // TODO: 수정 필요
@@ -146,6 +146,6 @@ fun EnvelopeCard(
         enter = fadeIn() + expandVertically(),
         exit = fadeOut() + shrinkVertically(),
     ) {
-        EnvelopeHistoryCard(historyCount = historyCount)
+        SentHistoryCard(historyCount = historyCount)
     }
 }

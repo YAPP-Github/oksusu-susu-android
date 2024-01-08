@@ -36,7 +36,7 @@ import com.susu.core.designsystem.theme.Gray100
 import com.susu.core.designsystem.theme.Gray50
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.ui.extension.susuClickable
-import com.susu.feature.sent.component.EnvelopeCard
+import com.susu.feature.sent.component.SentCard
 
 @Composable
 fun SentScreen(
@@ -139,7 +139,7 @@ fun SentScreen(
                 ) {
                     // TODO: 수정 필요
                     items(8) {
-                        EnvelopeCard()
+                        SentCard()
                     }
                 }
             } else {

@@ -20,7 +20,7 @@ import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.feature.sent.R
 
 @Composable
-fun EnvelopeHistoryCard(
+fun SentHistoryCard(
     modifier: Modifier = Modifier,
     historyCount: Int,
 ) {
@@ -43,7 +43,7 @@ fun EnvelopeHistoryCard(
                 ),
         ) {
             repeat(historyCount) {
-                EnvelopeHistoryItem(isSent = true)
+                SentHistoryItem(isSent = true)
                 Spacer(modifier = modifier.size(SusuTheme.spacing.spacing_xxs))
             }
             Spacer(modifier = modifier.size(SusuTheme.spacing.spacing_xxs))
