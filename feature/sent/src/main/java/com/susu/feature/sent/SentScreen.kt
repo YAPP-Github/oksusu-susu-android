@@ -60,13 +60,13 @@ fun SentScreen(
                         painter = painterResource(id = R.drawable.ic_susu_app),
                         contentDescription = null,
                         modifier = modifier
+                            .padding(
+                                start = SusuTheme.spacing.spacing_xs
+                            )
                             .size(
                                 width = 56.dp,
                                 height = 24.dp,
                             )
-                            .padding(
-                                start = SusuTheme.spacing.spacing_xs,
-                            ),
                     )
                 },
                 title = stringResource(R.string.sent_screen_appbar_title),
