@@ -1,16 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_bar_search">검색</string>
-    <string name="app_bar_notification">알림</string>
-    <string name="order_sort">정렬</string>
-    <string name="order_filter">필터</string>
-    <string name="order_latest">최신 순</string>
-    <string name="empty_view_title">아직 보낸 봉투가 없어요</string>
-    <string name="empty_view_add_button">보낸 봉투 추가하기</string>
-    <string name="envelope_card">봉투</string>
-    <string name="envelope_show_detail">내역 보기</string>
-    <string name="envelope_sent">보냈어요</string>
-    <string name="envelope_received">받았어요</string>
-    <string name="envelope_show_history_all">전체 보기</string>
-    <string name="envelope_hisotry_arrow">화살표</string>
+    <string name="sent_screen_appbar_title">보내요</string>
+    <string name="sent_screen_empty_view_title">아직 보낸 봉투가 없어요</string>
+    <string name="sent_screen_empty_view_add_button">보낸 봉투 추가하기</string>
+    <string name="sent_screen_envelope_sent">보냈어요</string>
+    <string name="sent_screen_envelope_received">받았어요</string>
+    <string name="sent_screen_envelope_history_show_all">전체 보기</string>
+
+    <string name="content_description_envelope_show_history">내역 보기</string>
 </resources>

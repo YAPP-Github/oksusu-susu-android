@@ -61,7 +61,7 @@ fun EnvelopeCard(
     ) {
         Image(
             painter = painterResource(id = R.drawable.ic_envelope),
-            contentDescription = stringResource(R.string.envelope_card),
+            contentDescription = null,
             contentScale = ContentScale.Crop,
         )
         Column(
@@ -85,7 +85,7 @@ fun EnvelopeCard(
                 Spacer(modifier = modifier.weight(1f))
                 Icon(
                     painter = painterResource(id = R.drawable.ic_arrow_down),
-                    contentDescription = stringResource(R.string.envelope_show_detail),
+                    contentDescription = stringResource(R.string.content_description_envelope_show_history),
                     tint = Gray100,
                     modifier = modifier
                         .susuClickable {
@@ -102,12 +102,12 @@ fun EnvelopeCard(
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 Text(
-                    text = stringResource(R.string.envelope_sent),
+                    text = stringResource(R.string.sent_screen_envelope_sent),
                     style = SusuTheme.typography.title_xxxs,
                     color = Gray90,
                 )
                 Text(
-                    text = stringResource(R.string.envelope_received),
+                    text = stringResource(R.string.sent_screen_envelope_received),
                     style = SusuTheme.typography.title_xxxs,
                     color = Gray60,
                 )

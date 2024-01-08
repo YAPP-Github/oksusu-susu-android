@@ -68,11 +68,11 @@ fun SentScreen(
                             ),
                     )
                 },
-                title = "보내요",
+                title = stringResource(R.string.sent_screen_appbar_title),
                 actions = {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_search),
-                        contentDescription = stringResource(R.string.app_bar_search),
+                        contentDescription = stringResource(com.susu.core.ui.R.string.app_bar_search),
                         modifier = modifier
                             .susuClickable(
                                 rippleEnabled = false,
@@ -82,7 +82,7 @@ fun SentScreen(
                     )
                     Icon(
                         painter = painterResource(id = R.drawable.ic_notification),
-                        contentDescription = stringResource(R.string.app_bar_notification),
+                        contentDescription = stringResource(com.susu.core.ui.R.string.app_bar_notification),
                         modifier = modifier
                             .susuClickable(
                                 rippleEnabled = false,
@@ -102,11 +102,11 @@ fun SentScreen(
                 SusuGhostButton(
                     color = GhostButtonColor.Black,
                     style = SmallButtonStyle.height32,
-                    text = stringResource(R.string.order_latest),
+                    text = stringResource(com.susu.core.ui.R.string.word_filter_latest),
                     leftIcon = {
                         Icon(
                             painter = painterResource(id = R.drawable.ic_sort),
-                            contentDescription = stringResource(R.string.order_sort),
+                            contentDescription = stringResource(com.susu.core.ui.R.string.word_filter_latest),
                             tint = Gray100,
                             modifier = modifier.size(16.dp),
                         )
@@ -115,11 +115,11 @@ fun SentScreen(
                 SusuGhostButton(
                     color = GhostButtonColor.Black,
                     style = SmallButtonStyle.height32,
-                    text = stringResource(R.string.order_filter),
+                    text = stringResource(com.susu.core.ui.R.string.word_filter_latest),
                     leftIcon = {
                         Icon(
                             painter = painterResource(id = R.drawable.ic_filter),
-                            contentDescription = stringResource(R.string.order_filter),
+                            contentDescription = stringResource(com.susu.core.ui.R.string.word_filter_latest),
                             tint = Gray100,
                             modifier = modifier.size(16.dp),
                         )
@@ -165,7 +165,7 @@ fun EmptyView(
         verticalArrangement = Arrangement.Center,
     ) {
         Text(
-            text = stringResource(R.string.empty_view_title),
+            text = stringResource(R.string.sent_screen_empty_view_title),
             color = Gray50,
             style = SusuTheme.typography.text_s,
         )
@@ -173,7 +173,7 @@ fun EmptyView(
         SusuGhostButton(
             color = GhostButtonColor.Black,
             style = SmallButtonStyle.height40,
-            text = stringResource(R.string.empty_view_add_button),
+            text = stringResource(R.string.sent_screen_empty_view_add_button),
         )
     }
 }

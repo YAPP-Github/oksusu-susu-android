@@ -53,18 +53,15 @@ fun EnvelopeHistoryCard(
                     end = SusuTheme.spacing.spacing_m,
                 ),
         ) {
-            // 내역
             repeat(historyCount) {
                 EnvelopeDetailItem(isSent = true)
                 Spacer(modifier = modifier.size(SusuTheme.spacing.spacing_xxs))
             }
-
-            // 전체보기
             Spacer(modifier = modifier.size(SusuTheme.spacing.spacing_xxs))
             SusuFilledButton(
                 color = FilledButtonColor.Black,
                 style = XSmallButtonStyle.height44,
-                text = stringResource(R.string.envelope_show_history_all),
+                text = stringResource(R.string.sent_screen_envelope_history_show_all),
                 modifier = modifier
                     .fillMaxWidth(),
             )
@@ -91,7 +88,7 @@ fun EnvelopeDetailItem(
                     R.drawable.ic_round_arrow_received
                 },
             ),
-            contentDescription = stringResource(R.string.envelope_hisotry_arrow),
+            contentDescription = null,
             tint = if (isSent) Orange60 else Gray40,
         )
         Spacer(modifier = modifier.size(SusuTheme.spacing.spacing_s))
