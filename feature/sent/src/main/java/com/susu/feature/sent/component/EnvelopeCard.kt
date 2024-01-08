@@ -1,4 +1,4 @@
-package com.susu.feature.sent
+package com.susu.feature.sent.component
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
@@ -43,6 +43,7 @@ import com.susu.core.designsystem.theme.Gray90
 import com.susu.core.designsystem.theme.Orange20
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.ui.extension.susuClickable
+import com.susu.feature.sent.R
 
 @Composable
 fun EnvelopeCard(
