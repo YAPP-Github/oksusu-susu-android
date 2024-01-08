@@ -10,6 +10,8 @@ import com.kakao.sdk.user.UserApiClient
 import timber.log.Timber
 
 object KakaoLoginHelper {
+    val hasKakaoLoginHistory
+        get() = AuthApiClient.instance.hasToken()
 
     fun login(
         context: Context,
@@ -69,10 +71,6 @@ object KakaoLoginHelper {
                 onFailed(error)
             }
         }
-    }
-
-    fun hasKakaoLoginHistory(): Boolean {
-        return AuthApiClient.instance.hasToken()
     }
 
     fun getAccessToken(

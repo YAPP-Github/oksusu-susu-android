@@ -10,70 +10,49 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import com.susu.core.designsystem.theme.SusuTheme
-import com.susu.feature.loginsignup.navigation.LoginSignupRoute
-import com.susu.feature.navigator.initialization.InitialRoute
-import com.susu.feature.navigator.initialization.MainContract
-import com.susu.feature.navigator.initialization.MainViewModel
-import com.susu.feature.sent.navigation.SentRoute
+import com.susu.feature.loginsignup.social.KakaoLoginHelper
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
-import timber.log.Timber
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     private val viewModel: MainViewModel by viewModels()
+    private val isNavigating
+        get() = viewModel.uiState.value.isNavigating
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
 
-        var uiState: MainContract.MainState by mutableStateOf(MainContract.MainState())
+        splashScreen.setKeepOnScreenCondition { isNavigating }
 
-        // Update the uiState
-        lifecycleScope.launch {
-            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.uiState.collect {
-                    uiState = it
-                    Timber.d(uiState.toString())
-                }
+        if (isNavigating) {
+            KakaoLoginHelper.getAccessToken { accessToken ->
+                viewModel.navigate(
+                    hasKakaoLoginHistory = KakaoLoginHelper.hasKakaoLoginHistory,
+                    kakaoAccessToken = accessToken,
+                )
             }
         }
-
-        splashScreen.setKeepOnScreenCondition { uiState.isLoading }
 
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
         setContent {
             SusuTheme {
-                if (uiState.isLoading.not()) {
-                    MainScreen(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .windowInsetsPadding(
-                                WindowInsets.systemBars.only(
-                                    WindowInsetsSides.Vertical,
-                                ),
+                MainScreen(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .windowInsetsPadding(
+                            WindowInsets.systemBars.only(
+                                WindowInsetsSides.Vertical,
                             ),
-                        startDestination = when (uiState.initialRoute) {
-                            InitialRoute.SIGNUP_VOTE -> LoginSignupRoute.Parent.Vote.route
-                            InitialRoute.LOGIN -> LoginSignupRoute.Parent.Login.route
-                            InitialRoute.SIGNUP -> LoginSignupRoute.Parent.SignUp.route
-                            InitialRoute.SENT -> SentRoute.route
-                            InitialRoute.NONE -> LoginSignupRoute.Parent.route
-                        },
-                    )
-                }
+                        ),
+                    viewModel = viewModel,
+                )
             }
         }
     }

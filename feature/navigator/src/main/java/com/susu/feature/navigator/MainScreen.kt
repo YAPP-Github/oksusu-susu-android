@@ -5,19 +5,21 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideIn
 import androidx.compose.animation.slideOut
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.IntOffset
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.NavHost
 import com.susu.core.designsystem.component.navigation.SusuNavigationBar
 import com.susu.core.designsystem.component.navigation.SusuNavigationItem
+import com.susu.core.designsystem.component.snackbar.SusuSnackbar
+import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.feature.community.navigation.communityNavGraph
-import com.susu.feature.loginsignup.navigation.LoginSignupRoute
 import com.susu.feature.loginsignup.navigation.loginSignupNavGraph
 import com.susu.feature.mypage.navigation.myPageNavGraph
-import com.susu.feature.received.navigation.ReceivedRoute
 import com.susu.feature.received.navigation.receivedNavGraph
 import com.susu.feature.sent.navigation.sentNavGraph
 import com.susu.feature.statistics.navigation.statisticsNavGraph
@@ -27,25 +29,28 @@ import kotlinx.collections.immutable.toImmutableList
 @Composable
 internal fun MainScreen(
     modifier: Modifier = Modifier,
-    startDestination: String,
+    viewModel: MainViewModel,
     navigator: MainNavigator = rememberMainNavigator(),
 ) {
+    val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
+    viewModel.sideEffect.collectWithLifecycle { sideEffect ->
+        when (sideEffect) {
+            MainSideEffect.NavigateLogin -> navigator.navigateLogin()
+            MainSideEffect.NavigateSent -> navigator.navigateSent()
+            MainSideEffect.NavigateSignup -> navigator.navigateSignup()
+        }
+    }
+
     Scaffold(
         modifier = modifier,
         content = { innerPadding ->
             NavHost(
                 navController = navigator.navController,
-                startDestination = startDestination,
+                startDestination = navigator.startDestination,
             ) {
                 loginSignupNavGraph(
                     navController = navigator.navController,
-                    navigateToReceived = {
-                        navigator.navController.navigate(ReceivedRoute.route) {
-                            popUpTo(navigator.navController.graph.id) {
-                                inclusive = true
-                            }
-                        }
-                    },
+                    navigateToReceived = navigator::navigateSent,
                 )
 
                 sentNavGraph(
@@ -69,7 +74,19 @@ internal fun MainScreen(
 
                 myPageNavGraph(
                     padding = innerPadding,
-                    navigateToLogin = { navigator.navController.navigate(LoginSignupRoute.Parent.Login.route) },
+                    navigateToLogin = navigator::navigateLogin,
+                )
+            }
+
+            with(uiState) {
+                SusuSnackbar(
+                    modifier = Modifier.padding(innerPadding),
+                    visible = snackbarVisible,
+                    message = snackbarToken.message,
+                    actionIconId = snackbarToken.actionIcon,
+                    actionIconContentDescription = snackbarToken.actionIconContentDescription,
+                    actionButtonText = snackbarToken.actionButtonText,
+                    onClickActionButton = snackbarToken.onClickActionButton,
                 )
             }
         },
