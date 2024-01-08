@@ -56,6 +56,7 @@ internal fun MainScreen(
                     padding = innerPadding,
                     popBackStack = navigator::popBackStackIfNotHome,
                     navigateLedgerSearch = navigator::navigateLedgerSearch,
+                    navigateLedgerDetail = navigator::navigateLedgerDetail,
                 )
 
                 statisticsNavGraph(

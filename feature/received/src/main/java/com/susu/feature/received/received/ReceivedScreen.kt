@@ -44,10 +44,12 @@ import kotlinx.collections.immutable.toImmutableList
 @Composable
 fun ReceivedRoute(
     padding: PaddingValues,
+    navigateLedgerDetail: (Int) -> Unit,
     navigateLedgerSearch: () -> Unit,
 ) {
     ReceiveScreen(
         padding = padding,
+        onClickLedgerCard = navigateLedgerDetail,
         onClickSearchIcon = navigateLedgerSearch, // TODO SideEffect로 변경
     )
 }
@@ -61,7 +63,7 @@ fun ReceiveScreen(
     onClickAlignButton: () -> Unit = {},
     onClickFilterButton: () -> Unit = {},
     onClickLedgerAddCard: () -> Unit = {},
-    onClickLedgerCard: () -> Unit = {},
+    onClickLedgerCard: (Int) -> Unit = {},
     onClickFloatingAddButton: () -> Unit = {},
 ) {
     Box(
@@ -107,7 +109,7 @@ fun ReceiveScreen(
                     SusuGhostButton(
                         color = GhostButtonColor.Black,
                         style = SmallButtonStyle.height32,
-                        text = stringResource(R.string.word_filter),
+                        text = stringResource(com.susu.core.ui.R.string.word_filter),
                         leftIcon = {
                             Icon(
                                 painter = painterResource(id = com.susu.core.ui.R.drawable.ic_filter),
@@ -129,9 +131,9 @@ fun ReceiveScreen(
                         LedgerCard(
                             ledgerType = "결혼식",
                             title = "나의 결혼식",
-                            currency = 4335000,
+                            money = 4335000,
                             count = 164,
-                            onClick = onClickLedgerCard,
+                            onClick = { onClickLedgerCard(1) },
                         )
                     }
 
@@ -139,9 +141,9 @@ fun ReceiveScreen(
                         LedgerCard(
                             ledgerType = "결혼식",
                             title = "나의 결혼식",
-                            currency = 4335000,
+                            money = 4335000,
                             count = 164,
-                            onClick = onClickLedgerCard,
+                            onClick = { onClickLedgerCard(1) },
                         )
                     }
 
