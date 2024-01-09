@@ -16,6 +16,7 @@ import com.susu.core.designsystem.component.badge.BadgeStyle
 import com.susu.core.designsystem.component.badge.SusuBadge
 import com.susu.core.designsystem.theme.Gray100
 import com.susu.core.designsystem.theme.Gray40
+import com.susu.core.designsystem.theme.Gray50
 import com.susu.core.designsystem.theme.Orange60
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.feature.sent.R
@@ -53,13 +54,13 @@ fun SentHistoryItem(
         Text(
             text = "23.07.18",
             style = SusuTheme.typography.title_xxxs,
-            color = if (isSent) Gray100 else Gray40,
+            color = if (isSent) Gray100 else Gray50,
         )
         Spacer(modifier = modifier.weight(1f))
         Text(
             text = "50,000원",
             style = SusuTheme.typography.title_xxs,
-            color = if (isSent) Gray100 else Gray40,
+            color = if (isSent) Gray100 else Gray50,
         )
     }
 }
