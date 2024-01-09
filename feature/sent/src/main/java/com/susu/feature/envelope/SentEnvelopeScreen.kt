@@ -24,7 +24,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.susu.core.designsystem.component.appbar.SusuDefaultAppBar
+import com.susu.core.designsystem.component.appbar.icon.BackIcon
 import com.susu.core.designsystem.component.badge.BadgeColor
 import com.susu.core.designsystem.component.badge.BadgeStyle
 import com.susu.core.designsystem.component.badge.SusuBadge
@@ -34,38 +36,44 @@ import com.susu.core.designsystem.theme.Gray60
 import com.susu.core.designsystem.theme.Gray90
 import com.susu.core.designsystem.theme.Orange20
 import com.susu.core.designsystem.theme.SusuTheme
+import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.core.ui.extension.susuClickable
 import com.susu.feature.envelope.component.EnvelopeHistoryItem
 import com.susu.feature.sent.R
 
 @Composable
+fun SentEnvelopeRoute(
+    viewModel: SentEnvelopeViewModel = hiltViewModel(),
+    popBackStack: () -> Unit,
+) {
+    viewModel.sideEffect.collectWithLifecycle { sideEffect ->
+        when (sideEffect) {
+            SentEnvelopeSideEffect.PopBackStack -> popBackStack()
+        }
+    }
+
+    SentEnvelopeScreen(
+        onClickBackIcon = viewModel::popBackStack,
+    )
+}
+
+@Composable
 fun SentEnvelopeScreen(
-    padding: PaddingValues,
     modifier: Modifier = Modifier,
-    name: String,
     clickPadding: Dp = SusuTheme.spacing.spacing_xs,
+    onClickBackIcon: () -> Unit = {},
 ) {
     Box(
         modifier = modifier
             .fillMaxSize()
-            .padding(padding)
             .background(SusuTheme.colorScheme.background10),
     ) {
         Column {
             SusuDefaultAppBar(
                 leftIcon = {
-                    Icon(
-                        painter = painterResource(id = com.susu.core.designsystem.R.drawable.ic_arrow_left),
-                        contentDescription = stringResource(id = com.susu.core.designsystem.R.string.content_description_back_icon),
-                        modifier = modifier
-                            .susuClickable(
-                                rippleEnabled = false,
-                                onClick = {},
-                            )
-                            .padding(clickPadding),
-                    )
+                    BackIcon(onClickBackIcon)
                 },
-                title = name,
+                title = "김철수",
                 actions = {
                     Icon(
                         painter = painterResource(id = com.susu.core.designsystem.R.drawable.ic_appbar_search),
@@ -173,9 +181,6 @@ fun SentEnvelopeScreen(
 @Composable
 fun SentEnvelopeScreenPreview() {
     SusuTheme {
-        SentEnvelopeScreen(
-            padding = PaddingValues(0.dp),
-            name = "김철수",
-        )
+        SentEnvelopeScreen()
     }
 }

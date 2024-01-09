@@ -39,10 +39,22 @@ import com.susu.core.ui.extension.susuClickable
 import com.susu.feature.sent.component.SentCard
 
 @Composable
+fun SentRoute(
+    padding: PaddingValues,
+    navigateSentEnvelope: () -> Unit,
+) {
+    SentScreen(
+        padding = padding,
+        onClickHistoryShowAll = navigateSentEnvelope,
+    )
+}
+
+@Composable
 fun SentScreen(
     padding: PaddingValues,
     modifier: Modifier = Modifier,
     clickPadding: Dp = SusuTheme.spacing.spacing_xs,
+    onClickHistoryShowAll: () -> Unit = {},
 ) {
     // TODO: 수정 필요
     var isEmpty by remember { mutableStateOf(true) }
@@ -139,7 +151,7 @@ fun SentScreen(
                 ) {
                     // TODO: 수정 필요
                     items(8) {
-                        SentCard()
+                        SentCard(onClick = onClickHistoryShowAll)
                     }
                 }
             } else {

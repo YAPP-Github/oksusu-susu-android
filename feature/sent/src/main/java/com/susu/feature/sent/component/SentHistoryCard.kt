@@ -25,6 +25,7 @@ import com.susu.feature.sent.R
 fun SentHistoryCard(
     modifier: Modifier = Modifier,
     historyCount: Int,
+    onClick: () -> Unit = {},
 ) {
     Card(
         modifier = modifier
@@ -59,6 +60,7 @@ fun SentHistoryCard(
                 text = stringResource(R.string.sent_screen_envelope_history_show_all),
                 modifier = modifier
                     .fillMaxWidth(),
+                onClick = onClick,
             )
         }
     }

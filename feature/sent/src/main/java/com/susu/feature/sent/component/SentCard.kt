@@ -48,6 +48,7 @@ import com.susu.feature.sent.R
 @Composable
 fun SentCard(
     modifier: Modifier = Modifier,
+    onClick: () -> Unit = {},
 ) {
     // TODO: 수정 필요
     var expanded by remember { mutableStateOf(false) }
@@ -147,6 +148,9 @@ fun SentCard(
         enter = fadeIn() + expandVertically(),
         exit = fadeOut() + shrinkVertically(),
     ) {
-        SentHistoryCard(historyCount = historyCount)
+        SentHistoryCard(
+            historyCount = historyCount,
+            onClick = onClick,
+        )
     }
 }
