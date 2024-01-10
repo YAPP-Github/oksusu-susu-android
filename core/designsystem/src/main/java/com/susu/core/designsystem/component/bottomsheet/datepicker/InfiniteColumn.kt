@@ -53,7 +53,7 @@ fun <T> InfiniteColumn(
         targetIndex += ((Int.MAX_VALUE / 2) / items.size) * items.size
         itemsState = items
         lastSelectedIndex = targetIndex
-        lazyListState.scrollToItem(targetIndex - 2, scrollOffset = 32)
+        lazyListState.scrollToItem(targetIndex - 2, scrollOffset = (itemHeight.value * 0.6f).toInt())
     }
 
     LazyColumn(
