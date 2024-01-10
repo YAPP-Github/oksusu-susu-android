@@ -42,8 +42,11 @@ import com.susu.feature.received.ledgerdetail.component.LedgerDetailOverviewColu
 fun LedgerDetailRoute(
     @Suppress("deteKt:UnusedParameter")
     viewModel: LedgerDetailViewModel = hiltViewModel(),
+    navigateLedgerEdit: () -> Unit,
 ) {
-    LedgerDetailScreen()
+    LedgerDetailScreen(
+        onClickEdit = navigateLedgerEdit,
+    )
 }
 
 @Composable
