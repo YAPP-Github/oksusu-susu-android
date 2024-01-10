@@ -9,4 +9,10 @@
     <string name="ledger_search_screen_search_placeholder">찾고 싶은 장부를 검색해보세요</string>
     <string name="ledger_detail_screen_empty_envelope">아직 보낸 봉투가 없어요</string>
     <string name="ledger_detail_screen_add_envelope">받은 봉투 추가하기</string>
+    <string name="ledger_edit_screen_from_date">%d년 %d월 %d일 부터</string>
+    <string name="ledger_edit_screen_until_date">%d년 %d월 %d일 까지</string>
+    <string name="ledger_edit_screen_year">년</string>
+    <string name="ledger_edit_screen_month">월</string>
+    <string name="ledger_edit_screen_from_day">일 부터</string>
+    <string name="ledger_edit_screen_until_day">일 까지</string>
 </resources>

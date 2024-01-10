@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -112,6 +113,7 @@ fun ReceiveScreen(
                         text = stringResource(com.susu.core.ui.R.string.word_filter),
                         leftIcon = {
                             Icon(
+                                modifier = Modifier.size(16.dp),
                                 painter = painterResource(id = com.susu.core.ui.R.drawable.ic_filter),
                                 contentDescription = stringResource(R.string.content_description_filter_icon),
                             )
