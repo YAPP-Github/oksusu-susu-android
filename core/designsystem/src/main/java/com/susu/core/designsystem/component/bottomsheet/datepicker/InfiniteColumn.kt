@@ -1,6 +1,7 @@
 package com.susu.core.designsystem.component.bottomsheet.datepicker
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.gestures.FlingBehavior
 import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -42,24 +43,23 @@ fun <T> InfiniteColumn(
     onItemSelected: (index: Int, item: T) -> Unit = { _, _ -> },
 ) {
     val itemHalfHeight = LocalDensity.current.run { itemHeight.toPx() / 2f }
-    val scrollState = rememberLazyListState(0)
     var lastSelectedIndex by remember { mutableStateOf(0) }
     var itemsState by remember { mutableStateOf(items) }
+    val lazyListState = rememberLazyListState(0)
+    val flingBehavior: FlingBehavior = rememberSnapFlingBehavior(lazyListState)
 
     LaunchedEffect(items) {
         var targetIndex = items.indexOf(initialItem)
         targetIndex += ((Int.MAX_VALUE / 2) / items.size) * items.size
         itemsState = items
         lastSelectedIndex = targetIndex
-        scrollState.scrollToItem(targetIndex - 2)
+        lazyListState.scrollToItem(targetIndex - 2, scrollOffset = 32)
     }
 
     LazyColumn(
         modifier = modifier.height(itemHeight * numberOfDisplayedItems),
-        state = scrollState,
-        flingBehavior = rememberSnapFlingBehavior(
-            lazyListState = scrollState,
-        ),
+        state = lazyListState,
+        flingBehavior = flingBehavior,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         items(
