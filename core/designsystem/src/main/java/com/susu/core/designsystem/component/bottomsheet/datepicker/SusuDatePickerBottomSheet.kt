@@ -13,9 +13,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.susu.core.designsystem.R
 import com.susu.core.designsystem.component.bottomsheet.SusuBottomSheet
 import com.susu.core.designsystem.theme.SusuTheme
 import kotlinx.collections.immutable.toImmutableList
@@ -41,8 +43,8 @@ fun SusuDatePickerBottomSheet(
     var selectedDay by remember { mutableIntStateOf(initialDay) }
     var lastDayInMonth by remember { mutableIntStateOf(getLastDayInMonth(initialYear, initialMonth)) }
 
-    val yearList = yearRange.map { "${it}년" }.toImmutableList()
-    val monthList = (1..12).map { "${it}월" }.toImmutableList()
+    val yearList = yearRange.map { stringResource(R.string.word_year_format, it) }.toImmutableList()
+    val monthList = (1..12).map { stringResource(R.string.word_month_format, it) }.toImmutableList()
 
     SusuBottomSheet(
         sheetState = sheetState,
@@ -54,7 +56,7 @@ fun SusuDatePickerBottomSheet(
             InfiniteColumn(
                 modifier = Modifier.width(100.dp),
                 items = yearList,
-                initialItem = "${initialYear}년",
+                initialItem = stringResource(R.string.word_year_format, initialYear),
                 itemHeight = itemHeight,
                 numberOfDisplayedItems = numberOfDisplayedItems,
                 onItemSelected = { _, item ->
@@ -71,7 +73,7 @@ fun SusuDatePickerBottomSheet(
             InfiniteColumn(
                 modifier = Modifier.width(100.dp),
                 items = monthList,
-                initialItem = "${initialMonth}월",
+                initialItem = stringResource(R.string.word_month_format, initialMonth),
                 itemHeight = itemHeight,
                 numberOfDisplayedItems = numberOfDisplayedItems,
                 onItemSelected = { _, item ->
@@ -87,8 +89,8 @@ fun SusuDatePickerBottomSheet(
             )
             InfiniteColumn(
                 modifier = Modifier.width(100.dp),
-                items = (1..lastDayInMonth).map { "${it}일" },
-                initialItem = "${selectedDay}일",
+                items = (1..lastDayInMonth).map { stringResource(R.string.word_day_format, it) },
+                initialItem = stringResource(R.string.word_month_format, selectedDay),
                 itemHeight = itemHeight,
                 numberOfDisplayedItems = numberOfDisplayedItems,
                 onItemSelected = { _, item ->
@@ -114,7 +116,7 @@ fun SusuYearPickerBottomSheet(
     onItemSelected: (Int) -> Unit = {},
 ) {
     var selectedYear by remember { mutableIntStateOf(initialYear) }
-    val yearList = yearRange.map { "${it}년" }.toImmutableList()
+    val yearList = yearRange.map { stringResource(id = R.string.word_year_format, it) }.toImmutableList()
     SusuBottomSheet(
         sheetState = sheetState,
         containerHeight = minOf(maximumContainerHeight, itemHeight * numberOfDisplayedItems + 32.dp),
@@ -126,7 +128,7 @@ fun SusuYearPickerBottomSheet(
                 .fillMaxWidth()
                 .align(Alignment.CenterHorizontally),
             items = yearList,
-            initialItem = "${initialYear}년",
+            initialItem = stringResource(id = R.string.word_year_format, initialYear),
             itemHeight = itemHeight,
             numberOfDisplayedItems = numberOfDisplayedItems,
             onItemSelected = { _, item ->
