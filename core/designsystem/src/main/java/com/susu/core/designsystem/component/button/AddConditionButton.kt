@@ -30,6 +30,7 @@ fun AddConditionButton(
                 tint = Gray70,
             )
         },
+        onClick = onClick,
     )
 }
 

@@ -43,7 +43,8 @@ fun LedgerEditContainer(
 fun LedgerEditContainerPreview() {
     SusuTheme {
         LedgerEditContainer(
-            name = "경조사명", verticalAlignment = Alignment.CenterVertically,
+            name = "경조사명",
+            verticalAlignment = Alignment.CenterVertically,
             content = { Text(text = "고모부 장례식", style = SusuTheme.typography.title_m) },
         )
     }

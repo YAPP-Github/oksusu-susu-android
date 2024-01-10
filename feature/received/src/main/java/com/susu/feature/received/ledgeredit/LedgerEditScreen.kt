@@ -33,6 +33,7 @@ import com.susu.feature.received.ledgeredit.component.LedgerEditContainer
 
 @Composable
 fun LedgerEditRoute(
+    @Suppress("unused")
     popBackStack: () -> Unit,
 ) {
     LedgerEditScreen()
