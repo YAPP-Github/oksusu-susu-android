@@ -84,7 +84,7 @@ fun SusuDatePickerBottomSheet(
             )
             InfiniteColumn(
                 modifier = Modifier.width(100.dp),
-                items = (1..lastDayInMonth).map { "${it}일" }.toMutableList(),
+                items = (1..lastDayInMonth).map { "${it}일" },
                 initialItem = "${selectedDay}일",
                 itemHeight = itemHeight,
                 numberOfDisplayedItems = numberOfDisplayedItems,
