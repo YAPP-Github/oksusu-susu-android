@@ -10,7 +10,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -39,7 +38,7 @@ fun SusuDatePickerBottomSheet(
     onDismissRequest: (Int, Int, Int) -> Unit = { _, _, _ -> },
     onItemSelected: (Int, Int, Int) -> Unit = { _, _, _ -> },
 ) {
-    val currentDate by rememberUpdatedState(newValue = LocalDate.now())
+    val currentDate = remember { LocalDate.now() }
 
     var selectedYear by remember { mutableIntStateOf(initialYear ?: currentDate.year) }
     var selectedMonth by remember { mutableIntStateOf(initialMonth ?: currentDate.monthValue) }
@@ -118,7 +117,7 @@ fun SusuYearPickerBottomSheet(
     onDismissRequest: (Int) -> Unit = {},
     onItemSelected: (Int) -> Unit = {},
 ) {
-    val currentYear by rememberUpdatedState(newValue = LocalDate.now().year)
+    val currentYear = remember { LocalDate.now().year }
     var selectedYear by remember { mutableIntStateOf(initialYear ?: currentYear) }
     val yearList = yearRange.map { stringResource(id = R.string.word_year_format, it) }.toImmutableList()
     SusuBottomSheet(
