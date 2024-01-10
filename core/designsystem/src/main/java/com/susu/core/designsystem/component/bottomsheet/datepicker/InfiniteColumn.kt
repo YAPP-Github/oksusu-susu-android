@@ -47,7 +47,7 @@ fun <T> InfiniteColumn(
     var itemsState by remember { mutableStateOf(items) }
 
     LaunchedEffect(items) {
-        var targetIndex = items.indexOf(initialItem) - 1
+        var targetIndex = items.indexOf(initialItem)
         targetIndex += ((Int.MAX_VALUE / 2) / items.size) * items.size
         itemsState = items
         lastSelectedIndex = targetIndex
