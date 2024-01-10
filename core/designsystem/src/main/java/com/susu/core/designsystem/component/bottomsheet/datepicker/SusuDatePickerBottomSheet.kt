@@ -26,6 +26,9 @@ import java.time.LocalDate
 fun SusuDatePickerBottomSheet(
     sheetState: SheetState = rememberModalBottomSheetState(),
     yearRange: IntRange = 1930..2030,
+    initialYear: Int = LocalDate.now().year,
+    initialMonth: Int = LocalDate.now().monthValue,
+    initialDay: Int = LocalDate.now().dayOfMonth,
     maximumContainerHeight: Dp,
     itemHeight: Dp = 48.dp,
     numberOfDisplayedItems: Int = 5,
@@ -33,10 +36,10 @@ fun SusuDatePickerBottomSheet(
     onDismissRequest: (Int, Int, Int) -> Unit = { _, _, _ -> },
     onItemSelected: (Int, Int, Int) -> Unit = { _, _, _ -> },
 ) {
-    var selectedYear by remember { mutableIntStateOf(LocalDate.now().year) }
-    var selectedMonth by remember { mutableIntStateOf(LocalDate.now().monthValue) }
-    var selectedDay by remember { mutableIntStateOf(LocalDate.now().dayOfMonth) }
-    var lastDayInMonth by remember { mutableIntStateOf(getLastDayInMonth(LocalDate.now().year, LocalDate.now().monthValue)) }
+    var selectedYear by remember { mutableIntStateOf(initialYear) }
+    var selectedMonth by remember { mutableIntStateOf(initialMonth) }
+    var selectedDay by remember { mutableIntStateOf(initialDay) }
+    var lastDayInMonth by remember { mutableIntStateOf(getLastDayInMonth(initialYear, initialMonth)) }
 
     val yearList = yearRange.map { "${it}년" }.toImmutableList()
     val monthList = (1..12).map { "${it}월" }.toImmutableList()
@@ -51,11 +54,11 @@ fun SusuDatePickerBottomSheet(
             InfiniteColumn(
                 modifier = Modifier.width(100.dp),
                 items = yearList,
-                initialItem = "${LocalDate.now().year}년",
+                initialItem = "${initialYear}년",
                 itemHeight = itemHeight,
                 numberOfDisplayedItems = numberOfDisplayedItems,
                 onItemSelected = { _, item ->
-                    selectedYear = item.dropLast(1).toIntOrNull() ?: LocalDate.now().year
+                    selectedYear = item.dropLast(1).toIntOrNull() ?: initialYear
                     getLastDayInMonth(selectedYear, selectedMonth).run {
                         lastDayInMonth = this
                         if (selectedDay > lastDayInMonth) {
@@ -68,11 +71,11 @@ fun SusuDatePickerBottomSheet(
             InfiniteColumn(
                 modifier = Modifier.width(100.dp),
                 items = monthList,
-                initialItem = "${LocalDate.now().monthValue}월",
+                initialItem = "${initialMonth}월",
                 itemHeight = itemHeight,
                 numberOfDisplayedItems = numberOfDisplayedItems,
                 onItemSelected = { _, item ->
-                    selectedMonth = item.dropLast(1).toIntOrNull() ?: LocalDate.now().monthValue
+                    selectedMonth = item.dropLast(1).toIntOrNull() ?: initialMonth
                     getLastDayInMonth(selectedYear, selectedMonth).run {
                         lastDayInMonth = this
                         if (selectedDay > lastDayInMonth) {
