@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,9 +29,9 @@ import java.time.LocalDate
 fun SusuDatePickerBottomSheet(
     sheetState: SheetState = rememberModalBottomSheetState(),
     yearRange: IntRange = 1930..2030,
-    initialYear: Int = LocalDate.now().year,
-    initialMonth: Int = LocalDate.now().monthValue,
-    initialDay: Int = LocalDate.now().dayOfMonth,
+    initialYear: Int? = null,
+    initialMonth: Int? = null,
+    initialDay: Int? = null,
     maximumContainerHeight: Dp,
     itemHeight: Dp = 48.dp,
     numberOfDisplayedItems: Int = 5,
@@ -38,10 +39,12 @@ fun SusuDatePickerBottomSheet(
     onDismissRequest: (Int, Int, Int) -> Unit = { _, _, _ -> },
     onItemSelected: (Int, Int, Int) -> Unit = { _, _, _ -> },
 ) {
-    var selectedYear by remember { mutableIntStateOf(initialYear) }
-    var selectedMonth by remember { mutableIntStateOf(initialMonth) }
-    var selectedDay by remember { mutableIntStateOf(initialDay) }
-    var lastDayInMonth by remember { mutableIntStateOf(getLastDayInMonth(initialYear, initialMonth)) }
+    val currentDate by rememberUpdatedState(newValue = LocalDate.now())
+
+    var selectedYear by remember { mutableIntStateOf(initialYear ?: currentDate.year) }
+    var selectedMonth by remember { mutableIntStateOf(initialMonth ?: currentDate.monthValue) }
+    var selectedDay by remember { mutableIntStateOf(initialDay ?: currentDate.dayOfMonth) }
+    var lastDayInMonth by remember { mutableIntStateOf(getLastDayInMonth(initialYear ?: currentDate.year, initialMonth ?: currentDate.monthValue)) }
 
     val yearList = yearRange.map { stringResource(R.string.word_year_format, it) }.toImmutableList()
     val monthList = (1..12).map { stringResource(R.string.word_month_format, it) }.toImmutableList()
@@ -56,11 +59,11 @@ fun SusuDatePickerBottomSheet(
             InfiniteColumn(
                 modifier = Modifier.width(100.dp),
                 items = yearList,
-                initialItem = stringResource(R.string.word_year_format, initialYear),
+                initialItem = stringResource(R.string.word_year_format, currentDate.year),
                 itemHeight = itemHeight,
                 numberOfDisplayedItems = numberOfDisplayedItems,
                 onItemSelected = { _, item ->
-                    selectedYear = item.dropLast(1).toIntOrNull() ?: initialYear
+                    selectedYear = item.dropLast(1).toIntOrNull() ?: currentDate.year
                     getLastDayInMonth(selectedYear, selectedMonth).run {
                         lastDayInMonth = this
                         if (selectedDay > lastDayInMonth) {
@@ -73,11 +76,11 @@ fun SusuDatePickerBottomSheet(
             InfiniteColumn(
                 modifier = Modifier.width(100.dp),
                 items = monthList,
-                initialItem = stringResource(R.string.word_month_format, initialMonth),
+                initialItem = stringResource(R.string.word_month_format, currentDate.monthValue),
                 itemHeight = itemHeight,
                 numberOfDisplayedItems = numberOfDisplayedItems,
                 onItemSelected = { _, item ->
-                    selectedMonth = item.dropLast(1).toIntOrNull() ?: initialMonth
+                    selectedMonth = item.dropLast(1).toIntOrNull() ?: currentDate.monthValue
                     getLastDayInMonth(selectedYear, selectedMonth).run {
                         lastDayInMonth = this
                         if (selectedDay > lastDayInMonth) {
@@ -90,7 +93,7 @@ fun SusuDatePickerBottomSheet(
             InfiniteColumn(
                 modifier = Modifier.width(100.dp),
                 items = (1..lastDayInMonth).map { stringResource(R.string.word_day_format, it) },
-                initialItem = stringResource(R.string.word_month_format, selectedDay),
+                initialItem = stringResource(R.string.word_day_format, selectedDay),
                 itemHeight = itemHeight,
                 numberOfDisplayedItems = numberOfDisplayedItems,
                 onItemSelected = { _, item ->
@@ -107,7 +110,7 @@ fun SusuDatePickerBottomSheet(
 fun SusuYearPickerBottomSheet(
     sheetState: SheetState = rememberModalBottomSheetState(),
     yearRange: IntRange = 1930..2030,
-    initialYear: Int = LocalDate.now().year,
+    initialYear: Int? = null,
     maximumContainerHeight: Dp,
     itemHeight: Dp = 48.dp,
     numberOfDisplayedItems: Int = 5,
@@ -115,7 +118,8 @@ fun SusuYearPickerBottomSheet(
     onDismissRequest: (Int) -> Unit = {},
     onItemSelected: (Int) -> Unit = {},
 ) {
-    var selectedYear by remember { mutableIntStateOf(initialYear) }
+    val currentYear by rememberUpdatedState(newValue = LocalDate.now().year)
+    var selectedYear by remember { mutableIntStateOf(initialYear ?: currentYear) }
     val yearList = yearRange.map { stringResource(id = R.string.word_year_format, it) }.toImmutableList()
     SusuBottomSheet(
         sheetState = sheetState,
@@ -128,11 +132,11 @@ fun SusuYearPickerBottomSheet(
                 .fillMaxWidth()
                 .align(Alignment.CenterHorizontally),
             items = yearList,
-            initialItem = stringResource(id = R.string.word_year_format, initialYear),
+            initialItem = stringResource(id = R.string.word_year_format, currentYear),
             itemHeight = itemHeight,
             numberOfDisplayedItems = numberOfDisplayedItems,
             onItemSelected = { _, item ->
-                selectedYear = item.dropLast(1).toIntOrNull() ?: initialYear
+                selectedYear = item.dropLast(1).toIntOrNull() ?: currentYear
                 onItemSelected(selectedYear)
             },
         )
