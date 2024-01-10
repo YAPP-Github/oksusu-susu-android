@@ -6,6 +6,7 @@
     <string name="word_align_low_amount">금액 낮은 순</string>
     <string name="word_recent_search">최근 검색</string>
     <string name="word_edit">편집</string>
+    <string name="word_save">저장</string>
     <string name="word_delete">삭제</string>
     <string name="word_total_money">전체 %s원</string>
     <string name="word_total_count">총 %d개</string>
@@ -14,4 +15,7 @@
     <string name="word_event_category">경조사 카테고리</string>
     <string name="word_event_range">경조사 기간</string>
     <string name="word_filter">필터</string>
+    <string name="word_category">카테고리</string>
+    <string name="word_date">날짜</string>
+    <string name="content_description_add_button">더하기 버튼</string>
 </resources>

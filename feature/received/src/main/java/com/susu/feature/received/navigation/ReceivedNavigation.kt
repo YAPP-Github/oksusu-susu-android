@@ -8,6 +8,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.susu.feature.received.ledgerdetail.LedgerDetailRoute
+import com.susu.feature.received.ledgeredit.LedgerEditRoute
 import com.susu.feature.received.received.ReceivedRoute
 import com.susu.feature.received.search.LedgerSearchRoute
 
@@ -23,11 +24,16 @@ fun NavController.navigateLedgerSearch() {
     navigate(ReceivedRoute.ledgerSearchRoute)
 }
 
+fun NavController.navigateLedgerEdit() {
+    navigate(ReceivedRoute.ledgerEditRoute)
+}
+
 fun NavGraphBuilder.receivedNavGraph(
     padding: PaddingValues,
     navigateLedgerDetail: (Int) -> Unit,
     popBackStack: () -> Unit,
     navigateLedgerSearch: () -> Unit,
+    navigateLedgerEdit: () -> Unit,
 ) {
     composable(route = ReceivedRoute.route) {
         ReceivedRoute(
@@ -46,13 +52,20 @@ fun NavGraphBuilder.receivedNavGraph(
             },
         ),
     ) {
-        LedgerDetailRoute()
+        LedgerDetailRoute(
+            navigateLedgerEdit = navigateLedgerEdit,
+        )
     }
 
     composable(route = ReceivedRoute.ledgerSearchRoute) {
         LedgerSearchRoute(
             popBackStack = popBackStack,
         )
+    }
+    composable(
+        route = ReceivedRoute.ledgerEditRoute,
+    ) {
+        LedgerEditRoute(popBackStack = popBackStack)
     }
 }
 
@@ -61,4 +74,6 @@ object ReceivedRoute {
     const val LEDGER_DETAIL_ARGUMENT_NAME = "ledgerDetailId"
     fun ledgerDetailRoute(id: String = "0") = "ledger-detail/$id"
     const val ledgerSearchRoute = "ledger-search"
+
+    const val ledgerEditRoute = "ledger-edit" // TODO 파라미터 넘기는 방식으로 수정해야함.
 }

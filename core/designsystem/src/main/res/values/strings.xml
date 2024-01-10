@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="word_edit">편집</string>
-    <string name="word_save">저장</string>
     <string name="money_unit">원</string>
     <string name="money_unit_format">%s원</string>
     <string name="content_description_search_icon">검색 아이콘</string>
