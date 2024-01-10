@@ -31,6 +31,7 @@ fun SusuDatePickerBottomSheet(
     numberOfDisplayedItems: Int = 5,
     cornerRadius: Dp = 24.dp,
     onDismissRequest: (Int, Int, Int) -> Unit = { _, _, _ -> },
+    onItemSelected: (Int, Int, Int) -> Unit = { _, _, _ -> },
 ) {
     var selectedYear by remember { mutableIntStateOf(LocalDate.now().year) }
     var selectedMonth by remember { mutableIntStateOf(LocalDate.now().monthValue) }
@@ -61,6 +62,7 @@ fun SusuDatePickerBottomSheet(
                             selectedDay = 1
                         }
                     }
+                    onItemSelected(selectedYear, selectedMonth, selectedDay)
                 },
             )
             InfiniteColumn(
@@ -77,6 +79,7 @@ fun SusuDatePickerBottomSheet(
                             selectedDay = 1
                         }
                     }
+                    onItemSelected(selectedYear, selectedMonth, selectedDay)
                 },
             )
             InfiniteColumn(
@@ -87,6 +90,7 @@ fun SusuDatePickerBottomSheet(
                 numberOfDisplayedItems = numberOfDisplayedItems,
                 onItemSelected = { _, item ->
                     selectedDay = item.dropLast(1).toIntOrNull() ?: 1
+                    onItemSelected(selectedYear, selectedMonth, selectedDay)
                 },
             )
         }
@@ -104,6 +108,7 @@ fun SusuYearPickerBottomSheet(
     numberOfDisplayedItems: Int = 5,
     cornerRadius: Dp = 24.dp,
     onDismissRequest: (Int) -> Unit = {},
+    onItemSelected: (Int) -> Unit = {},
 ) {
     var selectedYear by remember { mutableIntStateOf(initialYear) }
     val yearList = yearRange.map { "${it}년" }.toImmutableList()
@@ -114,13 +119,16 @@ fun SusuYearPickerBottomSheet(
         cornerRadius = cornerRadius,
     ) {
         InfiniteColumn(
-            modifier = Modifier.fillMaxWidth().align(Alignment.CenterHorizontally),
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.CenterHorizontally),
             items = yearList,
             initialItem = "${initialYear}년",
             itemHeight = itemHeight,
             numberOfDisplayedItems = numberOfDisplayedItems,
             onItemSelected = { _, item ->
                 selectedYear = item.dropLast(1).toIntOrNull() ?: initialYear
+                onItemSelected(selectedYear)
             },
         )
     }
@@ -144,9 +152,7 @@ fun SusuDatePickerBottomSheetPreview() {
     SusuTheme {
         SusuDatePickerBottomSheet(
             maximumContainerHeight = 346.dp,
-            onDismissRequest = { y, m, d ->
-                println("$y $m $d")
-            },
+            onDismissRequest = { _, _, _ -> },
         )
     }
 }
