@@ -2,15 +2,20 @@ package com.susu.feature.navigator
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavDestination
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
+import com.susu.core.designsystem.theme.Gray10
+import com.susu.core.designsystem.theme.Gray100
+import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.feature.community.navigation.navigateCommunity
 import com.susu.feature.loginsignup.navigation.LoginSignupRoute
 import com.susu.feature.mypage.navigation.navigateMyPage
+import com.susu.feature.received.navigation.ReceivedRoute
 import com.susu.feature.received.navigation.navigateLedgerDetail
 import com.susu.feature.received.navigation.navigateLedgerEdit
 import com.susu.feature.received.navigation.navigateLedgerSearch
@@ -31,6 +36,13 @@ internal class MainNavigator(
         @Composable get() = currentDestination
             ?.route
             ?.let(MainNavigationTab::find)
+
+    val statusBarColor: Color
+        @Composable
+        get() = when (currentDestination?.route) {
+            in listOf(ReceivedRoute.ledgerSearchRoute) -> SusuTheme.colorScheme.background10
+            else -> SusuTheme.colorScheme.background15
+        }
 
     fun navigate(tab: MainNavigationTab) {
         val navOptions = navOptions {

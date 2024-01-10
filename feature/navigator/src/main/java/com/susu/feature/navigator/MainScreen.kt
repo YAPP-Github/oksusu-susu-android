@@ -13,6 +13,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.IntOffset
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.NavHost
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.susu.core.designsystem.component.navigation.SusuNavigationBar
 import com.susu.core.designsystem.component.navigation.SusuNavigationItem
 import com.susu.core.designsystem.component.snackbar.SusuSnackbar
@@ -40,6 +41,9 @@ internal fun MainScreen(
             MainSideEffect.NavigateSignup -> navigator.navigateSignup()
         }
     }
+
+    val systemUiController = rememberSystemUiController()
+    systemUiController.setStatusBarColor(color = navigator.statusBarColor, darkIcons = true)
 
     Scaffold(
         modifier = modifier,
