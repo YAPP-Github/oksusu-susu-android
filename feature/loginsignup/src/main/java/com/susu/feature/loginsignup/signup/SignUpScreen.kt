@@ -21,6 +21,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
@@ -175,7 +176,7 @@ fun SignUpRoute(
         }
 
         if (uiState.isLoading || termState.isLoading) {
-            LoadingScreen(modifier = Modifier.fillMaxSize())
+            LoadingScreen(modifier = Modifier.align(Alignment.Center))
         }
     }
 }
@@ -220,6 +221,7 @@ fun SignUpScreen(
             style = MediumButtonStyle.height60,
             text = stringResource(id = uiState.currentStep.bottomButtonText),
             isActive = isNextStepActive,
+            isClickable = isNextStepActive,
             onClick = onNextPressed,
         )
     }
