@@ -1,6 +1,7 @@
 package com.susu.feature.loginsignup.signup
 
 import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
@@ -55,6 +56,10 @@ fun SignUpRoute(
     val termState: TermState by termViewModel.uiState.collectAsStateWithLifecycle()
 
     var showDatePicker by remember { mutableStateOf(false) }
+
+    BackHandler {
+        viewModel.goPreviousStep()
+    }
 
     LaunchedEffect(key1 = viewModel.sideEffect) {
         viewModel.sideEffect.collect { sideEffect ->
