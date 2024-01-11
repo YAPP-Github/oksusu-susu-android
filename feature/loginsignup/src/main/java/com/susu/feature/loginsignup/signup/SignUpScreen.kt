@@ -8,26 +8,21 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.susu.core.designsystem.R
 import com.susu.core.designsystem.component.appbar.SusuDefaultAppBar
 import com.susu.core.designsystem.component.appbar.SusuProgressAppBar
+import com.susu.core.designsystem.component.appbar.icon.BackIcon
 import com.susu.core.designsystem.component.button.FilledButtonColor
 import com.susu.core.designsystem.component.button.MediumButtonStyle
 import com.susu.core.designsystem.component.button.SusuFilledButton
 import com.susu.core.designsystem.theme.SusuTheme
-import com.susu.core.ui.extension.susuClickable
 
 @Composable
 fun SignUpRoute(
@@ -99,23 +94,22 @@ fun SignUpScreen(
         if (uiState.currentStep == SignUpStep.TERMS) {
             SusuDefaultAppBar(
                 leftIcon = {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_arrow_left),
-                        contentDescription = "뒤로가기",
-                        modifier = Modifier.susuClickable(
-                            rippleEnabled = true,
-                            onClick = onPreviousPressed,
-                        ).padding(10.dp),
+                    BackIcon(
+                        onClick = onPreviousPressed
                     )
                 },
                 title = uiState.currentStep.appBarTitle,
             )
         } else {
             SusuProgressAppBar(
-                leftIcon = R.drawable.ic_arrow_left,
+                leftIcon = {
+                    BackIcon(
+                        onClick = onPreviousPressed
+                    )
+                },
                 currentStep = SignUpStep.entries.indexOf(uiState.currentStep),
                 entireStep = SignUpStep.entries.size - 1,
-                onClickBackButton = onPreviousPressed,
+
             )
         }
         content()
@@ -135,7 +129,9 @@ fun SignUpScreen(
 fun SignUpScreenPreview() {
     SusuTheme {
         SignUpScreen {
-            Text("hello", modifier = Modifier.fillMaxWidth().weight(1f))
+            Text("hello", modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f))
         }
     }
 }
