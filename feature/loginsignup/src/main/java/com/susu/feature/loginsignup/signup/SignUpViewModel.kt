@@ -34,9 +34,8 @@ class SignUpViewModel @Inject constructor(
         intent { copy(agreedTerms = agreedTerms - termId) }
     }
 
-    fun agreeAllTerms() {
-        // TODO: 약관 정보 받아오기
-        intent { copy(agreedTerms = listOf(1, 2)) }
+    fun agreeAllTerms(entireTermIds: List<Int>) {
+        intent { copy(agreedTerms = entireTermIds) }
     }
 
     fun disagreeAllTerms() {
@@ -61,8 +60,7 @@ class SignUpViewModel @Inject constructor(
         }
     }
 
-    fun goTermDetail(termId: Int) {
-        // TODO: termId에 맞는 화면 표시
+    fun goTermDetail() {
         intent { copy(currentStep = SignUpStep.TERM_DETAIL) }
     }
 

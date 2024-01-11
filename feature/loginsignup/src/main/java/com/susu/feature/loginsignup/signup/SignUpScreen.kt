@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -15,6 +16,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.susu.core.designsystem.component.appbar.SusuDefaultAppBar
@@ -24,16 +26,17 @@ import com.susu.core.designsystem.component.button.FilledButtonColor
 import com.susu.core.designsystem.component.button.MediumButtonStyle
 import com.susu.core.designsystem.component.button.SusuFilledButton
 import com.susu.core.designsystem.theme.SusuTheme
-import com.susu.core.model.Term
 import com.susu.feature.loginsignup.signup.content.TermsContent
 
 @Composable
 fun SignUpRoute(
     viewModel: SignUpViewModel = hiltViewModel(),
+    termViewModel: TermViewModel = hiltViewModel(),
     navigateToReceived: () -> Unit,
     navigateToLogin: () -> Unit,
 ) {
     val uiState: SignUpState by viewModel.uiState.collectAsStateWithLifecycle()
+    val termState: TermState by termViewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(key1 = viewModel.sideEffect) {
         viewModel.sideEffect.collect { sideEffect ->
@@ -56,7 +59,7 @@ fun SignUpRoute(
         onPreviousPressed = viewModel::goPreviousStep,
         onNextPressed = {
             if (uiState.currentStep == SignUpStep.TERM_DETAIL) {
-                // TODO: 현재 보고 있던 약관 동의
+                viewModel.agreeTerm(termState.currentTerm.id)
             }
             viewModel.goNextStep()
         },
@@ -83,13 +86,19 @@ fun SignUpRoute(
                     TermsContent(
                         modifier = Modifier.fillMaxSize(),
                         descriptionText = targetState.description,
-                        terms = listOf(
-                            Term(id = 1, title = "아무개 약관", isEssential = true),
-                            Term(id = 2, title = "아무개 약관", isEssential = true),
-                        ),
+                        terms = termState.terms,
                         agreedTerms = uiState.agreedTerms,
-                        onDetailClick = viewModel::goTermDetail,
-                        onSelectAll = { if (it) viewModel.agreeAllTerms() else viewModel.disagreeAllTerms() },
+                        onDetailClick = {
+                            termViewModel.updateCurrentTerm(it)
+                            viewModel.goTermDetail()
+                        },
+                        onSelectAll = { agree ->
+                            if (agree) {
+                                viewModel.agreeAllTerms(termState.terms.map { it.id })
+                            } else {
+                                viewModel.disagreeAllTerms()
+                            }
+                        },
                         onTermChecked = { agree, id ->
                             if (agree) viewModel.agreeTerm(id) else viewModel.disagreeTerm(id)
                         },
@@ -105,7 +114,11 @@ fun SignUpRoute(
                 }
 
                 SignUpStep.TERM_DETAIL -> {
-                    Text(text = targetState.description)
+                    Text(
+                        modifier = Modifier.fillMaxSize().padding(16.dp),
+                        text = termState.currentTerm.description,
+                        style = SusuTheme.typography.text_xxxs,
+                    )
                 }
             }
         }
