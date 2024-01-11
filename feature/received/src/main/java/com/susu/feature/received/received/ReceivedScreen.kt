@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -44,10 +45,12 @@ import kotlinx.collections.immutable.toImmutableList
 @Composable
 fun ReceivedRoute(
     padding: PaddingValues,
+    navigateLedgerDetail: (Int) -> Unit,
     navigateLedgerSearch: () -> Unit,
 ) {
     ReceiveScreen(
         padding = padding,
+        onClickLedgerCard = navigateLedgerDetail,
         onClickSearchIcon = navigateLedgerSearch, // TODO SideEffect로 변경
     )
 }
@@ -61,7 +64,7 @@ fun ReceiveScreen(
     onClickAlignButton: () -> Unit = {},
     onClickFilterButton: () -> Unit = {},
     onClickLedgerAddCard: () -> Unit = {},
-    onClickLedgerCard: () -> Unit = {},
+    onClickLedgerCard: (Int) -> Unit = {},
     onClickFloatingAddButton: () -> Unit = {},
 ) {
     Box(
@@ -107,9 +110,10 @@ fun ReceiveScreen(
                     SusuGhostButton(
                         color = GhostButtonColor.Black,
                         style = SmallButtonStyle.height32,
-                        text = stringResource(R.string.word_filter),
+                        text = stringResource(com.susu.core.ui.R.string.word_filter),
                         leftIcon = {
                             Icon(
+                                modifier = Modifier.size(16.dp),
                                 painter = painterResource(id = com.susu.core.ui.R.drawable.ic_filter),
                                 contentDescription = stringResource(R.string.content_description_filter_icon),
                             )
@@ -129,9 +133,9 @@ fun ReceiveScreen(
                         LedgerCard(
                             ledgerType = "결혼식",
                             title = "나의 결혼식",
-                            currency = 4335000,
+                            money = 4335000,
                             count = 164,
-                            onClick = onClickLedgerCard,
+                            onClick = { onClickLedgerCard(1) },
                         )
                     }
 
@@ -139,9 +143,9 @@ fun ReceiveScreen(
                         LedgerCard(
                             ledgerType = "결혼식",
                             title = "나의 결혼식",
-                            currency = 4335000,
+                            money = 4335000,
                             count = 164,
-                            onClick = onClickLedgerCard,
+                            onClick = { onClickLedgerCard(1) },
                         )
                     }
 

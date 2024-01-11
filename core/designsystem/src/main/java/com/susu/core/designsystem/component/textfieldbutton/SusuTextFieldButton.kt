@@ -320,7 +320,7 @@ private fun InnerButtons(
                 .padding(paddingValues),
         ) {
             Text(
-                text = if (isSaved) stringResource(R.string.word_edit) else stringResource(R.string.word_save),
+                text = if (isSaved) stringResource(com.susu.core.ui.R.string.word_edit) else stringResource(com.susu.core.ui.R.string.word_save),
                 style = textStyle,
                 color = innerButtonTextColor,
             )

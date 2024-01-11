@@ -16,4 +16,5 @@ dependencies {
     implementation(projects.feature.statistics)
 
     implementation(libs.androidx.splashscreen)
+    implementation(libs.compose.accompanist.systemuicontroller)
 }

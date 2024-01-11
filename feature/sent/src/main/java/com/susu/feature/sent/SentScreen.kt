@@ -25,9 +25,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.susu.core.designsystem.component.appbar.SusuDefaultAppBar
+import com.susu.core.designsystem.component.appbar.icon.NotificationIcon
+import com.susu.core.designsystem.component.appbar.icon.SearchIcon
 import com.susu.core.designsystem.component.button.GhostButtonColor
 import com.susu.core.designsystem.component.button.SmallButtonStyle
 import com.susu.core.designsystem.component.button.SusuFloatingButton
@@ -35,7 +36,6 @@ import com.susu.core.designsystem.component.button.SusuGhostButton
 import com.susu.core.designsystem.theme.Gray100
 import com.susu.core.designsystem.theme.Gray50
 import com.susu.core.designsystem.theme.SusuTheme
-import com.susu.core.ui.extension.susuClickable
 import com.susu.feature.sent.component.SentCard
 
 @Composable
@@ -53,7 +53,8 @@ fun SentRoute(
 fun SentScreen(
     padding: PaddingValues,
     modifier: Modifier = Modifier,
-    clickPadding: Dp = SusuTheme.spacing.spacing_xs,
+    onClickSearchIcon: () -> Unit = {},
+    onClickNotificationIcon: () -> Unit = {},
     onClickHistoryShowAll: () -> Unit = {},
 ) {
     // TODO: 수정 필요
@@ -73,36 +74,18 @@ fun SentScreen(
                         contentDescription = null,
                         modifier = modifier
                             .padding(
-                                start = SusuTheme.spacing.spacing_xs
+                                start = SusuTheme.spacing.spacing_xs,
                             )
                             .size(
                                 width = 56.dp,
                                 height = 24.dp,
-                            )
+                            ),
                     )
                 },
                 title = stringResource(R.string.sent_screen_appbar_title),
                 actions = {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_search),
-                        contentDescription = stringResource(com.susu.core.ui.R.string.app_bar_search),
-                        modifier = modifier
-                            .susuClickable(
-                                rippleEnabled = false,
-                                onClick = {},
-                            )
-                            .padding(clickPadding),
-                    )
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_notification),
-                        contentDescription = stringResource(com.susu.core.ui.R.string.app_bar_notification),
-                        modifier = modifier
-                            .susuClickable(
-                                rippleEnabled = false,
-                                onClick = {},
-                            )
-                            .padding(clickPadding),
-                    )
+                    SearchIcon(onClickSearchIcon)
+                    NotificationIcon(onClickNotificationIcon)
                 },
             )
 
@@ -116,7 +99,7 @@ fun SentScreen(
                         FilterSection(
                             padding = PaddingValues(
                                 bottom = SusuTheme.spacing.spacing_xxs,
-                            )
+                            ),
                         )
                     }
                     items(8) {
@@ -125,7 +108,7 @@ fun SentScreen(
                 }
             } else {
                 FilterSection(
-                    padding = PaddingValues(SusuTheme.spacing.spacing_m)
+                    padding = PaddingValues(SusuTheme.spacing.spacing_m),
                 )
                 EmptyView()
             }
@@ -154,11 +137,11 @@ fun FilterSection(
         SusuGhostButton(
             color = GhostButtonColor.Black,
             style = SmallButtonStyle.height32,
-            text = stringResource(com.susu.core.ui.R.string.word_sort_latest),
+            text = stringResource(com.susu.core.ui.R.string.word_align_recently),
             leftIcon = {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_sort),
-                    contentDescription = stringResource(com.susu.core.ui.R.string.word_sort_latest),
+                    contentDescription = stringResource(com.susu.core.ui.R.string.word_align_recently),
                     tint = Gray100,
                     modifier = modifier.size(16.dp),
                 )
