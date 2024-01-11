@@ -1,6 +1,5 @@
 package com.susu.feature.sent
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -27,6 +26,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.susu.core.designsystem.component.appbar.SusuDefaultAppBar
+import com.susu.core.designsystem.component.appbar.icon.LogoIcon
 import com.susu.core.designsystem.component.appbar.icon.NotificationIcon
 import com.susu.core.designsystem.component.appbar.icon.SearchIcon
 import com.susu.core.designsystem.component.button.GhostButtonColor
@@ -57,8 +57,8 @@ fun SentScreen(
     onClickNotificationIcon: () -> Unit = {},
     onClickHistoryShowAll: () -> Unit = {},
 ) {
-    // TODO: 수정 필요
-    var isEmpty by remember { mutableStateOf(true) }
+    // TODO: 수정 필요 (확인을 위해 false로 설정)
+    var isEmpty by remember { mutableStateOf(false) }
 
     Box(
         modifier = Modifier
@@ -69,18 +69,8 @@ fun SentScreen(
         Column {
             SusuDefaultAppBar(
                 leftIcon = {
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_susu_app),
-                        contentDescription = null,
-                        modifier = modifier
-                            .padding(
-                                start = SusuTheme.spacing.spacing_xs,
-                            )
-                            .size(
-                                width = 56.dp,
-                                height = 24.dp,
-                            ),
-                    )
+                    Spacer(modifier = modifier.size(SusuTheme.spacing.spacing_xs))
+                    LogoIcon()
                 },
                 title = stringResource(R.string.sent_screen_appbar_title),
                 actions = {
