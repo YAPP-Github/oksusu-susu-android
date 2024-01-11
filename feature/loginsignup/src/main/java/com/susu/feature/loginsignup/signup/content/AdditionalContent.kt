@@ -19,9 +19,7 @@ import com.susu.core.designsystem.component.button.MediumButtonStyle
 import com.susu.core.designsystem.component.button.SusuGhostButton
 import com.susu.core.designsystem.theme.Gray60
 import com.susu.core.designsystem.theme.SusuTheme
-import com.susu.feature.loginsignup.R
 import com.susu.feature.loginsignup.signup.Gender
-import com.susu.feature.loginsignup.signup.SignUpStep
 import java.time.LocalDate
 
 @Composable
@@ -31,7 +29,7 @@ fun AdditionalContent(
     selectedGender: Gender = Gender.NONE,
     selectedYear: Int = -1,
     onGenderSelect: (Gender) -> Unit = {},
-    onYearClick: () -> Unit = {}
+    onYearClick: () -> Unit = {},
 ) {
     Column(
         modifier = modifier.padding(horizontal = 16.dp, vertical = 24.dp),
@@ -67,12 +65,15 @@ fun AdditionalContent(
         Text(text = stringResource(com.susu.core.ui.R.string.word_birth), style = SusuTheme.typography.title_xxxs, color = Gray60)
         SusuGhostButton(
             modifier = Modifier.fillMaxWidth(),
-            text = if (selectedYear < 0) LocalDate.now().year.toString() else selectedYear.toString(),
+            text = stringResource(
+                id = com.susu.core.designsystem.R.string.word_year_format,
+                if (selectedYear < 0) LocalDate.now().year else selectedYear,
+            ),
             color = GhostButtonColor.Black,
             style = MediumButtonStyle.height60,
             isClickable = true,
             isActive = selectedYear > 0,
-            onClick = onYearClick
+            onClick = onYearClick,
         )
     }
 }
