@@ -106,55 +106,27 @@ fun SentScreen(
                 },
             )
 
-            Row(
-                modifier = modifier
-                    .fillMaxWidth()
-                    .padding(SusuTheme.spacing.spacing_m),
-                horizontalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxs),
-            ) {
-                SusuGhostButton(
-                    color = GhostButtonColor.Black,
-                    style = SmallButtonStyle.height32,
-                    text = stringResource(com.susu.core.ui.R.string.word_sort_latest),
-                    leftIcon = {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_sort),
-                            contentDescription = stringResource(com.susu.core.ui.R.string.word_sort_latest),
-                            tint = Gray100,
-                            modifier = modifier.size(16.dp),
-                        )
-                    },
-                )
-                SusuGhostButton(
-                    color = GhostButtonColor.Black,
-                    style = SmallButtonStyle.height32,
-                    text = stringResource(com.susu.core.ui.R.string.word_filter),
-                    leftIcon = {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_filter),
-                            contentDescription = stringResource(com.susu.core.ui.R.string.word_filter),
-                            tint = Gray100,
-                            modifier = modifier.size(16.dp),
-                        )
-                    },
-                )
-            }
-
             if (!isEmpty) {
                 LazyColumn(
                     verticalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxs),
-                    contentPadding = PaddingValues(
-                        start = SusuTheme.spacing.spacing_m,
-                        end = SusuTheme.spacing.spacing_m,
-                        bottom = SusuTheme.spacing.spacing_m,
-                    ),
+                    contentPadding = PaddingValues(SusuTheme.spacing.spacing_m),
                 ) {
                     // TODO: 수정 필요
+                    item {
+                        FilterSection(
+                            padding = PaddingValues(
+                                bottom = SusuTheme.spacing.spacing_xxs,
+                            )
+                        )
+                    }
                     items(8) {
                         SentCard(onClick = onClickHistoryShowAll)
                     }
                 }
             } else {
+                FilterSection(
+                    padding = PaddingValues(SusuTheme.spacing.spacing_m)
+                )
                 EmptyView()
             }
         }
@@ -164,6 +136,46 @@ fun SentScreen(
                 .align(Alignment.BottomEnd)
                 .padding(SusuTheme.spacing.spacing_l),
             onClick = {},
+        )
+    }
+}
+
+@Composable
+fun FilterSection(
+    modifier: Modifier = Modifier,
+    padding: PaddingValues,
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(padding),
+        horizontalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxs),
+    ) {
+        SusuGhostButton(
+            color = GhostButtonColor.Black,
+            style = SmallButtonStyle.height32,
+            text = stringResource(com.susu.core.ui.R.string.word_sort_latest),
+            leftIcon = {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_sort),
+                    contentDescription = stringResource(com.susu.core.ui.R.string.word_sort_latest),
+                    tint = Gray100,
+                    modifier = modifier.size(16.dp),
+                )
+            },
+        )
+        SusuGhostButton(
+            color = GhostButtonColor.Black,
+            style = SmallButtonStyle.height32,
+            text = stringResource(com.susu.core.ui.R.string.word_filter),
+            leftIcon = {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_filter),
+                    contentDescription = stringResource(com.susu.core.ui.R.string.word_filter),
+                    tint = Gray100,
+                    modifier = modifier.size(16.dp),
+                )
+            },
         )
     }
 }
