@@ -15,7 +15,7 @@ data class SignUpState(
     val name: String = "",
     val isNameValid: Boolean = true,
     val gender: Gender = Gender.NONE,
-    val birth: Int = 1930,
+    val birth: Int = -1,
 ) : UiState
 
 enum class SignUpStep(
