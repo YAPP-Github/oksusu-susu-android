@@ -8,6 +8,7 @@ import com.susu.core.ui.base.UiState
 object TermEffect : SideEffect
 
 data class TermState(
+    val isLoading: Boolean = false,
     val terms: List<Term> = emptyList(),
     val currentTerm: TermDetail = TermDetail(0, "", false, ""),
-): UiState
+) : UiState

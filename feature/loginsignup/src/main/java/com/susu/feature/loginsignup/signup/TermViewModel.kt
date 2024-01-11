@@ -16,20 +16,24 @@ class TermViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
+            intent { copy(isLoading = true) }
             getTermsUseCase().onSuccess {
-                intent { copy(terms = it) }
+                intent { copy(terms = it, isLoading = false) }
             }.onFailure {
                 // TODO: 실패
+                intent { copy(isLoading = false) }
             }
         }
     }
 
     fun updateCurrentTerm(termId: Int) {
         viewModelScope.launch {
+            intent { copy(isLoading = true) }
             getTermDetailUseCase(termId).onSuccess {
-                intent { copy(currentTerm = it) }
+                intent { copy(currentTerm = it, isLoading = false) }
             }.onFailure {
                 // TODO: 실패
+                intent { copy(isLoading = false) }
             }
         }
     }

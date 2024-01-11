@@ -32,6 +32,7 @@ import com.susu.core.designsystem.component.bottomsheet.datepicker.SusuYearPicke
 import com.susu.core.designsystem.component.button.FilledButtonColor
 import com.susu.core.designsystem.component.button.MediumButtonStyle
 import com.susu.core.designsystem.component.button.SusuFilledButton
+import com.susu.core.designsystem.component.screen.LoadingScreen
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.feature.loginsignup.signup.content.AdditionalContent
 import com.susu.feature.loginsignup.signup.content.NameContent
@@ -161,6 +162,10 @@ fun SignUpRoute(
                     showDatePicker = false
                 },
             )
+        }
+
+        if (uiState.isLoading || termState.isLoading) {
+            LoadingScreen(modifier = Modifier.fillMaxSize())
         }
     }
 }

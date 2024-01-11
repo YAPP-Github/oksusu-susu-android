@@ -70,6 +70,7 @@ class SignUpViewModel @Inject constructor(
     private fun signUp() {
         KakaoLoginHelper.getAccessToken { oauthAccessToken ->
             viewModelScope.launch {
+                intent { copy(isLoading = true) }
                 if (oauthAccessToken != null) {
                     signUpUseCase(
                         oauthAccessToken = oauthAccessToken,
@@ -86,6 +87,7 @@ class SignUpViewModel @Inject constructor(
                 } else {
                     postSideEffect(SignUpEffect.ShowToast("카카오톡 로그인 에러 발생"))
                 }
+                intent { copy(isLoading = false) }
             }
         }
     }

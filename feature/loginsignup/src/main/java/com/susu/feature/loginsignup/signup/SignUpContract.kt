@@ -12,6 +12,7 @@ sealed class SignUpEffect : SideEffect {
 }
 
 data class SignUpState(
+    val isLoading: Boolean = false,
     val currentStep: SignUpStep = SignUpStep.TERMS,
     val agreedTerms: List<Int> = emptyList(),
     val name: String = "",
