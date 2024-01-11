@@ -42,41 +42,41 @@ fun SelectCategoryScreen() {
         Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_xxl))
 
         Column(
-            verticalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxs)
+            verticalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxs),
         ) {
             SusuGhostButton(
                 modifier = Modifier.fillMaxWidth(),
                 color = GhostButtonColor.Black,
                 style = MediumButtonStyle.height60,
-                text = "결혼식"
+                text = "결혼식",
             )
 
             SusuGhostButton(
                 modifier = Modifier.fillMaxWidth(),
                 color = GhostButtonColor.Black,
                 style = MediumButtonStyle.height60,
-                text = "돌잔치"
+                text = "돌잔치",
             )
 
             SusuGhostButton(
                 modifier = Modifier.fillMaxWidth(),
                 color = GhostButtonColor.Black,
                 style = MediumButtonStyle.height60,
-                text = "장례식"
+                text = "장례식",
             )
 
             SusuGhostButton(
                 modifier = Modifier.fillMaxWidth(),
                 color = GhostButtonColor.Black,
                 style = MediumButtonStyle.height60,
-                text = "생일 기념일"
+                text = "생일 기념일",
             )
 
             SusuGhostButton(
                 modifier = Modifier.fillMaxWidth(),
                 color = GhostButtonColor.Black,
                 style = MediumButtonStyle.height60,
-                text = "직접 입력"
+                text = "직접 입력",
             )
         }
     }

@@ -79,7 +79,7 @@ fun NavGraphBuilder.receivedNavGraph(
         route = ReceivedRoute.ledgerAddRoute,
     ) {
         LedgerAddRoute(
-            popBackStack = popBackStack
+            popBackStack = popBackStack,
         )
     }
 }

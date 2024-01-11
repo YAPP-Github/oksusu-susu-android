@@ -200,7 +200,7 @@ fun SusuTextFieldWrapContentButton(
             modifier = modifier
                 .clip(shape)
                 .background(backgroundColor)
-                .susuClickable{ onClickButton(isFocused) }
+                .susuClickable { onClickButton(isFocused) }
                 .padding(paddingValues),
             horizontalArrangement = Arrangement.spacedBy(iconSpacing),
             verticalAlignment = Alignment.CenterVertically,
@@ -504,7 +504,7 @@ fun TextFieldButtonFocusedPreview() {
                     isFocusedTextFieldButton = false
                     isFocusedButton1 = true
                     isFocusedButton2 = false
-                }
+                },
             )
 
             SusuFilledButton(
@@ -516,7 +516,7 @@ fun TextFieldButtonFocusedPreview() {
                     isFocusedTextFieldButton = false
                     isFocusedButton1 = false
                     isFocusedButton2 = true
-                }
+                },
             )
         }
     }

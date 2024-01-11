@@ -47,7 +47,7 @@ fun LedgerAddRoute(
             scope.launch {
                 pagerState.animateScrollToPage(pagerState.currentPage + 1)
             }
-        }
+        },
     )
 }
 
