@@ -25,12 +25,13 @@ import com.susu.feature.sent.R
 fun EnvelopeHistoryItem(
     modifier: Modifier = Modifier,
     isSent: Boolean = true,
+    onClick: () -> Unit = {},
 ) {
     Row(
         modifier = modifier
             .fillMaxWidth()
             .susuClickable(
-                onClick = {}
+                onClick = onClick
             )
             .padding(
                 horizontal = SusuTheme.spacing.spacing_m,

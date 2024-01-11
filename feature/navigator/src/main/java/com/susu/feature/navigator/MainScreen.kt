@@ -49,6 +49,7 @@ internal fun MainScreen(
                     padding = innerPadding,
                     popBackStack = navigator::popBackStackIfNotHome,
                     navigateSentEnvelope = navigator::navigateSentEnvelope,
+                    navigateSentEnvelopeDetail = navigator::navigateSentEnvelopeDetail,
                 )
 
                 receivedNavGraph(

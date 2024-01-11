@@ -14,16 +14,36 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.susu.core.designsystem.component.appbar.SusuDefaultAppBar
 import com.susu.core.designsystem.component.appbar.icon.BackIcon
 import com.susu.core.designsystem.theme.Gray100
 import com.susu.core.designsystem.theme.SusuTheme
+import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.core.ui.extension.susuClickable
 import com.susu.feature.envelopedetail.component.DetailItem
 
 @Composable
+fun SentEnvelopeDetailRoute(
+    viewModel: SentEnvelopeDetailViewModel = hiltViewModel(),
+    popBackStack: () -> Unit,
+) {
+    viewModel.sideEffect.collectWithLifecycle { sideEffect ->
+        when (sideEffect) {
+            SentEnvelopeDetailSideEffect.PopBackStack -> popBackStack()
+        }
+    }
+
+    SentEnvelopeDetailScreen(
+        onClickBackIcon = viewModel::popBackStack,
+    )
+}
+
+@Composable
 fun SentEnvelopeDetailScreen(
     modifier: Modifier = Modifier,
+    onClickBackIcon: () -> Unit = {},
+
 ) {
     val scrollState = rememberScrollState()
 
@@ -34,7 +54,9 @@ fun SentEnvelopeDetailScreen(
         Column {
             SusuDefaultAppBar(
                 leftIcon = {
-                    BackIcon()
+                    BackIcon(
+                        onClick = onClickBackIcon
+                    )
                 },
                 actions = {
                     Text(

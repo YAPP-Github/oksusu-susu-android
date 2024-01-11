@@ -45,6 +45,7 @@ import com.susu.feature.sent.R
 fun SentEnvelopeRoute(
     viewModel: SentEnvelopeViewModel = hiltViewModel(),
     popBackStack: () -> Unit,
+    navigateSentEnvelopeDetail: () -> Unit,
 ) {
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
@@ -54,6 +55,7 @@ fun SentEnvelopeRoute(
 
     SentEnvelopeScreen(
         onClickBackIcon = viewModel::popBackStack,
+        onClickEnvelopeDetail = navigateSentEnvelopeDetail
     )
 }
 
@@ -62,6 +64,7 @@ fun SentEnvelopeScreen(
     modifier: Modifier = Modifier,
     clickPadding: Dp = SusuTheme.spacing.spacing_xs,
     onClickBackIcon: () -> Unit = {},
+    onClickEnvelopeDetail: () -> Unit = {},
 ) {
     Box(
         modifier = modifier
@@ -169,7 +172,9 @@ fun SentEnvelopeScreen(
             ) {
                 repeat(10) {
                     item {
-                        EnvelopeHistoryItem()
+                        EnvelopeHistoryItem(
+                            onClick = onClickEnvelopeDetail,
+                        )
                     }
                 }
             }

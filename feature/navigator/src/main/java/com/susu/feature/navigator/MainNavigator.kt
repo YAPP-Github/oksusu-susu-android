@@ -15,6 +15,7 @@ import com.susu.feature.received.navigation.navigateReceived
 import com.susu.feature.sent.navigation.SentRoute
 import com.susu.feature.sent.navigation.navigateSent
 import com.susu.feature.sent.navigation.navigateSentEnvelope
+import com.susu.feature.sent.navigation.navigateSentEnvelopeDetail
 import com.susu.feature.statistics.navigation.navigateStatistics
 
 internal class MainNavigator(
@@ -53,6 +54,10 @@ internal class MainNavigator(
 
     fun navigateSentEnvelope() {
         navController.navigateSentEnvelope()
+    }
+
+    fun navigateSentEnvelopeDetail() {
+        navController.navigateSentEnvelopeDetail()
     }
 
     fun popBackStackIfNotHome() {
