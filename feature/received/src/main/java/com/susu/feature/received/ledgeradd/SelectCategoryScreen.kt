@@ -12,11 +12,13 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.susu.core.designsystem.component.button.GhostButtonColor
 import com.susu.core.designsystem.component.button.MediumButtonStyle
 import com.susu.core.designsystem.component.button.SusuGhostButton
 import com.susu.core.designsystem.theme.SusuTheme
+import com.susu.feature.received.R
 
 @Composable
 fun SelectCategoryScreen() {
@@ -33,7 +35,7 @@ fun SelectCategoryScreen() {
             .verticalScroll(scrollState),
     ) {
         Text(
-            text = "어떤 경조사였나요",
+            text = stringResource(R.string.select_category_screen_title),
             style = SusuTheme.typography.title_m,
         )
 

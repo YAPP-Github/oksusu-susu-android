@@ -8,9 +8,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.susu.core.designsystem.component.textfield.SusuBasicTextField
 import com.susu.core.designsystem.theme.SusuTheme
+import com.susu.feature.received.R
 
 @Composable
 fun InputNameScreen() {
@@ -24,14 +26,14 @@ fun InputNameScreen() {
             ),
     ) {
         Text(
-            text = "경조사명을 알려주세요",
+            text = stringResource(R.string.input_name_screen_title),
             style = SusuTheme.typography.title_m,
         )
 
         Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_m))
 
         SusuBasicTextField(
-            placeholder = "경조사명을 입력해주세요"
+            placeholder = stringResource(R.string.input_name_screen_textfield_placeholder),
         )
     }
 }
