@@ -16,7 +16,7 @@ class SignUpViewModel @Inject constructor(
 
     fun updateName(name: String) {
         val trimmedName = name.trim()
-        val slicedName = if (trimmedName.length > 20) trimmedName.slice(0 until 20) else trimmedName
+        val slicedName = if (trimmedName.length > 10) trimmedName.slice(0 until 10) else trimmedName
 
         intent { copy(name = slicedName, isNameValid = nameRegex.matches(slicedName)) }
     }
@@ -78,6 +78,7 @@ class SignUpViewModel @Inject constructor(
                             name = uiState.value.name,
                             gender = uiState.value.gender.content,
                             birth = uiState.value.birth,
+                            termAgreement = uiState.value.agreedTerms
                         ),
                     ).onSuccess {
                         postSideEffect(SignUpEffect.NavigateToReceived)
