@@ -76,7 +76,7 @@ fun SignUpRoute(
         SignUpScreen(
             uiState = uiState,
             isNextStepActive = when (uiState.currentStep) {
-                SignUpStep.TERMS -> uiState.agreedTerms.containsAll(termState.terms.map { it.id })
+                SignUpStep.TERMS -> uiState.agreedTerms.containsAll(termState.terms.filter { it.isEssential }.map { it.id })
                 SignUpStep.TERM_DETAIL -> true
                 SignUpStep.NAME -> uiState.isNameValid && uiState.name.isNotEmpty()
                 SignUpStep.ADDITIONAL -> true
