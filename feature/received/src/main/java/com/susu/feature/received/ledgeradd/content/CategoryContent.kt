@@ -1,4 +1,4 @@
-package com.susu.feature.received.ledgeradd
+package com.susu.feature.received.ledgeradd.content
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -21,7 +21,7 @@ import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.feature.received.R
 
 @Composable
-fun SelectCategoryScreen() {
+fun CategoryContent() {
     val scrollState = rememberScrollState()
 
     Column(
@@ -84,8 +84,8 @@ fun SelectCategoryScreen() {
 
 @Preview(showBackground = true, backgroundColor = 0xFFF6F6F6)
 @Composable
-fun SelectCategoryScreenPreview() {
+fun CategoryContentPreview() {
     SusuTheme {
-        SelectCategoryScreen()
+        CategoryContent()
     }
 }

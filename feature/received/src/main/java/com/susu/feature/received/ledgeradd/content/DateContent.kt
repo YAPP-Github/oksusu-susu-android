@@ -1,4 +1,4 @@
-package com.susu.feature.received.ledgeradd
+package com.susu.feature.received.ledgeradd.content
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -17,7 +17,7 @@ import com.susu.feature.received.R
 
 // TODO 디자인 변경 예정
 @Composable
-fun InputDateScreen() {
+fun DateContent() {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -59,8 +59,8 @@ fun InputDateScreen() {
 
 @Preview(showBackground = true, backgroundColor = 0xFFF6F6F6)
 @Composable
-fun InputDateScreenPreview() {
+fun DateContentPreview() {
     SusuTheme {
-        InputDateScreen()
+        DateContent()
     }
 }

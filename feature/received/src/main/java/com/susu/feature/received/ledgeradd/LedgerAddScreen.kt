@@ -1,17 +1,17 @@
 package com.susu.feature.received.ledgeradd
 
-import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.PagerState
-import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.stringResource
@@ -23,38 +23,42 @@ import com.susu.core.designsystem.component.button.MediumButtonStyle
 import com.susu.core.designsystem.component.button.SusuFilledButton
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.ui.R
-import kotlinx.coroutines.launch
+import com.susu.core.ui.extension.susuDefaultAnimatedContentTransitionSpec
+import com.susu.feature.received.ledgeradd.content.DateContent
+import com.susu.feature.received.ledgeradd.content.NameContent
+import com.susu.feature.received.ledgeradd.content.CategoryContent
 
-enum class LedgerAddPage {
+enum class LedgerAddStep {
     CATEGORY,
     NAME,
     DATE,
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun LedgerAddRoute(
     popBackStack: () -> Unit,
 ) {
-    val pagerState = rememberPagerState(pageCount = { LedgerAddPage.entries.size })
-    val scope = rememberCoroutineScope()
+    var currentStep by remember {
+        mutableStateOf(LedgerAddStep.CATEGORY)
+    }
 
     LedgerAddScreen(
-        pagerState = pagerState,
+        currentStep = currentStep,
         onClickBack = popBackStack,
         onClickNextButton = {
             // TODO 임시 코드 입니다.
-            scope.launch {
-                pagerState.animateScrollToPage(pagerState.currentPage + 1)
+            currentStep = when (currentStep) {
+                LedgerAddStep.CATEGORY -> LedgerAddStep.NAME
+                LedgerAddStep.NAME -> LedgerAddStep.DATE
+                LedgerAddStep.DATE -> LedgerAddStep.DATE
             }
         },
     )
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun LedgerAddScreen(
-    pagerState: PagerState = rememberPagerState(pageCount = { LedgerAddPage.entries.size }),
+    currentStep: LedgerAddStep = LedgerAddStep.CATEGORY,
     onClickBack: () -> Unit = {},
     onClickNextButton: () -> Unit = {},
 ) {
@@ -68,19 +72,24 @@ fun LedgerAddScreen(
                 leftIcon = {
                     BackIcon(onClickBack)
                 },
-                entireStep = pagerState.pageCount,
-                currentStep = pagerState.currentPage + 1,
+                entireStep = LedgerAddStep.entries.size,
+                currentStep = currentStep.ordinal + 1,
             )
 
-            HorizontalPager(
+            AnimatedContent(
                 modifier = Modifier.weight(1f),
-                state = pagerState,
-                userScrollEnabled = false,
-            ) { page ->
-                when (LedgerAddPage.entries[page]) {
-                    LedgerAddPage.CATEGORY -> SelectCategoryScreen()
-                    LedgerAddPage.NAME -> InputNameScreen()
-                    LedgerAddPage.DATE -> InputDateScreen()
+                targetState = currentStep,
+                label = "LedgerAddScreen",
+                transitionSpec = {
+                    susuDefaultAnimatedContentTransitionSpec(
+                        leftDirectionCondition = targetState.ordinal > initialState.ordinal,
+                    )
+                },
+            ) { targetState ->
+                when (targetState) {
+                    LedgerAddStep.CATEGORY -> CategoryContent()
+                    LedgerAddStep.NAME -> NameContent()
+                    LedgerAddStep.DATE -> DateContent()
                 }
             }
 
@@ -98,7 +107,6 @@ fun LedgerAddScreen(
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Preview
 @Composable
 fun ReceivedScreenPreview() {

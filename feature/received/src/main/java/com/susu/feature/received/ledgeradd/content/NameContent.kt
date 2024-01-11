@@ -1,4 +1,4 @@
-package com.susu.feature.received.ledgeradd
+package com.susu.feature.received.ledgeradd.content
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -15,7 +15,7 @@ import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.feature.received.R
 
 @Composable
-fun InputNameScreen() {
+fun NameContent() {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -40,8 +40,8 @@ fun InputNameScreen() {
 
 @Preview(showBackground = true, backgroundColor = 0xFFF6F6F6)
 @Composable
-fun InputNameScreenPreview() {
+fun NameContentPreview() {
     SusuTheme {
-        InputNameScreen()
+        NameContent()
     }
 }
