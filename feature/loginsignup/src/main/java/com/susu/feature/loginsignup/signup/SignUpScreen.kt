@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -115,6 +116,7 @@ fun SignUpScreen(
         content()
         SusuFilledButton(
             modifier = Modifier.fillMaxWidth(),
+            shape = RectangleShape,
             color = FilledButtonColor.Black,
             style = MediumButtonStyle.height60,
             text = "다음",
