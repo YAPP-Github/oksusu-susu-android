@@ -55,7 +55,7 @@ fun SentEnvelopeDetailScreen(
             SusuDefaultAppBar(
                 leftIcon = {
                     BackIcon(
-                        onClick = onClickBackIcon
+                        onClick = onClickBackIcon,
                     )
                 },
                 actions = {

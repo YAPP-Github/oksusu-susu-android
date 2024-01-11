@@ -55,7 +55,7 @@ fun SentEnvelopeRoute(
 
     SentEnvelopeScreen(
         onClickBackIcon = viewModel::popBackStack,
-        onClickEnvelopeDetail = navigateSentEnvelopeDetail
+        onClickEnvelopeDetail = navigateSentEnvelopeDetail,
     )
 }
 

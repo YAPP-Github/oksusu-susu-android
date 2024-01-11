@@ -44,7 +44,8 @@ internal class MainNavigator(
                 ReceivedRoute.ledgerSearchRoute,
                 SentRoute.sentEnvelopeRoute,
                 SentRoute.sentEnvelopeDetailRoute,
-            ) -> SusuTheme.colorScheme.background10
+            ),
+            -> SusuTheme.colorScheme.background10
 
             else -> SusuTheme.colorScheme.background15
         }

@@ -38,7 +38,7 @@ fun SentHistoryCard(
         border = BorderStroke(
             width = 1.dp,
             color = Gray20,
-        )
+        ),
     ) {
         Column(
             modifier = modifier

@@ -31,7 +31,7 @@ fun EnvelopeHistoryItem(
         modifier = modifier
             .fillMaxWidth()
             .susuClickable(
-                onClick = onClick
+                onClick = onClick,
             )
             .padding(
                 horizontal = SusuTheme.spacing.spacing_m,

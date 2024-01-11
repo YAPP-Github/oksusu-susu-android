@@ -43,7 +43,7 @@ fun NavGraphBuilder.sentNavGraph(
 
     composable(route = SentRoute.sentEnvelopeDetailRoute) {
         SentEnvelopeDetailRoute(
-            popBackStack = popBackStack
+            popBackStack = popBackStack,
         )
     }
 }
