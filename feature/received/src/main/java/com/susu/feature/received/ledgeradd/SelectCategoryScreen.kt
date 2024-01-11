@@ -76,7 +76,7 @@ fun SelectCategoryScreen() {
                 modifier = Modifier.fillMaxWidth(),
                 color = GhostButtonColor.Black,
                 style = MediumButtonStyle.height60,
-                text = "직접 입력",
+                text = stringResource(com.susu.core.ui.R.string.word_input_yourself),
             )
         }
     }
