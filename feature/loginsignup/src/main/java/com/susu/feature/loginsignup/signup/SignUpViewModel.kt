@@ -26,9 +26,27 @@ class SignUpViewModel @Inject constructor(
         intent { copy(birth = birth) }
     }
 
+    fun agreeTerm(termId: Int) {
+        intent { copy(agreedTerms = agreedTerms + termId) }
+    }
+
+    fun disagreeTerm(termId: Int) {
+        intent { copy(agreedTerms = agreedTerms - termId) }
+    }
+
+    fun agreeAllTerms() {
+        // TODO: 약관 정보 받아오기
+        intent { copy(agreedTerms = listOf(1, 2)) }
+    }
+
+    fun disagreeAllTerms() {
+        intent { copy(agreedTerms = emptyList()) }
+    }
+
     fun goNextStep() {
         when (uiState.value.currentStep) {
             SignUpStep.TERMS -> intent { copy(currentStep = SignUpStep.NAME) }
+            SignUpStep.TERM_DETAIL -> intent { copy(currentStep = SignUpStep.TERMS) }
             SignUpStep.NAME -> intent { copy(currentStep = SignUpStep.ADDITIONAL) }
             SignUpStep.ADDITIONAL -> signUp()
         }
@@ -37,9 +55,15 @@ class SignUpViewModel @Inject constructor(
     fun goPreviousStep() {
         when (uiState.value.currentStep) {
             SignUpStep.TERMS -> postSideEffect(SignUpEffect.NavigateToLogin)
+            SignUpStep.TERM_DETAIL -> intent { copy(currentStep = SignUpStep.TERMS) }
             SignUpStep.NAME -> intent { copy(currentStep = SignUpStep.TERMS) }
             SignUpStep.ADDITIONAL -> intent { copy(currentStep = SignUpStep.NAME) }
         }
+    }
+
+    fun goTermDetail(termId: Int) {
+        // TODO: termId에 맞는 화면 표시
+        intent { copy(currentStep = SignUpStep.TERM_DETAIL) }
     }
 
     private fun signUp() {

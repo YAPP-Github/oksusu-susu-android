@@ -24,6 +24,8 @@ import com.susu.core.designsystem.component.button.FilledButtonColor
 import com.susu.core.designsystem.component.button.MediumButtonStyle
 import com.susu.core.designsystem.component.button.SusuFilledButton
 import com.susu.core.designsystem.theme.SusuTheme
+import com.susu.core.model.Term
+import com.susu.feature.loginsignup.signup.content.TermsContent
 
 @Composable
 fun SignUpRoute(
@@ -45,15 +47,26 @@ fun SignUpRoute(
 
     SignUpScreen(
         uiState = uiState,
+        isNextStepActive = when (uiState.currentStep) {
+            SignUpStep.TERMS -> uiState.agreedTerms.containsAll(listOf(1, 2))
+            SignUpStep.TERM_DETAIL -> true
+            SignUpStep.NAME -> true
+            SignUpStep.ADDITIONAL -> true
+        },
         onPreviousPressed = viewModel::goPreviousStep,
-        onNextPressed = viewModel::goNextStep,
+        onNextPressed = {
+            if (uiState.currentStep == SignUpStep.TERM_DETAIL) {
+                // TODO: 현재 보고 있던 약관 동의
+            }
+            viewModel.goNextStep()
+        },
     ) {
         AnimatedContent(
             modifier = Modifier.weight(1f),
-            targetState = uiState,
+            targetState = uiState.currentStep,
             label = "SignUpContent",
             transitionSpec = {
-                val direction = if (targetState.currentStep.ordinal > initialState.currentStep.ordinal)
+                val direction = if (targetState.ordinal > initialState.ordinal)
                     AnimatedContentTransitionScope.SlideDirection.Left
                 else AnimatedContentTransitionScope.SlideDirection.Right
                 slideIntoContainer(
@@ -65,17 +78,34 @@ fun SignUpRoute(
                 )
             },
         ) { targetState ->
-            when (targetState.currentStep) {
+            when (targetState) {
                 SignUpStep.TERMS -> {
-                    Text(text = targetState.currentStep.description)
+                    TermsContent(
+                        modifier = Modifier.fillMaxSize(),
+                        descriptionText = targetState.description,
+                        terms = listOf(
+                            Term(id = 1, title = "아무개 약관", isEssential = true),
+                            Term(id = 2, title = "아무개 약관", isEssential = true),
+                        ),
+                        agreedTerms = uiState.agreedTerms,
+                        onDetailClick = viewModel::goTermDetail,
+                        onSelectAll = { if (it) viewModel.agreeAllTerms() else viewModel.disagreeAllTerms() },
+                        onTermChecked = { agree, id ->
+                            if (agree) viewModel.agreeTerm(id) else viewModel.disagreeTerm(id)
+                        },
+                    )
                 }
 
                 SignUpStep.NAME -> {
-                    Text(text = targetState.currentStep.description)
+                    Text(text = targetState.description)
                 }
 
                 SignUpStep.ADDITIONAL -> {
-                    Text(text = targetState.currentStep.description)
+                    Text(text = targetState.description)
+                }
+
+                SignUpStep.TERM_DETAIL -> {
+                    Text(text = targetState.description)
                 }
             }
         }
@@ -85,6 +115,7 @@ fun SignUpRoute(
 @Composable
 fun SignUpScreen(
     uiState: SignUpState = SignUpState(),
+    isNextStepActive: Boolean = false,
     onPreviousPressed: () -> Unit = {},
     onNextPressed: () -> Unit = {},
     content: @Composable ColumnScope.() -> Unit = {},
@@ -92,11 +123,11 @@ fun SignUpScreen(
     Column(
         modifier = Modifier.fillMaxSize(),
     ) {
-        if (uiState.currentStep == SignUpStep.TERMS) {
+        if (uiState.currentStep == SignUpStep.TERMS || uiState.currentStep == SignUpStep.TERM_DETAIL) {
             SusuDefaultAppBar(
                 leftIcon = {
                     BackIcon(
-                        onClick = onPreviousPressed
+                        onClick = onPreviousPressed,
                     )
                 },
                 title = uiState.currentStep.appBarTitle,
@@ -105,12 +136,11 @@ fun SignUpScreen(
             SusuProgressAppBar(
                 leftIcon = {
                     BackIcon(
-                        onClick = onPreviousPressed
+                        onClick = onPreviousPressed,
                     )
                 },
                 currentStep = SignUpStep.entries.indexOf(uiState.currentStep),
                 entireStep = SignUpStep.entries.size - 1,
-
             )
         }
         content()
@@ -119,8 +149,8 @@ fun SignUpScreen(
             shape = RectangleShape,
             color = FilledButtonColor.Black,
             style = MediumButtonStyle.height60,
-            text = "다음",
-            isActive = uiState.isNextStepAvailable,
+            text = uiState.currentStep.bottomButtonText,
+            isActive = isNextStepActive,
             onClick = onNextPressed,
         )
     }
@@ -131,9 +161,12 @@ fun SignUpScreen(
 fun SignUpScreenPreview() {
     SusuTheme {
         SignUpScreen {
-            Text("hello", modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f))
+            Text(
+                "hello",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
+            )
         }
     }
 }

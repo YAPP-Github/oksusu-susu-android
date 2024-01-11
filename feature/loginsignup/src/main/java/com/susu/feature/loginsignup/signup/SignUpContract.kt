@@ -10,9 +10,8 @@ sealed class SignUpEffect : SideEffect {
 }
 
 data class SignUpState(
-    val isNextStepAvailable: Boolean = true,
     val currentStep: SignUpStep = SignUpStep.TERMS,
-    val terms: List<Int> = emptyList(),
+    val agreedTerms: List<Int> = emptyList(),
     val name: String = "",
     val gender: Gender = Gender.NONE,
     val birth: Int = 1930,
@@ -21,18 +20,27 @@ data class SignUpState(
 enum class SignUpStep(
     val appBarTitle: String,
     val description: String,
+    val bottomButtonText: String,
 ) {
     TERMS(
         appBarTitle = "약관 동의",
         description = "서비스 약관을 위해\n약관에 동의해주세요",
+        bottomButtonText = "다음",
+    ),
+    TERM_DETAIL(
+        appBarTitle = "서비스 이용 약관",
+        description = "",
+        bottomButtonText = "동의하기",
     ),
     NAME(
         appBarTitle = "",
         description = "반가워요!\n이름을 알려주세요",
+        bottomButtonText = "다음",
     ),
     ADDITIONAL(
         appBarTitle = "",
         description = "아래 정보들을 알려주시면\n통계를 알려드릴 수 있어요",
+        bottomButtonText = "다음",
     ),
 }
 
