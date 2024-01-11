@@ -20,7 +20,7 @@ class TermViewModel @Inject constructor(
             getTermsUseCase().onSuccess {
                 intent { copy(terms = it, isLoading = false) }
             }.onFailure {
-                // TODO: 실패
+                postSideEffect(TermEffect.ShowToast(it.message ?: "약관을 불러오지 못했어요"))
                 intent { copy(isLoading = false) }
             }
         }
@@ -32,7 +32,7 @@ class TermViewModel @Inject constructor(
             getTermDetailUseCase(termId).onSuccess {
                 intent { copy(currentTerm = it, isLoading = false) }
             }.onFailure {
-                // TODO: 실패
+                postSideEffect(TermEffect.ShowToast(it.message ?: "약관 내용을 불러오지 못했어요"))
                 intent { copy(isLoading = false) }
             }
         }

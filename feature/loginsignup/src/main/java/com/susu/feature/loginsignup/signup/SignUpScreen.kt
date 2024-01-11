@@ -1,5 +1,6 @@
 package com.susu.feature.loginsignup.signup
 
+import android.widget.Toast
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
@@ -20,6 +21,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -46,6 +48,7 @@ fun SignUpRoute(
     navigateToReceived: () -> Unit,
     navigateToLogin: () -> Unit,
 ) {
+    val context = LocalContext.current
     val uiState: SignUpState by viewModel.uiState.collectAsStateWithLifecycle()
     val termState: TermState by termViewModel.uiState.collectAsStateWithLifecycle()
 
@@ -56,7 +59,7 @@ fun SignUpRoute(
             when (sideEffect) {
                 SignUpEffect.NavigateToLogin -> navigateToLogin()
                 SignUpEffect.NavigateToReceived -> navigateToReceived()
-                is SignUpEffect.ShowToast -> {}
+                is SignUpEffect.ShowToast -> Toast.makeText(context, sideEffect.msg, Toast.LENGTH_SHORT).show()
             }
         }
     }

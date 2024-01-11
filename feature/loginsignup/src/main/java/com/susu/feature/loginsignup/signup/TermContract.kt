@@ -5,7 +5,9 @@ import com.susu.core.model.TermDetail
 import com.susu.core.ui.base.SideEffect
 import com.susu.core.ui.base.UiState
 
-object TermEffect : SideEffect
+sealed interface TermEffect : SideEffect {
+    data class ShowToast(val msg: String) : TermEffect
+}
 
 data class TermState(
     val isLoading: Boolean = false,

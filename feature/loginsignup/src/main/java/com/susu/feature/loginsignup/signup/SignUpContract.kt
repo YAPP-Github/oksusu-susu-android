@@ -5,10 +5,10 @@ import com.susu.core.ui.base.SideEffect
 import com.susu.core.ui.base.UiState
 import com.susu.feature.loginsignup.R
 
-sealed class SignUpEffect : SideEffect {
-    data object NavigateToLogin : SignUpEffect()
-    data object NavigateToReceived : SignUpEffect()
-    data class ShowToast(val msg: String) : SignUpEffect()
+sealed interface SignUpEffect : SideEffect {
+    data object NavigateToLogin : SignUpEffect
+    data object NavigateToReceived : SignUpEffect
+    data class ShowToast(val msg: String) : SignUpEffect
 }
 
 data class SignUpState(
