@@ -15,7 +15,10 @@ class SignUpViewModel @Inject constructor(
 ) : BaseViewModel<SignUpState, SignUpEffect>(SignUpState()) {
 
     fun updateName(name: String) {
-        intent { copy(name = name) }
+        val trimmedName = name.trim()
+        val slicedName = if (trimmedName.length > 20) trimmedName.slice(0 until 20) else trimmedName
+
+        intent { copy(name = slicedName, isNameValid = nameRegex.matches(slicedName)) }
     }
 
     fun updateGender(gender: Gender) {
@@ -85,5 +88,9 @@ class SignUpViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    companion object {
+        private val nameRegex = Regex("[a-zA-Z가-힣]{0,10}")
     }
 }

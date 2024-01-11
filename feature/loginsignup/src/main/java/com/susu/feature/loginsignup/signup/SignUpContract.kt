@@ -13,6 +13,7 @@ data class SignUpState(
     val currentStep: SignUpStep = SignUpStep.TERMS,
     val agreedTerms: List<Int> = emptyList(),
     val name: String = "",
+    val isNameValid: Boolean = true,
     val gender: Gender = Gender.NONE,
     val birth: Int = 1930,
 ) : UiState

@@ -26,6 +26,7 @@ import com.susu.core.designsystem.component.button.FilledButtonColor
 import com.susu.core.designsystem.component.button.MediumButtonStyle
 import com.susu.core.designsystem.component.button.SusuFilledButton
 import com.susu.core.designsystem.theme.SusuTheme
+import com.susu.feature.loginsignup.signup.content.NameContent
 import com.susu.feature.loginsignup.signup.content.TermsContent
 
 @Composable
@@ -51,9 +52,9 @@ fun SignUpRoute(
     SignUpScreen(
         uiState = uiState,
         isNextStepActive = when (uiState.currentStep) {
-            SignUpStep.TERMS -> uiState.agreedTerms.containsAll(listOf(1, 2))
+            SignUpStep.TERMS -> uiState.agreedTerms.containsAll(termState.terms.map { it.id })
             SignUpStep.TERM_DETAIL -> true
-            SignUpStep.NAME -> true
+            SignUpStep.NAME -> uiState.isNameValid && uiState.name.isNotEmpty()
             SignUpStep.ADDITIONAL -> true
         },
         onPreviousPressed = viewModel::goPreviousStep,
@@ -106,7 +107,14 @@ fun SignUpRoute(
                 }
 
                 SignUpStep.NAME -> {
-                    Text(text = targetState.description)
+                    NameContent(
+                        modifier = Modifier.fillMaxSize(),
+                        description = targetState.description,
+                        text = uiState.name,
+                        isError = uiState.isNameValid.not(),
+                        onTextChange = viewModel::updateName,
+                        onClickClearIcon = { viewModel.updateName("") },
+                    )
                 }
 
                 SignUpStep.ADDITIONAL -> {
@@ -152,8 +160,8 @@ fun SignUpScreen(
                         onClick = onPreviousPressed,
                     )
                 },
-                currentStep = SignUpStep.entries.indexOf(uiState.currentStep),
-                entireStep = SignUpStep.entries.size - 1,
+                currentStep = SignUpStep.entries.indexOf(uiState.currentStep) - 1,
+                entireStep = SignUpStep.entries.size - 2,
             )
         }
         content()
