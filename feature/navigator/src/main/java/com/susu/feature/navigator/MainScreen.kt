@@ -55,6 +55,7 @@ internal fun MainScreen(
                 loginSignupNavGraph(
                     navController = navigator.navController,
                     navigateToReceived = navigator::navigateSent,
+                    padding = innerPadding
                 )
 
                 sentNavGraph(

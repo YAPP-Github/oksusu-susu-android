@@ -8,6 +8,7 @@ import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -43,6 +44,7 @@ import com.susu.feature.loginsignup.signup.content.TermsContent
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SignUpRoute(
+    padding: PaddingValues,
     viewModel: SignUpViewModel = hiltViewModel(),
     termViewModel: TermViewModel = hiltViewModel(),
     navigateToReceived: () -> Unit,
@@ -64,7 +66,7 @@ fun SignUpRoute(
         }
     }
 
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(modifier = Modifier.fillMaxSize().padding(padding)) {
         SignUpScreen(
             uiState = uiState,
             isNextStepActive = when (uiState.currentStep) {
@@ -175,6 +177,7 @@ fun SignUpRoute(
 
 @Composable
 fun SignUpScreen(
+    modifier: Modifier = Modifier,
     uiState: SignUpState = SignUpState(),
     isNextStepActive: Boolean = false,
     onPreviousPressed: () -> Unit = {},
@@ -182,7 +185,7 @@ fun SignUpScreen(
     content: @Composable ColumnScope.() -> Unit = {},
 ) {
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
     ) {
         if (uiState.currentStep == SignUpStep.TERMS || uiState.currentStep == SignUpStep.TERM_DETAIL) {
             SusuDefaultAppBar(

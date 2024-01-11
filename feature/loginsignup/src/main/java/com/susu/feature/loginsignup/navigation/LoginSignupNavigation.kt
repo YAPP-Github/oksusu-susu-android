@@ -1,5 +1,6 @@
 package com.susu.feature.loginsignup.navigation
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
@@ -14,6 +15,7 @@ fun NavController.navigateLoginSignup(navOptions: NavOptions) {
 }
 
 fun NavGraphBuilder.loginSignupNavGraph(
+    padding: PaddingValues,
     navController: NavController,
     navigateToReceived: () -> Unit,
 ) {
@@ -46,6 +48,7 @@ fun NavGraphBuilder.loginSignupNavGraph(
     }
     composable(route = LoginSignupRoute.Parent.SignUp.route) {
         SignUpRoute(
+            padding = padding,
             navigateToReceived = navigateToReceived,
             navigateToLogin = {
                 navController.navigate(LoginSignupRoute.Parent.Login.route) {
