@@ -6,7 +6,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.susu.feature.loginsignup.VoteRoute
 import com.susu.feature.loginsignup.login.LoginRoute
-import com.susu.feature.loginsignup.signup.SignUpScreen
+import com.susu.feature.loginsignup.signup.SignUpRoute
 
 @Suppress("unused")
 fun NavController.navigateLoginSignup(navOptions: NavOptions) {
@@ -45,8 +45,17 @@ fun NavGraphBuilder.loginSignupNavGraph(
         )
     }
     composable(route = LoginSignupRoute.Parent.SignUp.route) {
-        SignUpScreen(
+        SignUpRoute(
             navigateToReceived = navigateToReceived,
+            navigateToLogin = {
+                navController.navigate(LoginSignupRoute.Parent.Login.route) {
+                    popUpTo(
+                        route = LoginSignupRoute.Parent.Vote.route,
+                    ) {
+                        inclusive = true
+                    }
+                }
+            },
         )
     }
 }

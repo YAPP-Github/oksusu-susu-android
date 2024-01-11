@@ -12,21 +12,37 @@ import javax.inject.Inject
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
     private val signUpUseCase: SignUpUseCase,
-) : BaseViewModel<SignUpContract.SignUpState, SignUpContract.SignUpEffect>(SignUpContract.SignUpState()) {
+) : BaseViewModel<SignUpState, SignUpEffect>(SignUpState()) {
 
     fun updateName(name: String) {
         intent { copy(name = name) }
     }
 
-    fun updateGender(gender: String) {
+    fun updateGender(gender: Gender) {
         intent { copy(gender = gender) }
     }
 
-    fun updateBirth(birth: String) {
+    fun updateBirth(birth: Int) {
         intent { copy(birth = birth) }
     }
 
-    fun signUp() {
+    fun goNextStep() {
+        when (uiState.value.currentStep) {
+            SignUpStep.TERMS -> intent { copy(currentStep = SignUpStep.NAME) }
+            SignUpStep.NAME -> intent { copy(currentStep = SignUpStep.ADDITIONAL) }
+            SignUpStep.ADDITIONAL -> signUp()
+        }
+    }
+
+    fun goPreviousStep() {
+        when (uiState.value.currentStep) {
+            SignUpStep.TERMS -> postSideEffect(SignUpEffect.NavigateToLogin)
+            SignUpStep.NAME -> intent { copy(currentStep = SignUpStep.TERMS) }
+            SignUpStep.ADDITIONAL -> intent { copy(currentStep = SignUpStep.NAME) }
+        }
+    }
+
+    private fun signUp() {
         KakaoLoginHelper.getAccessToken { oauthAccessToken ->
             viewModelScope.launch {
                 if (oauthAccessToken != null) {
@@ -34,16 +50,16 @@ class SignUpViewModel @Inject constructor(
                         oauthAccessToken = oauthAccessToken,
                         user = User(
                             name = uiState.value.name,
-                            gender = uiState.value.gender,
-                            birth = uiState.value.birth.toInt(),
+                            gender = uiState.value.gender.content,
+                            birth = uiState.value.birth,
                         ),
                     ).onSuccess {
-                        postSideEffect(SignUpContract.SignUpEffect.NavigateToReceived)
+                        postSideEffect(SignUpEffect.NavigateToReceived)
                     }.onFailure {
-                        postSideEffect(SignUpContract.SignUpEffect.ShowToast(it.message ?: "에러 발생"))
+                        postSideEffect(SignUpEffect.ShowToast(it.message ?: "에러 발생"))
                     }
                 } else {
-                    postSideEffect(SignUpContract.SignUpEffect.ShowToast("카카오톡 로그인 에러 발생"))
+                    postSideEffect(SignUpEffect.ShowToast("카카오톡 로그인 에러 발생"))
                 }
             }
         }

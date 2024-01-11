@@ -1,61 +1,141 @@
 package com.susu.feature.loginsignup.signup
 
-import android.widget.Toast
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Column
-import androidx.compose.material3.Button
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.susu.core.designsystem.R
+import com.susu.core.designsystem.component.appbar.SusuDefaultAppBar
+import com.susu.core.designsystem.component.appbar.SusuProgressAppBar
+import com.susu.core.designsystem.component.button.FilledButtonColor
+import com.susu.core.designsystem.component.button.MediumButtonStyle
+import com.susu.core.designsystem.component.button.SusuFilledButton
+import com.susu.core.designsystem.theme.SusuTheme
+import com.susu.core.ui.extension.susuClickable
 
 @Composable
-fun SignUpScreen(
+fun SignUpRoute(
     viewModel: SignUpViewModel = hiltViewModel(),
     navigateToReceived: () -> Unit,
+    navigateToLogin: () -> Unit,
 ) {
-    val uiState by viewModel.uiState.collectAsState()
-    val context = LocalContext.current
+    val uiState: SignUpState by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(key1 = viewModel.sideEffect) {
         viewModel.sideEffect.collect { sideEffect ->
             when (sideEffect) {
-                SignUpContract.SignUpEffect.NavigateToReceived -> {
-                    Toast.makeText(context, "가입 성공", Toast.LENGTH_SHORT).show()
-                    navigateToReceived()
-                }
-
-                is SignUpContract.SignUpEffect.ShowToast -> {
-                    Toast.makeText(context, sideEffect.msg, Toast.LENGTH_SHORT).show()
-                }
+                SignUpEffect.NavigateToLogin -> navigateToLogin()
+                SignUpEffect.NavigateToReceived -> navigateToReceived()
+                is SignUpEffect.ShowToast -> {}
             }
         }
     }
 
-    Column {
-        TextField(
-            value = uiState.name,
-            onValueChange = viewModel::updateName,
-            label = { Text(text = "이름") },
-        )
-        TextField(
-            value = uiState.gender,
-            onValueChange = viewModel::updateGender,
-            label = {
-                Text(text = "성별 (M/F)")
+    SignUpScreen(
+        uiState = uiState,
+        onPreviousPressed = viewModel::goPreviousStep,
+        onNextPressed = viewModel::goNextStep,
+    ) {
+        AnimatedContent(
+            modifier = Modifier.weight(1f),
+            targetState = uiState,
+            label = "SignUpContent",
+            transitionSpec = {
+                val direction = if (targetState.currentStep.ordinal > initialState.currentStep.ordinal)
+                    AnimatedContentTransitionScope.SlideDirection.Left
+                else AnimatedContentTransitionScope.SlideDirection.Right
+                slideIntoContainer(
+                    towards = direction,
+                    animationSpec = tween(500),
+                ) togetherWith slideOutOfContainer(
+                    towards = direction,
+                    animationSpec = tween(500),
+                )
             },
-        )
-        TextField(
-            value = uiState.birth,
-            onValueChange = { viewModel.updateBirth(it) },
-            label = { Text(text = "출생년도 (1930 ~ 2030)") },
+        ) { targetState ->
+            when (targetState.currentStep) {
+                SignUpStep.TERMS -> {
+                    Text(text = targetState.currentStep.description)
+                }
 
+                SignUpStep.NAME -> {
+                    Text(text = targetState.currentStep.description)
+                }
+
+                SignUpStep.ADDITIONAL -> {
+                    Text(text = targetState.currentStep.description)
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun SignUpScreen(
+    uiState: SignUpState = SignUpState(),
+    onPreviousPressed: () -> Unit = {},
+    onNextPressed: () -> Unit = {},
+    content: @Composable ColumnScope.() -> Unit = {},
+) {
+    Column(
+        modifier = Modifier.fillMaxSize(),
+    ) {
+        if (uiState.currentStep == SignUpStep.TERMS) {
+            SusuDefaultAppBar(
+                leftIcon = {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_arrow_left),
+                        contentDescription = "뒤로가기",
+                        modifier = Modifier.susuClickable(
+                            rippleEnabled = true,
+                            onClick = onPreviousPressed,
+                        ).padding(10.dp),
+                    )
+                },
+                title = uiState.currentStep.appBarTitle,
+            )
+        } else {
+            SusuProgressAppBar(
+                leftIcon = R.drawable.ic_arrow_left,
+                currentStep = SignUpStep.entries.indexOf(uiState.currentStep),
+                entireStep = SignUpStep.entries.size - 1,
+                onClickBackButton = onPreviousPressed,
+            )
+        }
+        content()
+        SusuFilledButton(
+            modifier = Modifier.fillMaxWidth(),
+            color = FilledButtonColor.Black,
+            style = MediumButtonStyle.height60,
+            text = "다음",
+            isActive = uiState.isNextStepAvailable,
+            onClick = onNextPressed,
         )
-        Button(onClick = viewModel::signUp) {
-            Text(text = "회원가입")
+    }
+}
+
+@Preview
+@Composable
+fun SignUpScreenPreview() {
+    SusuTheme {
+        SignUpScreen {
+            Text("hello", modifier = Modifier.fillMaxWidth().weight(1f))
         }
     }
 }
