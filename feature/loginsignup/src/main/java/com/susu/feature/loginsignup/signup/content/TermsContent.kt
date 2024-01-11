@@ -46,13 +46,13 @@ fun TermsContent(
     onTermChecked: (agree: Boolean, id: Int) -> Unit = { _, _ -> },
 ) {
     Column(
-        modifier = modifier.padding(16.dp),
+        modifier = modifier.padding(SusuTheme.spacing.spacing_m),
     ) {
         Text(
             text = descriptionText,
             style = SusuTheme.typography.title_m,
         )
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(SusuTheme.spacing.spacing_xl))
         TermListItem(
             title = "전체 동의하기",
             checked = agreedTerms.containsAll(terms.map { it.id }),
@@ -89,14 +89,14 @@ fun TermListItem(
     onDetailClick: () -> Unit = {},
 ) {
     Row(
-        modifier = modifier.padding(vertical = 16.dp),
+        modifier = modifier.padding(vertical = SusuTheme.spacing.spacing_m),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         TermCheckCircle(isChecked = checked, onCheckedChange = onCheckClick)
-        Spacer(modifier = Modifier.width(16.dp))
+        Spacer(modifier = Modifier.width(SusuTheme.spacing.spacing_m))
         if (isEssential) {
             SusuBadge(color = BadgeColor.Blue60, text = "필수", padding = BadgeStyle.smallBadge)
-            Spacer(modifier = Modifier.width(8.dp))
+            Spacer(modifier = Modifier.width(SusuTheme.spacing.spacing_xxs))
         }
         Text(
             modifier = Modifier.weight(1f),
@@ -104,7 +104,7 @@ fun TermListItem(
             style = SusuTheme.typography.title_xxs,
         )
         if (canRead) {
-            Spacer(modifier = Modifier.width(16.dp))
+            Spacer(modifier = Modifier.width(SusuTheme.spacing.spacing_m))
             Image(
                 modifier = Modifier
                     .size(20.dp)

@@ -141,7 +141,7 @@ fun SignUpRoute(
 
                     SignUpStep.TERM_DETAIL -> {
                         Text(
-                            modifier = Modifier.fillMaxSize().padding(16.dp),
+                            modifier = Modifier.fillMaxSize().padding(SusuTheme.spacing.spacing_m),
                             text = termState.currentTerm.description,
                             style = SusuTheme.typography.text_xxxs,
                         )
@@ -156,7 +156,7 @@ fun SignUpRoute(
                 onDismissRequest = {
                     viewModel.updateBirth(it)
                     showDatePicker = false
-                }
+                },
             )
         }
     }

@@ -35,12 +35,12 @@ fun AdditionalContent(
         modifier = modifier.padding(horizontal = 16.dp, vertical = 24.dp),
     ) {
         Text(text = description, style = SusuTheme.typography.title_m)
-        Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.height(SusuTheme.spacing.spacing_xxl))
         Text(text = "성별", style = SusuTheme.typography.title_xxxs, color = Gray60)
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(SusuTheme.spacing.spacing_xxs))
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            horizontalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxs),
         ) {
             SusuGhostButton(
                 modifier = Modifier.weight(1f),
@@ -61,7 +61,7 @@ fun AdditionalContent(
                 onClick = { onGenderSelect(Gender.FEMALE) }
             )
         }
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(SusuTheme.spacing.spacing_xl))
         Text(text = "출생년도", style = SusuTheme.typography.title_xxxs, color = Gray60)
         SusuGhostButton(
             modifier = Modifier.fillMaxWidth(),

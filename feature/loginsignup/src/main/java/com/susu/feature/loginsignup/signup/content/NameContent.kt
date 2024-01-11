@@ -9,7 +9,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.susu.core.designsystem.component.textfield.SusuUnderlineTextField
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.feature.loginsignup.signup.SignUpStep
@@ -24,10 +23,10 @@ fun NameContent(
     onClickClearIcon: () -> Unit = {},
 ) {
     Column(
-        modifier = modifier.padding(horizontal = 16.dp, vertical = 24.dp),
+        modifier = modifier.padding(horizontal = SusuTheme.spacing.spacing_m, vertical = SusuTheme.spacing.spacing_xl),
     ) {
         Text(text = description, style = SusuTheme.typography.title_m)
-        Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.height(SusuTheme.spacing.spacing_xxl))
         SusuUnderlineTextField(
             text = text,
             placeholder = "김수수",
