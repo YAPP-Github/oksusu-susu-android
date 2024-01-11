@@ -12,15 +12,15 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.susu.core.designsystem.component.appbar.SusuDefaultAppBar
 import com.susu.core.designsystem.component.appbar.icon.BackIcon
+import com.susu.core.designsystem.component.appbar.icon.DeleteText
+import com.susu.core.designsystem.component.appbar.icon.EditText
 import com.susu.core.designsystem.theme.Gray100
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.ui.extension.collectWithLifecycle
-import com.susu.core.ui.extension.susuClickable
 import com.susu.feature.envelopedetail.component.DetailItem
 
 @Composable
@@ -43,7 +43,8 @@ fun SentEnvelopeDetailRoute(
 fun SentEnvelopeDetailScreen(
     modifier: Modifier = Modifier,
     onClickBackIcon: () -> Unit = {},
-
+    onClickEdit: () -> Unit = {},
+    onClickDelete: () -> Unit = {},
 ) {
     val scrollState = rememberScrollState()
 
@@ -59,26 +60,12 @@ fun SentEnvelopeDetailScreen(
                     )
                 },
                 actions = {
-                    Text(
-                        text = stringResource(id = com.susu.core.ui.R.string.word_edit),
-                        style = SusuTheme.typography.title_xxs,
-                        color = Gray100,
-                        modifier = modifier
-                            .susuClickable(
-                                rippleEnabled = false,
-                                onClick = {},
-                            ),
+                    EditText(
+                        onClick = onClickEdit,
                     )
                     Spacer(modifier = modifier.size(SusuTheme.spacing.spacing_m))
-                    Text(
-                        text = stringResource(id = com.susu.core.ui.R.string.word_delete),
-                        style = SusuTheme.typography.title_xxs,
-                        color = Gray100,
-                        modifier = modifier
-                            .susuClickable(
-                                rippleEnabled = false,
-                                onClick = {},
-                            ),
+                    DeleteText(
+                        onClick = onClickDelete,
                     )
                     Spacer(modifier = modifier.size(SusuTheme.spacing.spacing_m))
                 },

@@ -13,20 +13,19 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.susu.core.designsystem.component.appbar.SusuDefaultAppBar
 import com.susu.core.designsystem.component.appbar.icon.BackIcon
+import com.susu.core.designsystem.component.appbar.icon.NotificationIcon
+import com.susu.core.designsystem.component.appbar.icon.SearchIcon
 import com.susu.core.designsystem.component.badge.BadgeColor
 import com.susu.core.designsystem.component.badge.BadgeStyle
 import com.susu.core.designsystem.component.badge.SusuBadge
@@ -37,7 +36,6 @@ import com.susu.core.designsystem.theme.Gray90
 import com.susu.core.designsystem.theme.Orange20
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.ui.extension.collectWithLifecycle
-import com.susu.core.ui.extension.susuClickable
 import com.susu.feature.envelope.component.EnvelopeHistoryItem
 import com.susu.feature.sent.R
 
@@ -62,8 +60,9 @@ fun SentEnvelopeRoute(
 @Composable
 fun SentEnvelopeScreen(
     modifier: Modifier = Modifier,
-    clickPadding: Dp = SusuTheme.spacing.spacing_xs,
     onClickBackIcon: () -> Unit = {},
+    onClickSearchIcon: () -> Unit = {},
+    onClickNotificationIcon: () -> Unit = {},
     onClickEnvelopeDetail: () -> Unit = {},
 ) {
     Box(
@@ -78,26 +77,8 @@ fun SentEnvelopeScreen(
                 },
                 title = "김철수",
                 actions = {
-                    Icon(
-                        painter = painterResource(id = com.susu.core.designsystem.R.drawable.ic_appbar_search),
-                        contentDescription = stringResource(id = com.susu.core.designsystem.R.string.content_description_search_icon),
-                        modifier = modifier
-                            .susuClickable(
-                                rippleEnabled = false,
-                                onClick = {},
-                            )
-                            .padding(clickPadding),
-                    )
-                    Icon(
-                        painter = painterResource(id = com.susu.core.designsystem.R.drawable.ic_appbar_notification),
-                        contentDescription = stringResource(id = com.susu.core.designsystem.R.string.content_description_notification_icon),
-                        modifier = modifier
-                            .susuClickable(
-                                rippleEnabled = false,
-                                onClick = {},
-                            )
-                            .padding(clickPadding),
-                    )
+                    SearchIcon(onClickSearchIcon)
+                    NotificationIcon(onClickNotificationIcon)
                 },
             )
 
