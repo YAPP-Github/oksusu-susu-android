@@ -6,14 +6,14 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class UserRequest(
     val name: String,
-    val gender: String,
+    val gender: String?,
     val termAgreement: List<Int>,
-    val birth: Int,
+    val birth: Int?,
 )
 
 fun User.toData() = UserRequest(
     name = name,
-    gender = gender,
-    birth = birth,
+    gender = gender.ifEmpty { null },
+    birth = if (birth < 0) null else birth,
     termAgreement = termAgreement,
 )
