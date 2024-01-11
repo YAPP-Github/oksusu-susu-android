@@ -20,6 +20,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -97,7 +98,7 @@ fun SignUpRoute(
                     SignUpStep.TERMS -> {
                         TermsContent(
                             modifier = Modifier.fillMaxSize(),
-                            descriptionText = targetState.description,
+                            descriptionText = targetState.description?.let { stringResource(id = it) } ?: "",
                             terms = termState.terms,
                             agreedTerms = uiState.agreedTerms,
                             onDetailClick = {
@@ -120,7 +121,7 @@ fun SignUpRoute(
                     SignUpStep.NAME -> {
                         NameContent(
                             modifier = Modifier.fillMaxSize(),
-                            description = targetState.description,
+                            description = targetState.description?.let { stringResource(id = it) } ?: "",
                             text = uiState.name,
                             isError = uiState.isNameValid.not(),
                             onTextChange = viewModel::updateName,
@@ -131,7 +132,7 @@ fun SignUpRoute(
                     SignUpStep.ADDITIONAL -> {
                         AdditionalContent(
                             modifier = Modifier.fillMaxSize(),
-                            description = targetState.description,
+                            description = targetState.description?.let { stringResource(id = it) } ?: "",
                             selectedGender = uiState.gender,
                             selectedYear = uiState.birth,
                             onGenderSelect = viewModel::updateGender,
@@ -141,7 +142,9 @@ fun SignUpRoute(
 
                     SignUpStep.TERM_DETAIL -> {
                         Text(
-                            modifier = Modifier.fillMaxSize().padding(SusuTheme.spacing.spacing_m),
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(SusuTheme.spacing.spacing_m),
                             text = termState.currentTerm.description,
                             style = SusuTheme.typography.text_xxxs,
                         )
@@ -180,7 +183,7 @@ fun SignUpScreen(
                         onClick = onPreviousPressed,
                     )
                 },
-                title = uiState.currentStep.appBarTitle,
+                title = uiState.currentStep.appBarTitle?.let { stringResource(id = it) } ?: "",
             )
         } else {
             SusuProgressAppBar(
@@ -199,7 +202,7 @@ fun SignUpScreen(
             shape = RectangleShape,
             color = FilledButtonColor.Black,
             style = MediumButtonStyle.height60,
-            text = uiState.currentStep.bottomButtonText,
+            text = stringResource(id = uiState.currentStep.bottomButtonText),
             isActive = isNextStepActive,
             onClick = onNextPressed,
         )

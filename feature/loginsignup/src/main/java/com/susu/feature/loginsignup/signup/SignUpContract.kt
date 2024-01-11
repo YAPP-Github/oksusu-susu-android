@@ -1,7 +1,9 @@
 package com.susu.feature.loginsignup.signup
 
+import androidx.annotation.StringRes
 import com.susu.core.ui.base.SideEffect
 import com.susu.core.ui.base.UiState
+import com.susu.feature.loginsignup.R
 
 sealed class SignUpEffect : SideEffect {
     data object NavigateToLogin : SignUpEffect()
@@ -19,29 +21,29 @@ data class SignUpState(
 ) : UiState
 
 enum class SignUpStep(
-    val appBarTitle: String,
-    val description: String,
-    val bottomButtonText: String,
+    @StringRes val appBarTitle: Int?,
+    @StringRes val description: Int?,
+    @StringRes val bottomButtonText: Int,
 ) {
     TERMS(
-        appBarTitle = "약관 동의",
-        description = "서비스 약관을 위해\n약관에 동의해주세요",
-        bottomButtonText = "다음",
+        appBarTitle = R.string.signup_term_title,
+        description = R.string.signup_term_description,
+        bottomButtonText = com.susu.core.ui.R.string.word_next,
     ),
     TERM_DETAIL(
-        appBarTitle = "서비스 이용 약관",
-        description = "",
-        bottomButtonText = "동의하기",
+        appBarTitle = R.string.signup_term_detail_title,
+        description = null,
+        bottomButtonText = R.string.signup_term_agree,
     ),
     NAME(
-        appBarTitle = "",
-        description = "반가워요!\n이름을 알려주세요",
-        bottomButtonText = "다음",
+        appBarTitle = null,
+        description = R.string.signup_name_description,
+        bottomButtonText = com.susu.core.ui.R.string.word_next,
     ),
     ADDITIONAL(
-        appBarTitle = "",
-        description = "아래 정보들을 알려주시면\n통계를 알려드릴 수 있어요",
-        bottomButtonText = "다음",
+        appBarTitle = null,
+        description = R.string.signup_additional_description,
+        bottomButtonText = com.susu.core.ui.R.string.word_next,
     ),
 }
 

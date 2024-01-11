@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.susu.core.designsystem.component.badge.BadgeColor
@@ -54,7 +55,7 @@ fun TermsContent(
         )
         Spacer(modifier = Modifier.height(SusuTheme.spacing.spacing_xl))
         TermListItem(
-            title = "전체 동의하기",
+            title = stringResource(com.susu.feature.loginsignup.R.string.signup_term_agree_all),
             checked = agreedTerms.containsAll(terms.map { it.id }),
             isEssential = false,
             canRead = false,
@@ -95,7 +96,11 @@ fun TermListItem(
         TermCheckCircle(isChecked = checked, onCheckedChange = onCheckClick)
         Spacer(modifier = Modifier.width(SusuTheme.spacing.spacing_m))
         if (isEssential) {
-            SusuBadge(color = BadgeColor.Blue60, text = "필수", padding = BadgeStyle.smallBadge)
+            SusuBadge(
+                color = BadgeColor.Blue60,
+                text = stringResource(com.susu.feature.loginsignup.R.string.signup_essential),
+                padding = BadgeStyle.smallBadge,
+            )
             Spacer(modifier = Modifier.width(SusuTheme.spacing.spacing_xxs))
         }
         Text(

@@ -15,4 +15,14 @@
     <string name="signup_vote_question_3">"은 "</string>
     <string name="signup_vote_question_4">얼마가 적당하다</string>
     <string name="signup_vote_question_5">고\n생각하시나요</string>
+    <string name="signup_name_sample">김수수</string>
+    <string name="signup_name_limitation">한글과 영문 10자 이내로 입력해주세요</string>
+    <string name="signup_term_agree_all">전체 동의하기</string>
+    <string name="signup_essential">필수</string>
+    <string name="signup_term_title">약관 동의</string>
+    <string name="signup_term_description">서비스 약관을 위해\n약관에 동의해주세요</string>
+    <string name="signup_term_detail_title">서비스 이용 약관</string>
+    <string name="signup_term_agree">동의하기</string>
+    <string name="signup_name_description">반가워요!\n이름을 알려주세요</string>
+    <string name="signup_additional_description">아래 정보들을 알려주시면\n통계를 알려드릴 수 있어요</string>
 </resources>

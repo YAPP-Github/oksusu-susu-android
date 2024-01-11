@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.susu.core.designsystem.component.button.GhostButtonColor
@@ -18,6 +19,7 @@ import com.susu.core.designsystem.component.button.MediumButtonStyle
 import com.susu.core.designsystem.component.button.SusuGhostButton
 import com.susu.core.designsystem.theme.Gray60
 import com.susu.core.designsystem.theme.SusuTheme
+import com.susu.feature.loginsignup.R
 import com.susu.feature.loginsignup.signup.Gender
 import com.susu.feature.loginsignup.signup.SignUpStep
 import java.time.LocalDate
@@ -44,25 +46,25 @@ fun AdditionalContent(
         ) {
             SusuGhostButton(
                 modifier = Modifier.weight(1f),
-                text = "남성",
+                text = stringResource(com.susu.core.ui.R.string.word_male),
                 color = GhostButtonColor.Black,
                 style = MediumButtonStyle.height60,
                 isClickable = true,
                 isActive = selectedGender == Gender.MALE,
-                onClick = { onGenderSelect(Gender.MALE) }
+                onClick = { onGenderSelect(Gender.MALE) },
             )
             SusuGhostButton(
                 modifier = Modifier.weight(1f),
-                text = "여성",
+                text = stringResource(com.susu.core.ui.R.string.word_female),
                 color = GhostButtonColor.Black,
                 style = MediumButtonStyle.height60,
                 isClickable = true,
                 isActive = selectedGender == Gender.FEMALE,
-                onClick = { onGenderSelect(Gender.FEMALE) }
+                onClick = { onGenderSelect(Gender.FEMALE) },
             )
         }
         Spacer(modifier = Modifier.height(SusuTheme.spacing.spacing_xl))
-        Text(text = "출생년도", style = SusuTheme.typography.title_xxxs, color = Gray60)
+        Text(text = stringResource(com.susu.core.ui.R.string.word_birth), style = SusuTheme.typography.title_xxxs, color = Gray60)
         SusuGhostButton(
             modifier = Modifier.fillMaxWidth(),
             text = if (selectedYear < 0) LocalDate.now().year.toString() else selectedYear.toString(),
@@ -81,7 +83,6 @@ fun AdditionalContentPreview() {
     SusuTheme {
         AdditionalContent(
             modifier = Modifier.fillMaxSize(),
-            description = SignUpStep.ADDITIONAL.description,
             selectedGender = Gender.MALE,
         )
     }

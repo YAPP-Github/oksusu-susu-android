@@ -8,9 +8,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.susu.core.designsystem.component.textfield.SusuUnderlineTextField
 import com.susu.core.designsystem.theme.SusuTheme
+import com.susu.feature.loginsignup.R
 import com.susu.feature.loginsignup.signup.SignUpStep
 
 @Composable
@@ -29,10 +31,10 @@ fun NameContent(
         Spacer(modifier = Modifier.height(SusuTheme.spacing.spacing_xxl))
         SusuUnderlineTextField(
             text = text,
-            placeholder = "김수수",
+            placeholder = stringResource(R.string.signup_name_sample),
             isError = isError,
             lengthLimit = 10,
-            description = if (isError && text.isNotEmpty()) "한글과 영문 10자 이내로 입력해주세요" else null,
+            description = if (isError && text.isNotEmpty()) stringResource(R.string.signup_name_limitation) else null,
             onTextChange = onTextChange,
             onClickClearIcon = onClickClearIcon,
         )
@@ -45,7 +47,6 @@ fun NameContentPreview() {
     SusuTheme {
         NameContent(
             modifier = Modifier.fillMaxSize(),
-            description = SignUpStep.NAME.description,
         )
     }
 }
