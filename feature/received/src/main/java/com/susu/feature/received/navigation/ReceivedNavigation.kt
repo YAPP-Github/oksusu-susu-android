@@ -46,7 +46,7 @@ fun NavGraphBuilder.receivedNavGraph(
             padding = padding,
             navigateLedgerDetail = navigateLedgerDetail,
             navigateLedgerSearch = navigateLedgerSearch,
-            navigateLedgerFilter= navigateLedgerFilter,
+            navigateLedgerFilter = navigateLedgerFilter,
         )
     }
 

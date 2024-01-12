@@ -137,7 +137,7 @@ fun LedgerFilterScreen(
             Spacer(modifier = Modifier.weight(1f))
 
             Column(
-                verticalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxs)
+                verticalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxs),
             ) {
                 SusuFilledButton(
                     color = FilledButtonColor.Orange,
@@ -159,7 +159,7 @@ fun LedgerFilterScreen(
 
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_m)
+                    horizontalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_m),
                 ) {
                     RefreshButton()
 
