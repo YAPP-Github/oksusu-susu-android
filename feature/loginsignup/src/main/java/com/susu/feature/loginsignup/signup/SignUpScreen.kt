@@ -1,6 +1,5 @@
 package com.susu.feature.loginsignup.signup
 
-import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedContentTransitionScope
@@ -24,7 +23,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -39,6 +37,7 @@ import com.susu.core.designsystem.component.button.MediumButtonStyle
 import com.susu.core.designsystem.component.button.SusuFilledButton
 import com.susu.core.designsystem.component.screen.LoadingScreen
 import com.susu.core.designsystem.theme.SusuTheme
+import com.susu.core.ui.SnackbarToken
 import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.feature.loginsignup.signup.content.AdditionalContent
 import com.susu.feature.loginsignup.signup.content.NameContent
@@ -52,8 +51,8 @@ fun SignUpRoute(
     termViewModel: TermViewModel = hiltViewModel(),
     navigateToReceived: () -> Unit,
     navigateToLogin: () -> Unit,
+    onShowToast: (SnackbarToken) -> Unit = {},
 ) {
-    val context = LocalContext.current
     val uiState: SignUpState by viewModel.uiState.collectAsStateWithLifecycle()
     val termState: TermState by termViewModel.uiState.collectAsStateWithLifecycle()
 
@@ -67,7 +66,7 @@ fun SignUpRoute(
         when (sideEffect) {
             SignUpEffect.NavigateToLogin -> navigateToLogin()
             SignUpEffect.NavigateToReceived -> navigateToReceived()
-            is SignUpEffect.ShowToast -> Toast.makeText(context, sideEffect.msg, Toast.LENGTH_SHORT).show()
+            is SignUpEffect.ShowToast -> onShowToast(SnackbarToken(message = sideEffect.msg))
         }
     }
 

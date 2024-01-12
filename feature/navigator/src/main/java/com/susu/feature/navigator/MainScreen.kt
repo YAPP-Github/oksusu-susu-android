@@ -56,7 +56,8 @@ internal fun MainScreen(
                     navigateToReceived = navigator::navigateSent,
                     navigateToLogin = navigator::navigateLogin,
                     navigateToSignUp = navigator::navigateSignup,
-                    padding = innerPadding
+                    onShowToast = viewModel::onShowToast,
+                    padding = innerPadding,
                 )
 
                 sentNavGraph(

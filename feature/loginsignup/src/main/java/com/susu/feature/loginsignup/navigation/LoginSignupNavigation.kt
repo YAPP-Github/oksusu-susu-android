@@ -5,6 +5,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
+import com.susu.core.ui.SnackbarToken
 import com.susu.feature.loginsignup.VoteRoute
 import com.susu.feature.loginsignup.login.LoginRoute
 import com.susu.feature.loginsignup.signup.SignUpRoute
@@ -19,6 +20,7 @@ fun NavGraphBuilder.loginSignupNavGraph(
     navigateToLogin: () -> Unit,
     navigateToSignUp: () -> Unit,
     navigateToReceived: () -> Unit,
+    onShowToast: (SnackbarToken) -> Unit,
 ) {
     composable(route = LoginSignupRoute.Parent.Vote.route) {
         VoteRoute(
@@ -36,6 +38,7 @@ fun NavGraphBuilder.loginSignupNavGraph(
             padding = padding,
             navigateToReceived = navigateToReceived,
             navigateToLogin = navigateToLogin,
+            onShowToast = onShowToast,
         )
     }
 }
