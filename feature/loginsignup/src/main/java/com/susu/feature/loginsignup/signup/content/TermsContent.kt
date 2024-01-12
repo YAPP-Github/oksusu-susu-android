@@ -33,8 +33,8 @@ import com.susu.core.designsystem.theme.Gray30
 import com.susu.core.designsystem.theme.Gray40
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.model.Term
-import com.susu.core.ui.extension.susuClickable
 import com.susu.core.ui.R
+import com.susu.core.ui.extension.susuClickable
 
 @Composable
 fun TermsContent(

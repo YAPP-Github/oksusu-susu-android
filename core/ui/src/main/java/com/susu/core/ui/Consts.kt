@@ -12,5 +12,5 @@ val alignList
         stringResource(id = R.string.word_align_low_amount),
     )
 
-const val inputLengthLimitation = 10
+const val USER_NAME_MAX_LENGTH = 10
 val nameRegex = Regex("[a-zA-Z가-힣]{0,10}")

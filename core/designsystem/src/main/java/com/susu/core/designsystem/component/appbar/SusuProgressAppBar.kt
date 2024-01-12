@@ -43,6 +43,7 @@ fun SusuProgressAppBar(
         },
     )
 }
+
 @Preview(showBackground = true, backgroundColor = 0xFFFFFFFF)
 @Composable
 fun SusuProgressAppBarPreview() {
