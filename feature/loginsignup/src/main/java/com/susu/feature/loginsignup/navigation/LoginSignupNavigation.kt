@@ -1,12 +1,14 @@
 package com.susu.feature.loginsignup.navigation
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
+import com.susu.core.ui.SnackbarToken
 import com.susu.feature.loginsignup.VoteRoute
 import com.susu.feature.loginsignup.login.LoginRoute
-import com.susu.feature.loginsignup.signup.SignUpScreen
+import com.susu.feature.loginsignup.signup.SignUpRoute
 
 @Suppress("unused")
 fun NavController.navigateLoginSignup(navOptions: NavOptions) {
@@ -14,39 +16,29 @@ fun NavController.navigateLoginSignup(navOptions: NavOptions) {
 }
 
 fun NavGraphBuilder.loginSignupNavGraph(
-    navController: NavController,
+    padding: PaddingValues,
+    navigateToLogin: () -> Unit,
+    navigateToSignUp: () -> Unit,
     navigateToReceived: () -> Unit,
+    onShowToast: (SnackbarToken) -> Unit,
 ) {
     composable(route = LoginSignupRoute.Parent.Vote.route) {
         VoteRoute(
-            navigateToLogin = {
-                navController.navigate(LoginSignupRoute.Parent.Login.route) {
-                    popUpTo(
-                        route = LoginSignupRoute.Parent.Vote.route,
-                    ) {
-                        inclusive = true
-                    }
-                }
-            },
+            navigateToLogin = navigateToLogin,
         )
     }
     composable(route = LoginSignupRoute.Parent.Login.route) {
         LoginRoute(
             navigateToReceived = navigateToReceived,
-            navigateToSignUp = {
-                navController.navigate(LoginSignupRoute.Parent.SignUp.route) {
-                    popUpTo(
-                        route = LoginSignupRoute.Parent.SignUp.route,
-                    ) {
-                        inclusive = true
-                    }
-                }
-            },
+            navigateToSignUp = navigateToSignUp,
         )
     }
     composable(route = LoginSignupRoute.Parent.SignUp.route) {
-        SignUpScreen(
+        SignUpRoute(
+            padding = padding,
             navigateToReceived = navigateToReceived,
+            navigateToLogin = navigateToLogin,
+            onShowToast = onShowToast,
         )
     }
 }

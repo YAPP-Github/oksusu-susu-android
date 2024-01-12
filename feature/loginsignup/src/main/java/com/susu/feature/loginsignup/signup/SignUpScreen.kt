@@ -1,61 +1,243 @@
 package com.susu.feature.loginsignup.signup
 
-import android.widget.Toast
+import androidx.activity.compose.BackHandler
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.material3.Button
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.susu.core.designsystem.component.appbar.SusuDefaultAppBar
+import com.susu.core.designsystem.component.appbar.SusuProgressAppBar
+import com.susu.core.designsystem.component.appbar.icon.BackIcon
+import com.susu.core.designsystem.component.bottomsheet.datepicker.SusuYearPickerBottomSheet
+import com.susu.core.designsystem.component.button.FilledButtonColor
+import com.susu.core.designsystem.component.button.MediumButtonStyle
+import com.susu.core.designsystem.component.button.SusuFilledButton
+import com.susu.core.designsystem.component.screen.LoadingScreen
+import com.susu.core.designsystem.theme.SusuTheme
+import com.susu.core.ui.SnackbarToken
+import com.susu.core.ui.extension.collectWithLifecycle
+import com.susu.feature.loginsignup.signup.content.AdditionalContent
+import com.susu.feature.loginsignup.signup.content.NameContent
+import com.susu.feature.loginsignup.signup.content.TermsContent
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SignUpScreen(
+fun SignUpRoute(
+    padding: PaddingValues,
     viewModel: SignUpViewModel = hiltViewModel(),
+    termViewModel: TermViewModel = hiltViewModel(),
     navigateToReceived: () -> Unit,
+    navigateToLogin: () -> Unit,
+    onShowToast: (SnackbarToken) -> Unit = {},
 ) {
-    val uiState by viewModel.uiState.collectAsState()
-    val context = LocalContext.current
+    val uiState: SignUpState by viewModel.uiState.collectAsStateWithLifecycle()
+    val termState: TermState by termViewModel.uiState.collectAsStateWithLifecycle()
 
-    LaunchedEffect(key1 = viewModel.sideEffect) {
-        viewModel.sideEffect.collect { sideEffect ->
-            when (sideEffect) {
-                SignUpContract.SignUpEffect.NavigateToReceived -> {
-                    Toast.makeText(context, "가입 성공", Toast.LENGTH_SHORT).show()
-                    navigateToReceived()
-                }
+    var showDatePicker by remember { mutableStateOf(false) }
 
-                is SignUpContract.SignUpEffect.ShowToast -> {
-                    Toast.makeText(context, sideEffect.msg, Toast.LENGTH_SHORT).show()
-                }
-            }
+    BackHandler {
+        viewModel.goPreviousStep()
+    }
+
+    viewModel.sideEffect.collectWithLifecycle { sideEffect ->
+        when (sideEffect) {
+            SignUpEffect.NavigateToLogin -> navigateToLogin()
+            SignUpEffect.NavigateToReceived -> navigateToReceived()
+            is SignUpEffect.ShowToast -> onShowToast(SnackbarToken(message = sideEffect.msg))
         }
     }
 
-    Column {
-        TextField(
-            value = uiState.name,
-            onValueChange = viewModel::updateName,
-            label = { Text(text = "이름") },
-        )
-        TextField(
-            value = uiState.gender,
-            onValueChange = viewModel::updateGender,
-            label = {
-                Text(text = "성별 (M/F)")
+    Box(modifier = Modifier.fillMaxSize().padding(padding)) {
+        SignUpScreen(
+            uiState = uiState,
+            isNextStepActive = when (uiState.currentStep) {
+                SignUpStep.TERMS -> uiState.agreedTerms.containsAll(termState.terms.filter { it.isEssential }.map { it.id })
+                SignUpStep.TERM_DETAIL -> true
+                SignUpStep.NAME -> uiState.isNameValid && uiState.name.isNotEmpty()
+                SignUpStep.ADDITIONAL -> true
             },
-        )
-        TextField(
-            value = uiState.birth,
-            onValueChange = { viewModel.updateBirth(it) },
-            label = { Text(text = "출생년도 (1930 ~ 2030)") },
+            onPreviousPressed = viewModel::goPreviousStep,
+            onNextPressed = {
+                if (uiState.currentStep == SignUpStep.TERM_DETAIL) {
+                    viewModel.agreeTerm(termState.currentTerm.id)
+                }
+                viewModel.goNextStep()
+            },
+        ) {
+            AnimatedContent(
+                modifier = Modifier.weight(1f),
+                targetState = uiState.currentStep,
+                label = "SignUpContent",
+                transitionSpec = {
+                    val direction = if (targetState.ordinal > initialState.ordinal) {
+                        AnimatedContentTransitionScope.SlideDirection.Left
+                    } else {
+                        AnimatedContentTransitionScope.SlideDirection.Right
+                    }
+                    slideIntoContainer(
+                        towards = direction,
+                        animationSpec = tween(500),
+                    ) togetherWith slideOutOfContainer(
+                        towards = direction,
+                        animationSpec = tween(500),
+                    )
+                },
+            ) { targetState ->
+                when (targetState) {
+                    SignUpStep.TERMS -> {
+                        TermsContent(
+                            modifier = Modifier.fillMaxSize(),
+                            descriptionText = targetState.description?.let { stringResource(id = it) } ?: "",
+                            terms = termState.terms,
+                            agreedTerms = uiState.agreedTerms,
+                            onDetailClick = {
+                                termViewModel.updateCurrentTerm(it)
+                                viewModel.goTermDetail()
+                            },
+                            onSelectAll = { agree ->
+                                if (agree) {
+                                    viewModel.agreeAllTerms(termState.terms.map { it.id })
+                                } else {
+                                    viewModel.disagreeAllTerms()
+                                }
+                            },
+                            onTermChecked = { agree, id ->
+                                if (agree) viewModel.agreeTerm(id) else viewModel.disagreeTerm(id)
+                            },
+                        )
+                    }
 
+                    SignUpStep.NAME -> {
+                        NameContent(
+                            modifier = Modifier.fillMaxSize(),
+                            description = targetState.description?.let { stringResource(id = it) } ?: "",
+                            text = uiState.name,
+                            isError = uiState.isNameValid.not(),
+                            onTextChange = viewModel::updateName,
+                            onClickClearIcon = { viewModel.updateName("") },
+                        )
+                    }
+
+                    SignUpStep.ADDITIONAL -> {
+                        AdditionalContent(
+                            modifier = Modifier.fillMaxSize(),
+                            description = targetState.description?.let { stringResource(id = it) } ?: "",
+                            selectedGender = uiState.gender,
+                            selectedYear = uiState.birth,
+                            onGenderSelect = viewModel::updateGender,
+                            onYearClick = { showDatePicker = true },
+                        )
+                    }
+
+                    SignUpStep.TERM_DETAIL -> {
+                        Text(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(SusuTheme.spacing.spacing_m),
+                            text = termState.currentTerm.description,
+                            style = SusuTheme.typography.text_xxxs,
+                        )
+                    }
+                }
+            }
+        }
+
+        if (showDatePicker) {
+            SusuYearPickerBottomSheet(
+                maximumContainerHeight = 322.dp,
+                onDismissRequest = {
+                    viewModel.updateBirth(it)
+                    showDatePicker = false
+                },
+            )
+        }
+
+        if (uiState.isLoading || termState.isLoading) {
+            LoadingScreen(modifier = Modifier.align(Alignment.Center))
+        }
+    }
+}
+
+@Composable
+fun SignUpScreen(
+    modifier: Modifier = Modifier,
+    uiState: SignUpState = SignUpState(),
+    isNextStepActive: Boolean = false,
+    onPreviousPressed: () -> Unit = {},
+    onNextPressed: () -> Unit = {},
+    content: @Composable ColumnScope.() -> Unit = {},
+) {
+    Column(
+        modifier = modifier.fillMaxSize(),
+    ) {
+        if (uiState.currentStep == SignUpStep.TERMS || uiState.currentStep == SignUpStep.TERM_DETAIL) {
+            SusuDefaultAppBar(
+                leftIcon = {
+                    BackIcon(
+                        onClick = onPreviousPressed,
+                    )
+                },
+                title = uiState.currentStep.appBarTitle?.let { stringResource(id = it) } ?: "",
+            )
+        } else {
+            SusuProgressAppBar(
+                leftIcon = {
+                    BackIcon(
+                        onClick = onPreviousPressed,
+                    )
+                },
+                currentStep = SignUpStep.entries.indexOf(uiState.currentStep) - 1,
+                entireStep = SignUpStep.entries.size - 2,
+            )
+        }
+        content()
+        SusuFilledButton(
+            modifier = Modifier.fillMaxWidth().imePadding(),
+            shape = RectangleShape,
+            color = FilledButtonColor.Black,
+            style = MediumButtonStyle.height60,
+            text = stringResource(id = uiState.currentStep.bottomButtonText),
+            isActive = isNextStepActive,
+            isClickable = isNextStepActive,
+            onClick = onNextPressed,
         )
-        Button(onClick = viewModel::signUp) {
-            Text(text = "회원가입")
+    }
+}
+
+@Preview
+@Composable
+fun SignUpScreenPreview() {
+    SusuTheme {
+        SignUpScreen {
+            Text(
+                "hello",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
+            )
         }
     }
 }

@@ -18,4 +18,9 @@
     <string name="word_category">카테고리</string>
     <string name="word_date">날짜</string>
     <string name="content_description_add_button">더하기 버튼</string>
+    <string name="word_male">남성</string>
+    <string name="word_female">여성</string>
+    <string name="word_birth">출생년도</string>
+    <string name="word_next">다음</string>
+    <string name="word_done">완료</string>
 </resources>

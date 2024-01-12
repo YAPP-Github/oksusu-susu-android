@@ -53,8 +53,11 @@ internal fun MainScreen(
                 startDestination = navigator.startDestination,
             ) {
                 loginSignupNavGraph(
-                    navController = navigator.navController,
                     navigateToReceived = navigator::navigateSent,
+                    navigateToLogin = navigator::navigateLogin,
+                    navigateToSignUp = navigator::navigateSignup,
+                    onShowToast = viewModel::onShowToast,
+                    padding = innerPadding,
                 )
 
                 sentNavGraph(

@@ -69,7 +69,11 @@ internal class MainNavigator(
     }
 
     fun navigateLogin() {
-        navController.navigate(LoginSignupRoute.Parent.Login.route)
+        navController.navigate(LoginSignupRoute.Parent.Login.route) {
+            popUpTo(id = navController.graph.id) {
+                inclusive = true
+            }
+        }
     }
 
     fun navigateSignup() {
