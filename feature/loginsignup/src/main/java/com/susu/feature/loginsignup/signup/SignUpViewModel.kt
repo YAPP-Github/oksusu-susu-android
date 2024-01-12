@@ -3,6 +3,7 @@ package com.susu.feature.loginsignup.signup
 import androidx.lifecycle.viewModelScope
 import com.susu.core.model.User
 import com.susu.core.ui.base.BaseViewModel
+import com.susu.core.ui.inputLengthLimitation
 import com.susu.domain.usecase.loginsignup.SignUpUseCase
 import com.susu.feature.loginsignup.social.KakaoLoginHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,9 +17,9 @@ class SignUpViewModel @Inject constructor(
 
     fun updateName(name: String) {
         val trimmedName = name.trim()
-        val slicedName = if (trimmedName.length > 10) trimmedName.slice(0 until 10) else trimmedName
+        if (trimmedName.length > inputLengthLimitation) return
 
-        intent { copy(name = slicedName, isNameValid = nameRegex.matches(slicedName)) }
+        intent { copy(name = trimmedName, isNameValid = nameRegex.matches(trimmedName)) }
     }
 
     fun updateGender(gender: Gender) {
@@ -78,7 +79,7 @@ class SignUpViewModel @Inject constructor(
                             name = uiState.value.name,
                             gender = uiState.value.gender.content,
                             birth = uiState.value.birth,
-                            termAgreement = uiState.value.agreedTerms
+                            termAgreement = uiState.value.agreedTerms,
                         ),
                     ).onSuccess {
                         postSideEffect(SignUpEffect.NavigateToReceived)

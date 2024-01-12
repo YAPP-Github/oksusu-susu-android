@@ -11,3 +11,5 @@ val alignList
         stringResource(id = R.string.word_align_high_amount),
         stringResource(id = R.string.word_align_low_amount),
     )
+
+const val inputLengthLimitation = 10
