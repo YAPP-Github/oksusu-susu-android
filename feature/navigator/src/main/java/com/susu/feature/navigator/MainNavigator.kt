@@ -14,8 +14,10 @@ import com.susu.feature.community.navigation.navigateCommunity
 import com.susu.feature.loginsignup.navigation.LoginSignupRoute
 import com.susu.feature.mypage.navigation.navigateMyPage
 import com.susu.feature.received.navigation.ReceivedRoute
+import com.susu.feature.received.navigation.navigateLedgerAdd
 import com.susu.feature.received.navigation.navigateLedgerDetail
 import com.susu.feature.received.navigation.navigateLedgerEdit
+import com.susu.feature.received.navigation.navigateLedgerFilter
 import com.susu.feature.received.navigation.navigateLedgerSearch
 import com.susu.feature.received.navigation.navigateReceived
 import com.susu.feature.sent.navigation.SentRoute
@@ -42,6 +44,7 @@ internal class MainNavigator(
         get() = when (currentDestination?.route) {
             in listOf(
                 ReceivedRoute.ledgerSearchRoute,
+                ReceivedRoute.ledgerFilterRoute,
                 SentRoute.sentEnvelopeRoute,
                 SentRoute.sentEnvelopeDetailRoute,
             ),
@@ -85,7 +88,11 @@ internal class MainNavigator(
     }
 
     fun navigateLogin() {
-        navController.navigate(LoginSignupRoute.Parent.Login.route)
+        navController.navigate(LoginSignupRoute.Parent.Login.route) {
+            popUpTo(id = navController.graph.id) {
+                inclusive = true
+            }
+        }
     }
 
     fun navigateSignup() {
@@ -106,6 +113,14 @@ internal class MainNavigator(
 
     fun navigateLedgerEdit() {
         navController.navigateLedgerEdit()
+    }
+
+    fun navigateLedgerFilter() {
+        navController.navigateLedgerFilter()
+    }
+
+    fun navigateLedgerAdd() {
+        navController.navigateLedgerAdd()
     }
 
     fun popBackStackIfNotHome() {

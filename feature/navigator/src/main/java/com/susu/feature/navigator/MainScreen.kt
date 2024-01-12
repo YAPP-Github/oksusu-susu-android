@@ -53,8 +53,11 @@ internal fun MainScreen(
                 startDestination = navigator.startDestination,
             ) {
                 loginSignupNavGraph(
-                    navController = navigator.navController,
                     navigateToReceived = navigator::navigateSent,
+                    navigateToLogin = navigator::navigateLogin,
+                    navigateToSignUp = navigator::navigateSignup,
+                    onShowToast = viewModel::onShowToast,
+                    padding = innerPadding,
                 )
 
                 sentNavGraph(
@@ -70,6 +73,8 @@ internal fun MainScreen(
                     navigateLedgerSearch = navigator::navigateLedgerSearch,
                     navigateLedgerDetail = navigator::navigateLedgerDetail,
                     navigateLedgerEdit = navigator::navigateLedgerEdit,
+                    navigateLedgerFilter = navigator::navigateLedgerFilter,
+                    navigateLedgerAdd = navigator::navigateLedgerAdd,
                 )
 
                 statisticsNavGraph(

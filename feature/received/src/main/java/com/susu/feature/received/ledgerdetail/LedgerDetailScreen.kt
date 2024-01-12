@@ -186,7 +186,7 @@ fun LedgerDetailScreen(
 
 @Preview
 @Composable
-fun ReceivedScreenPreview() {
+fun LedgerDetailScreenPreview() {
     SusuTheme {
         LedgerDetailScreen()
     }

@@ -15,4 +15,13 @@
     <string name="ledger_edit_screen_month">월</string>
     <string name="ledger_edit_screen_from_day">일 부터</string>
     <string name="ledger_edit_screen_until_day">일 까지</string>
+    <string name="ledger_filter_screen_from">부터</string>
+    <string name="ledger_filter_screen_until">까지</string>
+    <string name="ledger_filter_screen_event_category">경조사 카테고리</string>
+    <string name="input_name_screen_title">경조사명을 알려주세요</string>
+    <string name="input_name_screen_textfield_placeholder">경조사명을 입력해주세요</string>
+    <string name="select_category_screen_title">어떤 경조사였나요</string>
+    <string name="ledger_add_screen_date">%d년 %d월 %d일</string>
+    <string name="ledger_add_screen_until">까지</string>
+    <string name="ledger_add_screen_from">부터</string>
 </resources>
