@@ -170,7 +170,7 @@ fun LedgerEditScreen() {
 
 @Preview
 @Composable
-fun ReceivedScreenPreview() {
+fun LedgerEditScreenPreview() {
     SusuTheme {
         LedgerEditScreen()
     }

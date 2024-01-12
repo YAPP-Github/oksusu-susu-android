@@ -16,6 +16,7 @@ import com.susu.feature.mypage.navigation.navigateMyPage
 import com.susu.feature.received.navigation.ReceivedRoute
 import com.susu.feature.received.navigation.navigateLedgerDetail
 import com.susu.feature.received.navigation.navigateLedgerEdit
+import com.susu.feature.received.navigation.navigateLedgerFilter
 import com.susu.feature.received.navigation.navigateLedgerSearch
 import com.susu.feature.received.navigation.navigateReceived
 import com.susu.feature.sent.navigation.SentRoute
@@ -94,6 +95,10 @@ internal class MainNavigator(
 
     fun navigateLedgerEdit() {
         navController.navigateLedgerEdit()
+    }
+
+    fun navigateLedgerFilter() {
+        navController.navigateLedgerFilter()
     }
 
     fun popBackStackIfNotHome() {

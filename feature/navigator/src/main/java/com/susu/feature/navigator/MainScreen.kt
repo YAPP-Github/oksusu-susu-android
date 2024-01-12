@@ -70,6 +70,7 @@ internal fun MainScreen(
                     navigateLedgerSearch = navigator::navigateLedgerSearch,
                     navigateLedgerDetail = navigator::navigateLedgerDetail,
                     navigateLedgerEdit = navigator::navigateLedgerEdit,
+                    navigateLedgerFilter = navigator::navigateLedgerFilter,
                 )
 
                 statisticsNavGraph(
