@@ -92,9 +92,11 @@ fun SignUpRoute(
                 targetState = uiState.currentStep,
                 label = "SignUpContent",
                 transitionSpec = {
-                    val direction = if (targetState.ordinal > initialState.ordinal)
+                    val direction = if (targetState.ordinal > initialState.ordinal) {
                         AnimatedContentTransitionScope.SlideDirection.Left
-                    else AnimatedContentTransitionScope.SlideDirection.Right
+                    } else {
+                        AnimatedContentTransitionScope.SlideDirection.Right
+                    }
                     slideIntoContainer(
                         towards = direction,
                         animationSpec = tween(500),

@@ -13,7 +13,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.susu.core.designsystem.component.textfield.SusuUnderlineTextField
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.feature.loginsignup.R
-import com.susu.feature.loginsignup.signup.SignUpStep
 
 @Composable
 fun NameContent(
