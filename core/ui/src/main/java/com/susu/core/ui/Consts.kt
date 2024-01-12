@@ -13,3 +13,4 @@ val alignList
     )
 
 const val inputLengthLimitation = 10
+val nameRegex = Regex("[a-zA-Z가-힣]{0,10}")
