@@ -7,6 +7,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.susu.feature.received.ledgeradd.LedgerAddRoute
 import com.susu.feature.received.ledgerdetail.LedgerDetailRoute
 import com.susu.feature.received.ledgeredit.LedgerEditRoute
 import com.susu.feature.received.ledgerfilter.LedgerFilterRoute
@@ -33,6 +34,10 @@ fun NavController.navigateLedgerFilter() {
     navigate(ReceivedRoute.ledgerFilterRoute)
 }
 
+fun NavController.navigateLedgerAdd() {
+    navigate(ReceivedRoute.ledgerAddRoute)
+}
+
 fun NavGraphBuilder.receivedNavGraph(
     padding: PaddingValues,
     navigateLedgerDetail: (Int) -> Unit,
@@ -40,6 +45,7 @@ fun NavGraphBuilder.receivedNavGraph(
     navigateLedgerSearch: () -> Unit,
     navigateLedgerEdit: () -> Unit,
     navigateLedgerFilter: () -> Unit,
+    navigateLedgerAdd: () -> Unit,
 ) {
     composable(route = ReceivedRoute.route) {
         ReceivedRoute(
@@ -47,6 +53,7 @@ fun NavGraphBuilder.receivedNavGraph(
             navigateLedgerDetail = navigateLedgerDetail,
             navigateLedgerSearch = navigateLedgerSearch,
             navigateLedgerFilter = navigateLedgerFilter,
+            navigateLedgerAdd = navigateLedgerAdd,
         )
     }
 
@@ -80,6 +87,14 @@ fun NavGraphBuilder.receivedNavGraph(
     ) {
         LedgerFilterRoute(popBackStack = popBackStack)
     }
+
+    composable(
+        route = ReceivedRoute.ledgerAddRoute,
+    ) {
+        LedgerAddRoute(
+            popBackStack = popBackStack,
+        )
+    }
 }
 
 object ReceivedRoute {
@@ -89,5 +104,6 @@ object ReceivedRoute {
     const val ledgerSearchRoute = "ledger-search"
 
     const val ledgerEditRoute = "ledger-edit" // TODO 파라미터 넘기는 방식으로 수정해야함.
+    const val ledgerAddRoute = "ledger-add" // TODO 파라미터 넘기는 방식으로 수정해야함.
     const val ledgerFilterRoute = "ledger-filter" // TODO 파라미터 넘기는 방식으로 수정해야함.
 }
