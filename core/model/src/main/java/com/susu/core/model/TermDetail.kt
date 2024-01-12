@@ -4,5 +4,5 @@ data class TermDetail(
     val id: Int,
     val title: String,
     val isEssential: Boolean,
-    val description: String
+    val description: String,
 )
