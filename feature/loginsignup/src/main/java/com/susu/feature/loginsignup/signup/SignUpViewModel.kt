@@ -2,8 +2,8 @@ package com.susu.feature.loginsignup.signup
 
 import androidx.lifecycle.viewModelScope
 import com.susu.core.model.User
-import com.susu.core.ui.base.BaseViewModel
 import com.susu.core.ui.USER_NAME_MAX_LENGTH
+import com.susu.core.ui.base.BaseViewModel
 import com.susu.core.ui.nameRegex
 import com.susu.domain.usecase.loginsignup.SignUpUseCase
 import com.susu.feature.loginsignup.social.KakaoLoginHelper
