@@ -19,6 +19,7 @@ internal val Spacing = SusuSpacing(
     spacing_xxl = 32.dp,
     spacing_xxxl = 36.dp,
     spacing_xxxxl = 40.dp,
+    spacing_xxxxxxl = 48.dp,
 )
 
 @Suppress("ConstructorParameterNaming")
@@ -37,6 +38,7 @@ data class SusuSpacing(
     val spacing_xxl: Dp,
     val spacing_xxxl: Dp,
     val spacing_xxxxl: Dp,
+    val spacing_xxxxxxl: Dp,
 )
 
 val LocalSpacing = staticCompositionLocalOf {
@@ -54,5 +56,6 @@ val LocalSpacing = staticCompositionLocalOf {
         spacing_xxl = Dp.Unspecified,
         spacing_xxxl = Dp.Unspecified,
         spacing_xxxxl = Dp.Unspecified,
+        spacing_xxxxxxl = Dp.Unspecified,
     )
 }

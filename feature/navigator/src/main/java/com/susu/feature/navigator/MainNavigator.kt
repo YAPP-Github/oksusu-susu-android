@@ -17,6 +17,7 @@ import com.susu.feature.received.navigation.ReceivedRoute
 import com.susu.feature.received.navigation.navigateLedgerAdd
 import com.susu.feature.received.navigation.navigateLedgerDetail
 import com.susu.feature.received.navigation.navigateLedgerEdit
+import com.susu.feature.received.navigation.navigateLedgerFilter
 import com.susu.feature.received.navigation.navigateLedgerSearch
 import com.susu.feature.received.navigation.navigateReceived
 import com.susu.feature.sent.navigation.SentRoute
@@ -39,7 +40,7 @@ internal class MainNavigator(
     val statusBarColor: Color
         @Composable
         get() = when (currentDestination?.route) {
-            in listOf(ReceivedRoute.ledgerSearchRoute) -> SusuTheme.colorScheme.background10
+            in listOf(ReceivedRoute.ledgerSearchRoute, ReceivedRoute.ledgerFilterRoute) -> SusuTheme.colorScheme.background10
             else -> SusuTheme.colorScheme.background15
         }
 
@@ -95,6 +96,10 @@ internal class MainNavigator(
 
     fun navigateLedgerEdit() {
         navController.navigateLedgerEdit()
+    }
+
+    fun navigateLedgerFilter() {
+        navController.navigateLedgerFilter()
     }
 
     fun navigateLedgerAdd() {

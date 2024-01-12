@@ -47,6 +47,7 @@ fun ReceivedRoute(
     padding: PaddingValues,
     navigateLedgerDetail: (Int) -> Unit,
     navigateLedgerSearch: () -> Unit,
+    navigateLedgerFilter: () -> Unit,
     navigateLedgerAdd: () -> Unit,
 ) {
     ReceiveScreen(
@@ -55,6 +56,7 @@ fun ReceivedRoute(
         onClickLedgerAddCard = navigateLedgerAdd,
         onClickSearchIcon = navigateLedgerSearch, // TODO SideEffect로 변경
         onClickFloatingAddButton = navigateLedgerAdd,
+        onClickFilterButton = navigateLedgerFilter,
     )
 }
 

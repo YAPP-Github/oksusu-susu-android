@@ -59,7 +59,7 @@ fun SusuRecentSearchContainer(
                     .clip(CircleShape)
                     .susuClickable(onClick = onClickCloseIcon),
                 painter = painterResource(id = R.drawable.ic_recent_search_close),
-                contentDescription = stringResource(R.string.content_description_close_icon),
+                contentDescription = stringResource(com.susu.core.ui.R.string.content_description_close_icon),
             )
         }
     }
