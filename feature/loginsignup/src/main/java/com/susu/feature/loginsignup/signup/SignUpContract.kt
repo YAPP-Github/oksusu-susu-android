@@ -44,7 +44,7 @@ enum class SignUpStep(
     ADDITIONAL(
         appBarTitle = null,
         description = R.string.signup_additional_description,
-        bottomButtonText = com.susu.core.ui.R.string.word_next,
+        bottomButtonText = com.susu.core.ui.R.string.word_done,
     ),
 }
 

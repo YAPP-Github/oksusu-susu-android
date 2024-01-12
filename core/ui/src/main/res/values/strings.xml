@@ -22,4 +22,5 @@
     <string name="word_female">여성</string>
     <string name="word_birth">출생년도</string>
     <string name="word_next">다음</string>
+    <string name="word_done">완료</string>
 </resources>
