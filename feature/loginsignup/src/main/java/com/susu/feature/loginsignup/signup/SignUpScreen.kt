@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -40,6 +39,7 @@ import com.susu.core.designsystem.component.button.MediumButtonStyle
 import com.susu.core.designsystem.component.button.SusuFilledButton
 import com.susu.core.designsystem.component.screen.LoadingScreen
 import com.susu.core.designsystem.theme.SusuTheme
+import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.feature.loginsignup.signup.content.AdditionalContent
 import com.susu.feature.loginsignup.signup.content.NameContent
 import com.susu.feature.loginsignup.signup.content.TermsContent
@@ -63,13 +63,11 @@ fun SignUpRoute(
         viewModel.goPreviousStep()
     }
 
-    LaunchedEffect(key1 = viewModel.sideEffect) {
-        viewModel.sideEffect.collect { sideEffect ->
-            when (sideEffect) {
-                SignUpEffect.NavigateToLogin -> navigateToLogin()
-                SignUpEffect.NavigateToReceived -> navigateToReceived()
-                is SignUpEffect.ShowToast -> Toast.makeText(context, sideEffect.msg, Toast.LENGTH_SHORT).show()
-            }
+    viewModel.sideEffect.collectWithLifecycle { sideEffect ->
+        when (sideEffect) {
+            SignUpEffect.NavigateToLogin -> navigateToLogin()
+            SignUpEffect.NavigateToReceived -> navigateToReceived()
+            is SignUpEffect.ShowToast -> Toast.makeText(context, sideEffect.msg, Toast.LENGTH_SHORT).show()
         }
     }
 
