@@ -6,9 +6,11 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.togetherWith
 
 fun <S> AnimatedContentTransitionScope<S>.susuDefaultAnimatedContentTransitionSpec(leftDirectionCondition: Boolean): ContentTransform {
-    val direction = if (leftDirectionCondition)
+    val direction = if (leftDirectionCondition) {
         AnimatedContentTransitionScope.SlideDirection.Left
-    else AnimatedContentTransitionScope.SlideDirection.Right
+    } else {
+        AnimatedContentTransitionScope.SlideDirection.Right
+    }
     return slideIntoContainer(
         towards = direction,
         animationSpec = tween(500),

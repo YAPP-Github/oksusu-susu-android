@@ -24,9 +24,9 @@ import com.susu.core.designsystem.component.button.SusuFilledButton
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.ui.R
 import com.susu.core.ui.extension.susuDefaultAnimatedContentTransitionSpec
+import com.susu.feature.received.ledgeradd.content.CategoryContent
 import com.susu.feature.received.ledgeradd.content.DateContent
 import com.susu.feature.received.ledgeradd.content.NameContent
-import com.susu.feature.received.ledgeradd.content.CategoryContent
 
 enum class LedgerAddStep {
     CATEGORY,
