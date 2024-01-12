@@ -49,7 +49,6 @@ fun SusuProgressAppBar(
 fun SusuProgressAppBarPreview() {
     val entireStep = 6
     var currentStep by remember { mutableStateOf(1) }
-
     SusuTheme {
         Column(
             verticalArrangement = Arrangement.spacedBy(20.dp),
