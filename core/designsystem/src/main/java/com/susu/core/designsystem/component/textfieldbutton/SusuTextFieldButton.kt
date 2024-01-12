@@ -333,7 +333,7 @@ private fun InnerButtons(
                 .clip(CircleShape)
                 .size(closeIconSize)
                 .susuClickable(onClick = onClickCloseIcon),
-            painter = painterResource(id = R.drawable.ic_close),
+            painter = painterResource(id = com.susu.core.ui.R.drawable.ic_close),
             contentDescription = "",
         )
     }

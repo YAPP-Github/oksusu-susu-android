@@ -8,7 +8,6 @@
     <string name="money_unit">원</string>
     <string name="money_unit_format">%s원</string>
     <string name="content_description_search_icon">검색 아이콘</string>
-    <string name="content_description_close_icon">닫기 아이콘</string>
     <string name="content_description_back_icon">뒤로가기 아이콘</string>
     <string name="content_description_logo_image">로고 이미지</string>
     <string name="content_description_notification_icon">알림 아이콘</string>

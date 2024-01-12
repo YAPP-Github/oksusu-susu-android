@@ -39,7 +39,7 @@ internal class MainNavigator(
     val statusBarColor: Color
         @Composable
         get() = when (currentDestination?.route) {
-            in listOf(ReceivedRoute.ledgerSearchRoute) -> SusuTheme.colorScheme.background10
+            in listOf(ReceivedRoute.ledgerSearchRoute, ReceivedRoute.ledgerFilterRoute) -> SusuTheme.colorScheme.background10
             else -> SusuTheme.colorScheme.background15
         }
 
