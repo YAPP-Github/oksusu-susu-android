@@ -22,6 +22,8 @@ import com.susu.feature.received.navigation.navigateLedgerSearch
 import com.susu.feature.received.navigation.navigateReceived
 import com.susu.feature.sent.navigation.SentRoute
 import com.susu.feature.sent.navigation.navigateSent
+import com.susu.feature.sent.navigation.navigateSentEnvelope
+import com.susu.feature.sent.navigation.navigateSentEnvelopeDetail
 import com.susu.feature.statistics.navigation.navigateStatistics
 
 internal class MainNavigator(
@@ -40,7 +42,14 @@ internal class MainNavigator(
     val statusBarColor: Color
         @Composable
         get() = when (currentDestination?.route) {
-            in listOf(ReceivedRoute.ledgerSearchRoute, ReceivedRoute.ledgerFilterRoute) -> SusuTheme.colorScheme.background10
+            in listOf(
+                ReceivedRoute.ledgerSearchRoute,
+                ReceivedRoute.ledgerFilterRoute,
+                SentRoute.sentEnvelopeRoute,
+                SentRoute.sentEnvelopeDetailRoute,
+            ),
+            -> SusuTheme.colorScheme.background10
+
             else -> SusuTheme.colorScheme.background15
         }
 
@@ -68,6 +77,14 @@ internal class MainNavigator(
                 inclusive = true
             }
         }
+    }
+
+    fun navigateSentEnvelope() {
+        navController.navigateSentEnvelope()
+    }
+
+    fun navigateSentEnvelopeDetail() {
+        navController.navigateSentEnvelopeDetail()
     }
 
     fun navigateLogin() {
