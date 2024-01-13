@@ -17,10 +17,13 @@ import com.susu.feature.received.navigation.ReceivedRoute
 import com.susu.feature.received.navigation.navigateLedgerAdd
 import com.susu.feature.received.navigation.navigateLedgerDetail
 import com.susu.feature.received.navigation.navigateLedgerEdit
+import com.susu.feature.received.navigation.navigateLedgerFilter
 import com.susu.feature.received.navigation.navigateLedgerSearch
 import com.susu.feature.received.navigation.navigateReceived
 import com.susu.feature.sent.navigation.SentRoute
 import com.susu.feature.sent.navigation.navigateSent
+import com.susu.feature.sent.navigation.navigateSentEnvelope
+import com.susu.feature.sent.navigation.navigateSentEnvelopeDetail
 import com.susu.feature.statistics.navigation.navigateStatistics
 
 internal class MainNavigator(
@@ -39,7 +42,14 @@ internal class MainNavigator(
     val statusBarColor: Color
         @Composable
         get() = when (currentDestination?.route) {
-            in listOf(ReceivedRoute.ledgerSearchRoute) -> SusuTheme.colorScheme.background10
+            in listOf(
+                ReceivedRoute.ledgerSearchRoute,
+                ReceivedRoute.ledgerFilterRoute,
+                SentRoute.sentEnvelopeRoute,
+                SentRoute.sentEnvelopeDetailRoute,
+            ),
+            -> SusuTheme.colorScheme.background10
+
             else -> SusuTheme.colorScheme.background15
         }
 
@@ -69,6 +79,14 @@ internal class MainNavigator(
         }
     }
 
+    fun navigateSentEnvelope() {
+        navController.navigateSentEnvelope()
+    }
+
+    fun navigateSentEnvelopeDetail() {
+        navController.navigateSentEnvelopeDetail()
+    }
+
     fun navigateLogin() {
         navController.navigate(LoginSignupRoute.Parent.Login.route) {
             popUpTo(id = navController.graph.id) {
@@ -95,6 +113,10 @@ internal class MainNavigator(
 
     fun navigateLedgerEdit() {
         navController.navigateLedgerEdit()
+    }
+
+    fun navigateLedgerFilter() {
+        navController.navigateLedgerFilter()
     }
 
     fun navigateLedgerAdd() {

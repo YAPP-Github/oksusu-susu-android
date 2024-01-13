@@ -1,4 +1,4 @@
-package com.susu.feature.sent
+package com.susu.feature.sent.component
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
@@ -43,10 +44,12 @@ import com.susu.core.designsystem.theme.Gray90
 import com.susu.core.designsystem.theme.Orange20
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.ui.extension.susuClickable
+import com.susu.feature.sent.R
 
 @Composable
-fun EnvelopeCard(
+fun SentCard(
     modifier: Modifier = Modifier,
+    onClick: () -> Unit = {},
 ) {
     // TODO: 수정 필요
     var expanded by remember { mutableStateOf(false) }
@@ -61,8 +64,9 @@ fun EnvelopeCard(
     ) {
         Image(
             painter = painterResource(id = R.drawable.ic_envelope),
-            contentDescription = stringResource(R.string.envelope_card),
+            contentDescription = null,
             contentScale = ContentScale.Crop,
+            modifier = modifier.fillMaxWidth(),
         )
         Column(
             modifier = modifier
@@ -85,9 +89,10 @@ fun EnvelopeCard(
                 Spacer(modifier = modifier.weight(1f))
                 Icon(
                     painter = painterResource(id = R.drawable.ic_arrow_down),
-                    contentDescription = stringResource(R.string.envelope_show_detail),
+                    contentDescription = stringResource(R.string.content_description_envelope_show_history),
                     tint = Gray100,
                     modifier = modifier
+                        .clip(CircleShape)
                         .susuClickable {
                             expanded = !expanded
                         }
@@ -102,12 +107,12 @@ fun EnvelopeCard(
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 Text(
-                    text = stringResource(R.string.envelope_sent),
+                    text = stringResource(R.string.sent_screen_envelope_sent),
                     style = SusuTheme.typography.title_xxxs,
                     color = Gray90,
                 )
                 Text(
-                    text = stringResource(R.string.envelope_received),
+                    text = stringResource(R.string.sent_screen_envelope_received),
                     style = SusuTheme.typography.title_xxxs,
                     color = Gray60,
                 )
@@ -145,6 +150,9 @@ fun EnvelopeCard(
         enter = fadeIn() + expandVertically(),
         exit = fadeOut() + shrinkVertically(),
     ) {
-        EnvelopeHistoryCard(historyCount = historyCount)
+        SentHistoryCard(
+            historyCount = historyCount,
+            onClick = onClick,
+        )
     }
 }
