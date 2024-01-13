@@ -1,6 +1,7 @@
 package com.susu.feature.navigator
 
 import androidx.lifecycle.viewModelScope
+import com.susu.core.ui.DialogToken
 import com.susu.core.ui.SnackbarToken
 import com.susu.core.ui.base.BaseViewModel
 import com.susu.domain.usecase.loginsignup.CheckCanRegisterUseCase
@@ -30,6 +31,14 @@ class MainViewModel @Inject constructor(
             delay(SHOW_TOAST_LENGTH)
             intent { copy(snackbarVisible = false) }
         }
+    }
+
+    fun onShowDialog(dialogToken: DialogToken) {
+        intent { copy(dialogToken = dialogToken, dialogVisible = true) }
+    }
+
+    fun dismissDialog() {
+        intent { copy(dialogVisible = false) }
     }
 
     fun navigate(hasKakaoLoginHistory: Boolean, kakaoAccessToken: String?) = viewModelScope.launch {
