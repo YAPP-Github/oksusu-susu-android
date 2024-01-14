@@ -13,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.susu.core.designsystem.theme.Gray100
@@ -55,5 +56,17 @@ fun DetailItem(
                 modifier = modifier.weight(1f),
             )
         }
+    }
+}
+
+@Preview(showBackground = true, backgroundColor = 0xffffff)
+@Composable
+fun DetailItem() {
+    SusuTheme {
+        DetailItem(
+            categoryText = "경조사",
+            contentText = "결혼식",
+            isEmptyContent = false,
+        )
     }
 }

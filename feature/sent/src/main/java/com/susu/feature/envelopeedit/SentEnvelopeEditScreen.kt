@@ -272,7 +272,7 @@ fun SentEnvelopeEditScreen(
                         modifier = modifier.fillMaxWidth(),
                     )
                 }
-                Spacer(modifier = modifier.size(320.dp))
+                Spacer(modifier = modifier.size(240.dp))
             }
 
             SusuFilledButton(
