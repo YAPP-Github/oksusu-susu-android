@@ -40,6 +40,7 @@ import com.susu.core.designsystem.component.textfield.SusuBasicTextField
 import com.susu.core.designsystem.theme.Gray100
 import com.susu.core.designsystem.theme.Gray30
 import com.susu.core.designsystem.theme.Gray40
+import com.susu.core.designsystem.theme.Gray70
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.feature.envelopeedit.component.EditDetailItem
 import com.susu.feature.sent.R
@@ -135,7 +136,7 @@ fun SentEnvelopeEditScreen(
                         onTextChange = { name = it },
                         placeholder = stringResource(R.string.sent_envelope_edit_category_name_placeholder),
                         placeholderColor = Gray30,
-                        textStyle = SusuTheme.typography.title_m,
+                        textStyle = SusuTheme.typography.title_s,
                         modifier = modifier.fillMaxWidth(),
                     )
                 }
@@ -181,7 +182,7 @@ fun SentEnvelopeEditScreen(
                 ) {
                     Text(
                         text = "2023년 11월 25일",
-                        style = SusuTheme.typography.title_m,
+                        style = SusuTheme.typography.title_s,
                         color = Gray100,
                         modifier = modifier
                             .fillMaxWidth()
@@ -211,7 +212,7 @@ fun SentEnvelopeEditScreen(
                 }
                 EditDetailItem(
                     categoryText = stringResource(R.string.sent_envelope_edit_category_present),
-                    categoryTextColor = if (present.isNotEmpty()) Gray100 else Gray40,
+                    categoryTextColor = if (present.isNotEmpty()) Gray70 else Gray40,
                     categoryTextAlign = Alignment.CenterVertically,
                 ) {
                     SusuBasicTextField(
@@ -219,13 +220,13 @@ fun SentEnvelopeEditScreen(
                         onTextChange = { present = it },
                         placeholder = stringResource(R.string.sent_envelope_edit_category_present_placeholder),
                         placeholderColor = Gray30,
-                        textStyle = SusuTheme.typography.title_m,
+                        textStyle = SusuTheme.typography.title_s,
                         modifier = modifier.fillMaxWidth(),
                     )
                 }
                 EditDetailItem(
                     categoryText = stringResource(R.string.sent_envelope_edit_category_phone),
-                    categoryTextColor = if (phone.isNotEmpty()) Gray100 else Gray40,
+                    categoryTextColor = if (phone.isNotEmpty()) Gray70 else Gray40,
                     categoryTextAlign = Alignment.CenterVertically,
                 ) {
                     SusuBasicTextField(
@@ -233,14 +234,14 @@ fun SentEnvelopeEditScreen(
                         onTextChange = { phone = it },
                         placeholder = stringResource(R.string.sent_envelope_edit_category_phone_placeholder),
                         placeholderColor = Gray30,
-                        textStyle = SusuTheme.typography.title_m,
+                        textStyle = SusuTheme.typography.title_s,
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                         modifier = modifier.fillMaxWidth(),
                     )
                 }
                 EditDetailItem(
                     categoryText = stringResource(R.string.sent_envelope_edit_category_memo),
-                    categoryTextColor = if (memo.isNotEmpty()) Gray100 else Gray40,
+                    categoryTextColor = if (memo.isNotEmpty()) Gray70 else Gray40,
                     categoryTextAlign = Alignment.Top,
                 ) {
                     SusuBasicTextField(
@@ -248,12 +249,12 @@ fun SentEnvelopeEditScreen(
                         onTextChange = { memo = it },
                         placeholder = stringResource(R.string.sent_envelope_edit_category_memo_placeholder),
                         placeholderColor = Gray30,
-                        textStyle = SusuTheme.typography.title_m,
+                        textStyle = SusuTheme.typography.title_s,
                         maxLines = 2,
                         modifier = modifier.fillMaxWidth(),
                     )
                 }
-                Spacer(modifier = modifier.size(400.dp))
+                Spacer(modifier = modifier.size(320.dp))
             }
         }
         SusuFilledButton(
