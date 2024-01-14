@@ -1,5 +1,6 @@
 package com.susu.data.remote.di
 
+import com.susu.data.remote.api.LedgerService
 import com.susu.data.remote.api.SignUpService
 import com.susu.data.remote.api.TermService
 import com.susu.data.remote.api.TokenService
@@ -38,5 +39,11 @@ object ApiServiceModule {
     @Provides
     fun providesTermService(retrofit: Retrofit): TermService {
         return retrofit.create(TermService::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun providesLedgerService(retrofit: Retrofit): LedgerService {
+        return retrofit.create(LedgerService::class.java)
     }
 }

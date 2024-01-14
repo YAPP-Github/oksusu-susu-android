@@ -2,12 +2,14 @@ package com.susu.feature.received.search
 
 import androidx.lifecycle.viewModelScope
 import com.susu.core.ui.base.BaseViewModel
+import com.susu.domain.usecase.ledger.GetLedgerListUseCase
 import com.susu.domain.usecase.ledgerrecentsearch.DeleteLedgerRecentSearchUseCase
 import com.susu.domain.usecase.ledgerrecentsearch.GetLedgerRecentSearchListUseCase
 import com.susu.domain.usecase.ledgerrecentsearch.UpsertLedgerRecentSearchUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -15,9 +17,20 @@ class LedgerSearchViewModel @Inject constructor(
     private val upsertLedgerRecentSearchUseCase: UpsertLedgerRecentSearchUseCase,
     private val getLedgerRecentSearchListUseCase: GetLedgerRecentSearchListUseCase,
     private val deleteLedgerRecentSearchUseCase: DeleteLedgerRecentSearchUseCase,
+    private val getLedgerListUseCase: GetLedgerListUseCase,
 ) : BaseViewModel<LedgerSearchState, LedgerSearchSideEffect>(
     LedgerSearchState(),
 ) {
+    init {
+        viewModelScope.launch {
+            getLedgerListUseCase(
+                GetLedgerListUseCase.Param(),
+            ).onSuccess {
+                Timber.d("$it")
+            }
+        }
+    }
+
     fun getLedgerRecentSearchList() = viewModelScope.launch {
         getLedgerRecentSearchListUseCase()
             .onSuccess(::updateRecentSearchList)
