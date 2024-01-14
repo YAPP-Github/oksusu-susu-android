@@ -7,6 +7,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.susu.feature.envelope.SentEnvelopeRoute
 import com.susu.feature.envelopedetail.SentEnvelopeDetailRoute
+import com.susu.feature.envelopeedit.SentEnvelopeEditRoute
 import com.susu.feature.sent.SentRoute
 
 fun NavController.navigateSent(navOptions: NavOptions) {
@@ -21,11 +22,16 @@ fun NavController.navigateSentEnvelopeDetail() {
     navigate(SentRoute.sentEnvelopeDetailRoute)
 }
 
+fun NavController.navigateSentEnvelopeEdit() {
+    navigate(SentRoute.sentEnvelopeEditRoute)
+}
+
 fun NavGraphBuilder.sentNavGraph(
     padding: PaddingValues,
     popBackStack: () -> Unit,
     navigateSentEnvelope: () -> Unit,
     navigateSentEnvelopeDetail: () -> Unit,
+    navigateSentEnvelopeEdit: () -> Unit,
 ) {
     composable(route = SentRoute.route) {
         SentRoute(
@@ -44,6 +50,13 @@ fun NavGraphBuilder.sentNavGraph(
     composable(route = SentRoute.sentEnvelopeDetailRoute) {
         SentEnvelopeDetailRoute(
             popBackStack = popBackStack,
+            navigateSentEnvelopeEdit = navigateSentEnvelopeEdit,
+        )
+    }
+
+    composable(route = SentRoute.sentEnvelopeEditRoute) {
+        SentEnvelopeEditRoute(
+            popBackStack = popBackStack,
         )
     }
 }
@@ -52,4 +65,5 @@ object SentRoute {
     const val route = "sent"
     const val sentEnvelopeRoute = "sent-envelope"
     const val sentEnvelopeDetailRoute = "sent-envelope-detail"
+    const val sentEnvelopeEditRoute = "sent-envelope-edit"
 }

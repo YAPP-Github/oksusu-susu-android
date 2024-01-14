@@ -28,6 +28,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.susu.core.designsystem.component.appbar.SusuDefaultAppBar
 import com.susu.core.designsystem.component.appbar.icon.BackIcon
 import com.susu.core.designsystem.component.bottomsheet.datepicker.SusuDatePickerBottomSheet
@@ -42,8 +43,25 @@ import com.susu.core.designsystem.theme.Gray30
 import com.susu.core.designsystem.theme.Gray40
 import com.susu.core.designsystem.theme.Gray70
 import com.susu.core.designsystem.theme.SusuTheme
+import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.feature.envelopeedit.component.EditDetailItem
 import com.susu.feature.sent.R
+
+@Composable
+fun SentEnvelopeEditRoute(
+    viewModel: SentEnvelopeEditViewModel = hiltViewModel(),
+    popBackStack: () -> Unit,
+) {
+    viewModel.sideEffect.collectWithLifecycle { sideEffect ->
+        when (sideEffect) {
+            SentEnvelopeEditSideEffect.PopBackStack -> popBackStack()
+        }
+    }
+
+    SentEnvelopeEditScreen(
+        onClickBackIcon = viewModel::popBackStack,
+    )
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
