@@ -95,7 +95,7 @@ fun SentEnvelopeEditScreen(
             Column(
                 modifier = modifier
                     .verticalScroll(rememberScrollState())
-                    .fillMaxSize()
+                    .weight(1f)
                     .padding(
                         start = SusuTheme.spacing.spacing_m,
                         end = SusuTheme.spacing.spacing_m,
@@ -274,18 +274,18 @@ fun SentEnvelopeEditScreen(
                 }
                 Spacer(modifier = modifier.size(320.dp))
             }
+
+            SusuFilledButton(
+                modifier = modifier
+                    .fillMaxWidth()
+                    .imePadding(),
+                color = FilledButtonColor.Black,
+                style = MediumButtonStyle.height60,
+                shape = RectangleShape,
+                text = stringResource(R.string.sent_envelope_edit_save),
+                onClick = onClickSave,
+            )
         }
-        SusuFilledButton(
-            modifier = modifier
-                .fillMaxWidth()
-                .align(Alignment.BottomCenter)
-                .imePadding(),
-            color = FilledButtonColor.Black,
-            style = MediumButtonStyle.height60,
-            shape = RectangleShape,
-            text = stringResource(R.string.sent_envelope_edit_save),
-            onClick = onClickSave,
-        )
 
         // DatePickerBottomSheet
         if (isSheetOpen) {
