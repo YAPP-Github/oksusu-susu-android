@@ -24,6 +24,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -41,6 +42,7 @@ import com.susu.core.designsystem.theme.Gray30
 import com.susu.core.designsystem.theme.Gray40
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.feature.envelopeedit.component.EditDetailItem
+import com.susu.feature.sent.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -89,34 +91,34 @@ fun SentEnvelopeEditScreen(
                 )
                 Spacer(modifier = modifier.size(SusuTheme.spacing.spacing_m))
                 EditDetailItem(
-                    categoryText = "경조사",
+                    categoryText = stringResource(R.string.sent_envelope_edit_category_event),
                     categoryTextAlign = Alignment.Top,
                 ) {
                     SusuFilledButton(
                         color = FilledButtonColor.Orange,
                         style = SmallButtonStyle.height32,
-                        text = "결혼식",
+                        text = stringResource(R.string.sent_envelope_edit_category_event_wedding),
                         isActive = true,
                         onClick = {},
                     )
                     SusuFilledButton(
                         color = FilledButtonColor.Orange,
                         style = SmallButtonStyle.height32,
-                        text = "돌잔치",
+                        text = stringResource(R.string.sent_envelope_edit_category_event_first_birth),
                         isActive = false,
                         onClick = {},
                     )
                     SusuFilledButton(
                         color = FilledButtonColor.Orange,
                         style = SmallButtonStyle.height32,
-                        text = "장례식",
+                        text = stringResource(R.string.sent_envelope_edit_category_edit_funeral),
                         isActive = false,
                         onClick = {},
                     )
                     SusuFilledButton(
                         color = FilledButtonColor.Orange,
                         style = SmallButtonStyle.height32,
-                        text = "생일 기념일",
+                        text = stringResource(R.string.sent_envelope_edit_category_edit_birthday),
                         isActive = false,
                         onClick = {},
                     )
@@ -125,47 +127,47 @@ fun SentEnvelopeEditScreen(
                     )
                 }
                 EditDetailItem(
-                    categoryText = "이름",
+                    categoryText = stringResource(R.string.sent_envelope_edit_category_name),
                     categoryTextAlign = Alignment.CenterVertically,
                 ) {
                     SusuBasicTextField(
                         text = name,
                         onTextChange = { name = it },
-                        placeholder = "김철수",
+                        placeholder = stringResource(R.string.sent_envelope_edit_category_name_placeholder),
                         placeholderColor = Gray30,
                         textStyle = SusuTheme.typography.title_m,
                         modifier = modifier.fillMaxWidth(),
                     )
                 }
                 EditDetailItem(
-                    categoryText = "나와의 관계",
+                    categoryText = stringResource(R.string.sent_envelope_edit_category_relationship),
                     categoryTextAlign = Alignment.Top,
                 ) {
                     SusuFilledButton(
                         color = FilledButtonColor.Orange,
                         style = SmallButtonStyle.height32,
-                        text = "친구",
+                        text = stringResource(R.string.sent_envelope_edit_category_relationship_friend),
                         isActive = true,
                         onClick = {},
                     )
                     SusuFilledButton(
                         color = FilledButtonColor.Orange,
                         style = SmallButtonStyle.height32,
-                        text = "가족",
+                        text = stringResource(R.string.sent_envelope_edit_category_relationship_family),
                         isActive = false,
                         onClick = {},
                     )
                     SusuFilledButton(
                         color = FilledButtonColor.Orange,
                         style = SmallButtonStyle.height32,
-                        text = "친척",
+                        text = stringResource(R.string.sent_envelope_edit_category_relationship_relatives),
                         isActive = false,
                         onClick = {},
                     )
                     SusuFilledButton(
                         color = FilledButtonColor.Orange,
                         style = SmallButtonStyle.height32,
-                        text = "동료",
+                        text = stringResource(R.string.sent_envelope_edit_category_relationship_colleague),
                         isActive = false,
                         onClick = {},
                     )
@@ -174,7 +176,7 @@ fun SentEnvelopeEditScreen(
                     )
                 }
                 EditDetailItem(
-                    categoryText = "날짜",
+                    categoryText = stringResource(R.string.sent_envelope_edit_category_date),
                     categoryTextAlign = Alignment.CenterVertically,
                 ) {
                     Text(
@@ -187,13 +189,13 @@ fun SentEnvelopeEditScreen(
                     )
                 }
                 EditDetailItem(
-                    categoryText = "방문 여부",
+                    categoryText = stringResource(R.string.sent_envelope_edit_category_visited),
                     categoryTextAlign = Alignment.Top,
                 ) {
                     SusuFilledButton(
                         color = FilledButtonColor.Orange,
                         style = SmallButtonStyle.height32,
-                        text = "예",
+                        text = stringResource(R.string.sent_envelope_edit_category_visited_yes),
                         isActive = true,
                         onClick = {},
                         modifier = modifier.weight(1f),
@@ -201,35 +203,35 @@ fun SentEnvelopeEditScreen(
                     SusuFilledButton(
                         color = FilledButtonColor.Orange,
                         style = SmallButtonStyle.height32,
-                        text = "아니요",
+                        text = stringResource(R.string.sent_envelope_edit_category_visited_no),
                         isActive = false,
                         onClick = {},
                         modifier = modifier.weight(1f),
                     )
                 }
                 EditDetailItem(
-                    categoryText = "선물",
+                    categoryText = stringResource(R.string.sent_envelope_edit_category_present),
                     categoryTextColor = if (present.isNotEmpty()) Gray100 else Gray40,
                     categoryTextAlign = Alignment.CenterVertically,
                 ) {
                     SusuBasicTextField(
                         text = present,
                         onTextChange = { present = it },
-                        placeholder = "한끼 식사",
+                        placeholder = stringResource(R.string.sent_envelope_edit_category_present_placeholder),
                         placeholderColor = Gray30,
                         textStyle = SusuTheme.typography.title_m,
                         modifier = modifier.fillMaxWidth(),
                     )
                 }
                 EditDetailItem(
-                    categoryText = "연락처",
+                    categoryText = stringResource(R.string.sent_envelope_edit_category_phone),
                     categoryTextColor = if (phone.isNotEmpty()) Gray100 else Gray40,
                     categoryTextAlign = Alignment.CenterVertically,
                 ) {
                     SusuBasicTextField(
                         text = phone,
                         onTextChange = { phone = it },
-                        placeholder = "01012345678",
+                        placeholder = stringResource(R.string.sent_envelope_edit_category_phone_placeholder),
                         placeholderColor = Gray30,
                         textStyle = SusuTheme.typography.title_m,
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
@@ -237,17 +239,16 @@ fun SentEnvelopeEditScreen(
                     )
                 }
                 EditDetailItem(
-                    categoryText = "메모",
+                    categoryText = stringResource(R.string.sent_envelope_edit_category_memo),
                     categoryTextColor = if (memo.isNotEmpty()) Gray100 else Gray40,
                     categoryTextAlign = Alignment.Top,
                 ) {
                     SusuBasicTextField(
                         text = memo,
                         onTextChange = { memo = it },
-                        placeholder = "입력해주세요",
+                        placeholder = stringResource(R.string.sent_envelope_edit_category_memo_placeholder),
                         placeholderColor = Gray30,
                         textStyle = SusuTheme.typography.title_m,
-                        minLines = 2,
                         maxLines = 2,
                         modifier = modifier.fillMaxWidth(),
                     )
@@ -263,7 +264,7 @@ fun SentEnvelopeEditScreen(
             color = FilledButtonColor.Black,
             style = MediumButtonStyle.height60,
             shape = RectangleShape,
-            text = "저장",
+            text = stringResource(R.string.sent_envelope_edit_save),
             onClick = {},
         )
 
