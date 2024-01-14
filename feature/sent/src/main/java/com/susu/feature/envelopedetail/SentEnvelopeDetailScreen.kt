@@ -27,6 +27,7 @@ import com.susu.feature.envelopedetail.component.DetailItem
 fun SentEnvelopeDetailRoute(
     viewModel: SentEnvelopeDetailViewModel = hiltViewModel(),
     popBackStack: () -> Unit,
+    navigateSentEnvelopeEdit: () -> Unit,
 ) {
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
@@ -36,6 +37,7 @@ fun SentEnvelopeDetailRoute(
 
     SentEnvelopeDetailScreen(
         onClickBackIcon = viewModel::popBackStack,
+        onClickEdit = navigateSentEnvelopeEdit,
     )
 }
 
