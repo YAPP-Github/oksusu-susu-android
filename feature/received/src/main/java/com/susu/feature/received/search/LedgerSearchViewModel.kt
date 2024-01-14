@@ -21,16 +21,6 @@ class LedgerSearchViewModel @Inject constructor(
 ) : BaseViewModel<LedgerSearchState, LedgerSearchSideEffect>(
     LedgerSearchState(),
 ) {
-    init {
-        viewModelScope.launch {
-            getLedgerListUseCase(
-                GetLedgerListUseCase.Param(),
-            ).onSuccess {
-                Timber.d("$it")
-            }
-        }
-    }
-
     fun getLedgerRecentSearchList() = viewModelScope.launch {
         getLedgerRecentSearchListUseCase()
             .onSuccess(::updateRecentSearchList)
@@ -51,7 +41,12 @@ class LedgerSearchViewModel @Inject constructor(
 
     fun updateSearch(search: String) = intent { copy(searchKeyword = search) }
 
+    fun getLedgerList(search: String) = viewModelScope.launch {
+        getLedgerListUseCase(GetLedgerListUseCase.Param(title = search))
+            .onSuccess { intent { copy(ledgerList = it.toPersistentList()) } }
+    }
+
     fun popBackStack() = postSideEffect(LedgerSearchSideEffect.PopBackStack)
 
-    private fun updateRecentSearchList(searchList: List<String>) = intent { copy(searchKeywordList = searchList.toPersistentList()) }
+    private fun updateRecentSearchList(searchList: List<String>) = intent { copy(recentSearchKeywordList = searchList.toPersistentList()) }
 }

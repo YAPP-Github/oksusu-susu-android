@@ -1,5 +1,6 @@
 package com.susu.feature.received.search
 
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -7,10 +8,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -26,10 +27,14 @@ import com.susu.core.designsystem.component.searchbar.SusuSearchBar
 import com.susu.core.designsystem.theme.Gray60
 import com.susu.core.designsystem.theme.Gray80
 import com.susu.core.designsystem.theme.SusuTheme
+import com.susu.core.model.Ledger
 import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.feature.received.R
 import kotlinx.collections.immutable.PersistentList
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.debounce
 
+@OptIn(FlowPreview::class)
 @Composable
 fun LedgerSearchRoute(
     viewModel: LedgerSearchViewModel = hiltViewModel(),
@@ -46,16 +51,19 @@ fun LedgerSearchRoute(
         viewModel.getLedgerRecentSearchList()
     }
 
+    LaunchedEffect(key1 = uiState.searchKeyword) {
+        snapshotFlow { uiState.searchKeyword }
+            .debounce(100L)
+            .collect(viewModel::getLedgerList)
+    }
+
     LedgerSearchScreen(
         uiState = uiState,
         onClickBackIcon = viewModel::popBackStack,
         onValueChangeSearchBar = viewModel::updateSearch,
+        onClickSearchClearIcon = { viewModel.updateSearch("") },
         onClickRecentSearchContainer = viewModel::upsertLedgerRecentSearch,
         onClickRecentSearchContainerCloseIcon = viewModel::deleteLedgerRecentSearch,
-        onSearchDone = {
-            viewModel.upsertLedgerRecentSearch(it)
-            viewModel.updateSearch("")
-        },
     )
 }
 
@@ -63,10 +71,10 @@ fun LedgerSearchRoute(
 fun LedgerSearchScreen(
     uiState: LedgerSearchState = LedgerSearchState(),
     onClickBackIcon: () -> Unit = {},
+    onClickSearchClearIcon: () -> Unit = {},
     onValueChangeSearchBar: (String) -> Unit = {},
     onClickRecentSearchContainer: (String) -> Unit = {},
     onClickRecentSearchContainerCloseIcon: (String) -> Unit = {},
-    onSearchDone: (String) -> Unit = {}, // TODO REMOVE -> 테스트 용
 ) {
     Box(
         modifier = Modifier
@@ -90,23 +98,23 @@ fun LedgerSearchScreen(
                 SusuSearchBar(
                     value = uiState.searchKeyword,
                     onValueChange = onValueChangeSearchBar,
+                    onClickClearIcon = onClickSearchClearIcon,
                     placeholder = stringResource(R.string.ledger_search_screen_search_placeholder),
-                    keyboardActions = KeyboardActions(
-                        onDone = {
-                            // TODO REMOVE -> 테스트 용
-                            onSearchDone(uiState.searchKeyword)
-                        },
-                    ),
                 )
 
-                if (uiState.searchKeywordList.isEmpty()) {
-                    RecentSearchEmptyScreen()
-                } else {
-                    RecentSearchScreen(
-                        recentSearchList = uiState.searchKeywordList,
-                        onClickItem = onClickRecentSearchContainer,
-                        onClickCloseIcon = onClickRecentSearchContainerCloseIcon,
-                    )
+                Crossfade(targetState = uiState.searchKeyword.isEmpty(), label = "SearchColumn") { showRecentSearch ->
+                    if (showRecentSearch) {
+                        RecentSearchColumn(
+                            recentSearchList = uiState.recentSearchKeywordList,
+                            onClickItem = onClickRecentSearchContainer,
+                            onClickCloseIcon = onClickRecentSearchContainerCloseIcon,
+                        )
+                    } else {
+                        SearchResultColumn(
+                            ledgerList = uiState.ledgerList,
+                            onClickItem = {},
+                        )
+                    }
                 }
             }
         }
@@ -114,19 +122,21 @@ fun LedgerSearchScreen(
 }
 
 @Composable
-private fun RecentSearchEmptyScreen() {
+private fun ResultEmptyColumn(
+    title: String,
+) {
     Column(
         modifier = Modifier.fillMaxWidth().padding(top = 136.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxxxs),
     ) {
         Text(
-            text = stringResource(R.string.ledger_search_screen_empty_recent_search_title),
+            text = title,
             style = SusuTheme.typography.title_xs,
             color = Gray80,
         )
         Text(
-            text = stringResource(R.string.ledger_search_screen_empty_recent_search_description),
+            text = stringResource(R.string.ledger_search_screen_empty_search_description),
             style = SusuTheme.typography.text_xxs,
             textAlign = TextAlign.Center,
             color = Gray80,
@@ -135,26 +145,62 @@ private fun RecentSearchEmptyScreen() {
 }
 
 @Composable
-private fun RecentSearchScreen(
+private fun RecentSearchColumn(
     recentSearchList: PersistentList<String>,
     onClickItem: (String) -> Unit,
     onClickCloseIcon: (String) -> Unit,
 ) {
-    Column(
-        modifier = Modifier.padding(top = SusuTheme.spacing.spacing_xxl),
-        verticalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_m),
-    ) {
-        Text(
-            text = stringResource(com.susu.core.ui.R.string.word_recent_search),
-            style = SusuTheme.typography.title_xxs,
-            color = Gray60,
+    if (recentSearchList.isEmpty()) {
+        ResultEmptyColumn(
+            title = stringResource(R.string.ledger_search_screen_empty_recent_search_title),
         )
-        recentSearchList.forEach { name ->
-            SusuRecentSearchContainer(
-                text = name,
-                onClick = { onClickItem(name) },
-                onClickCloseIcon = { onClickCloseIcon(name) },
+    } else {
+        Column(
+            modifier = Modifier.padding(top = SusuTheme.spacing.spacing_xxl),
+            verticalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_m),
+        ) {
+            Text(
+                text = stringResource(com.susu.core.ui.R.string.word_recent_search),
+                style = SusuTheme.typography.title_xxs,
+                color = Gray60,
             )
+            recentSearchList.forEach { name ->
+                SusuRecentSearchContainer(
+                    text = name,
+                    onClick = { onClickItem(name) },
+                    onClickCloseIcon = { onClickCloseIcon(name) },
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun SearchResultColumn(
+    ledgerList: PersistentList<Ledger>,
+    onClickItem: (Int) -> Unit,
+) {
+    if (ledgerList.isEmpty()) {
+        ResultEmptyColumn(
+            title = stringResource(R.string.ledger_search_screen_empty_search_result_title),
+        )
+    } else {
+        Column(
+            modifier = Modifier.padding(top = SusuTheme.spacing.spacing_xxl),
+            verticalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_m),
+        ) {
+            Text(
+                text = stringResource(com.susu.core.ui.R.string.word_search_result),
+                style = SusuTheme.typography.title_xxs,
+                color = Gray60,
+            )
+            ledgerList.forEach { ledger ->
+                SusuRecentSearchContainer(
+                    typeIconId = R.drawable.ic_ledger,
+                    text = ledger.title,
+                    onClick = { onClickItem(ledger.id) },
+                )
+            }
         }
     }
 }
