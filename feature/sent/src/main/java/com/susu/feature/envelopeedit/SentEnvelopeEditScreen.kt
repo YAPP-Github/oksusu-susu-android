@@ -1,7 +1,6 @@
 package com.susu.feature.envelopeedit
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -37,12 +36,14 @@ import com.susu.core.designsystem.component.button.MediumButtonStyle
 import com.susu.core.designsystem.component.button.SmallButtonStyle
 import com.susu.core.designsystem.component.button.SusuFilledButton
 import com.susu.core.designsystem.component.textfield.SusuBasicTextField
+import com.susu.core.designsystem.component.textfield.SusuPriceTextField
 import com.susu.core.designsystem.theme.Gray100
 import com.susu.core.designsystem.theme.Gray30
 import com.susu.core.designsystem.theme.Gray40
 import com.susu.core.designsystem.theme.Gray70
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.ui.extension.collectWithLifecycle
+import com.susu.core.ui.extension.susuClickable
 import com.susu.feature.envelopeedit.component.EditDetailItem
 import com.susu.feature.sent.R
 
@@ -102,8 +103,8 @@ fun SentEnvelopeEditScreen(
                         top = SusuTheme.spacing.spacing_xl,
                     ),
             ) {
-                SusuBasicTextField(
-                    text = "${money}원",
+                SusuPriceTextField(
+                    text = money.toString(),
                     onTextChange = { money = it.toInt() },
                     textStyle = SusuTheme.typography.title_xxl,
                     modifier = modifier.fillMaxWidth(),
@@ -204,7 +205,10 @@ fun SentEnvelopeEditScreen(
                         color = Gray100,
                         modifier = modifier
                             .fillMaxWidth()
-                            .clickable { isSheetOpen = true },
+                            .susuClickable(
+                                rippleEnabled = false,
+                                onClick = { isSheetOpen = true },
+                            ),
                     )
                 }
                 EditDetailItem(
