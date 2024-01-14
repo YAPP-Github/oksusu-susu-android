@@ -57,6 +57,7 @@ fun NavGraphBuilder.sentNavGraph(
     composable(route = SentRoute.sentEnvelopeEditRoute) {
         SentEnvelopeEditRoute(
             popBackStack = popBackStack,
+            navigateSentEnvelopeDetail = navigateSentEnvelopeDetail,
         )
     }
 }
