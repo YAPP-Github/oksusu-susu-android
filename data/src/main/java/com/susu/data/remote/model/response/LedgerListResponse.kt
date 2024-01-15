@@ -14,7 +14,7 @@ data class LedgerListResponse(
     val size: Int,
     val totalPage: Int,
     val totalCount: Int,
-    val sort: SortInfo
+    val sort: SortInfo,
 )
 
 @Serializable
@@ -23,7 +23,7 @@ data class Ledger(
     val info: LedgerInfo,
     val category: CategoryInfo,
     val totalAmounts: Int,
-    val totalCounts: Int
+    val totalCounts: Int,
 )
 
 @Serializable
@@ -32,7 +32,7 @@ data class LedgerInfo(
     val title: String,
     val description: String,
     val startAt: LocalDateTime,
-    val endAt: LocalDateTime
+    val endAt: LocalDateTime,
 )
 
 @Serializable
@@ -47,7 +47,7 @@ data class CategoryInfo(
 data class SortInfo(
     val empty: Boolean,
     val unsorted: Boolean,
-    val sorted: Boolean
+    val sorted: Boolean,
 )
 
 internal fun LedgerListResponse.toModel() = this.ledgerList.map { ledger ->

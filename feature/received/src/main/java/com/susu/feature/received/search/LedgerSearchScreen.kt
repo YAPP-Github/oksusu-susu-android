@@ -72,7 +72,7 @@ fun LedgerSearchRoute(
         onClickSearchResultContainer = {
             viewModel.upsertLedgerRecentSearch(it.title)
             viewModel.navigateLedgerDetail(it.id)
-        }
+        },
     )
 }
 
