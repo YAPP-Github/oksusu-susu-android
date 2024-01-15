@@ -1,12 +1,16 @@
 package com.susu.core.designsystem.component.bottomsheet.datepicker
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SheetState
+import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
@@ -14,11 +18,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.susu.core.designsystem.R
 import com.susu.core.designsystem.component.bottomsheet.SusuBottomSheet
+import com.susu.core.designsystem.theme.Gray100
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.ui.util.currentDate
 import kotlinx.collections.immutable.toImmutableList
@@ -107,6 +113,150 @@ fun SusuDatePickerBottomSheet(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
+fun SusuLimitDatePickerBottomSheet(
+    criteriaYear: Int,
+    criteriaMonth: Int,
+    criteriaDay: Int,
+    afterDate: Boolean,
+    sheetState: SheetState = rememberModalBottomSheetState(),
+    yearRange: IntRange = 1930..2030,
+    maximumContainerHeight: Dp,
+    itemHeight: Dp = 48.dp,
+    numberOfDisplayedItems: Int = 5,
+    cornerRadius: Dp = 24.dp,
+    onDismissRequest: (Int, Int, Int) -> Unit = { _, _, _ -> },
+    onItemSelected: (Int, Int, Int) -> Unit = { _, _, _ -> },
+) {
+    var selectedYear by remember { mutableIntStateOf(criteriaYear) }
+    var selectedMonth by remember { mutableIntStateOf(criteriaMonth) }
+    var selectedDay by remember { mutableIntStateOf(criteriaDay) }
+
+    val yearList = if (afterDate) {
+        (criteriaYear..yearRange.last).map { stringResource(R.string.word_year_format, it) }.toImmutableList()
+    } else {
+        (yearRange.first..criteriaYear).map { stringResource(R.string.word_year_format, it) }.toImmutableList()
+    }
+    val monthRange by remember(selectedYear) {
+        derivedStateOf {
+            if (selectedYear == criteriaYear) {
+                if (afterDate) {
+                    criteriaMonth..12
+                } else {
+                    1..criteriaMonth
+                }
+            } else {
+                1..12
+            }
+        }
+    }
+    val dayRange by remember(selectedYear, selectedMonth) {
+        derivedStateOf {
+            if (selectedYear == criteriaYear && selectedMonth == criteriaMonth) {
+                if (afterDate) {
+                    if (selectedDay < criteriaDay) {
+                        selectedDay = criteriaDay
+                    }
+                    criteriaDay..getLastDayInMonth(selectedYear, selectedMonth)
+                } else {
+                    if (selectedDay > criteriaDay) {
+                        selectedDay = 1
+                    }
+                    1..criteriaDay
+                }
+            } else {
+                val lastDay = getLastDayInMonth(selectedYear, selectedMonth)
+                if (selectedDay > lastDay) {
+                    selectedDay = 1
+                }
+                1..lastDay
+            }
+        }
+    }
+
+    SusuBottomSheet(
+        sheetState = sheetState,
+        containerHeight = minOf(maximumContainerHeight, itemHeight * numberOfDisplayedItems + 32.dp),
+        onDismissRequest = { onDismissRequest(selectedYear, selectedMonth, selectedDay) },
+        cornerRadius = cornerRadius,
+    ) {
+        Row {
+            InfiniteColumn(
+                modifier = Modifier.width(100.dp),
+                items = yearList,
+                initialItem = stringResource(R.string.word_year_format, criteriaYear),
+                itemHeight = itemHeight,
+                numberOfDisplayedItems = numberOfDisplayedItems,
+                onItemSelected = { _, item ->
+                    selectedYear = item.dropLast(1).toIntOrNull() ?: criteriaYear
+                    onItemSelected(selectedYear, selectedMonth, selectedDay)
+                },
+            )
+            if (monthRange.count() > 1) {
+                InfiniteColumn(
+                    modifier = Modifier.width(100.dp),
+                    items = monthRange.map { stringResource(id = R.string.word_month_format, it) },
+                    initialItem = stringResource(R.string.word_month_format, criteriaMonth),
+                    itemHeight = itemHeight,
+                    numberOfDisplayedItems = numberOfDisplayedItems,
+                    onItemSelected = { _, item ->
+                        selectedMonth = item.dropLast(1).toIntOrNull() ?: criteriaMonth
+                        onItemSelected(selectedYear, selectedMonth, selectedDay)
+                    },
+                )
+            } else {
+                selectedMonth = criteriaMonth
+                Box(
+                    modifier = Modifier
+                        .width(100.dp)
+                        .fillMaxHeight(),
+                ) {
+                    Text(
+                        modifier = Modifier
+                            .width(100.dp)
+                            .align(Alignment.Center),
+                        text = stringResource(id = R.string.word_month_format, selectedMonth),
+                        style = SusuTheme.typography.title_xxs,
+                        color = Gray100,
+                        textAlign = TextAlign.Center,
+                    )
+                }
+            }
+            if (dayRange.count() > 1) {
+                InfiniteColumn(
+                    modifier = Modifier.width(100.dp),
+                    items = dayRange.map { stringResource(R.string.word_day_format, it) },
+                    initialItem = stringResource(R.string.word_day_format, selectedDay),
+                    itemHeight = itemHeight,
+                    numberOfDisplayedItems = numberOfDisplayedItems,
+                    onItemSelected = { _, item ->
+                        selectedDay = item.dropLast(1).toIntOrNull() ?: 1
+                        onItemSelected(selectedYear, selectedMonth, selectedDay)
+                    },
+                )
+            } else {
+                selectedDay = criteriaDay
+                Box(
+                    modifier = Modifier
+                        .width(100.dp)
+                        .fillMaxHeight(),
+                ) {
+                    Text(
+                        modifier = Modifier
+                            .width(100.dp)
+                            .align(Alignment.Center),
+                        text = stringResource(id = R.string.word_day_format, selectedDay),
+                        style = SusuTheme.typography.title_xxs,
+                        color = Gray100,
+                        textAlign = TextAlign.Center,
+                    )
+                }
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
 fun SusuYearPickerBottomSheet(
     sheetState: SheetState = rememberModalBottomSheetState(),
     yearRange: IntRange = 1930..2030,
@@ -157,9 +307,13 @@ private fun getLastDayInMonth(year: Int, month: Int): Int {
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable
-fun SusuDatePickerBottomSheetPreview() {
+fun SusuLimitDatePickerBottomSheetPreview() {
     SusuTheme {
-        SusuDatePickerBottomSheet(
+        SusuLimitDatePickerBottomSheet(
+            criteriaYear = 2024,
+            criteriaMonth = 1,
+            criteriaDay = 16,
+            afterDate = false,
             maximumContainerHeight = 346.dp,
             onDismissRequest = { _, _, _ -> },
         )
