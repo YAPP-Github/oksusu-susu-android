@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.susu.core.ui.DialogToken
 import com.susu.core.ui.SnackbarToken
 import com.susu.core.ui.base.BaseViewModel
+import com.susu.domain.usecase.categoryconfig.GetCategoryConfigUseCase
 import com.susu.domain.usecase.loginsignup.CheckCanRegisterUseCase
 import com.susu.domain.usecase.loginsignup.LoginUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -11,12 +12,14 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val loginUseCase: LoginUseCase,
     private val checkCanRegisterUseCase: CheckCanRegisterUseCase,
+    private val getCategoryConfigUseCase: GetCategoryConfigUseCase,
 ) : BaseViewModel<MainState, MainSideEffect>(MainState()) {
     companion object {
         private const val NAVIGATE_DELAY = 500L
@@ -39,6 +42,12 @@ class MainViewModel @Inject constructor(
 
     fun dismissDialog() {
         intent { copy(dialogVisible = false) }
+    }
+
+    fun initCategoryConfig() = viewModelScope.launch {
+        getCategoryConfigUseCase()
+            .onFailure {  }
+        intent { copy(isInitializing = false) }
     }
 
     fun navigate(hasKakaoLoginHistory: Boolean, kakaoAccessToken: String?) = viewModelScope.launch {

@@ -1,5 +1,6 @@
 package com.susu.data.remote.di
 
+import com.susu.data.remote.api.CategoryService
 import com.susu.data.remote.api.LedgerService
 import com.susu.data.remote.api.SignUpService
 import com.susu.data.remote.api.TermService
@@ -45,5 +46,11 @@ object ApiServiceModule {
     @Provides
     fun providesLedgerService(retrofit: Retrofit): LedgerService {
         return retrofit.create(LedgerService::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun providesCategoryService(retrofit: Retrofit): CategoryService {
+        return retrofit.create(CategoryService::class.java)
     }
 }
