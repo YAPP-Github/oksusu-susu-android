@@ -155,10 +155,14 @@ fun SusuLimitDatePickerBottomSheet(
         mutableIntStateOf(
             when {
                 initialDay == null -> criteriaDay
-                (afterDate && initialYear != null && initialYear == criteriaYear && initialMonth != null &&
-                    initialMonth == criteriaMonth && initialDay < criteriaDay) ||
-                    (!afterDate && initialYear != null && initialYear == criteriaYear && initialMonth != null &&
-                        initialMonth == criteriaMonth && initialDay > criteriaDay)
+                (
+                    afterDate && initialYear != null && initialYear == criteriaYear && initialMonth != null &&
+                        initialMonth == criteriaMonth && initialDay < criteriaDay
+                    ) ||
+                    (
+                        !afterDate && initialYear != null && initialYear == criteriaYear && initialMonth != null &&
+                            initialMonth == criteriaMonth && initialDay > criteriaDay
+                        )
                 -> criteriaDay
                 else -> initialDay
             },
