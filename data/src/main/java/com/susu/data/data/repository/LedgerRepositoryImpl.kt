@@ -2,6 +2,7 @@ package com.susu.data.data.repository
 
 import com.susu.core.model.Ledger
 import com.susu.data.remote.api.LedgerService
+import com.susu.data.remote.model.request.toData
 import com.susu.data.remote.model.response.toModel
 import com.susu.domain.repository.LedgerRepository
 import kotlinx.datetime.toKotlinLocalDateTime
@@ -18,14 +19,18 @@ class LedgerRepositoryImpl @Inject constructor(
         toEndAt: LocalDateTime,
         page: Int?,
         sort: String?,
-    ): List<Ledger> {
-        return ledgerService.getLedgerList(
-            title = title,
-            categoryId = categoryId,
-            fromStartAt = fromStartAt.toKotlinLocalDateTime(),
-            toEndAt = toEndAt.toKotlinLocalDateTime(),
-            page = page,
-            sort = sort,
-        ).getOrThrow().toModel()
-    }
+    ): List<Ledger> = ledgerService.getLedgerList(
+        title = title,
+        categoryId = categoryId,
+        fromStartAt = fromStartAt.toKotlinLocalDateTime(),
+        toEndAt = toEndAt.toKotlinLocalDateTime(),
+        page = page,
+        sort = sort,
+    ).getOrThrow().toModel()
+
+
+    override suspend fun editLedger(ledger: Ledger): Ledger = ledgerService.editLedger(
+        id = ledger.id,
+        ledgerRequest = ledger.toData(),
+    ).getOrThrow().toModel()
 }

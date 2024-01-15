@@ -24,6 +24,11 @@ data class LedgerEditState(
     val showEndDateBottomSheet: Boolean = false,
 ) : UiState {
     val isSelectedCustomCategory = selectedCategoryId == categoryConfigList.last().id
+    val saveButtonEnabled = when {
+        name.isEmpty() -> false
+        isSelectedCustomCategory && (customCategory.isEmpty() || isCustomCategoryChipSaved.not()) -> false
+        else -> true
+    }
 }
 
 sealed interface LedgerEditSideEffect : SideEffect {

@@ -91,6 +91,7 @@ fun LedgerEditRoute(
         onEndDateItemSelected = viewModel::updateEndYear,
         onClickEndDateText = viewModel::showEndDateBottomSheet,
         onDismissEndDateBottomSheet = viewModel::hideEndDateBottomSheet,
+        onClickSaveButton = viewModel::editLedger,
     )
 }
 
@@ -113,6 +114,7 @@ fun LedgerEditScreen(
     onEndDateItemSelected: (Int, Int, Int) -> Unit = { _, _, _ -> },
     onClickEndDateText: () -> Unit = {},
     onDismissEndDateBottomSheet: () -> Unit = {},
+    onClickSaveButton: () -> Unit = {},
 ) {
     Box(
         modifier = Modifier
@@ -236,9 +238,12 @@ fun LedgerEditScreen(
                 .fillMaxWidth()
                 .imePadding(),
             shape = RectangleShape,
+            isActive = uiState.saveButtonEnabled,
+            isClickable = uiState.saveButtonEnabled,
             color = FilledButtonColor.Black,
             style = MediumButtonStyle.height60,
             text = stringResource(id = com.susu.core.ui.R.string.word_save),
+            onClick = onClickSaveButton,
         )
 
         if (uiState.showStartDateBottomSheet) {

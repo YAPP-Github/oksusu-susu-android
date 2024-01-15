@@ -12,4 +12,8 @@ interface LedgerRepository {
         page: Int?,
         sort: String?,
     ): List<Ledger>
+
+    suspend fun editLedger(
+        ledger: Ledger,
+    ): Ledger
 }

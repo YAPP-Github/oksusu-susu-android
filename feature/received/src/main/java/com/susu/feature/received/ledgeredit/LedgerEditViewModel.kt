@@ -2,26 +2,56 @@ package com.susu.feature.received.ledgeredit
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.susu.core.model.Category
 import com.susu.core.model.Ledger
 import com.susu.core.ui.base.BaseViewModel
 import com.susu.core.ui.extension.decodeFromUri
 import com.susu.domain.usecase.categoryconfig.GetCategoryConfigUseCase
+import com.susu.domain.usecase.ledger.EditLedgerUseCase
 import com.susu.feature.received.navigation.ReceivedRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
 import kotlinx.datetime.toJavaLocalDateTime
+import kotlinx.datetime.toKotlinLocalDateTime
 import kotlinx.serialization.json.Json
+import timber.log.Timber
+import java.time.LocalDateTime
 import javax.inject.Inject
 
 @HiltViewModel
 class LedgerEditViewModel @Inject constructor(
     private val getCategoryConfigUseCase: GetCategoryConfigUseCase,
+    private val editLedgerUseCase: EditLedgerUseCase,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<LedgerEditState, LedgerEditSideEffect>(
     LedgerEditState(),
 ) {
     private val argument = savedStateHandle.get<String>(ReceivedRoute.LEDGER_ARGUMENT_NAME)!!
+    private var ledgerId = 0
+    private val toEditLedger
+        get() = with(currentState) {
+            Ledger(
+                id = ledgerId,
+                title = name,
+                startAt = LocalDateTime.of(startYear, startMonth, startDay, 0, 0).toKotlinLocalDateTime(),
+                endAt = LocalDateTime.of(startYear, startMonth, startDay, 0, 0).toKotlinLocalDateTime(),
+                category = Category(
+                    id = selectedCategoryId,
+                    customCategory = customCategory.ifEmpty { null },
+                ),
+            )
+        }
+
+    fun editLedger() = viewModelScope.launch {
+        editLedgerUseCase(toEditLedger)
+            .onSuccess {
+                Timber.tag("테스트").d("$it")
+            }
+            .onFailure {
+                Timber.tag("테스트").d("$it")
+            }
+    }
 
     fun initData() = viewModelScope.launch {
         getCategoryConfigUseCase()
@@ -36,6 +66,7 @@ class LedgerEditViewModel @Inject constructor(
         val ledger = Json.decodeFromUri<Ledger>(argument)
         val (startDate, endDate) = (ledger.startAt.toJavaLocalDateTime() to ledger.endAt.toJavaLocalDateTime())
         intent {
+            ledgerId = ledger.id
             copy(
                 name = ledger.title,
                 selectedCategoryId = ledger.category.id,
@@ -86,7 +117,7 @@ class LedgerEditViewModel @Inject constructor(
             )
         }
         updateCustomCategory("")
-        if(currentState.isSelectedCustomCategory) {
+        if (currentState.isSelectedCustomCategory) {
             updateCategory(currentState.categoryConfigList.first().id)
         }
     }
