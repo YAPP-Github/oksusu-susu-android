@@ -1,0 +1,30 @@
+package com.susu.feature.received.ledgeredit
+
+import com.susu.core.model.Category
+import com.susu.core.model.Ledger
+import com.susu.core.ui.base.SideEffect
+import com.susu.core.ui.base.UiState
+import kotlinx.collections.immutable.PersistentList
+import kotlinx.collections.immutable.persistentListOf
+
+data class LedgerEditState(
+    val name: String = "",
+    val selectedCategory: Category = Category(),
+    val startYear: Int = 0,
+    val startMonth: Int = 0,
+    val startDay: Int = 0,
+    val endYear: Int = 0,
+    val endMonth: Int = 0,
+    val endDay: Int = 0,
+    val categoryConfigList: PersistentList<Category> = persistentListOf(Category()),
+    val showCustomCategoryButton: Boolean = false,
+    val isCustomCategoryChipSaved: Boolean = false,
+    val showStartDateBottomSheet: Boolean = false,
+    val showEndDateBottomSheet: Boolean = false,
+) : UiState
+
+sealed interface LedgerEditSideEffect : SideEffect {
+    data object popBackStack : LedgerEditSideEffect
+    data class popBackStackWithLedger(val ledger: Ledger) : LedgerEditSideEffect
+    data object FocusCustomCategory : LedgerEditSideEffect
+}

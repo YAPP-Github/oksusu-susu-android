@@ -28,6 +28,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.painterResource
@@ -185,7 +187,8 @@ fun SusuTextFieldWrapContentButton(
     onClickClearIcon: () -> Unit = {},
     onClickCloseIcon: () -> Unit = {},
     onClickFilledButton: () -> Unit = {},
-    onClickButton: (isFocused: Boolean) -> Unit = {},
+    onClickButton: () -> Unit = {},
+    focusRequester: FocusRequester = remember { FocusRequester() },
 ) {
     val (backgroundColor, textColor) = with(color) {
         when {
@@ -200,7 +203,7 @@ fun SusuTextFieldWrapContentButton(
             modifier = modifier
                 .clip(shape)
                 .background(backgroundColor)
-                .susuClickable { onClickButton(isFocused) }
+                .susuClickable (onClick = onClickButton)
                 .padding(paddingValues),
             horizontalArrangement = Arrangement.spacedBy(iconSpacing),
             verticalAlignment = Alignment.CenterVertically,
@@ -217,7 +220,8 @@ fun SusuTextFieldWrapContentButton(
                          * see -> https://stackoverflow.com/questions/67719981/resizeable-basictextfield-in-jetpack-compose
                          */
                         .width(IntrinsicSize.Min)
-                        .susuClickable(rippleEnabled = false, runIf = isFocused.not(), onClick = { onClickButton(isFocused) }),
+                        .susuClickable(rippleEnabled = false, runIf = isFocused.not(), onClick = onClickButton)
+                        .focusRequester(focusRequester),
                     value = text,
                     enabled = isSaved.not() && isFocused,
                     onValueChange = onTextChange,

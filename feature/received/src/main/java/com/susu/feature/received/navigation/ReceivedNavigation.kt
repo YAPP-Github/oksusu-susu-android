@@ -29,8 +29,8 @@ fun NavController.navigateLedgerSearch() {
     navigate(ReceivedRoute.ledgerSearchRoute)
 }
 
-fun NavController.navigateLedgerEdit() {
-    navigate(ReceivedRoute.ledgerEditRoute)
+fun NavController.navigateLedgerEdit(ledger: Ledger) {
+    navigate(ReceivedRoute.ledgerEditRoute(Json.encodeToUri(ledger)))
 }
 
 fun NavController.navigateLedgerFilter() {
@@ -46,7 +46,7 @@ fun NavGraphBuilder.receivedNavGraph(
     navigateLedgerDetail: (Ledger) -> Unit,
     popBackStack: () -> Unit,
     navigateLedgerSearch: () -> Unit,
-    navigateLedgerEdit: () -> Unit,
+    navigateLedgerEdit: (Ledger) -> Unit,
     navigateLedgerFilter: () -> Unit,
     navigateLedgerAdd: () -> Unit,
 ) {
@@ -61,9 +61,9 @@ fun NavGraphBuilder.receivedNavGraph(
     }
 
     composable(
-        route = ReceivedRoute.ledgerDetailRoute("{${ReceivedRoute.LEDGER_DETAIL_ARGUMENT_NAME}}"),
+        route = ReceivedRoute.ledgerDetailRoute("{${ReceivedRoute.LEDGER_ARGUMENT_NAME}}"),
         arguments = listOf(
-            navArgument(ReceivedRoute.LEDGER_DETAIL_ARGUMENT_NAME) {
+            navArgument(ReceivedRoute.LEDGER_ARGUMENT_NAME) {
                 type = NavType.StringType
             },
         ),
@@ -80,7 +80,7 @@ fun NavGraphBuilder.receivedNavGraph(
         )
     }
     composable(
-        route = ReceivedRoute.ledgerEditRoute,
+        route = ReceivedRoute.ledgerEditRoute("{${ReceivedRoute.LEDGER_ARGUMENT_NAME}}"),
     ) {
         LedgerEditRoute(popBackStack = popBackStack)
     }
@@ -102,11 +102,11 @@ fun NavGraphBuilder.receivedNavGraph(
 
 object ReceivedRoute {
     const val route = "received"
-    const val LEDGER_DETAIL_ARGUMENT_NAME = "ledger"
+    const val LEDGER_ARGUMENT_NAME = "ledger"
     fun ledgerDetailRoute(ledger: String) = "ledger-detail/$ledger"
+    fun ledgerEditRoute(ledger: String) = "ledger-edit/$ledger"
     const val ledgerSearchRoute = "ledger-search"
 
-    const val ledgerEditRoute = "ledger-edit" // TODO 파라미터 넘기는 방식으로 수정해야함.
     const val ledgerAddRoute = "ledger-add" // TODO 파라미터 넘기는 방식으로 수정해야함.
     const val ledgerFilterRoute = "ledger-filter" // TODO 파라미터 넘기는 방식으로 수정해야함.
 }

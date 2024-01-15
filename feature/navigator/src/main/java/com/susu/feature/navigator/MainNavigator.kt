@@ -118,8 +118,8 @@ internal class MainNavigator(
         navController.navigateLedgerSearch()
     }
 
-    fun navigateLedgerEdit() {
-        navController.navigateLedgerEdit()
+    fun navigateLedgerEdit(ledger: Ledger) {
+        navController.navigateLedgerEdit(ledger)
     }
 
     fun navigateLedgerFilter() {

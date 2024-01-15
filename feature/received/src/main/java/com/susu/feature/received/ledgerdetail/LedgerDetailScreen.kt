@@ -39,6 +39,7 @@ import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.model.Ledger
 import com.susu.core.ui.R
 import com.susu.core.ui.alignList
+import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.core.ui.extension.encodeToUri
 import com.susu.feature.received.ledgerdetail.component.LedgerDetailEnvelopeContainer
 import com.susu.feature.received.ledgerdetail.component.LedgerDetailOverviewColumn
@@ -47,9 +48,14 @@ import kotlinx.serialization.json.Json
 @Composable
 fun LedgerDetailRoute(
     viewModel: LedgerDetailViewModel = hiltViewModel(),
-    navigateLedgerEdit: () -> Unit,
+    navigateLedgerEdit: (Ledger) -> Unit,
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
+    viewModel.sideEffect.collectWithLifecycle { sideEffect ->
+        when (sideEffect) {
+            is LedgerDetailSideEffect.NavigateLedgerEdit -> navigateLedgerEdit(sideEffect.ledger)
+        }
+    }
 
     LaunchedEffect(key1 = Unit) {
         viewModel.initData(
@@ -59,7 +65,7 @@ fun LedgerDetailRoute(
 
     LedgerDetailScreen(
         uiState = uiState,
-        onClickEdit = navigateLedgerEdit,
+        onClickEdit = viewModel::navigateLedgerEdit,
     )
 }
 

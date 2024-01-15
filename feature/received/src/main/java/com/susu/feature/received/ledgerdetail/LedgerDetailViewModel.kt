@@ -17,7 +17,8 @@ class LedgerDetailViewModel @Inject constructor(
 ) : BaseViewModel<LedgerDetailState, LedgerDetailSideEffect>(
     LedgerDetailState(),
 ) {
-    private val argument = savedStateHandle.get<String>(ReceivedRoute.LEDGER_DETAIL_ARGUMENT_NAME)!!
+    private val argument = savedStateHandle.get<String>(ReceivedRoute.LEDGER_ARGUMENT_NAME)!!
+    private var ledger = Ledger()
 
     fun initData(backStackEntryLedger: String) {
         Json.decodeFromUri<Ledger>(backStackEntryLedger)
@@ -29,8 +30,9 @@ class LedgerDetailViewModel @Inject constructor(
         updateLedgerInfo(Json.decodeFromUri<Ledger>(argument))
     }
 
-    private fun updateLedgerInfo(backStackEntryLedger: Ledger) = intent {
-        backStackEntryLedger.let { ledger ->
+    private fun updateLedgerInfo(ledger: Ledger) = intent {
+        this@LedgerDetailViewModel.ledger = ledger
+        ledger.let { ledger ->
             copy(
                 name = ledger.title,
                 money = ledger.totalAmounts,
@@ -42,4 +44,5 @@ class LedgerDetailViewModel @Inject constructor(
         }
     }
 
+    fun navigateLedgerEdit() = postSideEffect(LedgerDetailSideEffect.NavigateLedgerEdit(ledger))
 }

@@ -1,7 +1,9 @@
 package com.susu.feature.received.ledgerdetail
 
+import com.susu.core.model.Ledger
 import com.susu.core.ui.base.SideEffect
 import com.susu.core.ui.base.UiState
+import com.susu.feature.received.search.LedgerSearchSideEffect
 
 data class LedgerDetailState(
     val name: String = "",
@@ -12,4 +14,6 @@ data class LedgerDetailState(
     val endDate: String = "",
 ) : UiState
 
-sealed interface LedgerDetailSideEffect : SideEffect
+sealed interface LedgerDetailSideEffect : SideEffect {
+    data class NavigateLedgerEdit(val ledger: Ledger) : LedgerDetailSideEffect
+}
