@@ -117,6 +117,9 @@ fun SusuLimitDatePickerBottomSheet(
     criteriaYear: Int,
     criteriaMonth: Int,
     criteriaDay: Int,
+    initialYear: Int? = null,
+    initialMonth: Int? = null,
+    initialDay: Int? = null,
     afterDate: Boolean,
     sheetState: SheetState = rememberModalBottomSheetState(),
     yearRange: IntRange = 1930..2030,
@@ -127,9 +130,40 @@ fun SusuLimitDatePickerBottomSheet(
     onDismissRequest: (Int, Int, Int) -> Unit = { _, _, _ -> },
     onItemSelected: (Int, Int, Int) -> Unit = { _, _, _ -> },
 ) {
-    var selectedYear by remember { mutableIntStateOf(criteriaYear) }
-    var selectedMonth by remember { mutableIntStateOf(criteriaMonth) }
-    var selectedDay by remember { mutableIntStateOf(criteriaDay) }
+    var selectedYear by remember {
+        mutableIntStateOf(
+            when {
+                initialYear == null -> criteriaYear
+                (afterDate && initialYear < criteriaYear) || (!afterDate && initialYear > criteriaYear) -> criteriaYear
+                else -> initialYear
+            },
+        )
+    }
+    var selectedMonth by remember {
+        mutableIntStateOf(
+            when {
+                initialMonth == null -> criteriaMonth
+                (afterDate && initialYear != null && initialYear == criteriaYear && initialMonth < criteriaMonth) ||
+                    (!afterDate && initialYear != null && initialYear == criteriaYear && initialMonth > criteriaMonth)
+                -> criteriaMonth
+
+                else -> initialMonth
+            },
+        )
+    }
+    var selectedDay by remember {
+        mutableIntStateOf(
+            when {
+                initialDay == null -> criteriaDay
+                (afterDate && initialYear != null && initialYear == criteriaYear && initialMonth != null &&
+                    initialMonth == criteriaMonth && initialDay < criteriaDay) ||
+                    (!afterDate && initialYear != null && initialYear == criteriaYear && initialMonth != null &&
+                        initialMonth == criteriaMonth && initialDay > criteriaDay)
+                -> criteriaDay
+                else -> initialDay
+            },
+        )
+    }
 
     val yearList = if (afterDate) {
         (criteriaYear..yearRange.last).map { stringResource(R.string.word_year_format, it) }.toImmutableList()
@@ -311,9 +345,12 @@ fun SusuLimitDatePickerBottomSheetPreview() {
     SusuTheme {
         SusuLimitDatePickerBottomSheet(
             criteriaYear = 2024,
-            criteriaMonth = 1,
+            criteriaMonth = 2,
             criteriaDay = 16,
-            afterDate = false,
+            initialYear = 2024,
+            initialMonth = 2,
+            initialDay = 20,
+            afterDate = true,
             maximumContainerHeight = 346.dp,
             onDismissRequest = { _, _, _ -> },
         )
