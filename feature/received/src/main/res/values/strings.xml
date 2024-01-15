@@ -4,8 +4,9 @@
     <string name="content_description_filter_icon">필터 아이콘</string>
     <string name="received_screen_empty_ledger">아직 받은 장부가 없어요</string>
     <string name="received_screen_appbar_title">받아요</string>
-    <string name="ledger_search_screen_empty_recent_search_description">장부 이름, 경조사 카테고리 등을\n검색해볼 수 있어요</string>
+    <string name="ledger_search_screen_empty_search_description">장부 이름, 경조사 카테고리 등을\n검색해볼 수 있어요</string>
     <string name="ledger_search_screen_empty_recent_search_title">어떤 장부를 찾아드릴까요?</string>
+    <string name="ledger_search_screen_empty_search_result_title">원하는 검색 결과가 없나요?</string>
     <string name="ledger_search_screen_search_placeholder">찾고 싶은 장부를 검색해보세요</string>
     <string name="ledger_detail_screen_empty_envelope">아직 보낸 봉투가 없어요</string>
     <string name="ledger_detail_screen_add_envelope">받은 봉투 추가하기</string>

@@ -74,6 +74,7 @@ fun NavGraphBuilder.receivedNavGraph(
     composable(route = ReceivedRoute.ledgerSearchRoute) {
         LedgerSearchRoute(
             popBackStack = popBackStack,
+            navigateLedgerDetail = navigateLedgerDetail,
         )
     }
     composable(
