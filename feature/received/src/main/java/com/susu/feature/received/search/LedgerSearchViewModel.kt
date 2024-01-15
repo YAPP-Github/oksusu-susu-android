@@ -21,6 +21,8 @@ class LedgerSearchViewModel @Inject constructor(
 ) : BaseViewModel<LedgerSearchState, LedgerSearchSideEffect>(
     LedgerSearchState(),
 ) {
+    fun navigateLedgerDetail(id: Int) = postSideEffect(LedgerSearchSideEffect.NavigateLedgerDetail(id))
+
     fun getLedgerRecentSearchList() = viewModelScope.launch {
         getLedgerRecentSearchListUseCase()
             .onSuccess(::updateRecentSearchList)

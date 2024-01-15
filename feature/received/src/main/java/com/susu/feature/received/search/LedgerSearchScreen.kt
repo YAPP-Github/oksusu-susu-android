@@ -39,11 +39,13 @@ import kotlinx.coroutines.flow.debounce
 fun LedgerSearchRoute(
     viewModel: LedgerSearchViewModel = hiltViewModel(),
     popBackStack: () -> Unit,
+    navigateLedgerDetail: (Int) -> Unit,
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
             LedgerSearchSideEffect.PopBackStack -> popBackStack()
+            is LedgerSearchSideEffect.NavigateLedgerDetail -> navigateLedgerDetail(sideEffect.id)
         }
     }
 
@@ -62,8 +64,15 @@ fun LedgerSearchRoute(
         onClickBackIcon = viewModel::popBackStack,
         onValueChangeSearchBar = viewModel::updateSearch,
         onClickSearchClearIcon = { viewModel.updateSearch("") },
-        onClickRecentSearchContainer = viewModel::upsertLedgerRecentSearch,
+        onClickRecentSearchContainer = { search ->
+            viewModel.updateSearch(search)
+            viewModel.upsertLedgerRecentSearch(search)
+        },
         onClickRecentSearchContainerCloseIcon = viewModel::deleteLedgerRecentSearch,
+        onClickSearchResultContainer = {
+            viewModel.upsertLedgerRecentSearch(it.title)
+            viewModel.navigateLedgerDetail(it.id)
+        }
     )
 }
 
@@ -75,6 +84,7 @@ fun LedgerSearchScreen(
     onValueChangeSearchBar: (String) -> Unit = {},
     onClickRecentSearchContainer: (String) -> Unit = {},
     onClickRecentSearchContainerCloseIcon: (String) -> Unit = {},
+    onClickSearchResultContainer: (Ledger) -> Unit = {},
 ) {
     Box(
         modifier = Modifier
@@ -112,7 +122,7 @@ fun LedgerSearchScreen(
                     } else {
                         SearchResultColumn(
                             ledgerList = uiState.ledgerList,
-                            onClickItem = {},
+                            onClickItem = onClickSearchResultContainer,
                         )
                     }
                 }
@@ -178,7 +188,7 @@ private fun RecentSearchColumn(
 @Composable
 private fun SearchResultColumn(
     ledgerList: PersistentList<Ledger>,
-    onClickItem: (Int) -> Unit,
+    onClickItem: (Ledger) -> Unit,
 ) {
     if (ledgerList.isEmpty()) {
         ResultEmptyColumn(
@@ -198,7 +208,7 @@ private fun SearchResultColumn(
                 SusuRecentSearchContainer(
                     typeIconId = R.drawable.ic_ledger,
                     text = ledger.title,
-                    onClick = { onClickItem(ledger.id) },
+                    onClick = { onClickItem(ledger) },
                 )
             }
         }
