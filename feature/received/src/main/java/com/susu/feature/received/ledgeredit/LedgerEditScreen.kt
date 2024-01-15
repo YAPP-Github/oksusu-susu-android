@@ -40,6 +40,7 @@ import com.susu.core.designsystem.component.textfieldbutton.TextFieldButtonColor
 import com.susu.core.designsystem.component.textfieldbutton.style.SmallTextFieldButtonStyle
 import com.susu.core.designsystem.theme.Gray80
 import com.susu.core.designsystem.theme.SusuTheme
+import com.susu.core.model.Ledger
 import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.core.ui.extension.susuClickable
 import com.susu.core.ui.util.AnnotatedText
@@ -52,6 +53,7 @@ import kotlinx.coroutines.launch
 fun LedgerEditRoute(
     viewModel: LedgerEditViewModel = hiltViewModel(),
     popBackStack: () -> Unit,
+    popBackStackWithLedger: (String) -> Unit,
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
 
@@ -60,8 +62,8 @@ fun LedgerEditRoute(
 
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
-            LedgerEditSideEffect.popBackStack -> popBackStack()
-            is LedgerEditSideEffect.popBackStackWithLedger -> TODO()
+            LedgerEditSideEffect.PopBackStack -> popBackStack()
+            is LedgerEditSideEffect.PopBackStackWithLedger -> popBackStackWithLedger(sideEffect.ledger)
             LedgerEditSideEffect.FocusCustomCategory -> scope.launch {
                 awaitFrame()
                 focusRequester.requestFocus()

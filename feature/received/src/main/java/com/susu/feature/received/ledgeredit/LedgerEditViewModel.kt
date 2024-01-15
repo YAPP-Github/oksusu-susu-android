@@ -6,6 +6,7 @@ import com.susu.core.model.Category
 import com.susu.core.model.Ledger
 import com.susu.core.ui.base.BaseViewModel
 import com.susu.core.ui.extension.decodeFromUri
+import com.susu.core.ui.extension.encodeToUri
 import com.susu.domain.usecase.categoryconfig.GetCategoryConfigUseCase
 import com.susu.domain.usecase.ledger.EditLedgerUseCase
 import com.susu.feature.received.navigation.ReceivedRoute
@@ -35,7 +36,7 @@ class LedgerEditViewModel @Inject constructor(
                 id = ledgerId,
                 title = name,
                 startAt = LocalDateTime.of(startYear, startMonth, startDay, 0, 0).toKotlinLocalDateTime(),
-                endAt = LocalDateTime.of(startYear, startMonth, startDay, 0, 0).toKotlinLocalDateTime(),
+                endAt = LocalDateTime.of(endYear, endMonth, endDay, 0, 0).toKotlinLocalDateTime(),
                 category = Category(
                     id = selectedCategoryId,
                     customCategory = customCategory.ifEmpty { null },
@@ -45,11 +46,11 @@ class LedgerEditViewModel @Inject constructor(
 
     fun editLedger() = viewModelScope.launch {
         editLedgerUseCase(toEditLedger)
-            .onSuccess {
-                Timber.tag("테스트").d("$it")
+            .onSuccess { ledger ->
+                postSideEffect(LedgerEditSideEffect.PopBackStackWithLedger(Json.encodeToUri(ledger)))
             }
             .onFailure {
-                Timber.tag("테스트").d("$it")
+
             }
     }
 
@@ -67,6 +68,7 @@ class LedgerEditViewModel @Inject constructor(
         val (startDate, endDate) = (ledger.startAt.toJavaLocalDateTime() to ledger.endAt.toJavaLocalDateTime())
         intent {
             ledgerId = ledger.id
+            val customCategory = ledger.category.customCategory
             copy(
                 name = ledger.title,
                 selectedCategoryId = ledger.category.id,
@@ -76,6 +78,8 @@ class LedgerEditViewModel @Inject constructor(
                 endYear = endDate.year,
                 endMonth = endDate.monthValue,
                 endDay = endDate.dayOfMonth,
+                customCategory = customCategory ?: "",
+                isCustomCategoryChipSaved = customCategory.isNullOrEmpty().not(),
                 showCustomCategoryButton = ledger.category.customCategory != null,
             )
         }
@@ -145,5 +149,5 @@ class LedgerEditViewModel @Inject constructor(
     fun showEndDateBottomSheet() = intent { copy(showEndDateBottomSheet = true) }
     fun hideEndDateBottomSheet() = intent { copy(showEndDateBottomSheet = false) }
 
-    fun popBackStack() = postSideEffect(LedgerEditSideEffect.popBackStack)
+    fun popBackStack() = postSideEffect(LedgerEditSideEffect.PopBackStack)
 }

@@ -20,10 +20,12 @@ import com.susu.core.designsystem.component.dialog.SusuDialog
 import com.susu.core.designsystem.component.navigation.SusuNavigationBar
 import com.susu.core.designsystem.component.navigation.SusuNavigationItem
 import com.susu.core.designsystem.component.snackbar.SusuSnackbar
+import com.susu.core.model.Ledger
 import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.feature.community.navigation.communityNavGraph
 import com.susu.feature.loginsignup.navigation.loginSignupNavGraph
 import com.susu.feature.mypage.navigation.myPageNavGraph
+import com.susu.feature.received.navigation.ReceivedRoute
 import com.susu.feature.received.navigation.receivedNavGraph
 import com.susu.feature.sent.navigation.sentNavGraph
 import com.susu.feature.statistics.navigation.statisticsNavGraph
@@ -75,6 +77,13 @@ internal fun MainScreen(
                     receivedNavGraph(
                         padding = innerPadding,
                         popBackStack = navigator::popBackStackIfNotHome,
+                        popBackStackWithLedger = { ledger ->
+                            navigator.navController.previousBackStackEntry?.savedStateHandle?.set(
+                                ReceivedRoute.LEDGER_ARGUMENT_NAME,
+                                ledger,
+                            )
+                            navigator.popBackStackIfNotHome()
+                        },
                         navigateLedgerSearch = navigator::navigateLedgerSearch,
                         navigateLedgerDetail = navigator::navigateLedgerDetail,
                         navigateLedgerEdit = navigator::navigateLedgerEdit,

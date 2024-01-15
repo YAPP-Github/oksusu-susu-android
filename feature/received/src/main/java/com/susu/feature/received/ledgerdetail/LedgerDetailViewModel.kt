@@ -20,24 +20,30 @@ class LedgerDetailViewModel @Inject constructor(
     private val argument = savedStateHandle.get<String>(ReceivedRoute.LEDGER_ARGUMENT_NAME)!!
     private var ledger = Ledger()
 
-    fun initData(backStackEntryLedger: String) {
-        Json.decodeFromUri<Ledger>(backStackEntryLedger)
-            .let { ledger ->
-                if (ledger == Ledger()) return@let
-                updateLedgerInfo(ledger)
-            }
+    fun initData(backStackEntryLedgerUri: String?) {
+        if (backStackEntryLedgerUri == null) {
+            updateLedgerInfo(Json.decodeFromUri<Ledger>(argument))
+            return
+        }
 
-        updateLedgerInfo(Json.decodeFromUri<Ledger>(argument))
+        val backStackLedger = Json.decodeFromUri<Ledger>(backStackEntryLedgerUri)
+        if (backStackLedger == Ledger()) {
+            updateLedgerInfo(Json.decodeFromUri<Ledger>(argument))
+            return
+        }
+
+        updateLedgerInfo(backStackLedger)
     }
 
     private fun updateLedgerInfo(ledger: Ledger) = intent {
         this@LedgerDetailViewModel.ledger = ledger
         ledger.let { ledger ->
+            val category = ledger.category
             copy(
                 name = ledger.title,
                 money = ledger.totalAmounts,
                 count = ledger.totalCounts,
-                category = ledger.category.name,
+                category = if (category.customCategory.isNullOrEmpty()) category.name else category.customCategory!!,
                 startDate = ledger.startAt.toJavaLocalDateTime().to_yyyy_dot_MM_dot_dd(),
                 endDate = ledger.endAt.toJavaLocalDateTime().to_yyyy_dot_MM_dot_dd(),
             )

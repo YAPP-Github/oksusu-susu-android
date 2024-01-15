@@ -48,6 +48,7 @@ import kotlinx.serialization.json.Json
 @Composable
 fun LedgerDetailRoute(
     viewModel: LedgerDetailViewModel = hiltViewModel(),
+    ledger: String?,
     navigateLedgerEdit: (Ledger) -> Unit,
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
@@ -58,9 +59,7 @@ fun LedgerDetailRoute(
     }
 
     LaunchedEffect(key1 = Unit) {
-        viewModel.initData(
-            Json.encodeToUri(Ledger()) // TODO 임시 코드
-        )
+        viewModel.initData(ledger)
     }
 
     LedgerDetailScreen(

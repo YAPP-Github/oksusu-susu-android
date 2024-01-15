@@ -45,6 +45,7 @@ fun NavGraphBuilder.receivedNavGraph(
     padding: PaddingValues,
     navigateLedgerDetail: (Ledger) -> Unit,
     popBackStack: () -> Unit,
+    popBackStackWithLedger: (String) -> Unit,
     navigateLedgerSearch: () -> Unit,
     navigateLedgerEdit: (Ledger) -> Unit,
     navigateLedgerFilter: () -> Unit,
@@ -67,8 +68,10 @@ fun NavGraphBuilder.receivedNavGraph(
                 type = NavType.StringType
             },
         ),
-    ) {
+    ) { navBackStackEntry ->
+        val ledger = navBackStackEntry.savedStateHandle.get<String>(ReceivedRoute.LEDGER_ARGUMENT_NAME)
         LedgerDetailRoute(
+            ledger = ledger,
             navigateLedgerEdit = navigateLedgerEdit,
         )
     }
@@ -82,7 +85,10 @@ fun NavGraphBuilder.receivedNavGraph(
     composable(
         route = ReceivedRoute.ledgerEditRoute("{${ReceivedRoute.LEDGER_ARGUMENT_NAME}}"),
     ) {
-        LedgerEditRoute(popBackStack = popBackStack)
+        LedgerEditRoute(
+            popBackStack = popBackStack,
+            popBackStackWithLedger = popBackStackWithLedger,
+        )
     }
 
     composable(
