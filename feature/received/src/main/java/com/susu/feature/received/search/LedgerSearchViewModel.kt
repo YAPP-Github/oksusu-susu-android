@@ -49,5 +49,10 @@ class LedgerSearchViewModel @Inject constructor(
 
     fun popBackStack() = postSideEffect(LedgerSearchSideEffect.PopBackStack)
 
-    private fun updateRecentSearchList(searchList: List<String>) = intent { copy(recentSearchKeywordList = searchList.toPersistentList()) }
+    private fun updateRecentSearchList(searchList: List<String>) = intent {
+        copy(
+            recentSearchKeywordList = searchList.toPersistentList(),
+            showSearchResultEmpty = searchList.isEmpty(),
+        )
+    }
 }

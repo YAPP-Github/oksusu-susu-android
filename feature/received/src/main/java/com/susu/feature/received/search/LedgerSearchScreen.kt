@@ -121,6 +121,7 @@ fun LedgerSearchScreen(
                         )
                     } else {
                         SearchResultColumn(
+                            showSearchResultEmpty = uiState.showSearchResultEmpty,
                             ledgerList = uiState.ledgerList,
                             onClickItem = onClickSearchResultContainer,
                         )
@@ -187,10 +188,11 @@ private fun RecentSearchColumn(
 
 @Composable
 private fun SearchResultColumn(
+    showSearchResultEmpty: Boolean,
     ledgerList: PersistentList<Ledger>,
     onClickItem: (Ledger) -> Unit,
 ) {
-    if (ledgerList.isEmpty()) {
+    if (showSearchResultEmpty) {
         ResultEmptyColumn(
             title = stringResource(R.string.ledger_search_screen_empty_search_result_title),
         )

@@ -11,6 +11,7 @@ data class LedgerSearchState(
     val recentSearchKeywordList: PersistentList<String> = persistentListOf(),
     val ledgerList: PersistentList<Ledger> = persistentListOf(),
     val isLoading: Boolean = false,
+    val showSearchResultEmpty: Boolean = false,
 ) : UiState
 
 sealed interface LedgerSearchSideEffect : SideEffect {
