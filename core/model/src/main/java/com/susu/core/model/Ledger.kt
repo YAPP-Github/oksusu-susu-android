@@ -12,4 +12,5 @@ data class Ledger(
     val endAt: LocalDateTime,
     val category: Category,
     val totalAmounts: Int,
+    val totalCounts: Int,
 )

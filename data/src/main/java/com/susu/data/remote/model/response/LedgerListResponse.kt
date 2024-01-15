@@ -60,6 +60,7 @@ internal fun LedgerListResponse.toModel() = this.ledgerList.map { ledger ->
             endAt = info.endAt.toJavaLocalDateTime(),
             category = category.toModel(),
             totalAmounts = totalAmounts,
+            totalCounts = totalCounts,
         )
     }
 }

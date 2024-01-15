@@ -10,14 +10,16 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,6 +27,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.susu.core.designsystem.component.appbar.SusuDefaultAppBar
 import com.susu.core.designsystem.component.appbar.icon.LogoIcon
 import com.susu.core.designsystem.component.appbar.icon.NotificationIcon
@@ -37,6 +41,8 @@ import com.susu.core.designsystem.component.button.SusuGhostButton
 import com.susu.core.designsystem.theme.Gray50
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.ui.alignList
+import com.susu.core.ui.extension.OnBottomReached
+import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.feature.received.R
 import com.susu.feature.received.received.component.LedgerAddCard
 import com.susu.feature.received.received.component.LedgerCard
@@ -44,25 +50,47 @@ import kotlinx.collections.immutable.toImmutableList
 
 @Composable
 fun ReceivedRoute(
+    viewModel: ReceivedViewModel = hiltViewModel(),
     padding: PaddingValues,
     navigateLedgerDetail: (Int) -> Unit,
     navigateLedgerSearch: () -> Unit,
     navigateLedgerFilter: () -> Unit,
     navigateLedgerAdd: () -> Unit,
 ) {
+    val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
+    val ledgerListState = rememberLazyGridState()
+    viewModel.sideEffect.collectWithLifecycle { sideEffect ->
+        when (sideEffect) {
+            ReceivedEffect.NavigateLedgerAdd -> navigateLedgerAdd()
+            is ReceivedEffect.NavigateLedgerDetail -> navigateLedgerDetail(sideEffect.id)
+            ReceivedEffect.NavigateLedgerFilter -> navigateLedgerFilter()
+            ReceivedEffect.NavigateLedgerSearch -> navigateLedgerSearch()
+        }
+    }
+
+    ledgerListState.OnBottomReached {
+        viewModel.getLedgerList()
+    }
+
     ReceiveScreen(
+        uiState = uiState,
+        ledgerListState = ledgerListState,
         padding = padding,
-        onClickLedgerCard = navigateLedgerDetail,
-        onClickLedgerAddCard = navigateLedgerAdd,
-        onClickSearchIcon = navigateLedgerSearch, // TODO SideEffect로 변경
-        onClickFloatingAddButton = navigateLedgerAdd,
-        onClickFilterButton = navigateLedgerFilter,
+        onClickLedgerCard = viewModel::navigateLedgerDetail,
+        onClickLedgerAddCard = viewModel::navigateLedgerAdd,
+        onClickSearchIcon = viewModel::navigateLedgerSearch,
+        onClickFloatingAddButton = viewModel::navigateLedgerAdd,
+        onClickFilterButton = viewModel::navigateLedgerFilter,
+        onClickAlignButton = viewModel::showAlignBottomSheet,
+        onDismissAlignBottomSheet = viewModel::hideAlignBottomSheet,
     )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ReceiveScreen(
+    uiState: ReceivedState = ReceivedState(),
+    ledgerListState: LazyGridState = rememberLazyGridState(),
     padding: PaddingValues,
     onClickSearchIcon: () -> Unit = {},
     onClickNotificationIcon: () -> Unit = {},
@@ -71,6 +99,7 @@ fun ReceiveScreen(
     onClickLedgerAddCard: () -> Unit = {},
     onClickLedgerCard: (Int) -> Unit = {},
     onClickFloatingAddButton: () -> Unit = {},
+    onDismissAlignBottomSheet: () -> Unit = {},
 ) {
     Box(
         modifier = Modifier
@@ -93,82 +122,81 @@ fun ReceiveScreen(
                 },
             )
 
-            Column(
-                modifier = Modifier.padding(SusuTheme.spacing.spacing_m),
-                verticalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_m),
+            LazyVerticalGrid(
+                modifier = Modifier
+                    .fillMaxSize(),
+                state = ledgerListState,
+                contentPadding = PaddingValues(
+                    SusuTheme.spacing.spacing_m,
+                ),
+                columns = GridCells.Fixed(2),
+                verticalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxs),
+                horizontalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxs),
             ) {
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxs),
+                item(
+                    span = { GridItemSpan(2) },
                 ) {
-                    SusuGhostButton(
-                        color = GhostButtonColor.Black,
-                        style = SmallButtonStyle.height32,
-                        text = alignList[0], // TODO State 변환
-                        leftIcon = {
-                            Icon(
-                                painter = painterResource(id = com.susu.core.ui.R.drawable.ic_align),
-                                contentDescription = stringResource(R.string.content_description_align_icon),
-                            )
-                        },
-                        onClick = onClickAlignButton,
-                    )
-                    SusuGhostButton(
-                        color = GhostButtonColor.Black,
-                        style = SmallButtonStyle.height32,
-                        text = stringResource(com.susu.core.ui.R.string.word_filter),
-                        leftIcon = {
-                            Icon(
-                                modifier = Modifier.size(16.dp),
-                                painter = painterResource(id = com.susu.core.ui.R.drawable.ic_filter),
-                                contentDescription = stringResource(R.string.content_description_filter_icon),
-                            )
-                        },
-                        onClick = onClickFilterButton,
+                    Row(
+                        modifier = Modifier.padding(bottom = SusuTheme.spacing.spacing_xxs),
+                        horizontalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxs),
+                    ) {
+                        SusuGhostButton(
+                            color = GhostButtonColor.Black,
+                            style = SmallButtonStyle.height32,
+                            text = alignList[0], // TODO State 변환
+                            leftIcon = {
+                                Icon(
+                                    painter = painterResource(id = com.susu.core.ui.R.drawable.ic_align),
+                                    contentDescription = stringResource(R.string.content_description_align_icon),
+                                )
+                            },
+                            onClick = onClickAlignButton,
+                        )
+                        SusuGhostButton(
+                            color = GhostButtonColor.Black,
+                            style = SmallButtonStyle.height32,
+                            text = stringResource(com.susu.core.ui.R.string.word_filter),
+                            leftIcon = {
+                                Icon(
+                                    modifier = Modifier.size(16.dp),
+                                    painter = painterResource(id = com.susu.core.ui.R.drawable.ic_filter),
+                                    contentDescription = stringResource(R.string.content_description_filter_icon),
+                                )
+                            },
+                            onClick = onClickFilterButton,
+                        )
+                    }
+                }
+
+                items(
+                    items = uiState.ledgerList,
+                    key = { it.id },
+                ) { ledger ->
+                    LedgerCard(
+                        ledgerType = ledger.category.category,
+                        title = ledger.title,
+                        money = ledger.totalAmounts,
+                        count = ledger.totalCounts,
+                        onClick = { onClickLedgerCard(ledger.id) },
                     )
                 }
 
-                LazyVerticalGrid(
-                    modifier = Modifier
-                        .fillMaxSize(),
-                    columns = GridCells.Fixed(2),
-                    verticalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxs),
-                    horizontalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxs),
-                ) {
-                    item {
-                        LedgerCard(
-                            ledgerType = "결혼식",
-                            title = "나의 결혼식",
-                            money = 4335000,
-                            count = 164,
-                            onClick = { onClickLedgerCard(1) },
-                        )
-                    }
-
-                    item {
-                        LedgerCard(
-                            ledgerType = "결혼식",
-                            title = "나의 결혼식",
-                            money = 4335000,
-                            count = 164,
-                            onClick = { onClickLedgerCard(1) },
-                        )
-                    }
-
-                    item {
-                        LedgerAddCard(
-                            onClick = onClickLedgerAddCard,
-                        )
-                    }
+                item {
+                    LedgerAddCard(
+                        onClick = onClickLedgerAddCard,
+                    )
                 }
             }
         }
 
-        Text(
-            modifier = Modifier.align(Alignment.Center),
-            text = stringResource(R.string.received_screen_empty_ledger),
-            style = SusuTheme.typography.text_s,
-            color = Gray50,
-        )
+        if (uiState.showEmptyLedger) {
+            Text(
+                modifier = Modifier.align(Alignment.Center),
+                text = stringResource(R.string.received_screen_empty_ledger),
+                style = SusuTheme.typography.text_s,
+                color = Gray50,
+            )
+        }
 
         SusuFloatingButton(
             modifier = Modifier
@@ -177,14 +205,9 @@ fun ReceiveScreen(
             onClick = onClickFloatingAddButton,
         )
 
-        // TODO State 변환
-        var isSheetOpen by remember {
-            mutableStateOf(true)
-        }
-
-        if (isSheetOpen) {
+        if (uiState.showAlignBottomSheet) {
             SusuSelectionBottomSheet(
-                onDismissRequest = { isSheetOpen = false },
+                onDismissRequest = onDismissAlignBottomSheet,
                 containerHeight = 250.dp,
                 items = alignList.toImmutableList(),
                 selectedItemPosition = 0, // TODO State 변환
