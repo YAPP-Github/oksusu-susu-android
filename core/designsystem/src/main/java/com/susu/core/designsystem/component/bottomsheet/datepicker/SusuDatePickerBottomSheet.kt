@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import com.susu.core.designsystem.R
 import com.susu.core.designsystem.component.bottomsheet.SusuBottomSheet
 import com.susu.core.designsystem.theme.SusuTheme
+import com.susu.core.ui.util.currentDate
 import kotlinx.collections.immutable.toImmutableList
 import java.time.LocalDate
 
@@ -38,7 +39,7 @@ fun SusuDatePickerBottomSheet(
     onDismissRequest: (Int, Int, Int) -> Unit = { _, _, _ -> },
     onItemSelected: (Int, Int, Int) -> Unit = { _, _, _ -> },
 ) {
-    val currentDate = remember { LocalDate.now() }
+    val currentDate = remember { currentDate }
 
     var selectedYear by remember { mutableIntStateOf(initialYear ?: currentDate.year) }
     var selectedMonth by remember { mutableIntStateOf(initialMonth ?: currentDate.monthValue) }
