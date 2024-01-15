@@ -2,7 +2,6 @@ package com.susu.data.remote.model.response
 
 import com.susu.core.model.Category
 import kotlinx.datetime.LocalDateTime
-import kotlinx.datetime.toJavaLocalDateTime
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -56,8 +55,8 @@ internal fun LedgerListResponse.toModel() = this.ledgerList.map { ledger ->
             id = info.id,
             title = info.title,
             description = info.description,
-            startAt = info.startAt.toJavaLocalDateTime(),
-            endAt = info.endAt.toJavaLocalDateTime(),
+            startAt = info.startAt,
+            endAt = info.endAt,
             category = category.toModel(),
             totalAmounts = totalAmounts,
             totalCounts = totalCounts,
@@ -68,6 +67,6 @@ internal fun LedgerListResponse.toModel() = this.ledgerList.map { ledger ->
 internal fun CategoryInfo.toModel() = Category(
     id = id,
     seq = seq,
-    category = category,
+    name = category,
     customCategory = customCategory,
 )

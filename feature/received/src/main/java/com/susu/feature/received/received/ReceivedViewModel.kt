@@ -1,6 +1,7 @@
 package com.susu.feature.received.received
 
 import androidx.lifecycle.viewModelScope
+import com.susu.core.model.Ledger
 import com.susu.core.ui.base.BaseViewModel
 import com.susu.domain.usecase.ledger.GetLedgerListUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -39,7 +40,7 @@ class ReceivedViewModel @Inject constructor(
 
     fun showAlignBottomSheet() = intent { copy(showAlignBottomSheet = true) }
     fun hideAlignBottomSheet() = intent { copy(showAlignBottomSheet = false) }
-    fun navigateLedgerDetail(id: Int) = postSideEffect(ReceivedEffect.NavigateLedgerDetail(id))
+    fun navigateLedgerDetail(ledger: Ledger) = postSideEffect(ReceivedEffect.NavigateLedgerDetail(ledger))
     fun navigateLedgerAdd() = postSideEffect(ReceivedEffect.NavigateLedgerAdd)
     fun navigateLedgerSearch() = postSideEffect(ReceivedEffect.NavigateLedgerSearch)
     fun navigateLedgerFilter() = postSideEffect(ReceivedEffect.NavigateLedgerFilter)

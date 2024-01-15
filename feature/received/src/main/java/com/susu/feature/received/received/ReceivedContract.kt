@@ -14,7 +14,7 @@ data class ReceivedState(
 ) : UiState
 
 sealed interface ReceivedEffect : SideEffect {
-    data class NavigateLedgerDetail(val id: Int) : ReceivedEffect
+    data class NavigateLedgerDetail(val ledger: Ledger) : ReceivedEffect
     data object NavigateLedgerAdd : ReceivedEffect
     data object NavigateLedgerSearch : ReceivedEffect
     data object NavigateLedgerFilter : ReceivedEffect

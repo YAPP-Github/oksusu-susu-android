@@ -7,19 +7,22 @@ import androidx.navigation.NavOptions
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.susu.core.model.Ledger
+import com.susu.core.ui.extension.encodeToUri
 import com.susu.feature.received.ledgeradd.LedgerAddRoute
 import com.susu.feature.received.ledgerdetail.LedgerDetailRoute
 import com.susu.feature.received.ledgeredit.LedgerEditRoute
 import com.susu.feature.received.ledgerfilter.LedgerFilterRoute
 import com.susu.feature.received.received.ReceivedRoute
 import com.susu.feature.received.search.LedgerSearchRoute
+import kotlinx.serialization.json.Json
 
 fun NavController.navigateReceived(navOptions: NavOptions) {
     navigate(ReceivedRoute.route, navOptions)
 }
 
-fun NavController.navigateLedgerDetail(id: Int) {
-    navigate(ReceivedRoute.ledgerDetailRoute(id.toString()))
+fun NavController.navigateLedgerDetail(ledger: Ledger) {
+    navigate(ReceivedRoute.ledgerDetailRoute(Json.encodeToUri(ledger)))
 }
 
 fun NavController.navigateLedgerSearch() {
@@ -40,7 +43,7 @@ fun NavController.navigateLedgerAdd() {
 
 fun NavGraphBuilder.receivedNavGraph(
     padding: PaddingValues,
-    navigateLedgerDetail: (Int) -> Unit,
+    navigateLedgerDetail: (Ledger) -> Unit,
     popBackStack: () -> Unit,
     navigateLedgerSearch: () -> Unit,
     navigateLedgerEdit: () -> Unit,
@@ -62,7 +65,6 @@ fun NavGraphBuilder.receivedNavGraph(
         arguments = listOf(
             navArgument(ReceivedRoute.LEDGER_DETAIL_ARGUMENT_NAME) {
                 type = NavType.StringType
-                defaultValue = "0"
             },
         ),
     ) {
@@ -100,8 +102,8 @@ fun NavGraphBuilder.receivedNavGraph(
 
 object ReceivedRoute {
     const val route = "received"
-    const val LEDGER_DETAIL_ARGUMENT_NAME = "ledgerDetailId"
-    fun ledgerDetailRoute(id: String = "0") = "ledger-detail/$id"
+    const val LEDGER_DETAIL_ARGUMENT_NAME = "ledger"
+    fun ledgerDetailRoute(ledger: String) = "ledger-detail/$ledger"
     const val ledgerSearchRoute = "ledger-search"
 
     const val ledgerEditRoute = "ledger-edit" // TODO 파라미터 넘기는 방식으로 수정해야함.

@@ -1,6 +1,7 @@
 package com.susu.feature.received.search
 
 import androidx.lifecycle.viewModelScope
+import com.susu.core.model.Ledger
 import com.susu.core.ui.base.BaseViewModel
 import com.susu.domain.usecase.ledger.GetLedgerListUseCase
 import com.susu.domain.usecase.ledgerrecentsearch.DeleteLedgerRecentSearchUseCase
@@ -20,7 +21,7 @@ class LedgerSearchViewModel @Inject constructor(
 ) : BaseViewModel<LedgerSearchState, LedgerSearchSideEffect>(
     LedgerSearchState(),
 ) {
-    fun navigateLedgerDetail(id: Int) = postSideEffect(LedgerSearchSideEffect.NavigateLedgerDetail(id))
+    fun navigateLedgerDetail(ledger: Ledger) = postSideEffect(LedgerSearchSideEffect.NavigateLedgerDetail(ledger))
 
     fun getLedgerRecentSearchList() = viewModelScope.launch {
         getLedgerRecentSearchListUseCase()

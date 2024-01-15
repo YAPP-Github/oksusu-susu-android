@@ -13,5 +13,5 @@ data class CategoryConfigResponse(
 internal fun CategoryConfigResponse.toModel() = Category(
     id = id,
     seq = seq,
-    category = name,
+    name = name,
 )

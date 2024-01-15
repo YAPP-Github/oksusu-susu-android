@@ -15,11 +15,11 @@ data class CategoryConfigEntity(
 internal fun CategoryConfigEntity.toModel() = Category(
     id = id,
     seq = seq,
-    category = name,
+    name = name,
 )
 
 internal fun Category.toEntity() = CategoryConfigEntity(
     id = id,
     seq = seq,
-    name = category,
+    name = name,
 )

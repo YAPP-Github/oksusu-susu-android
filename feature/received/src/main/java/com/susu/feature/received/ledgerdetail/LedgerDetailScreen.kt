@@ -16,6 +16,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -23,6 +24,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.susu.core.designsystem.component.appbar.SusuDefaultAppBar
 import com.susu.core.designsystem.component.appbar.icon.BackIcon
 import com.susu.core.designsystem.component.appbar.icon.DeleteText
@@ -34,24 +36,36 @@ import com.susu.core.designsystem.component.button.SusuGhostButton
 import com.susu.core.designsystem.theme.Gray25
 import com.susu.core.designsystem.theme.Gray50
 import com.susu.core.designsystem.theme.SusuTheme
+import com.susu.core.model.Ledger
 import com.susu.core.ui.R
 import com.susu.core.ui.alignList
+import com.susu.core.ui.extension.encodeToUri
 import com.susu.feature.received.ledgerdetail.component.LedgerDetailEnvelopeContainer
 import com.susu.feature.received.ledgerdetail.component.LedgerDetailOverviewColumn
+import kotlinx.serialization.json.Json
 
 @Composable
 fun LedgerDetailRoute(
-    @Suppress("deteKt:UnusedParameter")
     viewModel: LedgerDetailViewModel = hiltViewModel(),
     navigateLedgerEdit: () -> Unit,
 ) {
+    val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
+
+    LaunchedEffect(key1 = Unit) {
+        viewModel.initData(
+            Json.encodeToUri(Ledger()) // TODO 임시 코드
+        )
+    }
+
     LedgerDetailScreen(
+        uiState = uiState,
         onClickEdit = navigateLedgerEdit,
     )
 }
 
 @Composable
 fun LedgerDetailScreen(
+    uiState: LedgerDetailState = LedgerDetailState(),
     onClickBack: () -> Unit = {},
     onClickEdit: () -> Unit = {},
     onClickDelete: () -> Unit = {},
@@ -89,13 +103,15 @@ fun LedgerDetailScreen(
                 ),
             ) {
                 item {
-                    LedgerDetailOverviewColumn(
-                        money = 0,
-                        count = 0,
-                        eventCategory = "장례식",
-                        eventName = "고모부 장례",
-                        eventRange = "2023.05.12 - 2023.05.15",
-                    )
+                    with(uiState) {
+                        LedgerDetailOverviewColumn(
+                            money = money,
+                            count = count,
+                            eventName = name,
+                            eventCategory = category,
+                            eventRange = "$startDate - $endDate",
+                        )
+                    }
                 }
 
                 item {
@@ -148,7 +164,9 @@ fun LedgerDetailScreen(
                 if (showEmptyScreen) {
                     item {
                         Column(
-                            modifier = Modifier.fillMaxWidth().padding(top = 104.dp),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 104.dp),
                             horizontalAlignment = Alignment.CenterHorizontally,
                             verticalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_m),
                         ) {

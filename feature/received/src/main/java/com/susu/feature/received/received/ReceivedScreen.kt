@@ -19,8 +19,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -40,6 +38,7 @@ import com.susu.core.designsystem.component.button.SusuFloatingButton
 import com.susu.core.designsystem.component.button.SusuGhostButton
 import com.susu.core.designsystem.theme.Gray50
 import com.susu.core.designsystem.theme.SusuTheme
+import com.susu.core.model.Ledger
 import com.susu.core.ui.alignList
 import com.susu.core.ui.extension.OnBottomReached
 import com.susu.core.ui.extension.collectWithLifecycle
@@ -52,7 +51,7 @@ import kotlinx.collections.immutable.toImmutableList
 fun ReceivedRoute(
     viewModel: ReceivedViewModel = hiltViewModel(),
     padding: PaddingValues,
-    navigateLedgerDetail: (Int) -> Unit,
+    navigateLedgerDetail: (Ledger) -> Unit,
     navigateLedgerSearch: () -> Unit,
     navigateLedgerFilter: () -> Unit,
     navigateLedgerAdd: () -> Unit,
@@ -62,7 +61,7 @@ fun ReceivedRoute(
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
             ReceivedEffect.NavigateLedgerAdd -> navigateLedgerAdd()
-            is ReceivedEffect.NavigateLedgerDetail -> navigateLedgerDetail(sideEffect.id)
+            is ReceivedEffect.NavigateLedgerDetail -> navigateLedgerDetail(sideEffect.ledger)
             ReceivedEffect.NavigateLedgerFilter -> navigateLedgerFilter()
             ReceivedEffect.NavigateLedgerSearch -> navigateLedgerSearch()
         }
@@ -97,7 +96,7 @@ fun ReceiveScreen(
     onClickAlignButton: () -> Unit = {},
     onClickFilterButton: () -> Unit = {},
     onClickLedgerAddCard: () -> Unit = {},
-    onClickLedgerCard: (Int) -> Unit = {},
+    onClickLedgerCard: (Ledger) -> Unit = {},
     onClickFloatingAddButton: () -> Unit = {},
     onDismissAlignBottomSheet: () -> Unit = {},
 ) {
@@ -173,11 +172,11 @@ fun ReceiveScreen(
                     key = { it.id },
                 ) { ledger ->
                     LedgerCard(
-                        ledgerType = ledger.category.category,
+                        ledgerType = ledger.category.name,
                         title = ledger.title,
                         money = ledger.totalAmounts,
                         count = ledger.totalCounts,
-                        onClick = { onClickLedgerCard(ledger.id) },
+                        onClick = { onClickLedgerCard(ledger) },
                     )
                 }
 
