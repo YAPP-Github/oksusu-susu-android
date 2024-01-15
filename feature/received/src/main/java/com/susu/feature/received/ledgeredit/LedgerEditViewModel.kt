@@ -22,8 +22,6 @@ class LedgerEditViewModel @Inject constructor(
     LedgerEditState(),
 ) {
     private val argument = savedStateHandle.get<String>(ReceivedRoute.LEDGER_ARGUMENT_NAME)!!
-    private val customCategoryId
-        get() = currentState.categoryConfigList.last().id
 
     fun initData() = viewModelScope.launch {
         getCategoryConfigUseCase()
@@ -40,7 +38,7 @@ class LedgerEditViewModel @Inject constructor(
         intent {
             copy(
                 name = ledger.title,
-                selectedCategory = ledger.category,
+                selectedCategoryId = ledger.category.id,
                 startYear = startDate.year,
                 startMonth = startDate.monthValue,
                 startDay = startDate.dayOfMonth,
@@ -53,7 +51,7 @@ class LedgerEditViewModel @Inject constructor(
     }
 
     fun updateCategory(categoryId: Int) = intent {
-        copy(selectedCategory = selectedCategory.copy(id = categoryId))
+        copy(selectedCategoryId = categoryId)
     }
 
     fun updateName(name: String) = intent { copy(name = name) }
@@ -66,9 +64,7 @@ class LedgerEditViewModel @Inject constructor(
 
     fun updateCustomCategory(customCategory: String) = intent {
         copy(
-            selectedCategory = selectedCategory.copy(
-                customCategory = customCategory,
-            ),
+            customCategory = customCategory,
         )
     }
 
@@ -78,7 +74,7 @@ class LedgerEditViewModel @Inject constructor(
                 showCustomCategoryButton = true,
             )
         }
-        updateCategory(customCategoryId)
+        updateCategory(currentState.categoryConfigList.last().id)
         postSideEffect(LedgerEditSideEffect.FocusCustomCategory)
     }
 
@@ -90,7 +86,7 @@ class LedgerEditViewModel @Inject constructor(
             )
         }
         updateCustomCategory("")
-        if(currentState.selectedCategory.id == customCategoryId) {
+        if(currentState.isSelectedCustomCategory) {
             updateCategory(currentState.categoryConfigList.first().id)
         }
     }

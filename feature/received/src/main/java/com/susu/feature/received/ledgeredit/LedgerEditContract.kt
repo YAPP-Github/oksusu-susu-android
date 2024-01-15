@@ -9,7 +9,8 @@ import kotlinx.collections.immutable.persistentListOf
 
 data class LedgerEditState(
     val name: String = "",
-    val selectedCategory: Category = Category(),
+    val selectedCategoryId: Int = 0,
+    val customCategory: String = "",
     val startYear: Int = 0,
     val startMonth: Int = 0,
     val startDay: Int = 0,
@@ -21,7 +22,9 @@ data class LedgerEditState(
     val isCustomCategoryChipSaved: Boolean = false,
     val showStartDateBottomSheet: Boolean = false,
     val showEndDateBottomSheet: Boolean = false,
-) : UiState
+) : UiState {
+    val isSelectedCustomCategory = selectedCategoryId == categoryConfigList.last().id
+}
 
 sealed interface LedgerEditSideEffect : SideEffect {
     data object popBackStack : LedgerEditSideEffect

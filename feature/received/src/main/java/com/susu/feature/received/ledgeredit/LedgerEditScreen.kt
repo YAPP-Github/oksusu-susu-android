@@ -158,7 +158,7 @@ fun LedgerEditScreen(
                         ) {
                             uiState.categoryConfigList.dropLast(1).forEach { categoryConfig ->
                                 SusuFilledButton(
-                                    isActive = categoryConfig.id == uiState.selectedCategory.id,
+                                    isActive = categoryConfig.id == uiState.selectedCategoryId,
                                     color = FilledButtonColor.Orange,
                                     style = SmallButtonStyle.height32,
                                     text = categoryConfig.name,
@@ -172,8 +172,8 @@ fun LedgerEditScreen(
                                     onTextChange = onTextChangeCustomCategory,
                                     color = TextFieldButtonColor.Orange,
                                     style = SmallTextFieldButtonStyle.height32,
-                                    text = uiState.selectedCategory.customCategory ?: "",
-                                    isFocused = uiState.categoryConfigList.last().id == uiState.selectedCategory.id,
+                                    text = uiState.customCategory,
+                                    isFocused = uiState.categoryConfigList.last().id == uiState.selectedCategoryId,
                                     isSaved = uiState.isCustomCategoryChipSaved,
                                     onClickClearIcon = onClickCustomCategoryClearIcon,
                                     onClickCloseIcon = onClickCustomCategoryCloseIcon,
