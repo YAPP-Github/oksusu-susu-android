@@ -13,7 +13,7 @@ import javax.inject.Inject
 class MyPageViewModel @Inject constructor(
     private val logoutUseCase: LogoutUseCase,
     private val withdrawUseCase: WithdrawUseCase,
-) : BaseViewModel<MyPageState, MyPageEffect>(MyPageState) {
+) : BaseViewModel<MyPageState, MyPageEffect>(MyPageState()) {
 
     fun logout() {
         UserApiClient.instance.logout { error ->

@@ -10,4 +10,7 @@ sealed interface MyPageEffect : SideEffect {
     data class ShowToast(val msg: String) : MyPageEffect
 }
 
-object MyPageState : UiState
+data class MyPageState(
+    val userName: String = "",
+    val appVersion: String = ""
+) : UiState

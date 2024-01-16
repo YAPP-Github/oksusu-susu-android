@@ -14,6 +14,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,6 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.susu.core.designsystem.component.appbar.SusuDefaultAppBar
 import com.susu.core.designsystem.component.appbar.icon.LogoIcon
 import com.susu.core.designsystem.component.appbar.icon.NotificationIcon
@@ -55,8 +57,11 @@ fun MyPageDefaultRoute(
         }
     }
 
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
     MyPageDefaultScreen(
         padding = padding,
+        uiState = uiState,
         onLogout = viewModel::logout,
         onWithdraw = viewModel::withdraw,
         navigateToInfo = navigateToInfo,
@@ -67,6 +72,7 @@ fun MyPageDefaultRoute(
 @Composable
 fun MyPageDefaultScreen(
     padding: PaddingValues,
+    uiState: MyPageState = MyPageState(),
     onLogout: () -> Unit = {},
     onWithdraw: () -> Unit = {},
     navigateToInfo: () -> Unit = {},
@@ -81,7 +87,7 @@ fun MyPageDefaultScreen(
             actions = { NotificationIcon() },
         )
         MyPageMenuItem(
-            titleText = "이름",
+            titleText = uiState.userName,
             titleTextColor = Gray100,
             titleTextStyle = SusuTheme.typography.title_m,
             action = {
@@ -132,7 +138,7 @@ fun MyPageDefaultScreen(
         ) {
             Text(
                 modifier = Modifier.align(Alignment.TopStart),
-                text = "앱 버전",
+                text = "앱 버전 ${uiState.appVersion}",
                 style = SusuTheme.typography.title_xxxs,
                 color = Gray50,
             )
