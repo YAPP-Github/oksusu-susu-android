@@ -1,5 +1,6 @@
 package com.susu.feature.received.ledgerdetail
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -89,6 +90,8 @@ fun LedgerDetailRoute(
     LaunchedEffect(key1 = Unit) {
         viewModel.initData(ledger)
     }
+
+    BackHandler(onBack = viewModel::popBackStackWithLedger)
 
     LedgerDetailScreen(
         uiState = uiState,
