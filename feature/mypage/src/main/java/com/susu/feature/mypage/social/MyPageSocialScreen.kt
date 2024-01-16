@@ -37,8 +37,9 @@ import com.susu.core.ui.SnsProviders
 @Composable
 fun MyPageSocialRoute(
     padding: PaddingValues,
+    popBackStack: () -> Unit,
 ) {
-    MyPageSocialScreen(padding = padding)
+    MyPageSocialScreen(padding = padding, popBackStack = popBackStack)
 }
 
 @Composable

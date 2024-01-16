@@ -43,22 +43,34 @@ fun MyPageDefaultRoute(
     padding: PaddingValues,
     viewModel: MyPageViewModel = hiltViewModel(),
     navigateToLogin: () -> Unit,
+    navigateToInfo: () -> Unit,
+    navigateToSocial: () -> Unit,
 ) {
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
             MyPageEffect.NavigateToLogin -> navigateToLogin()
+            MyPageEffect.NavigateToInfo -> navigateToInfo()
+            MyPageEffect.NavigateToSocial -> navigateToSocial()
             is MyPageEffect.ShowToast -> TODO()
         }
     }
+
+    MyPageDefaultScreen(
+        padding = padding,
+        onLogout = viewModel::logout,
+        onWithdraw = viewModel::withdraw,
+        navigateToInfo = navigateToInfo,
+        navigateToSocial = navigateToSocial,
+    )
 }
 
 @Composable
 fun MyPageDefaultScreen(
     padding: PaddingValues,
-    onLogoutClick: () -> Unit = {},
-    onWithdrawClick: () -> Unit = {},
-    navigateToLogin: () -> Unit = {},
-    navigateToMyInfo: () -> Unit = {},
+    onLogout: () -> Unit = {},
+    onWithdraw: () -> Unit = {},
+    navigateToInfo: () -> Unit = {},
+    navigateToSocial: () -> Unit = {},
 ) {
     Column(
         modifier = Modifier.fillMaxSize().padding(padding),
@@ -74,7 +86,7 @@ fun MyPageDefaultScreen(
             titleTextStyle = SusuTheme.typography.title_m,
             action = {
                 Row(
-                    modifier = Modifier.susuClickable(onClick = navigateToMyInfo),
+                    modifier = Modifier.susuClickable(onClick = navigateToInfo),
                 ) {
                     Text(text = "내 정보", style = SusuTheme.typography.title_xxs, color = Gray60)
                     Spacer(modifier = Modifier.width(SusuTheme.spacing.spacing_xxs))
@@ -91,6 +103,7 @@ fun MyPageDefaultScreen(
         MyPageDivider()
         MyPageMenuItem(
             titleText = "연동된 소셜 계정",
+            onMenuClick = navigateToSocial,
         )
         MyPageMenuItem(
             titleText = "엑셀 파일 내보내기",
@@ -100,14 +113,16 @@ fun MyPageDefaultScreen(
         )
         MyPageDivider()
         MyPageMenuItem(
-            titleText = "개인정보 처리 방침",
+            titleText = "앱 버전",
         )
         MyPageDivider()
         MyPageMenuItem(
-            titleText = "엑셀 파일 내보내기",
+            titleText = "로그아웃",
+            onMenuClick = onLogout,
         )
         MyPageMenuItem(
-            titleText = "개인정보 처리 방침",
+            titleText = "탈퇴하기",
+            onMenuClick = onWithdraw,
         )
         Box(
             modifier = Modifier.fillMaxWidth()

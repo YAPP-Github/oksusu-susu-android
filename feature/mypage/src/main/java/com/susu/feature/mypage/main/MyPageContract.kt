@@ -5,6 +5,8 @@ import com.susu.core.ui.base.UiState
 
 sealed interface MyPageEffect : SideEffect {
     data object NavigateToLogin : MyPageEffect
+    data object NavigateToInfo : MyPageEffect
+    data object NavigateToSocial : MyPageEffect
     data class ShowToast(val msg: String) : MyPageEffect
 }
 
