@@ -7,7 +7,7 @@ import retrofit2.http.Body
 import retrofit2.http.POST
 import retrofit2.http.Path
 
-interface UserService {
+interface AuthService {
     @POST("oauth/{provider}/login")
     suspend fun login(
         @Path("provider") provider: String,
