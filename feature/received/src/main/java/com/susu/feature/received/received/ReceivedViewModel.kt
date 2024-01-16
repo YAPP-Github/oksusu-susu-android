@@ -40,11 +40,13 @@ class ReceivedViewModel @Inject constructor(
         }
     }
 
-    fun updateLedgerIfNeed(ledger: String?) {
-        if (ledger == null) return
-        val toUpdateLedger = Json.decodeFromUri<Ledger>(ledger)
+    fun updateLedgerIfNeed(ledger: String?, toDeleteLedgerId: Int) {
+        val toUpdateLedger = ledger?.let {
+            Json.decodeFromUri<Ledger>(ledger)
+        } ?: Ledger()
         val newList = currentState
             .ledgerList
+            .filter { it.id != toDeleteLedgerId }
             .map { if (it.id == toUpdateLedger.id) toUpdateLedger else it }
             .toPersistentList()
 

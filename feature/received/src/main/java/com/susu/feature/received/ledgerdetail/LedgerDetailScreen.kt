@@ -19,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -37,13 +38,13 @@ import com.susu.core.designsystem.theme.Gray25
 import com.susu.core.designsystem.theme.Gray50
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.model.Ledger
+import com.susu.core.ui.DialogToken
 import com.susu.core.ui.R
+import com.susu.core.ui.SnackbarToken
 import com.susu.core.ui.alignList
 import com.susu.core.ui.extension.collectWithLifecycle
-import com.susu.core.ui.extension.encodeToUri
 import com.susu.feature.received.ledgerdetail.component.LedgerDetailEnvelopeContainer
 import com.susu.feature.received.ledgerdetail.component.LedgerDetailOverviewColumn
-import kotlinx.serialization.json.Json
 
 @Composable
 fun LedgerDetailRoute(
@@ -51,12 +52,37 @@ fun LedgerDetailRoute(
     ledger: String?,
     navigateLedgerEdit: (Ledger) -> Unit,
     popBackStackWithLedger: (String) -> Unit,
+    popBackStackWithDeleteLedgerId: (Int) -> Unit,
+    onShowSnackbar: (SnackbarToken) -> Unit,
+    onShowDialog: (DialogToken) -> Unit,
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
+    val context = LocalContext.current
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
             is LedgerDetailSideEffect.NavigateLedgerEdit -> navigateLedgerEdit(sideEffect.ledger)
             is LedgerDetailSideEffect.PopBackStackWithLedger -> popBackStackWithLedger(sideEffect.ledger)
+            is LedgerDetailSideEffect.ShowDeleteDialog -> {
+                onShowDialog(
+                    DialogToken(
+                        title = context.getString(com.susu.feature.received.R.string.ledger_detail_screen_dialog_title),
+                        text = context.getString(com.susu.feature.received.R.string.ledger_detail_screen_dialog_description),
+                        confirmText = context.getString(R.string.word_delete),
+                        dismissText = context.getString(R.string.word_cancel),
+                        onConfirmRequest = sideEffect.onConfirmRequest,
+                    ),
+                )
+            }
+
+            LedgerDetailSideEffect.ShowDeleteSuccessSnackbar -> {
+                onShowSnackbar(
+                    SnackbarToken(
+                        message = context.getString(com.susu.feature.received.R.string.ledger_detail_screen_snackbar_message),
+                    ),
+                )
+            }
+
+            is LedgerDetailSideEffect.PopBackStackWithDeleteLedgerId -> popBackStackWithDeleteLedgerId(sideEffect.ledgerId)
         }
     }
 
@@ -67,6 +93,7 @@ fun LedgerDetailRoute(
     LedgerDetailScreen(
         uiState = uiState,
         onClickEdit = viewModel::navigateLedgerEdit,
+        onClickDelete = viewModel::showDeleteDialog,
         onClickBack = viewModel::popBackStackWithLedger,
     )
 }

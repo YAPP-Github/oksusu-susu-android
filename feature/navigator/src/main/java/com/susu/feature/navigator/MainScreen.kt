@@ -20,7 +20,6 @@ import com.susu.core.designsystem.component.dialog.SusuDialog
 import com.susu.core.designsystem.component.navigation.SusuNavigationBar
 import com.susu.core.designsystem.component.navigation.SusuNavigationItem
 import com.susu.core.designsystem.component.snackbar.SusuSnackbar
-import com.susu.core.model.Ledger
 import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.feature.community.navigation.communityNavGraph
 import com.susu.feature.loginsignup.navigation.loginSignupNavGraph
@@ -62,7 +61,7 @@ internal fun MainScreen(
                         navigateToReceived = navigator::navigateSent,
                         navigateToLogin = navigator::navigateLogin,
                         navigateToSignUp = navigator::navigateSignup,
-                        onShowToast = viewModel::onShowToast,
+                        onShowToast = viewModel::onShowSnackbar,
                         padding = innerPadding,
                     )
 
@@ -84,11 +83,20 @@ internal fun MainScreen(
                             )
                             navigator.popBackStackIfNotHome()
                         },
+                        popBackStackWithDeleteLedgerId = { ledgerId ->
+                            navigator.navController.previousBackStackEntry?.savedStateHandle?.set(
+                                ReceivedRoute.LEDGER_ID_ARGUMENT_NAME,
+                                ledgerId,
+                            )
+                            navigator.popBackStackIfNotHome()
+                        },
                         navigateLedgerSearch = navigator::navigateLedgerSearch,
                         navigateLedgerDetail = navigator::navigateLedgerDetail,
                         navigateLedgerEdit = navigator::navigateLedgerEdit,
                         navigateLedgerFilter = navigator::navigateLedgerFilter,
                         navigateLedgerAdd = navigator::navigateLedgerAdd,
+                        onShowSnackbar = viewModel::onShowSnackbar,
+                        onShowDialog = viewModel::onShowDialog,
                     )
 
                     statisticsNavGraph(

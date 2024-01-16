@@ -31,5 +31,5 @@ interface LedgerService {
     ): ApiResult<LedgerResponse>
 
     @DELETE("ledgers")
-    fun deleteLedgerList(@Query("ids") idList: List<Int>): ApiResult<Unit>
+    suspend fun deleteLedgerList(@Query("ids") idList: List<Int>): ApiResult<Unit>
 }

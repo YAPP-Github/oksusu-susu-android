@@ -52,6 +52,7 @@ import kotlinx.collections.immutable.toImmutableList
 fun ReceivedRoute(
     viewModel: ReceivedViewModel = hiltViewModel(),
     ledger: String?,
+    toDeleteLedgerId: Int,
     padding: PaddingValues,
     navigateLedgerDetail: (Ledger) -> Unit,
     navigateLedgerSearch: () -> Unit,
@@ -70,7 +71,7 @@ fun ReceivedRoute(
     }
 
     LaunchedEffect(key1 = Unit) {
-        viewModel.updateLedgerIfNeed(ledger)
+        viewModel.updateLedgerIfNeed(ledger = ledger, toDeleteLedgerId = toDeleteLedgerId)
     }
 
     ledgerListState.OnBottomReached {

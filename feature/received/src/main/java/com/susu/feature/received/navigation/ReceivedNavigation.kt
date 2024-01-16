@@ -8,6 +8,8 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.susu.core.model.Ledger
+import com.susu.core.ui.DialogToken
+import com.susu.core.ui.SnackbarToken
 import com.susu.core.ui.extension.encodeToUri
 import com.susu.feature.received.ledgeradd.LedgerAddRoute
 import com.susu.feature.received.ledgerdetail.LedgerDetailRoute
@@ -46,15 +48,20 @@ fun NavGraphBuilder.receivedNavGraph(
     navigateLedgerDetail: (Ledger) -> Unit,
     popBackStack: () -> Unit,
     popBackStackWithLedger: (String) -> Unit,
+    popBackStackWithDeleteLedgerId: (Int) -> Unit,
     navigateLedgerSearch: () -> Unit,
     navigateLedgerEdit: (Ledger) -> Unit,
     navigateLedgerFilter: () -> Unit,
     navigateLedgerAdd: () -> Unit,
+    onShowSnackbar: (SnackbarToken) -> Unit,
+    onShowDialog: (DialogToken) -> Unit,
 ) {
     composable(route = ReceivedRoute.route) { navBackStackEntry ->
         val ledger = navBackStackEntry.savedStateHandle.get<String>(ReceivedRoute.LEDGER_ARGUMENT_NAME)
+        val toDeleteLedgerId = navBackStackEntry.savedStateHandle.get<Int>(ReceivedRoute.LEDGER_ID_ARGUMENT_NAME) ?: -1
         ReceivedRoute(
             ledger = ledger,
+            toDeleteLedgerId = toDeleteLedgerId,
             padding = padding,
             navigateLedgerDetail = navigateLedgerDetail,
             navigateLedgerSearch = navigateLedgerSearch,
@@ -76,6 +83,9 @@ fun NavGraphBuilder.receivedNavGraph(
             ledger = ledger,
             navigateLedgerEdit = navigateLedgerEdit,
             popBackStackWithLedger = popBackStackWithLedger,
+            popBackStackWithDeleteLedgerId = popBackStackWithDeleteLedgerId,
+            onShowSnackbar = onShowSnackbar,
+            onShowDialog = onShowDialog,
         )
     }
 
@@ -112,6 +122,7 @@ fun NavGraphBuilder.receivedNavGraph(
 object ReceivedRoute {
     const val route = "received"
     const val LEDGER_ARGUMENT_NAME = "ledger"
+    const val LEDGER_ID_ARGUMENT_NAME = "ledger-id"
     fun ledgerDetailRoute(ledger: String) = "ledger-detail/$ledger"
     fun ledgerEditRoute(ledger: String) = "ledger-edit/$ledger"
     const val ledgerSearchRoute = "ledger-search"

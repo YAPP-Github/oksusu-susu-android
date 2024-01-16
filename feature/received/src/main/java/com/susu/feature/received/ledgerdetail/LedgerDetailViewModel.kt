@@ -1,19 +1,24 @@
 package com.susu.feature.received.ledgerdetail
 
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.viewModelScope
 import com.susu.core.model.Ledger
 import com.susu.core.ui.base.BaseViewModel
 import com.susu.core.ui.extension.decodeFromUri
 import com.susu.core.ui.extension.encodeToUri
 import com.susu.core.ui.util.to_yyyy_dot_MM_dot_dd
+import com.susu.domain.usecase.ledger.DeleteLedgerUseCase
 import com.susu.feature.received.navigation.ReceivedRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import kotlinx.datetime.toJavaLocalDateTime
 import kotlinx.serialization.json.Json
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class LedgerDetailViewModel @Inject constructor(
+    private val deleteLedgerUseCase: DeleteLedgerUseCase,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<LedgerDetailState, LedgerDetailSideEffect>(
     LedgerDetailState(),
@@ -54,4 +59,22 @@ class LedgerDetailViewModel @Inject constructor(
     fun navigateLedgerEdit() = postSideEffect(LedgerDetailSideEffect.NavigateLedgerEdit(ledger))
 
     fun popBackStackWithLedger() = postSideEffect(LedgerDetailSideEffect.PopBackStackWithLedger(Json.encodeToUri(ledger)))
+    fun showDeleteDialog() = postSideEffect(
+        LedgerDetailSideEffect.ShowDeleteDialog(
+            onConfirmRequest = ::deleteLedger,
+        ),
+    )
+
+    private fun deleteLedger() = viewModelScope.launch {
+        deleteLedgerUseCase(ledger.id)
+            .onSuccess {
+                postSideEffect(
+                    LedgerDetailSideEffect.ShowDeleteSuccessSnackbar,
+                    LedgerDetailSideEffect.PopBackStackWithDeleteLedgerId(ledger.id),
+                )
+            }
+            .onFailure {
+
+            }
+    }
 }

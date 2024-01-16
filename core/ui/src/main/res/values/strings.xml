@@ -9,6 +9,7 @@
     <string name="word_edit">편집</string>
     <string name="word_save">저장</string>
     <string name="word_delete">삭제</string>
+    <string name="word_cancel">취소</string>
     <string name="word_total_money">전체 %s원</string>
     <string name="word_total_count">총 %d개</string>
     <string name="content_description_see_more_icon">더보기 아이콘</string>

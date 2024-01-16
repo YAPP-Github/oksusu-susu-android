@@ -25,4 +25,7 @@
     <string name="ledger_add_screen_date">%d년 %d월 %d일</string>
     <string name="ledger_add_screen_until">까지</string>
     <string name="ledger_add_screen_from">부터</string>
+    <string name="ledger_detail_screen_dialog_title">장부를 삭제할까요?</string>
+    <string name="ledger_detail_screen_dialog_description">삭제한 장부와 봉투는 다시 복구할 수 없어요</string>
+    <string name="ledger_detail_screen_snackbar_message">장부가 삭제되었어요</string>
 </resources>

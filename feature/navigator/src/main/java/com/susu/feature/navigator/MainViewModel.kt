@@ -12,7 +12,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -28,7 +27,7 @@ class MainViewModel @Inject constructor(
 
     private val mutex = Mutex()
 
-    fun onShowToast(snackbarToken: SnackbarToken) = viewModelScope.launch {
+    fun onShowSnackbar(snackbarToken: SnackbarToken) = viewModelScope.launch {
         mutex.withLock {
             intent { copy(snackbarToken = snackbarToken, snackbarVisible = true) }
             delay(SHOW_TOAST_LENGTH)
