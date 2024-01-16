@@ -1,6 +1,7 @@
 package com.susu.feature.loginsignup.login
 
 import androidx.lifecycle.viewModelScope
+import com.susu.core.ui.SnsProviders
 import com.susu.core.ui.base.BaseViewModel
 import com.susu.domain.usecase.loginsignup.CheckCanRegisterUseCase
 import com.susu.domain.usecase.loginsignup.LoginUseCase
@@ -14,15 +15,15 @@ class LoginViewModel @Inject constructor(
     private val loginUseCase: LoginUseCase,
 ) : BaseViewModel<LoginContract.LoginState, LoginContract.LoginEffect>(LoginContract.LoginState()) {
 
-    fun login(oauthAccessToken: String) {
+    fun login(provider: SnsProviders, oauthAccessToken: String) {
         viewModelScope.launch {
             intent { copy(isLoading = true) }
             // 수수 서버에 가입되지 않은 회원이라면 -> 회원 정보 기입 후 수수 회원가입
-            checkCanRegisterUseCase(oauthAccessToken = oauthAccessToken).onSuccess { canRegister ->
+            checkCanRegisterUseCase(provider = provider.path, oauthAccessToken = oauthAccessToken).onSuccess { canRegister ->
                 if (canRegister) {
                     postSideEffect(LoginContract.LoginEffect.NavigateToSignUp)
                 } else {
-                    loginUseCase(oauthAccessToken = oauthAccessToken)
+                    loginUseCase(provider = provider.path, oauthAccessToken = oauthAccessToken)
                         .onSuccess {
                             postSideEffect(LoginContract.LoginEffect.NavigateToReceived)
                         }

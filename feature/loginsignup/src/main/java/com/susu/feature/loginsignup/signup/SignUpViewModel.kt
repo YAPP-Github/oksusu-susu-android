@@ -2,6 +2,7 @@ package com.susu.feature.loginsignup.signup
 
 import androidx.lifecycle.viewModelScope
 import com.susu.core.model.User
+import com.susu.core.ui.SnsProviders
 import com.susu.core.ui.USER_NAME_MAX_LENGTH
 import com.susu.core.ui.base.BaseViewModel
 import com.susu.core.ui.nameRegex
@@ -75,6 +76,7 @@ class SignUpViewModel @Inject constructor(
                 intent { copy(isLoading = true) }
                 if (oauthAccessToken != null) {
                     signUpUseCase(
+                        provider = SnsProviders.Kakao.path,
                         oauthAccessToken = oauthAccessToken,
                         user = User(
                             name = uiState.value.name,
