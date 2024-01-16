@@ -1,7 +1,6 @@
 package com.susu.data.data.repository
 
 import com.susu.data.remote.api.UserService
-import com.susu.data.remote.model.SnsProviders
 import com.susu.data.remote.model.request.AccessTokenRequest
 import com.susu.data.remote.model.response.toDomain
 import com.susu.domain.repository.LoginRepository
