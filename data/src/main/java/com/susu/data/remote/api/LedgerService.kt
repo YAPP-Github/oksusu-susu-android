@@ -1,7 +1,6 @@
 package com.susu.data.remote.api
 
 import com.susu.data.remote.model.request.LedgerRequest
-import com.susu.data.remote.model.response.LedgerInfo
 import com.susu.data.remote.model.response.LedgerListResponse
 import com.susu.data.remote.model.response.LedgerResponse
 import com.susu.data.remote.retrofit.ApiResult

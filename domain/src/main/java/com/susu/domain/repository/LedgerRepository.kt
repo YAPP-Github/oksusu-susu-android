@@ -18,6 +18,6 @@ interface LedgerRepository {
     ): Ledger
 
     suspend fun deleteLedger(
-        id: Int
+        id: Int,
     )
 }

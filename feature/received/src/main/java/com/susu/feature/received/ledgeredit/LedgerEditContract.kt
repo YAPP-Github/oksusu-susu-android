@@ -1,7 +1,6 @@
 package com.susu.feature.received.ledgeredit
 
 import com.susu.core.model.Category
-import com.susu.core.model.Ledger
 import com.susu.core.ui.base.SideEffect
 import com.susu.core.ui.base.UiState
 import kotlinx.collections.immutable.PersistentList

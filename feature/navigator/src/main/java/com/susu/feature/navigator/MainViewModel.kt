@@ -46,7 +46,7 @@ class MainViewModel @Inject constructor(
         intent { copy(dialogVisible = false) }
     }
 
-    fun handleException(throwable: Throwable, retry: () -> Unit) = when(throwable) {
+    fun handleException(throwable: Throwable, retry: () -> Unit) = when (throwable) {
         is NetworkException -> postSideEffect(MainSideEffect.ShowNetworkErrorSnackbar(retry))
         is UnknownHostException -> postSideEffect(MainSideEffect.ShowNetworkErrorSnackbar(retry))
         else -> throwUnknownException(throwable)
@@ -54,7 +54,7 @@ class MainViewModel @Inject constructor(
 
     fun initCategoryConfig() = viewModelScope.launch {
         getCategoryConfigUseCase()
-            .onFailure {  }
+            .onFailure { }
         intent { copy(isInitializing = false) }
     }
 

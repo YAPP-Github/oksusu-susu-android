@@ -203,7 +203,7 @@ fun SusuTextFieldWrapContentButton(
             modifier = modifier
                 .clip(shape)
                 .background(backgroundColor)
-                .susuClickable (onClick = onClickButton)
+                .susuClickable(onClick = onClickButton)
                 .padding(paddingValues),
             horizontalArrangement = Arrangement.spacedBy(iconSpacing),
             verticalAlignment = Alignment.CenterVertically,

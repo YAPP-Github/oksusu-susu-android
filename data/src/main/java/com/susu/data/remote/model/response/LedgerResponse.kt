@@ -43,7 +43,6 @@ internal fun LedgerResponse.toModel() = Ledger(
     totalCounts = totalCounts,
 )
 
-
 internal fun CategoryInfo.toModel() = Category(
     id = id,
     seq = seq,

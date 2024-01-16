@@ -28,7 +28,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.susu.core.designsystem.component.appbar.SusuDefaultAppBar
 import com.susu.core.designsystem.component.appbar.icon.BackIcon
-import com.susu.core.designsystem.component.bottomsheet.datepicker.SusuDatePickerBottomSheet
 import com.susu.core.designsystem.component.bottomsheet.datepicker.SusuLimitDatePickerBottomSheet
 import com.susu.core.designsystem.component.button.AddConditionButton
 import com.susu.core.designsystem.component.button.FilledButtonColor
@@ -41,7 +40,6 @@ import com.susu.core.designsystem.component.textfieldbutton.TextFieldButtonColor
 import com.susu.core.designsystem.component.textfieldbutton.style.SmallTextFieldButtonStyle
 import com.susu.core.designsystem.theme.Gray80
 import com.susu.core.designsystem.theme.SusuTheme
-import com.susu.core.model.Ledger
 import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.core.ui.extension.susuClickable
 import com.susu.core.ui.util.AnnotatedText
@@ -75,7 +73,6 @@ fun LedgerEditRoute(
     LaunchedEffect(key1 = Unit) {
         viewModel.initData()
     }
-
 
     LedgerEditScreen(
         uiState = uiState,
@@ -260,7 +257,7 @@ fun LedgerEditScreen(
                 afterDate = false,
                 maximumContainerHeight = 346.dp,
                 onDismissRequest = { _, _, _ -> onDismissStartDateBottomSheet() },
-                onItemSelected = onStartDateItemSelected
+                onItemSelected = onStartDateItemSelected,
             )
         }
 
@@ -275,7 +272,7 @@ fun LedgerEditScreen(
                 afterDate = true,
                 maximumContainerHeight = 346.dp,
                 onDismissRequest = { _, _, _ -> onDismissEndDateBottomSheet() },
-                onItemSelected = onEndDateItemSelected
+                onItemSelected = onEndDateItemSelected,
             )
         }
     }

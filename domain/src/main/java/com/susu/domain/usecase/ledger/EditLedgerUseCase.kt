@@ -3,7 +3,6 @@ package com.susu.domain.usecase.ledger
 import com.susu.core.common.runCatchingIgnoreCancelled
 import com.susu.core.model.Ledger
 import com.susu.domain.repository.LedgerRepository
-import java.time.LocalDateTime
 import javax.inject.Inject
 
 class EditLedgerUseCase @Inject constructor(

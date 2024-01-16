@@ -50,7 +50,7 @@ internal fun MainScreen(
                         message = "네트워크 오류가 발생했어요",
                         onClickActionButton = sideEffect.retry,
                         actionIcon = R.drawable.ic_refresh,
-                        actionIconContentDescription = "새로고침 아이콘"
+                        actionIconContentDescription = "새로고침 아이콘",
                     ),
                 )
             }

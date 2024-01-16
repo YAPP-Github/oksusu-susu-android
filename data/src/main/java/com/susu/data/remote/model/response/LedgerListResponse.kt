@@ -1,8 +1,5 @@
 package com.susu.data.remote.model.response
 
-import com.susu.core.model.Category
-import com.susu.core.model.Ledger
-import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -16,7 +13,6 @@ data class LedgerListResponse(
     val totalCount: Int,
     val sort: SortInfo,
 )
-
 
 @Serializable
 data class SortInfo(
