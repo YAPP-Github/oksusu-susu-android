@@ -1,6 +1,6 @@
 package com.susu.data.remote.model.request
 
-import com.susu.core.model.User
+import com.susu.core.model.SignUpUser
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -11,7 +11,7 @@ data class UserRequest(
     val birth: Int?,
 )
 
-fun User.toData() = UserRequest(
+fun SignUpUser.toData() = UserRequest(
     name = name,
     gender = gender.ifEmpty { null },
     birth = if (birth < 0) null else birth,

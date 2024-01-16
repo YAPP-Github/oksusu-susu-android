@@ -1,6 +1,6 @@
 package com.susu.data.data.repository
 
-import com.susu.core.model.User
+import com.susu.core.model.SignUpUser
 import com.susu.data.remote.api.SignUpService
 import com.susu.data.remote.model.request.toData
 import com.susu.data.remote.model.response.toDomain
@@ -14,11 +14,11 @@ class SignUpRepositoryImpl @Inject constructor(
     override suspend fun signUp(
         provider: String,
         oauthAccessToken: String,
-        user: User,
+        signUpUser: SignUpUser,
     ) = signUpService.signUp(
         provider = provider,
         accessToken = oauthAccessToken,
-        user = user.toData(),
+        user = signUpUser.toData(),
     ).getOrThrow().toDomain()
 
     override suspend fun canRegister(

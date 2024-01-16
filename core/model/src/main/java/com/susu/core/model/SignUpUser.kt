@@ -1,6 +1,6 @@
 package com.susu.core.model
 
-data class User(
+data class SignUpUser(
     val name: String,
     val gender: String,
     val termAgreement: List<Int>,
