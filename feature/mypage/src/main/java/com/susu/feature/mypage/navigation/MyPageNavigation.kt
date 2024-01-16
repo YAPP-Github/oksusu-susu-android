@@ -5,21 +5,23 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
-import com.susu.feature.mypage.MyPageScreen
+import com.susu.feature.mypage.main.MyPageDefaultRoute
 
 fun NavController.navigateMyPage(navOptions: NavOptions) {
-    navigate(MyPageRoute.route, navOptions)
+    navigate(MyPageRoute.default, navOptions)
 }
 
 fun NavGraphBuilder.myPageNavGraph(
     padding: PaddingValues,
     navigateToLogin: () -> Unit,
 ) {
-    composable(route = MyPageRoute.route) {
-        MyPageScreen(padding, navigateToLogin = navigateToLogin)
+    composable(route = MyPageRoute.default) {
+        MyPageDefaultRoute(padding, navigateToLogin = navigateToLogin)
     }
 }
 
 object MyPageRoute {
-    const val route = "my-page"
+    const val default = "my-page"
+    const val myInfo = "my-info"
+    const val social = "social"
 }

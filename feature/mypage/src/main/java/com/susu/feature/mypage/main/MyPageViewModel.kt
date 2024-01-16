@@ -1,4 +1,4 @@
-package com.susu.feature.mypage
+package com.susu.feature.mypage.main
 
 import androidx.lifecycle.viewModelScope
 import com.kakao.sdk.user.UserApiClient
@@ -13,16 +13,16 @@ import javax.inject.Inject
 class MyPageViewModel @Inject constructor(
     private val logoutUseCase: LogoutUseCase,
     private val withdrawUseCase: WithdrawUseCase,
-) : BaseViewModel<MyPageContract.MyPageState, MyPageContract.MyPageEffect>(MyPageContract.MyPageState) {
+) : BaseViewModel<MyPageState, MyPageEffect>(MyPageState) {
 
     fun logout() {
         UserApiClient.instance.logout { error ->
             if (error != null) {
-                postSideEffect(MyPageContract.MyPageEffect.ShowToast(error.message ?: "에러 발생했지만 토큰은 삭제됨"))
+                postSideEffect(MyPageEffect.ShowToast(error.message ?: "에러 발생했지만 토큰은 삭제됨"))
             } else {
                 viewModelScope.launch {
                     logoutUseCase().onSuccess {
-                        postSideEffect(MyPageContract.MyPageEffect.NavigateToLogin)
+                        postSideEffect(MyPageEffect.NavigateToLogin)
                     }
                 }
             }
@@ -32,11 +32,11 @@ class MyPageViewModel @Inject constructor(
     fun withdraw() {
         UserApiClient.instance.unlink { error ->
             if (error != null) {
-                postSideEffect(MyPageContract.MyPageEffect.ShowToast(error.message ?: "에러 발생했지만 토큰은 삭제됨"))
+                postSideEffect(MyPageEffect.ShowToast(error.message ?: "에러 발생했지만 토큰은 삭제됨"))
             } else {
                 viewModelScope.launch {
                     withdrawUseCase().onSuccess {
-                        postSideEffect(MyPageContract.MyPageEffect.NavigateToLogin)
+                        postSideEffect(MyPageEffect.NavigateToLogin)
                     }
                 }
             }
