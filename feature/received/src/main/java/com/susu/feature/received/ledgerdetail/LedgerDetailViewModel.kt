@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import com.susu.core.model.Ledger
 import com.susu.core.ui.base.BaseViewModel
 import com.susu.core.ui.extension.decodeFromUri
+import com.susu.core.ui.extension.encodeToUri
 import com.susu.core.ui.util.to_yyyy_dot_MM_dot_dd
 import com.susu.feature.received.navigation.ReceivedRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -51,4 +52,6 @@ class LedgerDetailViewModel @Inject constructor(
     }
 
     fun navigateLedgerEdit() = postSideEffect(LedgerDetailSideEffect.NavigateLedgerEdit(ledger))
+
+    fun popBackStackWithLedger() = postSideEffect(LedgerDetailSideEffect.PopBackStackWithLedger(Json.encodeToUri(ledger)))
 }

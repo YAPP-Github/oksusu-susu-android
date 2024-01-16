@@ -19,6 +19,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -50,6 +51,7 @@ import kotlinx.collections.immutable.toImmutableList
 @Composable
 fun ReceivedRoute(
     viewModel: ReceivedViewModel = hiltViewModel(),
+    ledger: String?,
     padding: PaddingValues,
     navigateLedgerDetail: (Ledger) -> Unit,
     navigateLedgerSearch: () -> Unit,
@@ -65,6 +67,10 @@ fun ReceivedRoute(
             ReceivedEffect.NavigateLedgerFilter -> navigateLedgerFilter()
             ReceivedEffect.NavigateLedgerSearch -> navigateLedgerSearch()
         }
+    }
+
+    LaunchedEffect(key1 = Unit) {
+        viewModel.updateLedgerIfNeed(ledger)
     }
 
     ledgerListState.OnBottomReached {

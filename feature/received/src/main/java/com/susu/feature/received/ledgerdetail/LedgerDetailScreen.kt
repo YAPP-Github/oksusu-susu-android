@@ -50,11 +50,13 @@ fun LedgerDetailRoute(
     viewModel: LedgerDetailViewModel = hiltViewModel(),
     ledger: String?,
     navigateLedgerEdit: (Ledger) -> Unit,
+    popBackStackWithLedger: (String) -> Unit,
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
             is LedgerDetailSideEffect.NavigateLedgerEdit -> navigateLedgerEdit(sideEffect.ledger)
+            is LedgerDetailSideEffect.PopBackStackWithLedger -> popBackStackWithLedger(sideEffect.ledger)
         }
     }
 
@@ -65,6 +67,7 @@ fun LedgerDetailRoute(
     LedgerDetailScreen(
         uiState = uiState,
         onClickEdit = viewModel::navigateLedgerEdit,
+        onClickBack = viewModel::popBackStackWithLedger,
     )
 }
 

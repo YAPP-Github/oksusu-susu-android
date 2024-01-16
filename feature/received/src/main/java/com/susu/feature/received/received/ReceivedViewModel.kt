@@ -3,10 +3,12 @@ package com.susu.feature.received.received
 import androidx.lifecycle.viewModelScope
 import com.susu.core.model.Ledger
 import com.susu.core.ui.base.BaseViewModel
+import com.susu.core.ui.extension.decodeFromUri
 import com.susu.domain.usecase.ledger.GetLedgerListUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
+import kotlinx.serialization.json.Json
 import javax.inject.Inject
 
 @HiltViewModel
@@ -36,6 +38,17 @@ class ReceivedViewModel @Inject constructor(
                 )
             }
         }
+    }
+
+    fun updateLedgerIfNeed(ledger: String?) {
+        if (ledger == null) return
+        val toUpdateLedger = Json.decodeFromUri<Ledger>(ledger)
+        val newList = currentState
+            .ledgerList
+            .map { if (it.id == toUpdateLedger.id) toUpdateLedger else it }
+            .toPersistentList()
+
+        intent { copy(ledgerList = newList) }
     }
 
     fun showAlignBottomSheet() = intent { copy(showAlignBottomSheet = true) }
