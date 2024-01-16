@@ -19,4 +19,6 @@ sealed interface LedgerDetailSideEffect : SideEffect {
     data class PopBackStackWithDeleteLedgerId(val ledgerId: Int) : LedgerDetailSideEffect
     data class ShowDeleteDialog(val onConfirmRequest: () -> Unit) : LedgerDetailSideEffect
     data object ShowDeleteSuccessSnackbar : LedgerDetailSideEffect
+    data class ShowSnackbar(val msg: String) : LedgerDetailSideEffect
+    data class HandleException(val throwable: Throwable, val retry: () -> Unit) : LedgerDetailSideEffect
 }

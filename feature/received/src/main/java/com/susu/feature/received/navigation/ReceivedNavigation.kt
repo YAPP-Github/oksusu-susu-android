@@ -55,6 +55,7 @@ fun NavGraphBuilder.receivedNavGraph(
     navigateLedgerAdd: () -> Unit,
     onShowSnackbar: (SnackbarToken) -> Unit,
     onShowDialog: (DialogToken) -> Unit,
+    handleException: (Throwable, () -> Unit) -> Unit,
 ) {
     composable(route = ReceivedRoute.route) { navBackStackEntry ->
         val ledger = navBackStackEntry.savedStateHandle.get<String>(ReceivedRoute.LEDGER_ARGUMENT_NAME)
@@ -86,6 +87,7 @@ fun NavGraphBuilder.receivedNavGraph(
             popBackStackWithDeleteLedgerId = popBackStackWithDeleteLedgerId,
             onShowSnackbar = onShowSnackbar,
             onShowDialog = onShowDialog,
+            handleException = handleException,
         )
     }
 

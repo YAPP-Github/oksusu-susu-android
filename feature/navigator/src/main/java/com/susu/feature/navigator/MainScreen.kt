@@ -20,6 +20,7 @@ import com.susu.core.designsystem.component.dialog.SusuDialog
 import com.susu.core.designsystem.component.navigation.SusuNavigationBar
 import com.susu.core.designsystem.component.navigation.SusuNavigationItem
 import com.susu.core.designsystem.component.snackbar.SusuSnackbar
+import com.susu.core.ui.SnackbarToken
 import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.feature.community.navigation.communityNavGraph
 import com.susu.feature.loginsignup.navigation.loginSignupNavGraph
@@ -43,6 +44,16 @@ internal fun MainScreen(
             MainSideEffect.NavigateLogin -> navigator.navigateLogin()
             MainSideEffect.NavigateSent -> navigator.navigateSent()
             MainSideEffect.NavigateSignup -> navigator.navigateSignup()
+            is MainSideEffect.ShowNetworkErrorSnackbar -> {
+                viewModel.onShowSnackbar(
+                    SnackbarToken(
+                        message = "네트워크 오류가 발생했어요",
+                        onClickActionButton = sideEffect.retry,
+                        actionIcon = R.drawable.ic_refresh,
+                        actionIconContentDescription = "새로고침 아이콘"
+                    ),
+                )
+            }
         }
     }
 
@@ -97,6 +108,7 @@ internal fun MainScreen(
                         navigateLedgerAdd = navigator::navigateLedgerAdd,
                         onShowSnackbar = viewModel::onShowSnackbar,
                         onShowDialog = viewModel::onShowDialog,
+                        handleException = viewModel::handleException,
                     )
 
                     statisticsNavGraph(

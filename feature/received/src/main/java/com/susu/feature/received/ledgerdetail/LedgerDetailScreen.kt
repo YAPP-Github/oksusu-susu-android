@@ -56,6 +56,7 @@ fun LedgerDetailRoute(
     popBackStackWithDeleteLedgerId: (Int) -> Unit,
     onShowSnackbar: (SnackbarToken) -> Unit,
     onShowDialog: (DialogToken) -> Unit,
+    handleException: (Throwable, () -> Unit) -> Unit,
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
     val context = LocalContext.current
@@ -84,6 +85,8 @@ fun LedgerDetailRoute(
             }
 
             is LedgerDetailSideEffect.PopBackStackWithDeleteLedgerId -> popBackStackWithDeleteLedgerId(sideEffect.ledgerId)
+            is LedgerDetailSideEffect.HandleException -> handleException(sideEffect.throwable, sideEffect.retry)
+            is LedgerDetailSideEffect.ShowSnackbar -> onShowSnackbar(SnackbarToken(message = sideEffect.msg))
         }
     }
 

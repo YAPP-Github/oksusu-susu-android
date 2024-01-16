@@ -20,4 +20,5 @@ sealed interface MainSideEffect : SideEffect {
     data object NavigateLogin : MainSideEffect
     data object NavigateSignup : MainSideEffect
     data object NavigateSent : MainSideEffect
+    data class ShowNetworkErrorSnackbar(val retry: () -> Unit) : MainSideEffect
 }

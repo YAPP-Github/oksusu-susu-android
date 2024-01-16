@@ -3,6 +3,7 @@ package com.susu.feature.received.ledgerdetail
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.susu.core.model.Ledger
+import com.susu.core.model.exception.NotFoundLedgerException
 import com.susu.core.ui.base.BaseViewModel
 import com.susu.core.ui.extension.decodeFromUri
 import com.susu.core.ui.extension.encodeToUri
@@ -73,8 +74,11 @@ class LedgerDetailViewModel @Inject constructor(
                     LedgerDetailSideEffect.PopBackStackWithDeleteLedgerId(ledger.id),
                 )
             }
-            .onFailure {
-
+            .onFailure { throwable ->
+                when(throwable) {
+                    is NotFoundLedgerException -> postSideEffect(LedgerDetailSideEffect.ShowSnackbar(throwable.message))
+                    else -> postSideEffect(LedgerDetailSideEffect.HandleException(throwable, ::deleteLedger))
+                }
             }
     }
 }

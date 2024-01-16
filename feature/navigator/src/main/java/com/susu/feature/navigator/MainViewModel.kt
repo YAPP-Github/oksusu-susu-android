@@ -1,6 +1,8 @@
 package com.susu.feature.navigator
 
 import androidx.lifecycle.viewModelScope
+import com.susu.core.android.throwUnknownException
+import com.susu.core.model.exception.NetworkException
 import com.susu.core.ui.DialogToken
 import com.susu.core.ui.SnackbarToken
 import com.susu.core.ui.base.BaseViewModel
@@ -12,6 +14,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import java.net.UnknownHostException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -41,6 +44,12 @@ class MainViewModel @Inject constructor(
 
     fun dismissDialog() {
         intent { copy(dialogVisible = false) }
+    }
+
+    fun handleException(throwable: Throwable, retry: () -> Unit) = when(throwable) {
+        is NetworkException -> postSideEffect(MainSideEffect.ShowNetworkErrorSnackbar(retry))
+        is UnknownHostException -> postSideEffect(MainSideEffect.ShowNetworkErrorSnackbar(retry))
+        else -> throwUnknownException(throwable)
     }
 
     fun initCategoryConfig() = viewModelScope.launch {
