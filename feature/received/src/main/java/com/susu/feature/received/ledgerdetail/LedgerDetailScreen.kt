@@ -1,5 +1,6 @@
 package com.susu.feature.received.ledgerdetail
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -16,13 +17,16 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.susu.core.designsystem.component.appbar.SusuDefaultAppBar
 import com.susu.core.designsystem.component.appbar.icon.BackIcon
 import com.susu.core.designsystem.component.appbar.icon.DeleteText
@@ -34,24 +38,75 @@ import com.susu.core.designsystem.component.button.SusuGhostButton
 import com.susu.core.designsystem.theme.Gray25
 import com.susu.core.designsystem.theme.Gray50
 import com.susu.core.designsystem.theme.SusuTheme
+import com.susu.core.model.Ledger
+import com.susu.core.ui.DialogToken
 import com.susu.core.ui.R
+import com.susu.core.ui.SnackbarToken
 import com.susu.core.ui.alignList
+import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.feature.received.ledgerdetail.component.LedgerDetailEnvelopeContainer
 import com.susu.feature.received.ledgerdetail.component.LedgerDetailOverviewColumn
 
 @Composable
 fun LedgerDetailRoute(
-    @Suppress("deteKt:UnusedParameter")
     viewModel: LedgerDetailViewModel = hiltViewModel(),
-    navigateLedgerEdit: () -> Unit,
+    ledger: String?,
+    navigateLedgerEdit: (Ledger) -> Unit,
+    popBackStackWithLedger: (String) -> Unit,
+    popBackStackWithDeleteLedgerId: (Int) -> Unit,
+    onShowSnackbar: (SnackbarToken) -> Unit,
+    onShowDialog: (DialogToken) -> Unit,
+    handleException: (Throwable, () -> Unit) -> Unit,
 ) {
+    val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
+    val context = LocalContext.current
+    viewModel.sideEffect.collectWithLifecycle { sideEffect ->
+        when (sideEffect) {
+            is LedgerDetailSideEffect.NavigateLedgerEdit -> navigateLedgerEdit(sideEffect.ledger)
+            is LedgerDetailSideEffect.PopBackStackWithLedger -> popBackStackWithLedger(sideEffect.ledger)
+            is LedgerDetailSideEffect.ShowDeleteDialog -> {
+                onShowDialog(
+                    DialogToken(
+                        title = context.getString(com.susu.feature.received.R.string.ledger_detail_screen_dialog_title),
+                        text = context.getString(com.susu.feature.received.R.string.ledger_detail_screen_dialog_description),
+                        confirmText = context.getString(R.string.word_delete),
+                        dismissText = context.getString(R.string.word_cancel),
+                        onConfirmRequest = sideEffect.onConfirmRequest,
+                    ),
+                )
+            }
+
+            LedgerDetailSideEffect.ShowDeleteSuccessSnackbar -> {
+                onShowSnackbar(
+                    SnackbarToken(
+                        message = context.getString(com.susu.feature.received.R.string.ledger_detail_screen_snackbar_message),
+                    ),
+                )
+            }
+
+            is LedgerDetailSideEffect.PopBackStackWithDeleteLedgerId -> popBackStackWithDeleteLedgerId(sideEffect.ledgerId)
+            is LedgerDetailSideEffect.HandleException -> handleException(sideEffect.throwable, sideEffect.retry)
+            is LedgerDetailSideEffect.ShowSnackbar -> onShowSnackbar(SnackbarToken(message = sideEffect.msg))
+        }
+    }
+
+    LaunchedEffect(key1 = Unit) {
+        viewModel.initData(ledger)
+    }
+
+    BackHandler(onBack = viewModel::popBackStackWithLedger)
+
     LedgerDetailScreen(
-        onClickEdit = navigateLedgerEdit,
+        uiState = uiState,
+        onClickEdit = viewModel::navigateLedgerEdit,
+        onClickDelete = viewModel::showDeleteDialog,
+        onClickBack = viewModel::popBackStackWithLedger,
     )
 }
 
 @Composable
 fun LedgerDetailScreen(
+    uiState: LedgerDetailState = LedgerDetailState(),
     onClickBack: () -> Unit = {},
     onClickEdit: () -> Unit = {},
     onClickDelete: () -> Unit = {},
@@ -89,13 +144,15 @@ fun LedgerDetailScreen(
                 ),
             ) {
                 item {
-                    LedgerDetailOverviewColumn(
-                        money = 0,
-                        count = 0,
-                        eventCategory = "장례식",
-                        eventName = "고모부 장례",
-                        eventRange = "2023.05.12 - 2023.05.15",
-                    )
+                    with(uiState) {
+                        LedgerDetailOverviewColumn(
+                            money = money,
+                            count = count,
+                            eventName = name,
+                            eventCategory = category,
+                            eventRange = "$startDate - $endDate",
+                        )
+                    }
                 }
 
                 item {
@@ -148,7 +205,9 @@ fun LedgerDetailScreen(
                 if (showEmptyScreen) {
                     item {
                         Column(
-                            modifier = Modifier.fillMaxWidth().padding(top = 104.dp),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 104.dp),
                             horizontalAlignment = Alignment.CenterHorizontally,
                             verticalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_m),
                         ) {

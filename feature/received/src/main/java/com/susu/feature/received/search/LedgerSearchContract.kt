@@ -16,5 +16,5 @@ data class LedgerSearchState(
 
 sealed interface LedgerSearchSideEffect : SideEffect {
     data object PopBackStack : LedgerSearchSideEffect
-    data class NavigateLedgerDetail(val id: Int) : LedgerSearchSideEffect
+    data class NavigateLedgerDetail(val ledger: Ledger) : LedgerSearchSideEffect
 }

@@ -23,6 +23,7 @@ internal class FeatureComposeConventionPlugin : Plugin<Project> {
                 "implementation"(project(":domain"))
 
                 "implementation"(libs.findLibrary("kotlinx.immutable").get())
+                "implementation"(libs.findLibrary("kotlinx.datetime").get())
                 "implementation"(libs.findLibrary("kotlinx.coroutines.android").get())
                 "implementation"(libs.findLibrary("kotlinx.coroutines.core").get())
 

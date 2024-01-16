@@ -221,7 +221,7 @@ fun SusuLimitDatePickerBottomSheet(
             InfiniteColumn(
                 modifier = Modifier.width(100.dp),
                 items = yearList,
-                initialItem = stringResource(R.string.word_year_format, criteriaYear),
+                initialItem = stringResource(R.string.word_year_format, selectedYear),
                 itemHeight = itemHeight,
                 numberOfDisplayedItems = numberOfDisplayedItems,
                 onItemSelected = { _, item ->
@@ -233,7 +233,7 @@ fun SusuLimitDatePickerBottomSheet(
                 InfiniteColumn(
                     modifier = Modifier.width(100.dp),
                     items = monthRange.map { stringResource(id = R.string.word_month_format, it) },
-                    initialItem = stringResource(R.string.word_month_format, criteriaMonth),
+                    initialItem = stringResource(R.string.word_month_format, selectedMonth),
                     itemHeight = itemHeight,
                     numberOfDisplayedItems = numberOfDisplayedItems,
                     onItemSelected = { _, item ->

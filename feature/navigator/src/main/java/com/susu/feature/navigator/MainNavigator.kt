@@ -4,12 +4,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavDestination
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.susu.core.designsystem.theme.SusuTheme
+import com.susu.core.model.Ledger
 import com.susu.feature.community.navigation.navigateCommunity
 import com.susu.feature.loginsignup.navigation.LoginSignupRoute
 import com.susu.feature.mypage.navigation.navigateMyPage
@@ -57,7 +57,7 @@ internal class MainNavigator(
 
     fun navigate(tab: MainNavigationTab) {
         val navOptions = navOptions {
-            popUpTo(navController.graph.findStartDestination().id) {
+            popUpTo(SentRoute.route) {
                 saveState = true
             }
             launchSingleTop = true
@@ -109,16 +109,16 @@ internal class MainNavigator(
         }
     }
 
-    fun navigateLedgerDetail(id: Int) {
-        navController.navigateLedgerDetail(id)
+    fun navigateLedgerDetail(ledger: Ledger) {
+        navController.navigateLedgerDetail(ledger)
     }
 
     fun navigateLedgerSearch() {
         navController.navigateLedgerSearch()
     }
 
-    fun navigateLedgerEdit() {
-        navController.navigateLedgerEdit()
+    fun navigateLedgerEdit(ledger: Ledger) {
+        navController.navigateLedgerEdit(ledger)
     }
 
     fun navigateLedgerFilter() {

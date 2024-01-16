@@ -12,4 +12,12 @@ interface LedgerRepository {
         page: Int?,
         sort: String?,
     ): List<Ledger>
+
+    suspend fun editLedger(
+        ledger: Ledger,
+    ): Ledger
+
+    suspend fun deleteLedger(
+        id: Int,
+    )
 }

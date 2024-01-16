@@ -39,13 +39,13 @@ import kotlinx.coroutines.flow.debounce
 fun LedgerSearchRoute(
     viewModel: LedgerSearchViewModel = hiltViewModel(),
     popBackStack: () -> Unit,
-    navigateLedgerDetail: (Int) -> Unit,
+    navigateLedgerDetail: (Ledger) -> Unit,
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
             LedgerSearchSideEffect.PopBackStack -> popBackStack()
-            is LedgerSearchSideEffect.NavigateLedgerDetail -> navigateLedgerDetail(sideEffect.id)
+            is LedgerSearchSideEffect.NavigateLedgerDetail -> navigateLedgerDetail(sideEffect.ledger)
         }
     }
 
@@ -69,9 +69,9 @@ fun LedgerSearchRoute(
             viewModel.upsertLedgerRecentSearch(search)
         },
         onClickRecentSearchContainerCloseIcon = viewModel::deleteLedgerRecentSearch,
-        onClickSearchResultContainer = {
-            viewModel.upsertLedgerRecentSearch(it.title)
-            viewModel.navigateLedgerDetail(it.id)
+        onClickSearchResultContainer = { ledger ->
+            viewModel.upsertLedgerRecentSearch(ledger.title)
+            viewModel.navigateLedgerDetail(ledger)
         },
     )
 }
