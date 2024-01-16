@@ -11,9 +11,10 @@ class LoginRepositoryImpl @Inject constructor(
     private val userService: UserService,
 ) : LoginRepository {
     override suspend fun login(
+        provider: String,
         oauthAccessToken: String,
     ) = userService.login(
-        provider = SnsProviders.Kakao.path,
+        provider = provider,
         accessTokenRequest = AccessTokenRequest(oauthAccessToken),
     ).getOrThrow().toDomain()
 

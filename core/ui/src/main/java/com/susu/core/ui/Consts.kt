@@ -14,3 +14,7 @@ val alignList
 
 const val USER_NAME_MAX_LENGTH = 10
 val nameRegex = Regex("[a-zA-Z가-힣]{0,10}")
+
+enum class SnsProviders(val path: String) {
+    Kakao("KAKAO"),
+}

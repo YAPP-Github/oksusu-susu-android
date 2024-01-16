@@ -11,11 +11,12 @@ class SignUpUseCase @Inject constructor(
     private val tokenRepository: TokenRepository,
 ) {
     suspend operator fun invoke(
+        provider: String,
         oauthAccessToken: String,
         user: User,
     ) = runCatchingIgnoreCancelled {
         tokenRepository.saveTokens(
-            token = signUpRepository.signUp(oauthAccessToken = oauthAccessToken, user = user),
+            token = signUpRepository.signUp(provider = provider, oauthAccessToken = oauthAccessToken, user = user),
         )
     }
 }
