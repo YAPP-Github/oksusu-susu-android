@@ -29,6 +29,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.susu.core.designsystem.component.appbar.SusuDefaultAppBar
 import com.susu.core.designsystem.component.appbar.icon.BackIcon
 import com.susu.core.designsystem.component.bottomsheet.datepicker.SusuDatePickerBottomSheet
+import com.susu.core.designsystem.component.bottomsheet.datepicker.SusuLimitDatePickerBottomSheet
 import com.susu.core.designsystem.component.button.AddConditionButton
 import com.susu.core.designsystem.component.button.FilledButtonColor
 import com.susu.core.designsystem.component.button.MediumButtonStyle
@@ -249,11 +250,14 @@ fun LedgerEditScreen(
         )
 
         if (uiState.showStartDateBottomSheet) {
-            // TODO 종료 날짜 이후로 선택할 수 없게 수정
-            SusuDatePickerBottomSheet(
+            SusuLimitDatePickerBottomSheet(
                 initialYear = uiState.startYear,
                 initialMonth = uiState.startMonth,
                 initialDay = uiState.startDay,
+                criteriaYear = uiState.endYear,
+                criteriaMonth = uiState.endMonth,
+                criteriaDay = uiState.endDay,
+                afterDate = false,
                 maximumContainerHeight = 346.dp,
                 onDismissRequest = { _, _, _ -> onDismissStartDateBottomSheet() },
                 onItemSelected = onStartDateItemSelected
@@ -261,11 +265,14 @@ fun LedgerEditScreen(
         }
 
         if (uiState.showEndDateBottomSheet) {
-            // TODO 시작 날짜 이후로 선택할 수 없게 수정
-            SusuDatePickerBottomSheet(
+            SusuLimitDatePickerBottomSheet(
                 initialYear = uiState.endYear,
                 initialMonth = uiState.endMonth,
                 initialDay = uiState.endDay,
+                criteriaYear = uiState.startYear,
+                criteriaMonth = uiState.startMonth,
+                criteriaDay = uiState.startDay,
+                afterDate = true,
                 maximumContainerHeight = 346.dp,
                 onDismissRequest = { _, _, _ -> onDismissEndDateBottomSheet() },
                 onItemSelected = onEndDateItemSelected
