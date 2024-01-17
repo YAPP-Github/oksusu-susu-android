@@ -44,6 +44,7 @@ import com.susu.core.ui.alignList
 import com.susu.core.ui.extension.OnBottomReached
 import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.feature.received.R
+import com.susu.feature.received.navigation.argument.FilterArgument
 import com.susu.feature.received.received.component.LedgerAddCard
 import com.susu.feature.received.received.component.LedgerCard
 import kotlinx.collections.immutable.toImmutableList
@@ -56,7 +57,7 @@ fun ReceivedRoute(
     padding: PaddingValues,
     navigateLedgerDetail: (Ledger) -> Unit,
     navigateLedgerSearch: () -> Unit,
-    navigateLedgerFilter: () -> Unit,
+    navigateLedgerFilter: (FilterArgument) -> Unit,
     navigateLedgerAdd: () -> Unit,
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
@@ -65,7 +66,7 @@ fun ReceivedRoute(
         when (sideEffect) {
             ReceivedEffect.NavigateLedgerAdd -> navigateLedgerAdd()
             is ReceivedEffect.NavigateLedgerDetail -> navigateLedgerDetail(sideEffect.ledger)
-            ReceivedEffect.NavigateLedgerFilter -> navigateLedgerFilter()
+            is ReceivedEffect.NavigateLedgerFilter -> navigateLedgerFilter(sideEffect.filter)
             ReceivedEffect.NavigateLedgerSearch -> navigateLedgerSearch()
         }
     }

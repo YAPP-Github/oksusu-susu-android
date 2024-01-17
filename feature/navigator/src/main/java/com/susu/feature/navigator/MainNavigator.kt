@@ -14,6 +14,7 @@ import com.susu.feature.community.navigation.navigateCommunity
 import com.susu.feature.loginsignup.navigation.LoginSignupRoute
 import com.susu.feature.mypage.navigation.navigateMyPage
 import com.susu.feature.received.navigation.ReceivedRoute
+import com.susu.feature.received.navigation.argument.FilterArgument
 import com.susu.feature.received.navigation.navigateLedgerAdd
 import com.susu.feature.received.navigation.navigateLedgerDetail
 import com.susu.feature.received.navigation.navigateLedgerEdit
@@ -45,7 +46,7 @@ internal class MainNavigator(
         get() = when (currentDestination?.route) {
             in listOf(
                 ReceivedRoute.ledgerSearchRoute,
-                ReceivedRoute.ledgerFilterRoute,
+                ReceivedRoute.ledgerFilterRoute("{${ReceivedRoute.FILTER_ARGUMENT_NAME}}"),
                 SentRoute.sentEnvelopeRoute,
                 SentRoute.sentEnvelopeDetailRoute,
                 SentRoute.sentEnvelopeEditRoute,
@@ -121,8 +122,8 @@ internal class MainNavigator(
         navController.navigateLedgerEdit(ledger)
     }
 
-    fun navigateLedgerFilter() {
-        navController.navigateLedgerFilter()
+    fun navigateLedgerFilter(filter: FilterArgument) {
+        navController.navigateLedgerFilter(filter)
     }
 
     fun navigateLedgerAdd() {

@@ -15,10 +15,11 @@ import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.ui.extension.susuClickable
 import com.susu.core.ui.util.currentDate
 import com.susu.core.ui.util.to_yyyy_dot_MM_dot_dd
+import java.time.LocalDateTime
 
 @Composable
 fun DateText(
-    text: String? = null,
+    date: LocalDateTime? = null,
     onClick: () -> Unit = {},
 ) {
     Text(
@@ -30,7 +31,7 @@ fun DateText(
                 vertical = SusuTheme.spacing.spacing_xxxxs,
             )
             .susuClickable(rippleEnabled = false, onClick = onClick),
-        text = text ?: currentDate.to_yyyy_dot_MM_dot_dd(),
+        text = date?.to_yyyy_dot_MM_dot_dd() ?: currentDate.to_yyyy_dot_MM_dot_dd(),
         style = SusuTheme.typography.title_xs,
         color = Gray40,
     )

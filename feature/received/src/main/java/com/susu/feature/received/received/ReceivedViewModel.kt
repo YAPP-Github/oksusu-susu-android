@@ -5,6 +5,7 @@ import com.susu.core.model.Ledger
 import com.susu.core.ui.base.BaseViewModel
 import com.susu.core.ui.extension.decodeFromUri
 import com.susu.domain.usecase.ledger.GetLedgerListUseCase
+import com.susu.feature.received.navigation.argument.FilterArgument
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
@@ -58,5 +59,5 @@ class ReceivedViewModel @Inject constructor(
     fun navigateLedgerDetail(ledger: Ledger) = postSideEffect(ReceivedEffect.NavigateLedgerDetail(ledger))
     fun navigateLedgerAdd() = postSideEffect(ReceivedEffect.NavigateLedgerAdd)
     fun navigateLedgerSearch() = postSideEffect(ReceivedEffect.NavigateLedgerSearch)
-    fun navigateLedgerFilter() = postSideEffect(ReceivedEffect.NavigateLedgerFilter)
+    fun navigateLedgerFilter(filter: FilterArgument = FilterArgument()) = postSideEffect(ReceivedEffect.NavigateLedgerFilter(filter))
 }

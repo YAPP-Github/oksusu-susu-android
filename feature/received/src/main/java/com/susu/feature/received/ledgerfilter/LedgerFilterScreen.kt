@@ -13,6 +13,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -20,6 +21,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.susu.core.designsystem.component.appbar.SusuDefaultAppBar
 import com.susu.core.designsystem.component.appbar.icon.BackIcon
 import com.susu.core.designsystem.component.button.FilledButtonColor
@@ -31,22 +34,38 @@ import com.susu.core.designsystem.component.button.SusuLinedButton
 import com.susu.core.designsystem.component.button.XSmallButtonStyle
 import com.susu.core.designsystem.theme.Gray10
 import com.susu.core.designsystem.theme.SusuTheme
+import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.core.ui.extension.susuClickable
 import com.susu.feature.received.R
 import com.susu.feature.received.ledgerfilter.component.DateText
 
 @Composable
 fun LedgerFilterRoute(
-    @Suppress("unused")
+    viewModel: LedgerFilterViewModel = hiltViewModel(),
     popBackStack: () -> Unit,
 ) {
+    val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
+    viewModel.sideEffect.collectWithLifecycle { sideEffect ->
+        when(sideEffect) {
+            is LedgerFilterSideEffect.HandleException -> TODO()
+            LedgerFilterSideEffect.PopBackStack -> popBackStack()
+            is LedgerFilterSideEffect.PopBackStackWithLedger -> TODO()
+        }
+    }
+
+    LaunchedEffect(key1 = Unit) {
+        viewModel.initData()
+    }
+
     LedgerFilterScreen(
+        uiState = uiState,
         onClickBackIcon = popBackStack,
     )
 }
 
 @Composable
 fun LedgerFilterScreen(
+    uiState: LedgerFilterState = LedgerFilterState(),
     onClickBackIcon: () -> Unit = {},
 ) {
     Column(
