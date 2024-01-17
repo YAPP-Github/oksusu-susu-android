@@ -23,6 +23,7 @@ import com.susu.feature.received.navigation.navigateReceived
 import com.susu.feature.sent.navigation.SentRoute
 import com.susu.feature.sent.navigation.navigateSent
 import com.susu.feature.sent.navigation.navigateSentEnvelope
+import com.susu.feature.sent.navigation.navigateSentEnvelopeAdd
 import com.susu.feature.sent.navigation.navigateSentEnvelopeDetail
 import com.susu.feature.sent.navigation.navigateSentEnvelopeEdit
 import com.susu.feature.statistics.navigation.navigateStatistics
@@ -91,6 +92,10 @@ internal class MainNavigator(
 
     fun navigateSentEnvelopeEdit() {
         navController.navigateSentEnvelopeEdit()
+    }
+
+    fun navigateSentEnvelopeAdd() {
+        navController.navigateSentEnvelopeAdd()
     }
 
     fun navigateLogin() {

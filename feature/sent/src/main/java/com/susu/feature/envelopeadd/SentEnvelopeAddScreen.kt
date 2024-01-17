@@ -7,6 +7,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.stringResource
@@ -35,6 +39,33 @@ enum class EnvelopeAddStep {
     PRESENT,
     MEMO,
     PHONE,
+}
+
+@Composable
+fun SentEnvelopeAddRoute(
+    popBackStack: () -> Unit,
+) {
+    var currentStep by remember { mutableStateOf(EnvelopeAddStep.MONEY) }
+
+    SentEnvelopeAddScreen(
+        currentStep = currentStep,
+        onClickBack = popBackStack,
+        onClickNext = {
+            // TODO: 수정 필요 (MORE 이후 분리 필요)
+            currentStep = when (currentStep) {
+                EnvelopeAddStep.MONEY -> EnvelopeAddStep.NAME
+                EnvelopeAddStep.NAME -> EnvelopeAddStep.RELATIONSHIP
+                EnvelopeAddStep.RELATIONSHIP -> EnvelopeAddStep.EVENT
+                EnvelopeAddStep.EVENT -> EnvelopeAddStep.DATE
+                EnvelopeAddStep.DATE -> EnvelopeAddStep.MORE
+                EnvelopeAddStep.MORE -> EnvelopeAddStep.VISITED
+                EnvelopeAddStep.VISITED -> EnvelopeAddStep.PRESENT
+                EnvelopeAddStep.PRESENT -> EnvelopeAddStep.PHONE
+                EnvelopeAddStep.PHONE -> EnvelopeAddStep.MEMO
+                else -> EnvelopeAddStep.MEMO
+            }
+        },
+    )
 }
 
 @Composable
@@ -82,36 +113,44 @@ fun SentEnvelopeAddScreen(
                     placeholder = stringResource(R.string.sent_envelope_add_name_placeholder),
                     friendList = friendList,
                 )
+
                 EnvelopeAddStep.RELATIONSHIP -> CategoryContent(
                     titleText = stringResource(R.string.sent_envelope_add_relationship_title),
                     categoryList = categoryList,
                 )
+
                 EnvelopeAddStep.EVENT -> CategoryContent(
                     titleText = stringResource(R.string.sent_envelope_add_event_title),
                     categoryList = eventList,
                 )
+
                 EnvelopeAddStep.DATE -> DateContent(
-                    name = "김철수"
+                    name = "김철수",
                 )
+
                 EnvelopeAddStep.MORE -> CategoryContent(
                     titleText = stringResource(R.string.sent_envelope_add_more_title),
                     categoryList = moreList,
                     hasSubTitle = true,
                     subTitleText = stringResource(R.string.sent_envelope_add_more_subtitle),
                 )
+
                 EnvelopeAddStep.VISITED -> CategoryContent(
                     titleText = stringResource(R.string.sent_envelope_add_visited_title),
                     categoryList = visitedList,
                 )
+
                 EnvelopeAddStep.PRESENT -> InputContent(
                     titleText = stringResource(R.string.sent_envelope_add_present_title),
                     placeholder = stringResource(R.string.sent_envelope_add_present_placeholder),
                 )
+
                 EnvelopeAddStep.PHONE -> InputContent(
                     titleText = stringResource(R.string.sent_envelope_add_phone_title),
                     placeholder = stringResource(R.string.sent_envelope_add_phone_placeholder),
                     name = "김철수",
                 )
+
                 EnvelopeAddStep.MEMO -> InputContent(
                     titleText = stringResource(R.string.sent_envelope_add_memo_title),
                     placeholder = stringResource(R.string.sent_envelope_add_memo_placeholder),
