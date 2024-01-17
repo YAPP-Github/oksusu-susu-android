@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.susu.core.designsystem.component.appbar.SusuProgressAppBar
 import com.susu.core.designsystem.component.appbar.icon.BackIcon
@@ -21,6 +22,7 @@ import com.susu.feature.envelopeadd.content.CategoryContent
 import com.susu.feature.envelopeadd.content.DateContent
 import com.susu.feature.envelopeadd.content.InputContent
 import com.susu.feature.envelopeadd.content.MoneyContent
+import com.susu.feature.sent.R
 
 enum class EnvelopeAddStep {
     MONEY,
@@ -76,44 +78,43 @@ fun SentEnvelopeAddScreen(
             when (targetState) {
                 EnvelopeAddStep.MONEY -> MoneyContent()
                 EnvelopeAddStep.NAME -> InputContent(
-                    titleText = "누구에게 보냈나요",
-                    placeholder = "이름을 입력해주세요",
-                    friendList = friendList
+                    titleText = stringResource(R.string.sent_envelope_add_name_title),
+                    placeholder = stringResource(R.string.sent_envelope_add_name_placeholder),
+                    friendList = friendList,
                 )
                 EnvelopeAddStep.RELATIONSHIP -> CategoryContent(
-                    titleText = "나와는\n어떤 사이 인가요",
+                    titleText = stringResource(R.string.sent_envelope_add_relationship_title),
                     categoryList = categoryList,
                 )
                 EnvelopeAddStep.EVENT -> CategoryContent(
-                    titleText = "어떤 경조였나요",
+                    titleText = stringResource(R.string.sent_envelope_add_event_title),
                     categoryList = eventList,
                 )
                 EnvelopeAddStep.DATE -> DateContent(
-                    titleText = "언제 보냈나요",
-                    name = "김철수",
-                )
-                EnvelopeAddStep.MORE -> CategoryContent(
-                    titleText = "더 기록할 내용이 있다면 알려주세요",
-                    categoryList = moreList,
-                    hasSubTitle = true,
-                    subTitleText = "복수로 선택하셔도 좋아요",
-                )
-                EnvelopeAddStep.VISITED -> CategoryContent(
-                    titleText = "방문했나요?",
-                    categoryList = visitedList
-                )
-                EnvelopeAddStep.PRESENT -> InputContent(
-                    titleText = "보낸 선물을 알려주세요",
-                    placeholder = "무엇을 선물했나요"
-                )
-                EnvelopeAddStep.PHONE -> InputContent(
-                    titleText = "연락처를 남겨주세요",
-                    placeholder = "01012345678",
                     name = "김철수"
                 )
+                EnvelopeAddStep.MORE -> CategoryContent(
+                    titleText = stringResource(R.string.sent_envelope_add_more_title),
+                    categoryList = moreList,
+                    hasSubTitle = true,
+                    subTitleText = stringResource(R.string.sent_envelope_add_more_subtitle),
+                )
+                EnvelopeAddStep.VISITED -> CategoryContent(
+                    titleText = stringResource(R.string.sent_envelope_add_visited_title),
+                    categoryList = visitedList,
+                )
+                EnvelopeAddStep.PRESENT -> InputContent(
+                    titleText = stringResource(R.string.sent_envelope_add_present_title),
+                    placeholder = stringResource(R.string.sent_envelope_add_present_placeholder),
+                )
+                EnvelopeAddStep.PHONE -> InputContent(
+                    titleText = stringResource(R.string.sent_envelope_add_phone_title),
+                    placeholder = stringResource(R.string.sent_envelope_add_phone_placeholder),
+                    name = "김철수",
+                )
                 EnvelopeAddStep.MEMO -> InputContent(
-                    titleText = "추가로 남기실 내용이 있나요",
-                    placeholder = "입력해주세요"
+                    titleText = stringResource(R.string.sent_envelope_add_memo_title),
+                    placeholder = stringResource(R.string.sent_envelope_add_memo_placeholder),
                 )
             }
         }
@@ -121,7 +122,7 @@ fun SentEnvelopeAddScreen(
             color = FilledButtonColor.Black,
             style = MediumButtonStyle.height60,
             shape = RectangleShape,
-            text = "다음",
+            text = stringResource(R.string.sent_envelope_add_next),
             onClick = onClickNext,
             modifier = modifier
                 .fillMaxWidth()
