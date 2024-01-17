@@ -114,9 +114,9 @@ fun SusuDatePickerBottomSheet(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SusuLimitDatePickerBottomSheet(
-    criteriaYear: Int,
-    criteriaMonth: Int,
-    criteriaDay: Int,
+    initialCriteriaYear: Int? = null,
+    initialCriteriaMonth: Int? = null,
+    initialCriteriaDay: Int? = null,
     initialYear: Int? = null,
     initialMonth: Int? = null,
     initialDay: Int? = null,
@@ -130,6 +130,12 @@ fun SusuLimitDatePickerBottomSheet(
     onDismissRequest: (Int, Int, Int) -> Unit = { _, _, _ -> },
     onItemSelected: (Int, Int, Int) -> Unit = { _, _, _ -> },
 ) {
+    val (criteriaYear, criteriaMonth, criteriaDay) = listOf(
+        initialCriteriaYear ?: 2030,
+        initialCriteriaMonth ?: 12,
+        initialCriteriaDay ?: 31,
+    )
+
     var selectedYear by remember {
         mutableIntStateOf(
             when {
@@ -348,9 +354,9 @@ private fun getLastDayInMonth(year: Int, month: Int): Int {
 fun SusuLimitDatePickerBottomSheetPreview() {
     SusuTheme {
         SusuLimitDatePickerBottomSheet(
-            criteriaYear = 2024,
-            criteriaMonth = 2,
-            criteriaDay = 16,
+            initialCriteriaYear = 2024,
+            initialCriteriaMonth = 2,
+            initialCriteriaDay = 16,
             initialYear = 2024,
             initialMonth = 2,
             initialDay = 20,

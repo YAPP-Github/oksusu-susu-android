@@ -9,6 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.susu.core.designsystem.theme.Gray100
 import com.susu.core.designsystem.theme.Gray15
 import com.susu.core.designsystem.theme.Gray40
 import com.susu.core.designsystem.theme.SusuTheme
@@ -33,7 +34,7 @@ fun DateText(
             .susuClickable(rippleEnabled = false, onClick = onClick),
         text = date?.to_yyyy_dot_MM_dot_dd() ?: currentDate.to_yyyy_dot_MM_dot_dd(),
         style = SusuTheme.typography.title_xs,
-        color = Gray40,
+        color = if (date == null) Gray40 else Gray100,
     )
 }
 

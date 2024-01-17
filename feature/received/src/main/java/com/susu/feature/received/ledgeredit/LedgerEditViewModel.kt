@@ -124,7 +124,7 @@ class LedgerEditViewModel @Inject constructor(
         }
     }
 
-    fun updateStartYear(year: Int, month: Int, day: Int) {
+    fun updateStartDate(year: Int, month: Int, day: Int) {
         intent {
             copy(
                 startYear = year,
@@ -134,7 +134,7 @@ class LedgerEditViewModel @Inject constructor(
         }
     }
 
-    fun updateEndYear(year: Int, month: Int, day: Int) = intent {
+    fun updateEndDate(year: Int, month: Int, day: Int) = intent {
         copy(
             endYear = year,
             endMonth = month,

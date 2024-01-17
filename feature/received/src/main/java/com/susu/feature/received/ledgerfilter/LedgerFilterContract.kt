@@ -4,13 +4,18 @@ import com.susu.core.model.Category
 import com.susu.core.ui.base.SideEffect
 import com.susu.core.ui.base.UiState
 import com.susu.feature.received.navigation.argument.FilterArgument
+import kotlinx.collections.immutable.PersistentList
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.datetime.toKotlinLocalDateTime
 import java.time.LocalDateTime
 
 data class LedgerFilterState(
-    val selectedCategoryList: List<Category> = emptyList(),
+    val categoryConfig: PersistentList<Category> = persistentListOf(),
+    val selectedCategoryList: PersistentList<Category> = persistentListOf(),
     val startAt: LocalDateTime? = null,
     val endAt: LocalDateTime? = null,
+    val showStartDateBottomSheet: Boolean = false,
+    val showEndDateBottomSheet: Boolean = false,
 ) : UiState
 
 internal fun LedgerFilterState.toFilterArgument() = FilterArgument(
