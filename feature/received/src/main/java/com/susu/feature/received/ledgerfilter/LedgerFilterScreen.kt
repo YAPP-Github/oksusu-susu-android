@@ -36,6 +36,7 @@ import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.model.Category
 import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.core.ui.util.currentDate
+import com.susu.core.ui.util.minDate
 import com.susu.core.ui.util.to_yyyy_dot_MM_dot_dd
 import com.susu.feature.received.R
 import com.susu.feature.received.ledgerfilter.component.DateText
@@ -228,12 +229,12 @@ fun LedgerFilterScreen(
 
     if (uiState.showEndDateBottomSheet) {
         SusuLimitDatePickerBottomSheet(
-            initialYear = uiState.endAt?.year,
-            initialMonth = uiState.endAt?.monthValue,
-            initialDay = uiState.endAt?.dayOfMonth,
-            initialCriteriaYear = uiState.startAt?.year ?: currentDate.year,
-            initialCriteriaMonth = uiState.startAt?.monthValue ?: currentDate.monthValue,
-            initialCriteriaDay = uiState.startAt?.dayOfMonth ?: currentDate.dayOfMonth,
+            initialYear = uiState.endAt?.year ?: currentDate.year,
+            initialMonth = uiState.endAt?.monthValue ?: currentDate.monthValue,
+            initialDay = uiState.endAt?.dayOfMonth ?: currentDate.dayOfMonth,
+            initialCriteriaYear = uiState.startAt?.year ?: minDate.year,
+            initialCriteriaMonth = uiState.startAt?.monthValue ?: minDate.monthValue,
+            initialCriteriaDay = uiState.startAt?.dayOfMonth ?: minDate.dayOfMonth,
             afterDate = true,
             maximumContainerHeight = 346.dp,
             onDismissRequest = { _, _, _ -> onDismissEndDateBottomSheet() },
