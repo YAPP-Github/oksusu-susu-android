@@ -54,6 +54,7 @@ fun ReceivedRoute(
     viewModel: ReceivedViewModel = hiltViewModel(),
     ledger: String?,
     toDeleteLedgerId: Int,
+    filter: String?,
     padding: PaddingValues,
     navigateLedgerDetail: (Ledger) -> Unit,
     navigateLedgerSearch: () -> Unit,
@@ -72,10 +73,12 @@ fun ReceivedRoute(
     }
 
     LaunchedEffect(key1 = Unit) {
+        viewModel.initData()
+        viewModel.filterIfNeed(filter)
         viewModel.updateLedgerIfNeed(ledger = ledger, toDeleteLedgerId = toDeleteLedgerId)
     }
 
-    ledgerListState.OnBottomReached {
+    ledgerListState.OnBottomReached(defaultItemCount = 2) {
         viewModel.getLedgerList()
     }
 

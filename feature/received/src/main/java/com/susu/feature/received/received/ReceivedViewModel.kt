@@ -9,7 +9,9 @@ import com.susu.feature.received.navigation.argument.FilterArgument
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
+import kotlinx.datetime.toJavaLocalDateTime
 import kotlinx.serialization.json.Json
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -20,18 +22,59 @@ class ReceivedViewModel @Inject constructor(
 ) {
     private var page = 0
     private var isLast = false
+    private var filter: FilterArgument = FilterArgument()
+    private var isFirstVisit = true
 
-    fun getLedgerList() = viewModelScope.launch {
+    fun initData() {
+        if (isFirstVisit.not()) return
+        getLedgerList()
+        isFirstVisit = false
+    }
+
+    fun filterIfNeed(filterUri: String?) {
+        if (filterUri == null) return
+
+        val filterArgument = Json.decodeFromUri<FilterArgument>(filterUri)
+        if (filter == filterArgument) return
+
+        filter = filterArgument
+        intent {
+            copy(
+                selectedCategoryList = filter.selectedCategoryList.toPersistentList(),
+                startAt = filter.startAt?.toJavaLocalDateTime(),
+                endAt = filter.endAt?.toJavaLocalDateTime(),
+            )
+        }
+
+        Timber.tag("테스트").d("filterIfNeed $page")
+        getLedgerList(true)
+    }
+
+    fun getLedgerList(needClear: Boolean = false) = viewModelScope.launch {
+        val currentList = if (needClear) {
+            page = 0
+            isLast = false
+            emptyList()
+        } else {
+            currentState.ledgerList
+        }
+
         if (isLast) return@launch
+
+        Timber.tag("테스트").d("getLedgerList $page")
 
         getLedgerListUseCase(
             GetLedgerListUseCase.Param(
                 page = page,
+                categoryId = null, // TODO
+                fromStartAt = currentState.startAt,
+                toEndAt = currentState.endAt,
+                sort = null,
             ),
         ).onSuccess { ledgerList ->
             isLast = ledgerList.isEmpty()
             page++
-            val newLedgerList = currentState.ledgerList.plus(ledgerList).toPersistentList()
+            val newLedgerList = currentList.plus(ledgerList).toPersistentList()
             intent {
                 copy(
                     ledgerList = newLedgerList,
@@ -59,5 +102,5 @@ class ReceivedViewModel @Inject constructor(
     fun navigateLedgerDetail(ledger: Ledger) = postSideEffect(ReceivedEffect.NavigateLedgerDetail(ledger))
     fun navigateLedgerAdd() = postSideEffect(ReceivedEffect.NavigateLedgerAdd)
     fun navigateLedgerSearch() = postSideEffect(ReceivedEffect.NavigateLedgerSearch)
-    fun navigateLedgerFilter(filter: FilterArgument = FilterArgument()) = postSideEffect(ReceivedEffect.NavigateLedgerFilter(filter))
+    fun navigateLedgerFilter(filterArgument: FilterArgument = filter) = postSideEffect(ReceivedEffect.NavigateLedgerFilter(filterArgument))
 }

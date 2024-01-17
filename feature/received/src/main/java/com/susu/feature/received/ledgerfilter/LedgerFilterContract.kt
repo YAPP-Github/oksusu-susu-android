@@ -26,6 +26,6 @@ internal fun LedgerFilterState.toFilterArgument() = FilterArgument(
 
 sealed interface LedgerFilterSideEffect : SideEffect {
     data object PopBackStack : LedgerFilterSideEffect
-    data class PopBackStackWithLedger(val ledger: String) : LedgerFilterSideEffect
+    data class PopBackStackWithFilter(val filter: String) : LedgerFilterSideEffect
     data class HandleException(val throwable: Throwable, val retry: () -> Unit) : LedgerFilterSideEffect
 }

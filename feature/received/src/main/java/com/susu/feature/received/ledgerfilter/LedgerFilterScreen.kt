@@ -11,16 +11,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -36,11 +32,9 @@ import com.susu.core.designsystem.component.button.SmallButtonStyle
 import com.susu.core.designsystem.component.button.SusuFilledButton
 import com.susu.core.designsystem.component.button.SusuLinedButton
 import com.susu.core.designsystem.component.button.XSmallButtonStyle
-import com.susu.core.designsystem.theme.Gray10
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.model.Category
 import com.susu.core.ui.extension.collectWithLifecycle
-import com.susu.core.ui.extension.susuClickable
 import com.susu.core.ui.util.currentDate
 import com.susu.core.ui.util.to_yyyy_dot_MM_dot_dd
 import com.susu.feature.received.R
@@ -51,13 +45,14 @@ import com.susu.feature.received.ledgerfilter.component.SelectedFilterButton
 fun LedgerFilterRoute(
     viewModel: LedgerFilterViewModel = hiltViewModel(),
     popBackStack: () -> Unit,
+    popBackStackWithFilter: (String) -> Unit,
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
             is LedgerFilterSideEffect.HandleException -> TODO()
             LedgerFilterSideEffect.PopBackStack -> popBackStack()
-            is LedgerFilterSideEffect.PopBackStackWithLedger -> TODO()
+            is LedgerFilterSideEffect.PopBackStackWithFilter -> popBackStackWithFilter(sideEffect.filter)
         }
     }
 
@@ -67,7 +62,8 @@ fun LedgerFilterRoute(
 
     LedgerFilterScreen(
         uiState = uiState,
-        onClickBackIcon = popBackStack,
+        onClickBackIcon = viewModel::popBackStack,
+        onClickApplyFilterButton = viewModel::popBackStackWithFilter,
         onStartDateItemSelected = viewModel::updateStartDate,
         onClickStartDateText = viewModel::showStartDateBottomSheet,
         onDismissStartDateBottomSheet = viewModel::hideStartDateBottomSheet,
@@ -86,6 +82,7 @@ fun LedgerFilterRoute(
 fun LedgerFilterScreen(
     uiState: LedgerFilterState = LedgerFilterState(),
     onClickBackIcon: () -> Unit = {},
+    onClickApplyFilterButton: () -> Unit = {},
     onStartDateItemSelected: (Int, Int, Int) -> Unit = { _, _, _ -> },
     onClickStartDateText: () -> Unit = {},
     onDismissStartDateBottomSheet: () -> Unit = {},
@@ -207,6 +204,7 @@ fun LedgerFilterScreen(
                         style = SmallButtonStyle.height48,
                         isActive = true,
                         text = stringResource(com.susu.core.ui.R.string.word_apply_filter),
+                        onClick = onClickApplyFilterButton,
                     )
                 }
             }
@@ -230,12 +228,12 @@ fun LedgerFilterScreen(
 
     if (uiState.showEndDateBottomSheet) {
         SusuLimitDatePickerBottomSheet(
-            initialYear = uiState.endAt?.year ?: currentDate.year,
-            initialMonth = uiState.endAt?.monthValue ?: currentDate.monthValue,
-            initialDay = uiState.endAt?.dayOfMonth ?: currentDate.dayOfMonth,
-            initialCriteriaYear = uiState.startAt?.year,
-            initialCriteriaMonth = uiState.startAt?.monthValue,
-            initialCriteriaDay = uiState.startAt?.dayOfMonth,
+            initialYear = uiState.endAt?.year,
+            initialMonth = uiState.endAt?.monthValue,
+            initialDay = uiState.endAt?.dayOfMonth,
+            initialCriteriaYear = uiState.startAt?.year ?: currentDate.year,
+            initialCriteriaMonth = uiState.startAt?.monthValue ?: currentDate.monthValue,
+            initialCriteriaDay = uiState.startAt?.dayOfMonth ?: currentDate.dayOfMonth,
             afterDate = true,
             maximumContainerHeight = 346.dp,
             onDismissRequest = { _, _, _ -> onDismissEndDateBottomSheet() },

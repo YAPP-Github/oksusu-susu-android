@@ -50,6 +50,7 @@ fun NavGraphBuilder.receivedNavGraph(
     popBackStack: () -> Unit,
     popBackStackWithLedger: (String) -> Unit,
     popBackStackWithDeleteLedgerId: (Int) -> Unit,
+    popBackStackWithFilter: (String) -> Unit,
     navigateLedgerSearch: () -> Unit,
     navigateLedgerEdit: (Ledger) -> Unit,
     navigateLedgerFilter: (FilterArgument) -> Unit,
@@ -61,9 +62,11 @@ fun NavGraphBuilder.receivedNavGraph(
     composable(route = ReceivedRoute.route) { navBackStackEntry ->
         val ledger = navBackStackEntry.savedStateHandle.get<String>(ReceivedRoute.LEDGER_ARGUMENT_NAME)
         val toDeleteLedgerId = navBackStackEntry.savedStateHandle.get<Int>(ReceivedRoute.LEDGER_ID_ARGUMENT_NAME) ?: -1
+        val filter = navBackStackEntry.savedStateHandle.get<String>(ReceivedRoute.FILTER_ARGUMENT_NAME)
         ReceivedRoute(
             ledger = ledger,
             toDeleteLedgerId = toDeleteLedgerId,
+            filter = filter,
             padding = padding,
             navigateLedgerDetail = navigateLedgerDetail,
             navigateLedgerSearch = navigateLedgerSearch,
@@ -110,7 +113,10 @@ fun NavGraphBuilder.receivedNavGraph(
     composable(
         route = ReceivedRoute.ledgerFilterRoute("{${ReceivedRoute.FILTER_ARGUMENT_NAME}}"),
     ) {
-        LedgerFilterRoute(popBackStack = popBackStack)
+        LedgerFilterRoute(
+            popBackStack = popBackStack,
+            popBackStackWithFilter = popBackStackWithFilter,
+        )
     }
 
     composable(

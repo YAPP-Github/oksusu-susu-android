@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.susu.core.model.Category
 import com.susu.core.ui.base.BaseViewModel
 import com.susu.core.ui.extension.decodeFromUri
+import com.susu.core.ui.extension.encodeToUri
 import com.susu.domain.usecase.categoryconfig.GetCategoryConfigUseCase
 import com.susu.feature.received.navigation.ReceivedRoute
 import com.susu.feature.received.navigation.argument.FilterArgument
@@ -14,6 +15,7 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
 import kotlinx.datetime.toJavaLocalDateTime
+import kotlinx.datetime.toKotlinLocalDateTime
 import kotlinx.serialization.json.Json
 import java.time.LocalDateTime
 import javax.inject.Inject
@@ -92,4 +94,14 @@ class LedgerFilterViewModel @Inject constructor(
     fun hideStartDateBottomSheet() = intent { copy(showStartDateBottomSheet = false) }
     fun showEndDateBottomSheet() = intent { copy(showEndDateBottomSheet = true) }
     fun hideEndDateBottomSheet() = intent { copy(showEndDateBottomSheet = false) }
+    fun popBackStack() = postSideEffect(LedgerFilterSideEffect.PopBackStack)
+    fun popBackStackWithFilter() {
+        val filter = FilterArgument(
+            selectedCategoryList = currentState.selectedCategoryList,
+            startAt = currentState.startAt?.toKotlinLocalDateTime(),
+            endAt = currentState.endAt?.toKotlinLocalDateTime(),
+        )
+
+        postSideEffect(LedgerFilterSideEffect.PopBackStackWithFilter(Json.encodeToUri(filter)))
+    }
 }
