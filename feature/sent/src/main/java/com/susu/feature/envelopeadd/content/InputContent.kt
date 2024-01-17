@@ -83,13 +83,13 @@ fun InputContent(
             placeholder = placeholder,
             placeholderColor = Gray40,
             modifier = modifier.fillMaxWidth(),
-            keyboardOptions = if (name == null) KeyboardOptions.Default else KeyboardOptions(keyboardType = KeyboardType.Number)
+            keyboardOptions = if (name == null) KeyboardOptions.Default else KeyboardOptions(keyboardType = KeyboardType.Number),
         )
         Spacer(modifier = modifier.size(SusuTheme.spacing.spacing_xl))
 
         if (friendList.isNotEmpty()) {
             // TODO: 친구 목록 서버 연동
-            LazyColumn() {
+            LazyColumn {
                 items(friendList) { friend ->
                     FriendListItem(friend)
                 }

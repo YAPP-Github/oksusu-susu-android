@@ -73,7 +73,7 @@ fun DateContent(
             modifier = modifier.susuClickable(
                 rippleEnabled = false,
                 onClick = { isSheetOpen = true },
-            )
+            ),
         )
     }
 

@@ -33,11 +33,15 @@ fun MoneyContent(
     modifier: Modifier = Modifier,
     padding: PaddingValues = PaddingValues(
         horizontal = SusuTheme.spacing.spacing_m,
-        vertical = SusuTheme.spacing.spacing_xl
+        vertical = SusuTheme.spacing.spacing_xl,
     ),
 ) {
     val moneyList = listOf(
-        10000, 30000, 50000, 100000, 500000,
+        10000,
+        30000,
+        50000,
+        100000,
+        500000,
     )
     var clickedMoney by remember { mutableStateOf("") }
 

@@ -82,7 +82,7 @@ fun CategoryContent(
                 text = subTitleText,
                 style = SusuTheme.typography.text_xs,
                 color = Gray70,
-                modifier = modifier.padding(top = SusuTheme.spacing.spacing_xxxxs)
+                modifier = modifier.padding(top = SusuTheme.spacing.spacing_xxxxs),
             )
         }
         Spacer(
@@ -172,5 +172,3 @@ fun VisitedContentPreview() {
         )
     }
 }
-
-
