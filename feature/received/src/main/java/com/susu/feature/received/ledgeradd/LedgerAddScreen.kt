@@ -1,5 +1,6 @@
 package com.susu.feature.received.ledgeradd
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -16,6 +17,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.susu.core.designsystem.component.appbar.SusuProgressAppBar
 import com.susu.core.designsystem.component.appbar.icon.BackIcon
 import com.susu.core.designsystem.component.button.FilledButtonColor
@@ -23,42 +26,40 @@ import com.susu.core.designsystem.component.button.MediumButtonStyle
 import com.susu.core.designsystem.component.button.SusuFilledButton
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.ui.R
+import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.core.ui.extension.susuDefaultAnimatedContentTransitionSpec
 import com.susu.feature.received.ledgeradd.content.CategoryContent
 import com.susu.feature.received.ledgeradd.content.DateContent
 import com.susu.feature.received.ledgeradd.content.NameContent
 
-enum class LedgerAddStep {
-    CATEGORY,
-    NAME,
-    DATE,
-}
+
 
 @Composable
 fun LedgerAddRoute(
+    viewModel: LedgerAddViewModel = hiltViewModel(),
     popBackStack: () -> Unit,
 ) {
-    var currentStep by remember {
-        mutableStateOf(LedgerAddStep.CATEGORY)
+    val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
+    viewModel.sideEffect.collectWithLifecycle { sideEffect ->
+        when (sideEffect) {
+            LedgerAddSideEffect.PopBackStack -> popBackStack()
+        }
+    }
+
+    BackHandler {
+        viewModel.goToPrevStep()
     }
 
     LedgerAddScreen(
-        currentStep = currentStep,
-        onClickBack = popBackStack,
-        onClickNextButton = {
-            // TODO 임시 코드 입니다.
-            currentStep = when (currentStep) {
-                LedgerAddStep.CATEGORY -> LedgerAddStep.NAME
-                LedgerAddStep.NAME -> LedgerAddStep.DATE
-                LedgerAddStep.DATE -> LedgerAddStep.DATE
-            }
-        },
+        uiState = uiState,
+        onClickBack = viewModel::goToPrevStep,
+        onClickNextButton = viewModel::goToNextStep,
     )
 }
 
 @Composable
 fun LedgerAddScreen(
-    currentStep: LedgerAddStep = LedgerAddStep.CATEGORY,
+    uiState: LedgerAddState = LedgerAddState(),
     onClickBack: () -> Unit = {},
     onClickNextButton: () -> Unit = {},
 ) {
@@ -73,12 +74,12 @@ fun LedgerAddScreen(
                     BackIcon(onClickBack)
                 },
                 entireStep = LedgerAddStep.entries.size,
-                currentStep = currentStep.ordinal + 1,
+                currentStep = uiState.currentStep.ordinal + 1,
             )
 
             AnimatedContent(
                 modifier = Modifier.weight(1f),
-                targetState = currentStep,
+                targetState = uiState.currentStep,
                 label = "LedgerAddScreen",
                 transitionSpec = {
                     susuDefaultAnimatedContentTransitionSpec(
@@ -101,6 +102,8 @@ fun LedgerAddScreen(
                 color = FilledButtonColor.Black,
                 style = MediumButtonStyle.height60,
                 text = stringResource(id = R.string.word_save),
+                isClickable = uiState.buttonEnabled,
+                isActive = uiState.buttonEnabled,
                 onClick = onClickNextButton,
             )
         }
