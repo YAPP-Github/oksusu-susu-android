@@ -17,6 +17,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import com.susu.core.designsystem.component.button.FilledButtonColor
 import com.susu.core.designsystem.component.button.GhostButtonColor
@@ -24,8 +28,10 @@ import com.susu.core.designsystem.component.button.MediumButtonStyle
 import com.susu.core.designsystem.component.button.SusuFilledButton
 import com.susu.core.designsystem.component.button.SusuGhostButton
 import com.susu.core.designsystem.theme.Gray100
+import com.susu.core.designsystem.theme.Gray60
 import com.susu.core.designsystem.theme.Gray70
 import com.susu.core.designsystem.theme.SusuTheme
+import com.susu.feature.sent.R
 
 @Composable
 fun CategoryContent(
@@ -34,6 +40,7 @@ fun CategoryContent(
         horizontal = SusuTheme.spacing.spacing_m,
         vertical = SusuTheme.spacing.spacing_xl,
     ),
+    event: String? = null,
     titleText: String,
     hasSubTitle: Boolean = false,
     subTitleText: String = "",
@@ -42,17 +49,35 @@ fun CategoryContent(
     val scrollState = rememberScrollState()
     var selectedItem by remember { mutableStateOf(-1) }
 
+    val title = buildAnnotatedString {
+        withStyle(style = SpanStyle(color = Gray60)) {
+            append(event + stringResource(R.string.sent_envelope_add_visited_to))
+        }
+        withStyle(style = SpanStyle(color = Gray100)) {
+            append(titleText)
+        }
+    }
+
     Column(
         modifier = modifier
             .fillMaxSize()
             .padding(padding)
             .verticalScroll(scrollState),
     ) {
-        Text(
-            text = titleText,
-            style = SusuTheme.typography.title_m,
-            color = Gray100,
-        )
+        if (event == null) {
+            Text(
+                text = titleText,
+                style = SusuTheme.typography.title_m,
+                color = Gray100,
+            )
+        } else {
+            Text(
+                text = title,
+                style = SusuTheme.typography.title_m,
+                color = Gray100,
+            )
+        }
+
         if (hasSubTitle) {
             Text(
                 text = subTitleText,
@@ -102,10 +127,11 @@ fun CategoryContentPreview() {
 
     SusuTheme {
         CategoryContent(
-            titleText = "나와는\n어떤 사이 인가요",
+            event = "결혼식",
+            titleText = "방문했나요?",
             categoryList = categoryList,
-            hasSubTitle = true,
-            subTitleText = "복수로 선택하셔도 좋아요"
+            hasSubTitle = false,
+//            subTitleText = "복수로 선택하셔도 좋아요"
         )
     }
 }

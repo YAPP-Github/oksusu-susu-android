@@ -51,4 +51,6 @@
     <string name="sent_envelope_add_money_placeholder">금액을 입력해주세요</string>
     <string name="sent_envelope_add_money_won">원</string>
     <string name="sent_envelope_add_date_to">님에게</string>
+    <string name="sent_envelope_add_phone_to">"님의 "</string>
+    <string name="sent_envelope_add_visited_to">"을 "</string>
 </resources>

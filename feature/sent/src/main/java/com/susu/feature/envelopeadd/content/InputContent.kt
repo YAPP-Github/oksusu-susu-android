@@ -17,6 +17,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.KeyboardType
@@ -28,6 +29,7 @@ import com.susu.core.designsystem.theme.Gray40
 import com.susu.core.designsystem.theme.Gray60
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.feature.envelopeadd.content.component.FriendListItem
+import com.susu.feature.sent.R
 
 @Composable
 fun InputContent(
@@ -45,7 +47,7 @@ fun InputContent(
 
     val title = buildAnnotatedString {
         withStyle(style = SpanStyle(color = Gray60)) {
-            append(name + "님의 ")
+            append(name + stringResource(R.string.sent_envelope_add_phone_to))
         }
         withStyle(style = SpanStyle(color = Gray100)) {
             append(titleText)
