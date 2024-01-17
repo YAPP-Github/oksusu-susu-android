@@ -78,7 +78,7 @@ fun ReceivedRoute(
         viewModel.updateLedgerIfNeed(ledger = ledger, toDeleteLedgerId = toDeleteLedgerId)
     }
 
-    ledgerListState.OnBottomReached(defaultItemCount = 2) {
+    ledgerListState.OnBottomReached(minItemsCount = 2) {
         viewModel.getLedgerList()
     }
 
