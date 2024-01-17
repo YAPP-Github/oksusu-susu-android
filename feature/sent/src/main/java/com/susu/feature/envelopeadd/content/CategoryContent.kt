@@ -42,8 +42,7 @@ fun CategoryContent(
     ),
     event: String? = null,
     titleText: String,
-    hasSubTitle: Boolean = false,
-    subTitleText: String = "",
+    subTitleText: String? = null,
     categoryList: List<String>,
 ) {
     val scrollState = rememberScrollState()
@@ -78,7 +77,7 @@ fun CategoryContent(
             )
         }
 
-        if (hasSubTitle) {
+        if (subTitleText != null) {
             Text(
                 text = subTitleText,
                 style = SusuTheme.typography.text_xs,
@@ -122,16 +121,56 @@ fun CategoryContent(
 
 @Preview(showBackground = true, backgroundColor = 0xFFF6F6F6)
 @Composable
-fun CategoryContentPreview() {
-    val categoryList = mutableListOf("친구", "가족", "친척", "동료", "직접 입력")
+fun RelationshipContentPreview() {
+    val relationshipList = mutableListOf("친구", "가족", "친척", "동료", "직접 입력")
+
+    SusuTheme {
+        CategoryContent(
+            titleText = "나와는\n어떤 사이 인가요",
+            categoryList = relationshipList,
+        )
+    }
+}
+
+@Preview(showBackground = true, backgroundColor = 0xFFF6F6F6)
+@Composable
+fun EventContentPreview() {
+    val eventList = mutableListOf("결혼식", "돌잔치", "장례식", "생일 기념일", "직접 입력")
+
+    SusuTheme {
+        CategoryContent(
+            titleText = "어떤 경조사였나요",
+            categoryList = eventList,
+        )
+    }
+}
+
+@Preview(showBackground = true, backgroundColor = 0xFFF6F6F6)
+@Composable
+fun MoreContentPreview() {
+    val moreList = mutableListOf("방문여부", "선물", "메모", "받은 이의 연락처")
+
+    SusuTheme {
+        CategoryContent(
+            titleText = "더 기록할 내용이 있다면 알려주세요",
+            subTitleText = "복수로 선택하셔도 좋아요",
+            categoryList = moreList,
+        )
+    }
+}
+
+@Preview(showBackground = true, backgroundColor = 0xFFF6F6F6)
+@Composable
+fun VisitedContentPreview() {
+    val visitedList = mutableListOf("예", "아니요")
 
     SusuTheme {
         CategoryContent(
             event = "결혼식",
             titleText = "방문했나요?",
-            categoryList = categoryList,
-            hasSubTitle = false,
-//            subTitleText = "복수로 선택하셔도 좋아요"
+            categoryList = visitedList,
         )
     }
 }
+
+

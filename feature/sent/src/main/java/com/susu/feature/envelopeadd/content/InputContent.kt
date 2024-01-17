@@ -111,3 +111,37 @@ fun NameContentPreview() {
         )
     }
 }
+
+@Preview(showBackground = true, backgroundColor = 0xFFF6F6F6)
+@Composable
+fun PresentContentPreview() {
+    SusuTheme {
+        InputContent(
+            titleText = "보낸 선물을 알려주세요",
+            placeholder = "무엇을 선물했나요",
+        )
+    }
+}
+
+@Preview(showBackground = true, backgroundColor = 0xFFF6F6F6)
+@Composable
+fun PhoneContentPreview() {
+    SusuTheme {
+        InputContent(
+            name = "김철수",
+            titleText = "연락처를 남겨주세요",
+            placeholder = "01012345678",
+        )
+    }
+}
+
+@Preview(showBackground = true, backgroundColor = 0xFFF6F6F6)
+@Composable
+fun MemoContentPreview() {
+    SusuTheme {
+        InputContent(
+            titleText = "추가로 남기실 내용이 있나요",
+            placeholder = "입력해주세요",
+        )
+    }
+}

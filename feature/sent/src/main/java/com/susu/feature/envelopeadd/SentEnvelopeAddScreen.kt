@@ -37,8 +37,8 @@ enum class EnvelopeAddStep {
     MORE,
     VISITED,
     PRESENT,
-    MEMO,
     PHONE,
+    MEMO,
 }
 
 @Composable
@@ -131,7 +131,6 @@ fun SentEnvelopeAddScreen(
                 EnvelopeAddStep.MORE -> CategoryContent(
                     titleText = stringResource(R.string.sent_envelope_add_more_title),
                     categoryList = moreList,
-                    hasSubTitle = true,
                     subTitleText = stringResource(R.string.sent_envelope_add_more_subtitle),
                 )
 
