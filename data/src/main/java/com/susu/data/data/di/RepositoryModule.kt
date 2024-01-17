@@ -1,11 +1,15 @@
 package com.susu.data.data.di
 
+import com.susu.data.data.repository.CategoryConfigRepositoryImpl
 import com.susu.data.data.repository.LedgerRecentSearchRepositoryImpl
+import com.susu.data.data.repository.LedgerRepositoryImpl
 import com.susu.data.data.repository.LoginRepositoryImpl
 import com.susu.data.data.repository.SignUpRepositoryImpl
 import com.susu.data.data.repository.TermRepositoryImpl
 import com.susu.data.data.repository.TokenRepositoryImpl
+import com.susu.domain.repository.CategoryConfigRepository
 import com.susu.domain.repository.LedgerRecentSearchRepository
+import com.susu.domain.repository.LedgerRepository
 import com.susu.domain.repository.LoginRepository
 import com.susu.domain.repository.SignUpRepository
 import com.susu.domain.repository.TermRepository
@@ -43,4 +47,14 @@ abstract class RepositoryModule {
     abstract fun bindTermRepository(
         termRepositoryImpl: TermRepositoryImpl,
     ): TermRepository
+
+    @Binds
+    abstract fun bindLedgerRepository(
+        ledgerRepositoryImpl: LedgerRepositoryImpl,
+    ): LedgerRepository
+
+    @Binds
+    abstract fun bindCategoryConfigRepository(
+        categoryConfigRepositoryImpl: CategoryConfigRepositoryImpl,
+    ): CategoryConfigRepository
 }

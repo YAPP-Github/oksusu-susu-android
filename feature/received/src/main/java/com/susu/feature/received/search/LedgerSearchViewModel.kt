@@ -1,7 +1,9 @@
 package com.susu.feature.received.search
 
 import androidx.lifecycle.viewModelScope
+import com.susu.core.model.Ledger
 import com.susu.core.ui.base.BaseViewModel
+import com.susu.domain.usecase.ledger.GetLedgerListUseCase
 import com.susu.domain.usecase.ledgerrecentsearch.DeleteLedgerRecentSearchUseCase
 import com.susu.domain.usecase.ledgerrecentsearch.GetLedgerRecentSearchListUseCase
 import com.susu.domain.usecase.ledgerrecentsearch.UpsertLedgerRecentSearchUseCase
@@ -15,9 +17,12 @@ class LedgerSearchViewModel @Inject constructor(
     private val upsertLedgerRecentSearchUseCase: UpsertLedgerRecentSearchUseCase,
     private val getLedgerRecentSearchListUseCase: GetLedgerRecentSearchListUseCase,
     private val deleteLedgerRecentSearchUseCase: DeleteLedgerRecentSearchUseCase,
+    private val getLedgerListUseCase: GetLedgerListUseCase,
 ) : BaseViewModel<LedgerSearchState, LedgerSearchSideEffect>(
     LedgerSearchState(),
 ) {
+    fun navigateLedgerDetail(ledger: Ledger) = postSideEffect(LedgerSearchSideEffect.NavigateLedgerDetail(ledger))
+
     fun getLedgerRecentSearchList() = viewModelScope.launch {
         getLedgerRecentSearchListUseCase()
             .onSuccess(::updateRecentSearchList)
@@ -38,7 +43,23 @@ class LedgerSearchViewModel @Inject constructor(
 
     fun updateSearch(search: String) = intent { copy(searchKeyword = search) }
 
+    fun getLedgerList(search: String) = viewModelScope.launch {
+        getLedgerListUseCase(GetLedgerListUseCase.Param(title = search))
+            .onSuccess {
+                intent {
+                    copy(
+                        ledgerList = it.toPersistentList(),
+                        showSearchResultEmpty = it.isEmpty(),
+                    )
+                }
+            }
+    }
+
     fun popBackStack() = postSideEffect(LedgerSearchSideEffect.PopBackStack)
 
-    private fun updateRecentSearchList(searchList: List<String>) = intent { copy(searchKeywordList = searchList.toPersistentList()) }
+    private fun updateRecentSearchList(searchList: List<String>) = intent {
+        copy(
+            recentSearchKeywordList = searchList.toPersistentList(),
+        )
+    }
 }

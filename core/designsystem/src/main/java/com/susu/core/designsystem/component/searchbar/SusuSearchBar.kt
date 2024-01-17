@@ -30,6 +30,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.susu.core.designsystem.R
+import com.susu.core.designsystem.component.button.ClearIconButton
 import com.susu.core.designsystem.theme.Gray100
 import com.susu.core.designsystem.theme.Gray20
 import com.susu.core.designsystem.theme.Gray60
@@ -40,6 +41,7 @@ fun SusuSearchBar(
     modifier: Modifier = Modifier,
     value: String,
     onValueChange: (String) -> Unit = {},
+    onClickClearIcon: () -> Unit = {},
     maxLines: Int = 1,
     minLines: Int = 1,
     textColor: Color = Gray100,
@@ -94,6 +96,13 @@ fun SusuSearchBar(
                         )
                     }
                 }
+
+                if (value.isNotEmpty()) {
+                    ClearIconButton(
+                        iconSize = 24.dp,
+                        onClick = onClickClearIcon,
+                    )
+                }
             }
         },
     )
@@ -104,7 +113,7 @@ fun SusuSearchBar(
 fun SusuSearchBarPreview() {
     SusuTheme {
         var text by remember {
-            mutableStateOf("")
+            mutableStateOf("zzzz")
         }
 
         SusuSearchBar(
