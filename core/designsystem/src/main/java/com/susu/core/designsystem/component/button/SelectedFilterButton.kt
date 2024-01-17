@@ -1,4 +1,4 @@
-package com.susu.feature.received.ledgerfilter.component
+package com.susu.core.designsystem.component.button
 
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -10,21 +10,20 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.susu.core.designsystem.component.button.FilledButtonColor
-import com.susu.core.designsystem.component.button.SusuFilledButton
-import com.susu.core.designsystem.component.button.XSmallButtonStyle
 import com.susu.core.designsystem.theme.Gray10
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.ui.extension.susuClickable
 
 @Composable
 fun SelectedFilterButton(
+    color: FilledButtonColor = FilledButtonColor.Orange,
+    style: @Composable () -> ButtonStyle = XSmallButtonStyle.height28,
     name: String = "",
     onClickCloseIcon: () -> Unit = {},
 ) {
     SusuFilledButton(
-        color = FilledButtonColor.Orange,
-        style = XSmallButtonStyle.height28,
+        color = color,
+        style = style,
         text = name,
         isClickable = false,
         rightIcon = {

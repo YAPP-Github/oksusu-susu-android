@@ -17,7 +17,9 @@ data class ReceivedState(
     val startAt: LocalDateTime? = null,
     val endAt: LocalDateTime? = null,
     val selectedCategoryList: PersistentList<Category> = persistentListOf(),
-) : UiState
+) : UiState {
+    val isFiltered = startAt != null || endAt != null || selectedCategoryList.isNotEmpty()
+}
 
 sealed interface ReceivedEffect : SideEffect {
     data class NavigateLedgerDetail(val ledger: Ledger) : ReceivedEffect

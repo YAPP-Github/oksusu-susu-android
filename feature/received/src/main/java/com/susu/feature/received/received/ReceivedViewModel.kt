@@ -10,6 +10,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
 import kotlinx.datetime.toJavaLocalDateTime
+import kotlinx.datetime.toKotlinLocalDateTime
 import kotlinx.serialization.json.Json
 import timber.log.Timber
 import javax.inject.Inject
@@ -46,7 +47,17 @@ class ReceivedViewModel @Inject constructor(
             )
         }
 
-        Timber.tag("테스트").d("filterIfNeed $page")
+        getLedgerList(true)
+    }
+
+    fun clearDate() {
+        intent {
+            copy(
+                startAt = null,
+                endAt = null,
+            )
+        }
+
         getLedgerList(true)
     }
 
@@ -60,8 +71,6 @@ class ReceivedViewModel @Inject constructor(
         }
 
         if (isLast) return@launch
-
-        Timber.tag("테스트").d("getLedgerList $page")
 
         getLedgerListUseCase(
             GetLedgerListUseCase.Param(
@@ -102,5 +111,15 @@ class ReceivedViewModel @Inject constructor(
     fun navigateLedgerDetail(ledger: Ledger) = postSideEffect(ReceivedEffect.NavigateLedgerDetail(ledger))
     fun navigateLedgerAdd() = postSideEffect(ReceivedEffect.NavigateLedgerAdd)
     fun navigateLedgerSearch() = postSideEffect(ReceivedEffect.NavigateLedgerSearch)
-    fun navigateLedgerFilter(filterArgument: FilterArgument = filter) = postSideEffect(ReceivedEffect.NavigateLedgerFilter(filterArgument))
+    fun navigateLedgerFilter() = postSideEffect(
+        ReceivedEffect.NavigateLedgerFilter(
+            with(currentState) {
+                FilterArgument(
+                    selectedCategoryList = selectedCategoryList,
+                    startAt = startAt?.toKotlinLocalDateTime(),
+                    endAt = endAt?.toKotlinLocalDateTime(),
+                )
+            },
+        ),
+    )
 }

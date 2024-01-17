@@ -4,11 +4,12 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyGridState
@@ -33,6 +34,8 @@ import com.susu.core.designsystem.component.appbar.icon.LogoIcon
 import com.susu.core.designsystem.component.appbar.icon.NotificationIcon
 import com.susu.core.designsystem.component.appbar.icon.SearchIcon
 import com.susu.core.designsystem.component.bottomsheet.SusuSelectionBottomSheet
+import com.susu.core.designsystem.component.button.FilledButtonColor
+import com.susu.core.designsystem.component.button.FilterButton
 import com.susu.core.designsystem.component.button.GhostButtonColor
 import com.susu.core.designsystem.component.button.SmallButtonStyle
 import com.susu.core.designsystem.component.button.SusuFloatingButton
@@ -43,11 +46,14 @@ import com.susu.core.model.Ledger
 import com.susu.core.ui.alignList
 import com.susu.core.ui.extension.OnBottomReached
 import com.susu.core.ui.extension.collectWithLifecycle
+import com.susu.core.ui.util.to_yyyy_dot_MM_dot_dd
 import com.susu.feature.received.R
+import com.susu.core.designsystem.component.button.SelectedFilterButton
 import com.susu.feature.received.navigation.argument.FilterArgument
 import com.susu.feature.received.received.component.LedgerAddCard
 import com.susu.feature.received.received.component.LedgerCard
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.android.awaitFrame
 
 @Composable
 fun ReceivedRoute(
@@ -93,10 +99,11 @@ fun ReceivedRoute(
         onClickFilterButton = viewModel::navigateLedgerFilter,
         onClickAlignButton = viewModel::showAlignBottomSheet,
         onDismissAlignBottomSheet = viewModel::hideAlignBottomSheet,
+        onClickDateClose = viewModel::clearDate,
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun ReceiveScreen(
     uiState: ReceivedState = ReceivedState(),
@@ -110,6 +117,7 @@ fun ReceiveScreen(
     onClickLedgerCard: (Ledger) -> Unit = {},
     onClickFloatingAddButton: () -> Unit = {},
     onDismissAlignBottomSheet: () -> Unit = {},
+    onClickDateClose: () -> Unit = {},
 ) {
     Box(
         modifier = Modifier
@@ -146,9 +154,10 @@ fun ReceiveScreen(
                 item(
                     span = { GridItemSpan(2) },
                 ) {
-                    Row(
+                    FlowRow(
                         modifier = Modifier.padding(bottom = SusuTheme.spacing.spacing_xxs),
                         horizontalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxs),
+                        verticalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxs),
                     ) {
                         SusuGhostButton(
                             color = GhostButtonColor.Black,
@@ -162,19 +171,17 @@ fun ReceiveScreen(
                             },
                             onClick = onClickAlignButton,
                         )
-                        SusuGhostButton(
-                            color = GhostButtonColor.Black,
-                            style = SmallButtonStyle.height32,
-                            text = stringResource(com.susu.core.ui.R.string.word_filter),
-                            leftIcon = {
-                                Icon(
-                                    modifier = Modifier.size(16.dp),
-                                    painter = painterResource(id = com.susu.core.ui.R.drawable.ic_filter),
-                                    contentDescription = stringResource(R.string.content_description_filter_icon),
-                                )
-                            },
-                            onClick = onClickFilterButton,
-                        )
+
+                        FilterButton(uiState.isFiltered, onClickFilterButton)
+
+                        if (uiState.startAt != null || uiState.endAt != null) {
+                            SelectedFilterButton(
+                                color = FilledButtonColor.Black,
+                                style = SmallButtonStyle.height32,
+                                name = "${uiState.startAt?.to_yyyy_dot_MM_dot_dd() ?: ""}~${uiState.endAt?.to_yyyy_dot_MM_dot_dd() ?: ""}",
+                                onClickCloseIcon = onClickDateClose,
+                            )
+                        }
                     }
                 }
 

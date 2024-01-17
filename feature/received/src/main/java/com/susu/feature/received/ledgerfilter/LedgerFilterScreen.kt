@@ -40,7 +40,7 @@ import com.susu.core.ui.util.minDate
 import com.susu.core.ui.util.to_yyyy_dot_MM_dot_dd
 import com.susu.feature.received.R
 import com.susu.feature.received.ledgerfilter.component.DateText
-import com.susu.feature.received.ledgerfilter.component.SelectedFilterButton
+import com.susu.core.designsystem.component.button.SelectedFilterButton
 
 @Composable
 fun LedgerFilterRoute(
@@ -180,13 +180,12 @@ fun LedgerFilterScreen(
                     uiState.selectedCategoryList.forEach { category ->
                         SelectedFilterButton(
                             name = category.name,
-                            onClickCloseIcon = { onClickCategoryClose(category) },
-                        )
+                        ) { onClickCategoryClose(category) }
                     }
 
-                    if (uiState.startAt != null && uiState.endAt != null) {
+                    if (uiState.startAt != null || uiState.endAt != null) {
                         SelectedFilterButton(
-                            name = "${uiState.startAt.to_yyyy_dot_MM_dot_dd()}~${uiState.endAt.to_yyyy_dot_MM_dot_dd()}",
+                            name = "${uiState.startAt?.to_yyyy_dot_MM_dot_dd() ?: ""}~${uiState.endAt?.to_yyyy_dot_MM_dot_dd() ?: ""}",
                             onClickCloseIcon = onClickDateClose,
                         )
                     }

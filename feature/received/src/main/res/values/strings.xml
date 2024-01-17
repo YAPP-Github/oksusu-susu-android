@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="content_description_align_icon">정렬 아이콘</string>
-    <string name="content_description_filter_icon">필터 아이콘</string>
     <string name="received_screen_empty_ledger">아직 받은 장부가 없어요</string>
     <string name="received_screen_appbar_title">받아요</string>
     <string name="ledger_search_screen_empty_search_description">장부 이름, 경조사 카테고리 등을\n검색해볼 수 있어요</string>
