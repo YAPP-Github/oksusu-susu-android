@@ -9,11 +9,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -25,18 +25,24 @@ import com.susu.core.designsystem.component.button.FilledButtonColor
 import com.susu.core.designsystem.component.button.MediumButtonStyle
 import com.susu.core.designsystem.component.button.SusuFilledButton
 import com.susu.core.designsystem.theme.SusuTheme
+import com.susu.core.model.Category
 import com.susu.core.ui.R
 import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.core.ui.extension.susuDefaultAnimatedContentTransitionSpec
-import com.susu.feature.received.ledgeradd.content.CategoryContent
+import com.susu.feature.received.Category.category.CategoryViewModel
+import com.susu.feature.received.ledgeradd.category.CategoryContent
+import com.susu.feature.received.ledgeradd.category.CategorySideEffect
+import com.susu.feature.received.ledgeradd.category.CategoryState
 import com.susu.feature.received.ledgeradd.content.DateContent
 import com.susu.feature.received.ledgeradd.content.NameContent
-
+import kotlinx.coroutines.android.awaitFrame
+import kotlinx.coroutines.launch
 
 
 @Composable
 fun LedgerAddRoute(
     viewModel: LedgerAddViewModel = hiltViewModel(),
+    categoryViewModel: CategoryViewModel = hiltViewModel(),
     popBackStack: () -> Unit,
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
@@ -44,6 +50,23 @@ fun LedgerAddRoute(
         when (sideEffect) {
             LedgerAddSideEffect.PopBackStack -> popBackStack()
         }
+    }
+
+    val categoryState = categoryViewModel.uiState.collectAsStateWithLifecycle().value
+    val focusRequester = remember { FocusRequester() }
+    val scope = rememberCoroutineScope()
+    categoryViewModel.sideEffect.collectWithLifecycle { sideEffect ->
+        when (sideEffect) {
+            is CategorySideEffect.UpdateParentButtonState -> TODO()
+            CategorySideEffect.FocusCustomCategory -> scope.launch {
+                awaitFrame()
+                focusRequester.requestFocus()
+            }
+        }
+    }
+
+    LaunchedEffect(key1 = Unit) {
+        categoryViewModel.getCategoryConfig()
     }
 
     BackHandler {
@@ -54,6 +77,12 @@ fun LedgerAddRoute(
         uiState = uiState,
         onClickBack = viewModel::goToPrevStep,
         onClickNextButton = viewModel::goToNextStep,
+        categoryState = categoryState,
+        focusRequester = focusRequester,
+        onClickCategoryButton = categoryViewModel::selectCategory,
+        onClickCustomCategoryButton = categoryViewModel::showCustomCategoryTextField,
+        onClickCustomCategoryTextFieldCloseIcon = categoryViewModel::hideCustomCategoryTextField,
+        onClickCustomCategoryTextField = categoryViewModel::selectCustomCategory,
     )
 }
 
@@ -62,6 +91,12 @@ fun LedgerAddScreen(
     uiState: LedgerAddState = LedgerAddState(),
     onClickBack: () -> Unit = {},
     onClickNextButton: () -> Unit = {},
+    categoryState: CategoryState = CategoryState(),
+    focusRequester: FocusRequester = remember { FocusRequester() },
+    onClickCategoryButton: (Category) -> Unit = {},
+    onClickCustomCategoryButton: () -> Unit = {},
+    onClickCustomCategoryTextFieldCloseIcon: () -> Unit = {},
+    onClickCustomCategoryTextField: () -> Unit = {},
 ) {
     Box(
         modifier = Modifier
@@ -88,7 +123,15 @@ fun LedgerAddScreen(
                 },
             ) { targetState ->
                 when (targetState) {
-                    LedgerAddStep.CATEGORY -> CategoryContent()
+                    LedgerAddStep.CATEGORY -> CategoryContent(
+                        uiState = categoryState,
+                        focusRequester = focusRequester,
+                        onClickCategoryButton = onClickCategoryButton,
+                        onClickCustomCategoryButton = onClickCustomCategoryButton,
+                        onClickCustomCategoryTextFieldCloseIcon = onClickCustomCategoryTextFieldCloseIcon,
+                        onClickCustomCategoryTextField =  onClickCustomCategoryTextField
+                    )
+
                     LedgerAddStep.NAME -> NameContent()
                     LedgerAddStep.DATE -> DateContent()
                 }

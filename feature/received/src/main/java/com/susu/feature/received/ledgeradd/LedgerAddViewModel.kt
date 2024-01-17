@@ -22,6 +22,7 @@ class LedgerAddViewModel @Inject constructor(
     }
 
     fun goToNextStep() {
+        intent { copy(buttonEnabled = false) }
         when(currentState.currentStep) {
             LedgerAddStep.CATEGORY -> intent { copy(currentStep = LedgerAddStep.NAME) }
             LedgerAddStep.NAME -> intent { copy(currentStep = LedgerAddStep.DATE) }
