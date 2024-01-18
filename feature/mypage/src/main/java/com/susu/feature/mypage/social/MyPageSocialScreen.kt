@@ -17,11 +17,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.kakao.sdk.auth.AuthApiClient
 import com.susu.core.designsystem.component.appbar.SusuDefaultAppBar
 import com.susu.core.designsystem.component.appbar.icon.BackIcon
 import com.susu.core.designsystem.component.button.FilledButtonColor
@@ -64,7 +64,8 @@ fun MyPageSocialScreen(
             horizontalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_m),
         ) {
             SnsProviders.entries.forEach {
-                SocialProvider(isActive = it == SnsProviders.Kakao, snsProviders = it)
+                // 추후 소셜 로그인 플랫폼 추가 시 수정
+                SocialProvider(isActive = AuthApiClient.instance.hasToken(), snsProviders = it)
             }
         }
         Spacer(modifier = Modifier.height(56.dp))
@@ -88,16 +89,17 @@ fun SocialProvider(
 ) {
     Column(
         modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Box(
             modifier = Modifier
-                .background(color = if (isActive) snsProviders.backgroundColor else Gray25)
-                .clip(CircleShape)
+                .size(56.dp)
+                .background(color = if (isActive) snsProviders.backgroundColor else Gray25, shape = CircleShape)
                 .padding(SusuTheme.spacing.spacing_s),
         ) {
             if (isActive) {
                 Image(
-                    modifier = Modifier.size(64.dp).align(Alignment.Center),
+                    modifier = Modifier.size(36.dp).align(Alignment.Center),
                     painter = painterResource(id = snsProviders.iconId),
                     contentDescription = null,
                 )

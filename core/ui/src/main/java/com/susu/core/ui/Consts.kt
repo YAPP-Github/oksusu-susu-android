@@ -32,13 +32,13 @@ enum class SnsProviders(
     ),
     Naver(
         path = "",
-        nameId = R.string.sns_kakao,
+        nameId = R.string.sns_naver,
         iconId = R.drawable.ic_kakao_login,
         backgroundColor = Color.Unspecified,
     ),
     Google(
         path = "",
-        nameId = R.string.sns_kakao,
+        nameId = R.string.sns_google,
         iconId = R.drawable.ic_kakao_login,
         backgroundColor = Color.Unspecified,
     )
