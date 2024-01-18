@@ -18,10 +18,11 @@ class CategoryViewModel @Inject constructor(
 ) : BaseViewModel<CategoryState, CategorySideEffect>(
     CategoryState(),
 ) {
-    val parentButtonEnabled = with(currentState) {
-        (selectedCategory == customCategory && !customCategory.customCategory.isNullOrEmpty()) ||
-            selectedCategory != null
-    }
+    private val parentSelectedCategory
+        get() = with(currentState) {
+            if (selectedCategory == customCategory && (customCategory.customCategory.isNullOrEmpty() || isSavedCustomCategory.not())) null
+            else selectedCategory
+        }
 
     fun getCategoryConfig() = viewModelScope.launch {
         getCategoryConfigUseCase()
@@ -43,6 +44,13 @@ class CategoryViewModel @Inject constructor(
         copy(selectedCategory = customCategory)
     }
 
+    fun updateCustomCategoryText(text: String) = intent {
+        copy(
+            selectedCategory = customCategory.copy(customCategory = text),
+            customCategory = customCategory.copy(customCategory = text),
+        )
+    }
+
     fun showCustomCategoryTextField() = intent {
         copy(
             showTextFieldButton = true,
@@ -52,10 +60,18 @@ class CategoryViewModel @Inject constructor(
 
     fun hideCustomCategoryTextField() = intent {
         copy(
+            isSavedCustomCategory = false,
             showTextFieldButton = false,
-            selectedCategory = null,
+            selectedCategory = if (isCustomCategorySelected) null else selectedCategory,
             customCategory = customCategory.copy(customCategory = ""),
         )
     }
 
+    fun toggleTextFieldSaved() = intent {
+        copy(
+            isSavedCustomCategory = !isSavedCustomCategory,
+        )
+    }
+
+    fun updateParentSelectedCategory() = postSideEffect(CategorySideEffect.UpdateParentSelectedCategory(parentSelectedCategory))
 }

@@ -57,7 +57,7 @@ fun LedgerAddRoute(
     val scope = rememberCoroutineScope()
     categoryViewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
-            is CategorySideEffect.UpdateParentButtonState -> TODO()
+            is CategorySideEffect.UpdateParentSelectedCategory -> viewModel.updateSelectedCategory(sideEffect.category)
             CategorySideEffect.FocusCustomCategory -> scope.launch {
                 awaitFrame()
                 focusRequester.requestFocus()
@@ -83,6 +83,10 @@ fun LedgerAddRoute(
         onClickCustomCategoryButton = categoryViewModel::showCustomCategoryTextField,
         onClickCustomCategoryTextFieldCloseIcon = categoryViewModel::hideCustomCategoryTextField,
         onClickCustomCategoryTextField = categoryViewModel::selectCustomCategory,
+        onClickCustomCategoryTextFieldClearIcon = { categoryViewModel.updateCustomCategoryText("") },
+        onTextChangeCustomCategoryTextField = categoryViewModel::updateCustomCategoryText,
+        onClickTextFieldInnerButton = categoryViewModel::toggleTextFieldSaved,
+        updateParentSelectedCategory = categoryViewModel::updateParentSelectedCategory,
     )
 }
 
@@ -97,6 +101,10 @@ fun LedgerAddScreen(
     onClickCustomCategoryButton: () -> Unit = {},
     onClickCustomCategoryTextFieldCloseIcon: () -> Unit = {},
     onClickCustomCategoryTextField: () -> Unit = {},
+    onClickCustomCategoryTextFieldClearIcon: () -> Unit = {},
+    onTextChangeCustomCategoryTextField: (String) -> Unit = {},
+    onClickTextFieldInnerButton: () -> Unit = {},
+    updateParentSelectedCategory: () -> Unit = {},
 ) {
     Box(
         modifier = Modifier
@@ -129,7 +137,11 @@ fun LedgerAddScreen(
                         onClickCategoryButton = onClickCategoryButton,
                         onClickCustomCategoryButton = onClickCustomCategoryButton,
                         onClickCustomCategoryTextFieldCloseIcon = onClickCustomCategoryTextFieldCloseIcon,
-                        onClickCustomCategoryTextField =  onClickCustomCategoryTextField
+                        onClickCustomCategoryTextField = onClickCustomCategoryTextField,
+                        onClickCustomCategoryTextFieldClearIcon = onClickCustomCategoryTextFieldClearIcon,
+                        onTextChangeCustomCategoryTextField = onTextChangeCustomCategoryTextField,
+                        onClickTextFieldInnerButton = onClickTextFieldInnerButton,
+                        updateParentSelectedCategory = updateParentSelectedCategory,
                     )
 
                     LedgerAddStep.NAME -> NameContent()

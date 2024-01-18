@@ -11,7 +11,9 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.res.stringResource
@@ -22,10 +24,12 @@ import com.susu.core.designsystem.component.button.MediumButtonStyle
 import com.susu.core.designsystem.component.button.SusuFilledButton
 import com.susu.core.designsystem.component.button.SusuGhostButton
 import com.susu.core.designsystem.component.textfieldbutton.SusuTextFieldFillMaxButton
+import com.susu.core.designsystem.component.textfieldbutton.TextFieldButtonColor
 import com.susu.core.designsystem.component.textfieldbutton.style.MediumTextFieldButtonStyle
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.model.Category
 import com.susu.feature.received.R
+import kotlinx.coroutines.flow.collect
 
 @Composable
 fun CategoryContent(
@@ -35,7 +39,21 @@ fun CategoryContent(
     onClickCustomCategoryButton: () -> Unit = {},
     onClickCustomCategoryTextFieldCloseIcon: () -> Unit = {},
     onClickCustomCategoryTextField: () -> Unit = {},
+    onClickCustomCategoryTextFieldClearIcon: () -> Unit = {},
+    onTextChangeCustomCategoryTextField: (String) -> Unit = {},
+    onClickTextFieldInnerButton: () -> Unit = {},
+    updateParentSelectedCategory: () -> Unit = {},
 ) {
+    LaunchedEffect(
+        key1 = uiState.selectedCategory,
+        key2 = uiState.isSavedCustomCategory,
+    ) {
+        snapshotFlow { uiState.selectedCategory }
+            .collect {
+                updateParentSelectedCategory()
+            }
+    }
+
     val scrollState = rememberScrollState()
 
     Column(
@@ -73,20 +91,25 @@ fun CategoryContent(
                         style = MediumButtonStyle.height60,
                         text = category.name,
                         rippleEnabled = false,
-                        onClick = { onClickCategoryButton(category) }
+                        onClick = { onClickCategoryButton(category) },
                     )
                 }
             }
 
             if (uiState.showTextFieldButton) {
                 SusuTextFieldFillMaxButton(
+                    color = if (uiState.isCustomCategorySelected) TextFieldButtonColor.Orange else TextFieldButtonColor.Black,
+                    text = uiState.customCategory.customCategory ?: "",
+                    onTextChange = onTextChangeCustomCategoryTextField,
                     focusRequester = focusRequester,
                     style = MediumTextFieldButtonStyle.height60,
                     isSaved = uiState.isSavedCustomCategory,
                     isFocused = uiState.customCategory == uiState.selectedCategory,
                     placeholder = stringResource(com.susu.core.ui.R.string.word_input_placeholder),
                     onClickCloseIcon = onClickCustomCategoryTextFieldCloseIcon,
+                    onClickClearIcon = onClickCustomCategoryTextFieldClearIcon,
                     onClickButton = { onClickCustomCategoryTextField() },
+                    onClickFilledButton = onClickTextFieldInnerButton,
                 )
             } else {
                 SusuGhostButton(

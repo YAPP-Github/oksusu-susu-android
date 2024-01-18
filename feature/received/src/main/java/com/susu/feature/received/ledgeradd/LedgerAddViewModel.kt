@@ -1,6 +1,7 @@
 package com.susu.feature.received.ledgeradd
 
 import androidx.lifecycle.viewModelScope
+import com.susu.core.model.Category
 import com.susu.core.model.Ledger
 import com.susu.core.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -13,6 +14,15 @@ class LedgerAddViewModel @Inject constructor(
 ) : BaseViewModel<LedgerAddState, LedgerAddSideEffect>(
     LedgerAddState(),
 ) {
+    private var selectedCategory: Category? = null
+
+    fun updateSelectedCategory(category: Category?) = intent {
+        selectedCategory = category
+        copy(
+            buttonEnabled = selectedCategory != null
+        )
+    }
+
     fun goToPrevStep() {
         when(currentState.currentStep) {
             LedgerAddStep.CATEGORY -> postSideEffect(LedgerAddSideEffect.PopBackStack)
