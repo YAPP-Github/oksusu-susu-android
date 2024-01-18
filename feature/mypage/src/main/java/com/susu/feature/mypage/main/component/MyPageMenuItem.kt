@@ -8,11 +8,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 import com.susu.core.designsystem.theme.Gray90
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.ui.extension.susuClickable
@@ -33,6 +33,7 @@ fun MyPageMenuItem(
             .susuClickable(
                 onClick = onMenuClick,
             ).padding(padding),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(modifier = Modifier.weight(1f), text = titleText, style = titleTextStyle, color = titleTextColor)
         action?.let {

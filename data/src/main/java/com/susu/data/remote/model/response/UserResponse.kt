@@ -22,5 +22,5 @@ fun UserResponse.toModel() = User(
     id = id,
     name = name,
     gender = gender,
-    birth = birth.toInt(),
+    birth = 0, // TODO: api 형식 변경 예정
 )

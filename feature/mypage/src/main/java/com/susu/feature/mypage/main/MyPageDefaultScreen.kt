@@ -53,7 +53,7 @@ fun MyPageDefaultRoute(
             MyPageEffect.NavigateToLogin -> navigateToLogin()
             MyPageEffect.NavigateToInfo -> navigateToInfo()
             MyPageEffect.NavigateToSocial -> navigateToSocial()
-            is MyPageEffect.ShowToast -> TODO()
+            is MyPageEffect.ShowToast -> {}
         }
     }
 
@@ -86,6 +86,7 @@ fun MyPageDefaultScreen(
             leftIcon = { LogoIcon() },
             actions = { NotificationIcon() },
         )
+
         MyPageMenuItem(
             titleText = uiState.userName,
             titleTextColor = Gray100,
@@ -106,7 +107,9 @@ fun MyPageDefaultScreen(
             padding = PaddingValues(SusuTheme.spacing.spacing_m),
             actionItemPadding = SusuTheme.spacing.spacing_xxl,
         )
+
         MyPageDivider()
+
         MyPageMenuItem(
             titleText = "연동된 소셜 계정",
             onMenuClick = navigateToSocial,
@@ -117,11 +120,18 @@ fun MyPageDefaultScreen(
         MyPageMenuItem(
             titleText = "개인정보 처리 방침",
         )
+
         MyPageDivider()
+
         MyPageMenuItem(
             titleText = "앱 버전",
+            action = {
+                Text(text = "업데이트 하기", style = SusuTheme.typography.title_xxs, color = Gray60)
+            },
         )
+
         MyPageDivider()
+
         MyPageMenuItem(
             titleText = "로그아웃",
             onMenuClick = onLogout,

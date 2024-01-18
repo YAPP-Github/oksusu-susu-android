@@ -11,6 +11,7 @@ sealed interface MyPageEffect : SideEffect {
 }
 
 data class MyPageState(
+    val isLoading: Boolean = false,
     val userName: String = "",
     val appVersion: String = ""
 ) : UiState
