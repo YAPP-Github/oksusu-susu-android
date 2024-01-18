@@ -4,15 +4,20 @@ import androidx.lifecycle.viewModelScope
 import com.susu.core.model.Category
 import com.susu.core.model.Ledger
 import com.susu.core.ui.base.BaseViewModel
+import com.susu.core.ui.extension.encodeToUri
+import com.susu.domain.usecase.ledger.CreateLedgerUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
+import kotlinx.datetime.toKotlinLocalDateTime
+import kotlinx.serialization.json.Json
 import timber.log.Timber
 import java.time.LocalDateTime
 import javax.inject.Inject
 
 @HiltViewModel
 class LedgerAddViewModel @Inject constructor(
+    private val createLedgerUseCase: CreateLedgerUseCase,
 ) : BaseViewModel<LedgerAddState, LedgerAddSideEffect>(
     LedgerAddState(),
 ) {
@@ -39,7 +44,7 @@ class LedgerAddViewModel @Inject constructor(
         this@LedgerAddViewModel.startAt = startAt
         this@LedgerAddViewModel.endAt = endAt
         copy(
-            buttonEnabled = startAt != null && endAt != null
+            buttonEnabled = startAt != null && endAt != null,
         )
     }
 
@@ -55,8 +60,25 @@ class LedgerAddViewModel @Inject constructor(
         when (currentState.currentStep) {
             LedgerAddStep.CATEGORY -> intent { copy(currentStep = LedgerAddStep.NAME) }
             LedgerAddStep.NAME -> intent { copy(currentStep = LedgerAddStep.DATE) }
-            LedgerAddStep.DATE -> { Timber.tag("LedgerAddViewModel").d("$name $selectedCategory $startAt $endAt") }
+            LedgerAddStep.DATE -> createLedger()
         }
+    }
+
+    private fun createLedger() = viewModelScope.launch {
+        intent { copy(isLoading = true) }
+        createLedgerUseCase(
+            ledger = Ledger(
+                title = name,
+                startAt = startAt!!.toKotlinLocalDateTime(),
+                endAt = endAt!!.toKotlinLocalDateTime(),
+                category = selectedCategory!!,
+            ),
+        ).onSuccess { ledger ->
+            postSideEffect(LedgerAddSideEffect.PopBackStackWithLedger(Json.encodeToUri(ledger)))
+        }.onFailure {
+            postSideEffect(LedgerAddSideEffect.HandleException(it, ::createLedger))
+        }
+        intent { copy(isLoading = false) }
     }
 
 }

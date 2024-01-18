@@ -117,6 +117,8 @@ fun NavGraphBuilder.receivedNavGraph(
     ) {
         LedgerAddRoute(
             popBackStack = popBackStack,
+            popBackStackWithLedger = popBackStackWithLedger,
+            handleException = handleException,
         )
     }
 }

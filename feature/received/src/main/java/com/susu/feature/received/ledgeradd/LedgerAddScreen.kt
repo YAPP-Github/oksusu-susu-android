@@ -24,6 +24,7 @@ import com.susu.core.designsystem.component.appbar.icon.BackIcon
 import com.susu.core.designsystem.component.button.FilledButtonColor
 import com.susu.core.designsystem.component.button.MediumButtonStyle
 import com.susu.core.designsystem.component.button.SusuFilledButton
+import com.susu.core.designsystem.component.screen.LoadingScreen
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.model.Category
 import com.susu.core.ui.R
@@ -52,11 +53,15 @@ fun LedgerAddRoute(
     nameViewModel: NameViewModel = hiltViewModel(),
     dateViewModel: DateViewModel = hiltViewModel(),
     popBackStack: () -> Unit,
+    popBackStackWithLedger: (String) -> Unit,
+    handleException: (Throwable, () -> Unit) -> Unit,
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
             LedgerAddSideEffect.PopBackStack -> popBackStack()
+            is LedgerAddSideEffect.HandleException -> handleException(sideEffect.throwable, sideEffect.retry)
+            is LedgerAddSideEffect.PopBackStackWithLedger -> popBackStackWithLedger(sideEffect.ledger)
         }
     }
 
@@ -231,6 +236,10 @@ fun LedgerAddScreen(
                 onClick = onClickNextButton,
             )
         }
+    }
+
+    if (uiState.isLoading) {
+        LoadingScreen()
     }
 }
 
