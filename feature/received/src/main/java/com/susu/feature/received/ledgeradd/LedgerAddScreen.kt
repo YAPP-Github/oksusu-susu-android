@@ -34,7 +34,10 @@ import com.susu.feature.received.ledgeradd.category.CategoryContent
 import com.susu.feature.received.ledgeradd.category.CategorySideEffect
 import com.susu.feature.received.ledgeradd.category.CategoryState
 import com.susu.feature.received.ledgeradd.content.DateContent
-import com.susu.feature.received.ledgeradd.content.NameContent
+import com.susu.feature.received.ledgeradd.name.NameContent
+import com.susu.feature.received.ledgeradd.name.NameSideEffect
+import com.susu.feature.received.ledgeradd.name.NameState
+import com.susu.feature.received.ledgeradd.name.NameViewModel
 import kotlinx.coroutines.android.awaitFrame
 import kotlinx.coroutines.launch
 
@@ -43,6 +46,7 @@ import kotlinx.coroutines.launch
 fun LedgerAddRoute(
     viewModel: LedgerAddViewModel = hiltViewModel(),
     categoryViewModel: CategoryViewModel = hiltViewModel(),
+    nameViewModel: NameViewModel = hiltViewModel(),
     popBackStack: () -> Unit,
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
@@ -69,6 +73,13 @@ fun LedgerAddRoute(
         categoryViewModel.getCategoryConfig()
     }
 
+    val nameState = nameViewModel.uiState.collectAsStateWithLifecycle().value
+    nameViewModel.sideEffect.collectWithLifecycle { sideEffect ->
+        when (sideEffect) {
+            is NameSideEffect.UpdateParentName -> viewModel.updateName(sideEffect.name)
+        }
+    }
+
     BackHandler {
         viewModel.goToPrevStep()
     }
@@ -87,6 +98,8 @@ fun LedgerAddRoute(
         onTextChangeCustomCategoryTextField = categoryViewModel::updateCustomCategoryText,
         onClickTextFieldInnerButton = categoryViewModel::toggleTextFieldSaved,
         updateParentSelectedCategory = categoryViewModel::updateParentSelectedCategory,
+        nameState = nameState,
+        onTextChangeName = nameViewModel::updateName,
     )
 }
 
@@ -105,6 +118,8 @@ fun LedgerAddScreen(
     onTextChangeCustomCategoryTextField: (String) -> Unit = {},
     onClickTextFieldInnerButton: () -> Unit = {},
     updateParentSelectedCategory: () -> Unit = {},
+    nameState: NameState = NameState(),
+    onTextChangeName: (String) -> Unit = {},
 ) {
     Box(
         modifier = Modifier
@@ -144,7 +159,10 @@ fun LedgerAddScreen(
                         updateParentSelectedCategory = updateParentSelectedCategory,
                     )
 
-                    LedgerAddStep.NAME -> NameContent()
+                    LedgerAddStep.NAME -> NameContent(
+                        uiState = nameState,
+                        onTextChangeName = onTextChangeName,
+                    )
                     LedgerAddStep.DATE -> DateContent()
                 }
             }

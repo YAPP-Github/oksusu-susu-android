@@ -1,4 +1,4 @@
-package com.susu.feature.received.ledgeradd.content
+package com.susu.feature.received.ledgeradd.name
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -15,7 +15,10 @@ import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.feature.received.R
 
 @Composable
-fun NameContent() {
+fun NameContent(
+    uiState: NameState = NameState(),
+    onTextChangeName: (String) -> Unit = {},
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -33,6 +36,8 @@ fun NameContent() {
         Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_m))
 
         SusuBasicTextField(
+            text = uiState.name,
+            onTextChange = onTextChangeName,
             placeholder = stringResource(R.string.input_name_screen_textfield_placeholder),
         )
     }

@@ -15,16 +15,24 @@ class LedgerAddViewModel @Inject constructor(
     LedgerAddState(),
 ) {
     private var selectedCategory: Category? = null
+    private var name: String = ""
 
     fun updateSelectedCategory(category: Category?) = intent {
         selectedCategory = category
         copy(
-            buttonEnabled = selectedCategory != null
+            buttonEnabled = selectedCategory != null,
+        )
+    }
+
+    fun updateName(name: String) = intent {
+        this@LedgerAddViewModel.name = name
+        copy(
+            buttonEnabled = name.isNotEmpty(),
         )
     }
 
     fun goToPrevStep() {
-        when(currentState.currentStep) {
+        when (currentState.currentStep) {
             LedgerAddStep.CATEGORY -> postSideEffect(LedgerAddSideEffect.PopBackStack)
             LedgerAddStep.NAME -> intent { copy(currentStep = LedgerAddStep.CATEGORY) }
             LedgerAddStep.DATE -> intent { copy(currentStep = LedgerAddStep.NAME) }
@@ -33,10 +41,11 @@ class LedgerAddViewModel @Inject constructor(
 
     fun goToNextStep() {
         intent { copy(buttonEnabled = false) }
-        when(currentState.currentStep) {
+        when (currentState.currentStep) {
             LedgerAddStep.CATEGORY -> intent { copy(currentStep = LedgerAddStep.NAME) }
             LedgerAddStep.NAME -> intent { copy(currentStep = LedgerAddStep.DATE) }
-            LedgerAddStep.DATE -> { /* TODO 장부 추가 서버 연동 */ }
+            LedgerAddStep.DATE -> { /* TODO 장부 추가 서버 연동 */
+            }
         }
     }
 
