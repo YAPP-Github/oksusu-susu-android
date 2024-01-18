@@ -1,10 +1,13 @@
 package com.susu.feature.navigator
 
 import androidx.lifecycle.viewModelScope
+import com.susu.core.android.throwUnknownException
+import com.susu.core.model.exception.NetworkException
 import com.susu.core.ui.DialogToken
 import com.susu.core.ui.SnackbarToken
 import com.susu.core.ui.SnsProviders
 import com.susu.core.ui.base.BaseViewModel
+import com.susu.domain.usecase.categoryconfig.GetCategoryConfigUseCase
 import com.susu.domain.usecase.loginsignup.CheckCanRegisterUseCase
 import com.susu.domain.usecase.loginsignup.LoginUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -12,12 +15,14 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import java.net.UnknownHostException
 import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val loginUseCase: LoginUseCase,
     private val checkCanRegisterUseCase: CheckCanRegisterUseCase,
+    private val getCategoryConfigUseCase: GetCategoryConfigUseCase,
 ) : BaseViewModel<MainState, MainSideEffect>(MainState()) {
     companion object {
         private const val NAVIGATE_DELAY = 500L
@@ -26,7 +31,7 @@ class MainViewModel @Inject constructor(
 
     private val mutex = Mutex()
 
-    fun onShowToast(snackbarToken: SnackbarToken) = viewModelScope.launch {
+    fun onShowSnackbar(snackbarToken: SnackbarToken) = viewModelScope.launch {
         mutex.withLock {
             intent { copy(snackbarToken = snackbarToken, snackbarVisible = true) }
             delay(SHOW_TOAST_LENGTH)
@@ -40,6 +45,18 @@ class MainViewModel @Inject constructor(
 
     fun dismissDialog() {
         intent { copy(dialogVisible = false) }
+    }
+
+    fun handleException(throwable: Throwable, retry: () -> Unit) = when (throwable) {
+        is NetworkException -> postSideEffect(MainSideEffect.ShowNetworkErrorSnackbar(retry))
+        is UnknownHostException -> postSideEffect(MainSideEffect.ShowNetworkErrorSnackbar(retry))
+        else -> throwUnknownException(throwable)
+    }
+
+    fun initCategoryConfig() = viewModelScope.launch {
+        getCategoryConfigUseCase()
+            .onFailure { }
+        intent { copy(isInitializing = false) }
     }
 
     fun navigate(hasKakaoLoginHistory: Boolean, kakaoAccessToken: String?) = viewModelScope.launch {

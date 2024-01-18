@@ -21,22 +21,26 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     private val viewModel: MainViewModel by viewModels()
-    private val isNavigating
-        get() = viewModel.uiState.value.isNavigating
+    private val uiState
+        get() = viewModel.uiState.value
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
 
-        splashScreen.setKeepOnScreenCondition { isNavigating }
+        splashScreen.setKeepOnScreenCondition { uiState.showSplashScreen }
 
-        if (isNavigating) {
+        if (uiState.isNavigating) {
             KakaoLoginHelper.getAccessToken { accessToken ->
                 viewModel.navigate(
                     hasKakaoLoginHistory = KakaoLoginHelper.hasKakaoLoginHistory,
                     kakaoAccessToken = accessToken,
                 )
             }
+        }
+
+        if (uiState.isInitializing) {
+            viewModel.initCategoryConfig()
         }
 
         WindowCompat.setDecorFitsSystemWindows(window, false)

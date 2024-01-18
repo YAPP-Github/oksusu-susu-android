@@ -3,8 +3,11 @@
 
 plugins {
     alias(libs.plugins.susu.java.library)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 dependencies {
     compileOnly(libs.compose.stable.marker)
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.kotlinx.datetime)
 }
