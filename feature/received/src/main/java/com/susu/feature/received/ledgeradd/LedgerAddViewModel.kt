@@ -7,6 +7,7 @@ import com.susu.core.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
 import javax.inject.Inject
 
 @HiltViewModel
@@ -16,6 +17,8 @@ class LedgerAddViewModel @Inject constructor(
 ) {
     private var selectedCategory: Category? = null
     private var name: String = ""
+    private var startAt: LocalDateTime? = null
+    private var endAt: LocalDateTime? = null
 
     fun updateSelectedCategory(category: Category?) = intent {
         selectedCategory = category
@@ -40,12 +43,10 @@ class LedgerAddViewModel @Inject constructor(
     }
 
     fun goToNextStep() {
-        intent { copy(buttonEnabled = false) }
         when (currentState.currentStep) {
             LedgerAddStep.CATEGORY -> intent { copy(currentStep = LedgerAddStep.NAME) }
             LedgerAddStep.NAME -> intent { copy(currentStep = LedgerAddStep.DATE) }
-            LedgerAddStep.DATE -> { /* TODO 장부 추가 서버 연동 */
-            }
+            LedgerAddStep.DATE -> { /* TODO 장부 추가 서버 연동 */ }
         }
     }
 

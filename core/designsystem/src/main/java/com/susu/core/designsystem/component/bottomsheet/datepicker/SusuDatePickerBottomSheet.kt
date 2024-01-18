@@ -279,6 +279,7 @@ fun SusuLimitDatePickerBottomSheet(
                 )
             } else {
                 selectedDay = criteriaDay
+                onItemSelected(selectedYear, selectedMonth, selectedDay)
                 Box(
                     modifier = Modifier
                         .width(100.dp)

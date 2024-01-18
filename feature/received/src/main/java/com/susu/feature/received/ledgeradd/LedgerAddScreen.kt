@@ -34,6 +34,8 @@ import com.susu.feature.received.ledgeradd.content.category.CategoryContent
 import com.susu.feature.received.ledgeradd.content.category.CategorySideEffect
 import com.susu.feature.received.ledgeradd.content.category.CategoryState
 import com.susu.feature.received.ledgeradd.content.date.DateContent
+import com.susu.feature.received.ledgeradd.content.date.DateState
+import com.susu.feature.received.ledgeradd.content.date.DateViewModel
 import com.susu.feature.received.ledgeradd.content.name.NameContent
 import com.susu.feature.received.ledgeradd.content.name.NameSideEffect
 import com.susu.feature.received.ledgeradd.content.name.NameState
@@ -47,6 +49,7 @@ fun LedgerAddRoute(
     viewModel: LedgerAddViewModel = hiltViewModel(),
     categoryViewModel: CategoryViewModel = hiltViewModel(),
     nameViewModel: NameViewModel = hiltViewModel(),
+    dateViewModel: DateViewModel = hiltViewModel(),
     popBackStack: () -> Unit,
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
@@ -61,7 +64,13 @@ fun LedgerAddRoute(
     val scope = rememberCoroutineScope()
     categoryViewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
-            is CategorySideEffect.UpdateParentSelectedCategory -> viewModel.updateSelectedCategory(sideEffect.category)
+            is CategorySideEffect.UpdateParentSelectedCategory -> {
+                viewModel.updateSelectedCategory(sideEffect.category)
+                dateViewModel.updateNameAndCategory(
+                    name = null,
+                    categoryName = sideEffect.category?.customCategory ?: sideEffect.category?.name
+                )
+            }
             CategorySideEffect.FocusCustomCategory -> scope.launch {
                 awaitFrame()
                 focusRequester.requestFocus()
@@ -76,9 +85,17 @@ fun LedgerAddRoute(
     val nameState = nameViewModel.uiState.collectAsStateWithLifecycle().value
     nameViewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
-            is NameSideEffect.UpdateParentName -> viewModel.updateName(sideEffect.name)
+            is NameSideEffect.UpdateParentName -> {
+                viewModel.updateName(sideEffect.name)
+                dateViewModel.updateNameAndCategory(
+                    name = sideEffect.name,
+                    categoryName = null,
+                )
+            }
         }
     }
+
+    val dateState = dateViewModel.uiState.collectAsStateWithLifecycle().value
 
     BackHandler {
         viewModel.goToPrevStep()
@@ -100,6 +117,13 @@ fun LedgerAddRoute(
         updateParentSelectedCategory = categoryViewModel::updateParentSelectedCategory,
         nameState = nameState,
         onTextChangeName = nameViewModel::updateName,
+        dateState = dateState,
+        onStartDateItemSelected = dateViewModel::updateStartDate,
+        onClickStartDateText = dateViewModel::showStartDateBottomSheet,
+        onDismissStartDateBottomSheet = dateViewModel::hideStartDateBottomSheet,
+        onEndDateItemSelected = dateViewModel::updateEndDate,
+        onClickEndDateText = dateViewModel::showEndDateBottomSheet,
+        onDismissEndDateBottomSheet = dateViewModel::hideEndDateBottomSheet,
     )
 }
 
@@ -120,6 +144,13 @@ fun LedgerAddScreen(
     updateParentSelectedCategory: () -> Unit = {},
     nameState: NameState = NameState(),
     onTextChangeName: (String) -> Unit = {},
+    dateState: DateState = DateState(),
+    onStartDateItemSelected: (Int, Int, Int) -> Unit = { _, _, _ -> },
+    onClickStartDateText: () -> Unit = {},
+    onDismissStartDateBottomSheet: () -> Unit = {},
+    onEndDateItemSelected: (Int, Int, Int) -> Unit = { _, _, _ -> },
+    onClickEndDateText: () -> Unit = {},
+    onDismissEndDateBottomSheet: () -> Unit = {},
 ) {
     Box(
         modifier = Modifier
@@ -163,7 +194,15 @@ fun LedgerAddScreen(
                         uiState = nameState,
                         onTextChangeName = onTextChangeName,
                     )
-                    LedgerAddStep.DATE -> DateContent()
+                    LedgerAddStep.DATE -> DateContent(
+                        uiState = dateState,
+                        onStartDateItemSelected = onStartDateItemSelected,
+                        onClickStartDateText = onClickStartDateText,
+                        onDismissStartDateBottomSheet = onDismissStartDateBottomSheet,
+                        onEndDateItemSelected = onEndDateItemSelected,
+                        onClickEndDateText = onClickEndDateText,
+                        onDismissEndDateBottomSheet = onDismissEndDateBottomSheet,
+                    )
                 }
             }
 
