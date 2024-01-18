@@ -13,6 +13,10 @@ interface LedgerRepository {
         sort: String?,
     ): List<Ledger>
 
+    suspend fun createLedger(
+        ledger: Ledger,
+    ): Ledger
+
     suspend fun editLedger(
         ledger: Ledger,
     ): Ledger
