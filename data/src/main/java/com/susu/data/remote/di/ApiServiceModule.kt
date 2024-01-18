@@ -5,6 +5,7 @@ import com.susu.data.remote.api.SignUpService
 import com.susu.data.remote.api.TermService
 import com.susu.data.remote.api.TokenService
 import com.susu.data.remote.api.AuthService
+import com.susu.data.remote.api.UserService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -44,5 +45,11 @@ object ApiServiceModule {
     @Provides
     fun providesLedgerService(retrofit: Retrofit): LedgerService {
         return retrofit.create(LedgerService::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun providesUserService(retrofit: Retrofit): UserService {
+        return retrofit.create(UserService::class.java)
     }
 }

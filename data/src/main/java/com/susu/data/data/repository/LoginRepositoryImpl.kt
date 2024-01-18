@@ -16,12 +16,4 @@ class LoginRepositoryImpl @Inject constructor(
         provider = provider,
         accessTokenRequest = AccessTokenRequest(oauthAccessToken),
     ).getOrThrow().toDomain()
-
-    override suspend fun logout() {
-        authService.logout().getOrThrow()
-    }
-
-    override suspend fun withdraw() {
-        authService.withdraw().getOrThrow()
-    }
 }

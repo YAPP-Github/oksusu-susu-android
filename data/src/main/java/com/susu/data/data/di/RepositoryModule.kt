@@ -6,12 +6,14 @@ import com.susu.data.data.repository.LoginRepositoryImpl
 import com.susu.data.data.repository.SignUpRepositoryImpl
 import com.susu.data.data.repository.TermRepositoryImpl
 import com.susu.data.data.repository.TokenRepositoryImpl
+import com.susu.data.data.repository.UserRepositoryImpl
 import com.susu.domain.repository.LedgerRecentSearchRepository
 import com.susu.domain.repository.LedgerRepository
 import com.susu.domain.repository.LoginRepository
 import com.susu.domain.repository.SignUpRepository
 import com.susu.domain.repository.TermRepository
 import com.susu.domain.repository.TokenRepository
+import com.susu.domain.repository.UserRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -50,4 +52,9 @@ abstract class RepositoryModule {
     abstract fun bindLedgerRepository(
         ledgerRepositoryImpl: LedgerRepositoryImpl,
     ): LedgerRepository
+
+    @Binds
+    abstract fun bindUserRepository(
+        userRepositoryImpl: UserRepositoryImpl,
+    ): UserRepository
 }
