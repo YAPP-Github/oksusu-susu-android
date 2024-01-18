@@ -22,10 +22,16 @@ import com.susu.core.designsystem.component.button.MediumButtonStyle
 import com.susu.core.designsystem.component.button.SusuFilledButton
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.ui.extension.susuDefaultAnimatedContentTransitionSpec
-import com.susu.feature.envelopeadd.content.CategoryContent
 import com.susu.feature.envelopeadd.content.DateContent
-import com.susu.feature.envelopeadd.content.InputContent
+import com.susu.feature.envelopeadd.content.EventContent
+import com.susu.feature.envelopeadd.content.MemoContent
 import com.susu.feature.envelopeadd.content.MoneyContent
+import com.susu.feature.envelopeadd.content.MoreContent
+import com.susu.feature.envelopeadd.content.NameContent
+import com.susu.feature.envelopeadd.content.PhoneContent
+import com.susu.feature.envelopeadd.content.PresentContent
+import com.susu.feature.envelopeadd.content.RelationshipContent
+import com.susu.feature.envelopeadd.content.VisitedContent
 import com.susu.feature.sent.R
 
 enum class EnvelopeAddStep {
@@ -76,7 +82,7 @@ fun SentEnvelopeAddScreen(
     onClickNext: () -> Unit = {},
 ) {
     // TODO: 수정 필요
-    val categoryList = listOf("친구", "가족", "친척", "동료", "직접 입력")
+    val relationshipList = listOf("친구", "가족", "친척", "동료", "직접 입력")
     val friendList = listOf("김철수", "국영수", "신짱구", "홍길동")
     val eventList = listOf("결혼식", "돌잔치", "장례식", "생일 기념일", "직접 입력")
     val moreList = listOf("방문여부", "선물", "메모", "보낸 이의 연락처")
@@ -108,52 +114,18 @@ fun SentEnvelopeAddScreen(
         ) { targetState ->
             when (targetState) {
                 EnvelopeAddStep.MONEY -> MoneyContent()
-                EnvelopeAddStep.NAME -> InputContent(
-                    titleText = stringResource(R.string.sent_envelope_add_name_title),
-                    placeholder = stringResource(R.string.sent_envelope_add_name_placeholder),
-                    friendList = friendList,
+                EnvelopeAddStep.NAME -> NameContent(friendList = friendList)
+                EnvelopeAddStep.RELATIONSHIP -> RelationshipContent(relationshipList = relationshipList)
+                EnvelopeAddStep.EVENT -> EventContent(eventList = eventList)
+                EnvelopeAddStep.DATE -> DateContent(name = "김철수")
+                EnvelopeAddStep.MORE -> MoreContent(moreList = moreList)
+                EnvelopeAddStep.VISITED -> VisitedContent(
+                    event = "결혼식",
+                    visitedList = visitedList,
                 )
-
-                EnvelopeAddStep.RELATIONSHIP -> CategoryContent(
-                    titleText = stringResource(R.string.sent_envelope_add_relationship_title),
-                    categoryList = categoryList,
-                )
-
-                EnvelopeAddStep.EVENT -> CategoryContent(
-                    titleText = stringResource(R.string.sent_envelope_add_event_title),
-                    categoryList = eventList,
-                )
-
-                EnvelopeAddStep.DATE -> DateContent(
-                    name = "김철수",
-                )
-
-                EnvelopeAddStep.MORE -> CategoryContent(
-                    titleText = stringResource(R.string.sent_envelope_add_more_title),
-                    categoryList = moreList,
-                    subTitleText = stringResource(R.string.sent_envelope_add_more_subtitle),
-                )
-
-                EnvelopeAddStep.VISITED -> CategoryContent(
-                    titleText = stringResource(R.string.sent_envelope_add_visited_title),
-                    categoryList = visitedList,
-                )
-
-                EnvelopeAddStep.PRESENT -> InputContent(
-                    titleText = stringResource(R.string.sent_envelope_add_present_title),
-                    placeholder = stringResource(R.string.sent_envelope_add_present_placeholder),
-                )
-
-                EnvelopeAddStep.PHONE -> InputContent(
-                    titleText = stringResource(R.string.sent_envelope_add_phone_title),
-                    placeholder = stringResource(R.string.sent_envelope_add_phone_placeholder),
-                    name = "김철수",
-                )
-
-                EnvelopeAddStep.MEMO -> InputContent(
-                    titleText = stringResource(R.string.sent_envelope_add_memo_title),
-                    placeholder = stringResource(R.string.sent_envelope_add_memo_placeholder),
-                )
+                EnvelopeAddStep.PRESENT -> PresentContent()
+                EnvelopeAddStep.PHONE -> PhoneContent(name = "김철수")
+                EnvelopeAddStep.MEMO -> MemoContent()
             }
         }
         SusuFilledButton(
