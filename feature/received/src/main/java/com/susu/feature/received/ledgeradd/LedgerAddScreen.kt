@@ -30,14 +30,14 @@ import com.susu.core.ui.R
 import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.core.ui.extension.susuDefaultAnimatedContentTransitionSpec
 import com.susu.feature.received.Category.category.CategoryViewModel
-import com.susu.feature.received.ledgeradd.category.CategoryContent
-import com.susu.feature.received.ledgeradd.category.CategorySideEffect
-import com.susu.feature.received.ledgeradd.category.CategoryState
-import com.susu.feature.received.ledgeradd.content.DateContent
-import com.susu.feature.received.ledgeradd.name.NameContent
-import com.susu.feature.received.ledgeradd.name.NameSideEffect
-import com.susu.feature.received.ledgeradd.name.NameState
-import com.susu.feature.received.ledgeradd.name.NameViewModel
+import com.susu.feature.received.ledgeradd.content.category.CategoryContent
+import com.susu.feature.received.ledgeradd.content.category.CategorySideEffect
+import com.susu.feature.received.ledgeradd.content.category.CategoryState
+import com.susu.feature.received.ledgeradd.content.date.DateContent
+import com.susu.feature.received.ledgeradd.content.name.NameContent
+import com.susu.feature.received.ledgeradd.content.name.NameSideEffect
+import com.susu.feature.received.ledgeradd.content.name.NameState
+import com.susu.feature.received.ledgeradd.content.name.NameViewModel
 import kotlinx.coroutines.android.awaitFrame
 import kotlinx.coroutines.launch
 

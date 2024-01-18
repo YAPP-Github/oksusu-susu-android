@@ -1,4 +1,4 @@
-package com.susu.feature.received.ledgeradd.category
+package com.susu.feature.received.ledgeradd.content.category
 
 import com.susu.core.model.Category
 import com.susu.core.ui.base.SideEffect

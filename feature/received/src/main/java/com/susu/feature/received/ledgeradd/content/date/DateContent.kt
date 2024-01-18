@@ -1,4 +1,4 @@
-package com.susu.feature.received.ledgeradd.content
+package com.susu.feature.received.ledgeradd.content.date
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.dp
 import com.susu.core.designsystem.component.bottomsheet.datepicker.SusuDatePickerBottomSheet
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.feature.received.R
-import com.susu.feature.received.ledgeradd.content.component.SelectDateRow
+import com.susu.feature.received.ledgeradd.content.date.component.SelectDateRow
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

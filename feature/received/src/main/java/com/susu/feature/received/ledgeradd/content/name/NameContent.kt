@@ -1,4 +1,4 @@
-package com.susu.feature.received.ledgeradd.name
+package com.susu.feature.received.ledgeradd.content.name
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer

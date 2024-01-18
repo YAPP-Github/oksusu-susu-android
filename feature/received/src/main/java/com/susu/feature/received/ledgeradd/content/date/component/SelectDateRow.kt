@@ -1,4 +1,4 @@
-package com.susu.feature.received.ledgeradd.content.component
+package com.susu.feature.received.ledgeradd.content.date.component
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row

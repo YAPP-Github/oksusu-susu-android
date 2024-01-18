@@ -1,4 +1,4 @@
-package com.susu.feature.received.ledgeradd.category
+package com.susu.feature.received.ledgeradd.content.category
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

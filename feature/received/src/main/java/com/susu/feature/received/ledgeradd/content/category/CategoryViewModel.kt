@@ -5,8 +5,8 @@ import com.susu.core.model.Category
 import com.susu.core.model.Ledger
 import com.susu.core.ui.base.BaseViewModel
 import com.susu.domain.usecase.categoryconfig.GetCategoryConfigUseCase
-import com.susu.feature.received.ledgeradd.category.CategorySideEffect
-import com.susu.feature.received.ledgeradd.category.CategoryState
+import com.susu.feature.received.ledgeradd.content.category.CategorySideEffect
+import com.susu.feature.received.ledgeradd.content.category.CategoryState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
