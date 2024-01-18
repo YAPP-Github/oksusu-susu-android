@@ -42,10 +42,12 @@ import com.susu.feature.sent.component.SentCard
 fun SentRoute(
     padding: PaddingValues,
     navigateSentEnvelope: () -> Unit,
+    navigateSentEnvelopeAdd: () -> Unit,
 ) {
     SentScreen(
         padding = padding,
         onClickHistoryShowAll = navigateSentEnvelope,
+        onClickAddEnvelope = navigateSentEnvelopeAdd,
     )
 }
 
@@ -56,6 +58,7 @@ fun SentScreen(
     onClickSearchIcon: () -> Unit = {},
     onClickNotificationIcon: () -> Unit = {},
     onClickHistoryShowAll: () -> Unit = {},
+    onClickAddEnvelope: () -> Unit = {},
 ) {
     // TODO: 수정 필요 (확인을 위해 false로 설정)
     var isEmpty by remember { mutableStateOf(false) }
@@ -108,7 +111,7 @@ fun SentScreen(
             modifier = modifier
                 .align(Alignment.BottomEnd)
                 .padding(SusuTheme.spacing.spacing_l),
-            onClick = {},
+            onClick = onClickAddEnvelope,
         )
     }
 }

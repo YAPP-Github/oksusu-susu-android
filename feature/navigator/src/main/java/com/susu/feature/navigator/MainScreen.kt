@@ -82,6 +82,7 @@ internal fun MainScreen(
                         navigateSentEnvelope = navigator::navigateSentEnvelope,
                         navigateSentEnvelopeDetail = navigator::navigateSentEnvelopeDetail,
                         navigateSentEnvelopeEdit = navigator::navigateSentEnvelopeEdit,
+                        navigateSentEnvelopeAdd = navigator::navigateSentEnvelopeAdd,
                     )
 
                     receivedNavGraph(
