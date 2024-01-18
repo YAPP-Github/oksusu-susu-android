@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 data class UserResponse(
     val id: Int,
     val name: String,
-    val gender: String,
+    val gender: String = "",
     val birth: Int,
 )
 
