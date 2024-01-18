@@ -7,6 +7,7 @@ import com.susu.core.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.time.LocalDateTime
 import javax.inject.Inject
 
@@ -34,6 +35,14 @@ class LedgerAddViewModel @Inject constructor(
         )
     }
 
+    fun updateDate(startAt: LocalDateTime?, endAt: LocalDateTime?) = intent {
+        this@LedgerAddViewModel.startAt = startAt
+        this@LedgerAddViewModel.endAt = endAt
+        copy(
+            buttonEnabled = startAt != null && endAt != null
+        )
+    }
+
     fun goToPrevStep() {
         when (currentState.currentStep) {
             LedgerAddStep.CATEGORY -> postSideEffect(LedgerAddSideEffect.PopBackStack)
@@ -46,7 +55,7 @@ class LedgerAddViewModel @Inject constructor(
         when (currentState.currentStep) {
             LedgerAddStep.CATEGORY -> intent { copy(currentStep = LedgerAddStep.NAME) }
             LedgerAddStep.NAME -> intent { copy(currentStep = LedgerAddStep.DATE) }
-            LedgerAddStep.DATE -> { /* TODO 장부 추가 서버 연동 */ }
+            LedgerAddStep.DATE -> { Timber.tag("LedgerAddViewModel").d("$name $selectedCategory $startAt $endAt") }
         }
     }
 

@@ -33,15 +33,10 @@ fun DateContent(
     onEndDateItemSelected: (Int, Int, Int) -> Unit = { _, _, _ -> },
     onClickEndDateText: () -> Unit = {},
     onDismissEndDateBottomSheet: () -> Unit = {},
+    updateParentDate: () -> Unit = {},
 ) {
     LaunchedEffect(key1 = Unit) {
-        uiState.startAt?.run {
-            onStartDateItemSelected(year, monthValue, dayOfMonth)
-        }
-
-        uiState.endAt?.run {
-            onEndDateItemSelected(year, monthValue, dayOfMonth)
-        }
+        updateParentDate()
     }
     Column(
         modifier = Modifier

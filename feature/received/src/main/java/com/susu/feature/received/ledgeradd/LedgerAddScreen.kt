@@ -34,6 +34,7 @@ import com.susu.feature.received.ledgeradd.content.category.CategoryContent
 import com.susu.feature.received.ledgeradd.content.category.CategorySideEffect
 import com.susu.feature.received.ledgeradd.content.category.CategoryState
 import com.susu.feature.received.ledgeradd.content.date.DateContent
+import com.susu.feature.received.ledgeradd.content.date.DateSideEffect
 import com.susu.feature.received.ledgeradd.content.date.DateState
 import com.susu.feature.received.ledgeradd.content.date.DateViewModel
 import com.susu.feature.received.ledgeradd.content.name.NameContent
@@ -68,9 +69,10 @@ fun LedgerAddRoute(
                 viewModel.updateSelectedCategory(sideEffect.category)
                 dateViewModel.updateNameAndCategory(
                     name = null,
-                    categoryName = sideEffect.category?.customCategory ?: sideEffect.category?.name
+                    categoryName = sideEffect.category?.customCategory ?: sideEffect.category?.name,
                 )
             }
+
             CategorySideEffect.FocusCustomCategory -> scope.launch {
                 awaitFrame()
                 focusRequester.requestFocus()
@@ -96,6 +98,12 @@ fun LedgerAddRoute(
     }
 
     val dateState = dateViewModel.uiState.collectAsStateWithLifecycle().value
+    dateViewModel.sideEffect.collectWithLifecycle { sideEffect ->
+        when (sideEffect) {
+            is DateSideEffect.UpdateParentDate -> viewModel.updateDate(sideEffect.startAt, sideEffect.endAt)
+        }
+
+    }
 
     BackHandler {
         viewModel.goToPrevStep()
@@ -124,6 +132,7 @@ fun LedgerAddRoute(
         onEndDateItemSelected = dateViewModel::updateEndDate,
         onClickEndDateText = dateViewModel::showEndDateBottomSheet,
         onDismissEndDateBottomSheet = dateViewModel::hideEndDateBottomSheet,
+        updateParentDate = dateViewModel::updateParentDate,
     )
 }
 
@@ -151,6 +160,7 @@ fun LedgerAddScreen(
     onEndDateItemSelected: (Int, Int, Int) -> Unit = { _, _, _ -> },
     onClickEndDateText: () -> Unit = {},
     onDismissEndDateBottomSheet: () -> Unit = {},
+    updateParentDate: () -> Unit = {},
 ) {
     Box(
         modifier = Modifier
@@ -194,6 +204,7 @@ fun LedgerAddScreen(
                         uiState = nameState,
                         onTextChangeName = onTextChangeName,
                     )
+
                     LedgerAddStep.DATE -> DateContent(
                         uiState = dateState,
                         onStartDateItemSelected = onStartDateItemSelected,
@@ -202,6 +213,7 @@ fun LedgerAddScreen(
                         onEndDateItemSelected = onEndDateItemSelected,
                         onClickEndDateText = onClickEndDateText,
                         onDismissEndDateBottomSheet = onDismissEndDateBottomSheet,
+                        updateParentDate = updateParentDate,
                     )
                 }
             }

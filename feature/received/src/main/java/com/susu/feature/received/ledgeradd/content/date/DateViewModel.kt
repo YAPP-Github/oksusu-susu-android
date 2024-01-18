@@ -19,18 +19,24 @@ class DateViewModel @Inject constructor(
         )
     }
 
-    fun updateStartDate(year: Int, month: Int, day: Int) {
-        intent {
-            copy(
-                startAt = LocalDateTime.of(year, month, day, 0, 0),
-            )
-        }
+    fun updateStartDate(year: Int, month: Int, day: Int) = intent {
+        val toUpdateStartAt = LocalDateTime.of(year, month, day, 0, 0)
+        postSideEffect(DateSideEffect.UpdateParentDate(toUpdateStartAt, endAt))
+        copy(
+            startAt = toUpdateStartAt,
+        )
     }
 
     fun updateEndDate(year: Int, month: Int, day: Int) = intent {
+        val toUpdateEndAt = getSafeLocalDateTime(year, month, day)
+        postSideEffect(DateSideEffect.UpdateParentDate(startAt, toUpdateEndAt))
         copy(
-            endAt = getSafeLocalDateTime(year, month, day),
+            endAt = toUpdateEndAt,
         )
+    }
+
+    fun updateParentDate() = with(currentState) {
+        postSideEffect(DateSideEffect.UpdateParentDate(startAt, endAt))
     }
 
     fun showStartDateBottomSheet() = intent { copy(showStartDateBottomSheet = true) }
