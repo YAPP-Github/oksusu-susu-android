@@ -8,19 +8,12 @@ data class UserResponse(
     val id: Int,
     val name: String,
     val gender: String,
-    val birth: String,
-)
-
-fun User.toData() = UserResponse(
-    id = id,
-    name = name,
-    gender = gender,
-    birth = birth.toString(),
+    val birth: Int,
 )
 
 fun UserResponse.toModel() = User(
     id = id,
     name = name,
     gender = gender,
-    birth = 0, // TODO: api 형식 변경 예정
+    birth = birth,
 )

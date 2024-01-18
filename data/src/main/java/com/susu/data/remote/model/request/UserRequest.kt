@@ -13,14 +13,14 @@ data class UserSignUpRequest(
 
 fun SignUpUser.toData() = UserSignUpRequest(
     name = name,
-    gender = gender.ifEmpty { null },
-    birth = if (birth < 0) null else birth,
+    gender = gender,
+    birth = if (birth == 0) null else birth,
     termAgreement = termAgreement,
 )
 
 @Serializable
 data class UserPatchRequest(
     val name: String,
-    val gender: String,
+    val gender: String?,
     val birth: Int
 )

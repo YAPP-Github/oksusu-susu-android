@@ -43,3 +43,7 @@ enum class SnsProviders(
         backgroundColor = Color.Unspecified,
     )
 }
+
+enum class Gender(val content: String?) {
+    NONE(null), MALE("M"), FEMALE("F")
+}

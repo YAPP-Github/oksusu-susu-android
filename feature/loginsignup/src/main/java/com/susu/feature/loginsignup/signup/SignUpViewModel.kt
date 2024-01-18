@@ -2,6 +2,7 @@ package com.susu.feature.loginsignup.signup
 
 import androidx.lifecycle.viewModelScope
 import com.susu.core.model.SignUpUser
+import com.susu.core.ui.Gender
 import com.susu.core.ui.SnsProviders
 import com.susu.core.ui.USER_NAME_MAX_LENGTH
 import com.susu.core.ui.base.BaseViewModel
