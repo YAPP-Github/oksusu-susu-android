@@ -39,20 +39,26 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun patchUserInfo(name: String, gender: String, birth: Int) {
+    override suspend fun patchUserInfo(name: String, gender: String?, birth: Int): User {
         val localUserInfo = dataStore.data.map { preferences ->
             preferences[userKey]
         }.firstOrNull() ?: throw Exception("유저 정보를 불러올 수 없습니다.")
 
         val uid = json.decodeFromString<UserResponse>(localUserInfo).id
-        userService.patchUserInfo(uid = uid, UserPatchRequest(name, gender, birth))
+        return userService.patchUserInfo(uid = uid, UserPatchRequest(name, gender, birth)).getOrThrow().toModel()
     }
 
     override suspend fun logout() {
+        dataStore.edit { preferences ->
+            preferences.remove(userKey)
+        }
         authService.logout().getOrThrow()
     }
 
     override suspend fun withdraw() {
+        dataStore.edit { preferences ->
+            preferences.remove(userKey)
+        }
         authService.withdraw().getOrThrow()
     }
 
