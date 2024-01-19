@@ -144,7 +144,7 @@ internal class MainNavigator(
     fun navigateMyPageSocial() {
         navController.navigateMyPageSocial()
     }
-    
+
     fun navigateEnvelopeAdd() {
         navController.navigateEnvelopeAdd()
     }
