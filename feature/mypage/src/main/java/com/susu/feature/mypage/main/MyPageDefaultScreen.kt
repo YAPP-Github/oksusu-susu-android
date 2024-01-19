@@ -38,9 +38,9 @@ import com.susu.core.designsystem.theme.Gray50
 import com.susu.core.designsystem.theme.Gray60
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.ui.DialogToken
-import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.core.ui.R
 import com.susu.core.ui.SnackbarToken
+import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.core.ui.extension.susuClickable
 import com.susu.feature.mypage.main.component.MyPageMenuItem
 

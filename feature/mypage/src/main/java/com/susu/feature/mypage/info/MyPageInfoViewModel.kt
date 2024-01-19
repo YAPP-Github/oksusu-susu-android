@@ -4,7 +4,6 @@ import androidx.lifecycle.viewModelScope
 import com.susu.core.model.exception.NoAuthorityException
 import com.susu.core.model.exception.UserNotFoundException
 import com.susu.core.ui.Gender
-
 import com.susu.core.ui.base.BaseViewModel
 import com.susu.domain.usecase.mypage.GetUserUseCase
 import com.susu.domain.usecase.mypage.PatchUserUseCase

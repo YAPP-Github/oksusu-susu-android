@@ -41,7 +41,7 @@ enum class SnsProviders(
         nameId = R.string.sns_google,
         iconId = R.drawable.ic_kakao_login,
         backgroundColor = Color.Unspecified,
-    )
+    ),
 }
 
 enum class Gender(val content: String?) {

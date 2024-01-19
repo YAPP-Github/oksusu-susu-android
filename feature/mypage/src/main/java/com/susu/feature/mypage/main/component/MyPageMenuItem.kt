@@ -20,7 +20,10 @@ import com.susu.core.ui.extension.susuClickable
 @Composable
 fun MyPageMenuItem(
     modifier: Modifier = Modifier,
-    padding: PaddingValues = PaddingValues(horizontal = SusuTheme.spacing.spacing_m, vertical = SusuTheme.spacing.spacing_s),
+    padding: PaddingValues = PaddingValues(
+        horizontal = SusuTheme.spacing.spacing_m,
+        vertical = SusuTheme.spacing.spacing_s,
+    ),
     titleText: String = "",
     titleTextColor: Color = Gray90,
     titleTextStyle: TextStyle = SusuTheme.typography.title_xxs,
@@ -29,10 +32,12 @@ fun MyPageMenuItem(
     onMenuClick: () -> Unit = {},
 ) {
     Row(
-        modifier = modifier.fillMaxWidth()
+        modifier = modifier
+            .fillMaxWidth()
             .susuClickable(
                 onClick = onMenuClick,
-            ).padding(padding),
+            )
+            .padding(padding),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(modifier = Modifier.weight(1f), text = titleText, style = titleTextStyle, color = titleTextColor)
