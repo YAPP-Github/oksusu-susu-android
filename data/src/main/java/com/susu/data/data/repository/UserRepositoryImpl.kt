@@ -5,6 +5,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.susu.core.model.User
+import com.susu.core.model.exception.UserNotFoundException
 import com.susu.data.remote.api.AuthService
 import com.susu.data.remote.api.UserService
 import com.susu.data.remote.model.request.UserPatchRequest
@@ -42,7 +43,7 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun patchUserInfo(name: String, gender: String?, birth: Int): User {
         val localUserInfo = dataStore.data.map { preferences ->
             preferences[userKey]
-        }.firstOrNull() ?: throw Exception("유저 정보를 불러올 수 없습니다.")
+        }.firstOrNull() ?: throw UserNotFoundException()
 
         val uid = json.decodeFromString<UserResponse>(localUserInfo).id
         return userService.patchUserInfo(uid = uid, UserPatchRequest(name, gender, birth)).getOrThrow().toModel()
