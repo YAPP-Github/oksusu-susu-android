@@ -128,7 +128,7 @@ fun NavGraphBuilder.receivedNavGraph(
     }
 
     composable(
-        route = ReceivedRoute.envelopeAddRoute
+        route = ReceivedRoute.envelopeAddRoute,
     ) {
         ReceivedEnvelopeAddRoute(
             popBackStack = popBackStack,

@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -16,16 +15,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import com.susu.core.designsystem.component.button.FilledButtonColor
 import com.susu.core.designsystem.component.button.GhostButtonColor
 import com.susu.core.designsystem.component.button.MediumButtonStyle
 import com.susu.core.designsystem.component.button.SusuFilledButton
 import com.susu.core.designsystem.component.button.SusuGhostButton
-import com.susu.core.designsystem.theme.Gray100
 import com.susu.core.designsystem.theme.Gray60
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.ui.util.AnnotatedText
@@ -42,15 +37,6 @@ fun VisitedContent(
     visitedList: List<String>,
 ) {
     var selectedItem by remember { mutableStateOf(-1) }
-
-    val title = buildAnnotatedString {
-        withStyle(style = SpanStyle(color = Gray60)) {
-            append(event)
-        }
-        withStyle(style = SpanStyle(color = Gray100)) {
-            append()
-        }
-    }
 
     Column(
         modifier = modifier
