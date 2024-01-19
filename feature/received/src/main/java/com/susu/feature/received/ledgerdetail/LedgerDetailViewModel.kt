@@ -80,4 +80,6 @@ class LedgerDetailViewModel @Inject constructor(
                 }
             }
     }
+
+    fun navigateEnvelopeAdd() = postSideEffect(LedgerDetailSideEffect.NavigateEnvelopeAdd)
 }
