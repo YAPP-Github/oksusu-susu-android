@@ -1,11 +1,11 @@
 package com.susu.data.remote.di
 
+import com.susu.data.remote.api.AuthService
 import com.susu.data.remote.api.CategoryService
 import com.susu.data.remote.api.LedgerService
 import com.susu.data.remote.api.SignUpService
 import com.susu.data.remote.api.TermService
 import com.susu.data.remote.api.TokenService
-import com.susu.data.remote.api.AuthService
 import com.susu.data.remote.api.UserService
 import dagger.Module
 import dagger.Provides
