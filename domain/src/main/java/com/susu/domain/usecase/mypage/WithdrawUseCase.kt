@@ -10,6 +10,7 @@ class WithdrawUseCase @Inject constructor(
     private val tokenRepository: TokenRepository,
 ) {
     suspend operator fun invoke() = runCatchingIgnoreCancelled {
+        println("탈퇴해요~~~")
         userRepository.withdraw()
         tokenRepository.deleteTokens()
     }

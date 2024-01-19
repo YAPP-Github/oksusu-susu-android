@@ -1,6 +1,8 @@
 package com.susu.feature.mypage.info
 
 import androidx.lifecycle.viewModelScope
+import com.susu.core.model.exception.NoAuthorityException
+import com.susu.core.model.exception.UserNotFoundException
 import com.susu.core.ui.Gender
 
 import com.susu.core.ui.base.BaseViewModel
@@ -8,7 +10,6 @@ import com.susu.domain.usecase.mypage.GetUserUseCase
 import com.susu.domain.usecase.mypage.PatchUserUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -18,6 +19,10 @@ class MyPageInfoViewModel @Inject constructor(
 ) : BaseViewModel<MyPageInfoState, MyPageInfoEffect>(MyPageInfoState()) {
 
     init {
+        getUserInfo()
+    }
+
+    private fun getUserInfo() {
         viewModelScope.launch {
             intent { copy(isLoading = true) }
             getUserUseCase().onSuccess {
@@ -33,7 +38,10 @@ class MyPageInfoViewModel @Inject constructor(
                     )
                 }
             }.onFailure {
-                postSideEffect(MyPageInfoEffect.ShowSnackBar(it.message ?: ""))
+                when (it) {
+                    is UserNotFoundException -> postSideEffect(MyPageInfoEffect.ShowSnackBar(it.message))
+                    else -> postSideEffect(MyPageInfoEffect.HandleException(it, ::getUserInfo))
+                }
             }
             intent { copy(isLoading = false) }
         }
@@ -87,8 +95,10 @@ class MyPageInfoViewModel @Inject constructor(
                         )
                     }
                 }.onFailure {
-                    Timber.d(it)
-                    postSideEffect(MyPageInfoEffect.ShowSnackBar(it.message ?: ""))
+                    when (it) {
+                        is NoAuthorityException -> postSideEffect(MyPageInfoEffect.ShowSnackBar(it.message))
+                        else -> postSideEffect(MyPageInfoEffect.HandleException(it, ::completeEdit))
+                    }
                 }
             intent { copy(isLoading = false, isEditing = false) }
         }

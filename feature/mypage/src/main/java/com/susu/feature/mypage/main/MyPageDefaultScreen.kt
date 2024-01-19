@@ -35,8 +35,10 @@ import com.susu.core.designsystem.theme.Gray20
 import com.susu.core.designsystem.theme.Gray50
 import com.susu.core.designsystem.theme.Gray60
 import com.susu.core.designsystem.theme.SusuTheme
+import com.susu.core.ui.DialogToken
 import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.core.ui.R
+import com.susu.core.ui.SnackbarToken
 import com.susu.core.ui.extension.susuClickable
 import com.susu.feature.mypage.main.component.MyPageMenuItem
 
@@ -47,13 +49,76 @@ fun MyPageDefaultRoute(
     navigateToLogin: () -> Unit,
     navigateToInfo: () -> Unit,
     navigateToSocial: () -> Unit,
+    onShowSnackbar: (SnackbarToken) -> Unit,
+    onShowDialog: (DialogToken) -> Unit,
+    handleException: (Throwable, () -> Unit) -> Unit,
 ) {
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
             MyPageEffect.NavigateToLogin -> navigateToLogin()
             MyPageEffect.NavigateToInfo -> navigateToInfo()
             MyPageEffect.NavigateToSocial -> navigateToSocial()
-            is MyPageEffect.ShowToast -> {}
+            is MyPageEffect.ShowSnackbar -> onShowSnackbar(SnackbarToken(message = sideEffect.msg))
+            MyPageEffect.ShowLogoutDialog -> {
+                onShowDialog(
+                    DialogToken(
+                        title = "로그아웃 할까요?",
+                        dismissText = "취소",
+                        confirmText = "로그아웃",
+                        onConfirmRequest = viewModel::logout,
+                    ),
+                )
+            }
+
+            MyPageEffect.ShowExportDialog -> {
+                onShowDialog(
+                    DialogToken(
+                        title = "엑셀로 내보낼까요?",
+                        text = "모든 기록을 엑셀로 저장해요. 파일은 (경로)에서 확인할 수 있어요.",
+                        dismissText = "취소",
+                        confirmText = "내보내기",
+                        onConfirmRequest = viewModel::export,
+                    ),
+                )
+            }
+
+            MyPageEffect.ShowWithdrawDialog -> {
+                onShowDialog(
+                    DialogToken(
+                        title = "정말 탈퇴하시겠어요?",
+                        text = "계정 정보와 모든 기록이 삭제되며 다시 복구할 수 없어요",
+                        dismissText = "취소",
+                        confirmText = "탈퇴",
+                        onConfirmRequest = viewModel::withdraw,
+                    ),
+                )
+            }
+
+            MyPageEffect.ShowExportSuccessSnackbar -> {
+                onShowSnackbar(
+                    SnackbarToken(
+                        message = "엑셀 내보내기가 완료됐어요",
+                    ),
+                )
+            }
+
+            MyPageEffect.ShowLogoutSuccessSnackbar -> {
+                onShowSnackbar(
+                    SnackbarToken(
+                        message = "정상적으로 로그아웃 됐어요",
+                    ),
+                )
+            }
+
+            MyPageEffect.ShowWithdrawSuccessSnackbar -> {
+                onShowSnackbar(
+                    SnackbarToken(
+                        message = "회원 탈퇴가 완료됐어요",
+                    ),
+                )
+            }
+
+            is MyPageEffect.HandleException -> handleException(sideEffect.throwable, sideEffect.retry)
         }
     }
 
@@ -62,8 +127,9 @@ fun MyPageDefaultRoute(
     MyPageDefaultScreen(
         padding = padding,
         uiState = uiState,
-        onLogout = viewModel::logout,
-        onWithdraw = viewModel::withdraw,
+        onLogout = viewModel::showLogoutDialog,
+        onWithdraw = viewModel::showWithdrawDialog,
+        onExport = viewModel::showExportDialog,
         navigateToInfo = navigateToInfo,
         navigateToSocial = navigateToSocial,
     )
@@ -75,6 +141,7 @@ fun MyPageDefaultScreen(
     uiState: MyPageState = MyPageState(),
     onLogout: () -> Unit = {},
     onWithdraw: () -> Unit = {},
+    onExport: () -> Unit = {},
     navigateToInfo: () -> Unit = {},
     navigateToSocial: () -> Unit = {},
 ) {
@@ -116,6 +183,7 @@ fun MyPageDefaultScreen(
         )
         MyPageMenuItem(
             titleText = "엑셀 파일 내보내기",
+            onMenuClick = onExport,
         )
         MyPageMenuItem(
             titleText = "개인정보 처리 방침",

@@ -1,7 +1,9 @@
 package com.susu.feature.mypage.main
 
 import androidx.lifecycle.viewModelScope
+import com.kakao.sdk.auth.TokenManagerProvider
 import com.kakao.sdk.user.UserApiClient
+import com.susu.core.model.exception.UserNotFoundException
 import com.susu.core.ui.base.BaseViewModel
 import com.susu.domain.usecase.mypage.GetUserUseCase
 import com.susu.domain.usecase.mypage.LogoutUseCase
@@ -18,12 +20,23 @@ class MyPageViewModel @Inject constructor(
 ) : BaseViewModel<MyPageState, MyPageEffect>(MyPageState()) {
 
     init {
+        getUserInfo()
+    }
+
+    fun showExportDialog() = postSideEffect(MyPageEffect.ShowExportDialog)
+    fun showLogoutDialog() = postSideEffect(MyPageEffect.ShowLogoutDialog)
+    fun showWithdrawDialog() = postSideEffect(MyPageEffect.ShowWithdrawDialog)
+
+    private fun getUserInfo() {
         viewModelScope.launch {
             intent { copy(isLoading = true) }
             getUserUseCase().onSuccess {
                 intent { copy(userName = it.name) }
             }.onFailure {
-                postSideEffect(MyPageEffect.ShowToast(it.message ?: "")) // TODO 에러 처리
+                when (it) {
+                    is UserNotFoundException -> postSideEffect(MyPageEffect.ShowSnackbar(it.message))
+                    else -> postSideEffect(MyPageEffect.HandleException(it, ::getUserInfo))
+                }
             }
             intent { copy(isLoading = false) }
         }
@@ -32,11 +45,14 @@ class MyPageViewModel @Inject constructor(
     fun logout() {
         UserApiClient.instance.logout { error ->
             if (error != null) {
-                postSideEffect(MyPageEffect.ShowToast(error.message ?: "에러 발생했지만 토큰은 삭제됨"))
+                postSideEffect(MyPageEffect.HandleException(error, ::logout))
             } else {
                 viewModelScope.launch {
                     logoutUseCase().onSuccess {
+                        postSideEffect(MyPageEffect.ShowLogoutSuccessSnackbar)
                         postSideEffect(MyPageEffect.NavigateToLogin)
+                    }.onFailure {
+                        postSideEffect(MyPageEffect.HandleException(it, ::logout))
                     }
                 }
             }
@@ -44,16 +60,18 @@ class MyPageViewModel @Inject constructor(
     }
 
     fun withdraw() {
-        UserApiClient.instance.unlink { error ->
-            if (error != null) {
-                postSideEffect(MyPageEffect.ShowToast(error.message ?: "에러 발생했지만 토큰은 삭제됨"))
-            } else {
-                viewModelScope.launch {
-                    withdrawUseCase().onSuccess {
-                        postSideEffect(MyPageEffect.NavigateToLogin)
-                    }
-                }
+        viewModelScope.launch {
+            withdrawUseCase().onSuccess {
+                postSideEffect(MyPageEffect.ShowWithdrawSuccessSnackbar)
+                postSideEffect(MyPageEffect.NavigateToLogin)
+                TokenManagerProvider.instance.manager.clear()
+            }.onFailure {
+                postSideEffect(MyPageEffect.HandleException(it, ::withdraw))
             }
         }
+    }
+
+    fun export() {
+        postSideEffect(MyPageEffect.ShowExportSuccessSnackbar)
     }
 }

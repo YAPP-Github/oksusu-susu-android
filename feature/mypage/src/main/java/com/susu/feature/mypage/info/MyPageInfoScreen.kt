@@ -42,6 +42,7 @@ import com.susu.core.designsystem.theme.Gray100
 import com.susu.core.designsystem.theme.Gray40
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.ui.Gender
+import com.susu.core.ui.SnackbarToken
 import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.core.ui.extension.susuClickable
 import com.susu.feature.mypage.info.component.MyPageInfoItem
@@ -51,11 +52,14 @@ fun MyPageInfoRoute(
     padding: PaddingValues,
     viewModel: MyPageInfoViewModel = hiltViewModel(),
     popBackStack: () -> Unit,
+    onShowSnackbar: (SnackbarToken) -> Unit,
+    handleException: (Throwable, () -> Unit) -> Unit,
 ) {
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
             MyPageInfoEffect.PopBackStack -> popBackStack()
-            is MyPageInfoEffect.ShowSnackBar -> {}
+            is MyPageInfoEffect.ShowSnackBar -> onShowSnackbar(SnackbarToken(message = sideEffect.msg))
+            is MyPageInfoEffect.HandleException -> handleException(sideEffect.throwable, sideEffect.retry)
         }
     }
 
@@ -122,7 +126,10 @@ fun MyPageInfoScreen(
                     if (uiState.isEditing) {
                         Text(
                             modifier = Modifier
-                                .susuClickable(onClick = onEditComplete)
+                                .susuClickable(
+                                    runIf = uiState.isEditNameValid,
+                                    onClick = onEditComplete,
+                                )
                                 .padding(end = SusuTheme.spacing.spacing_m),
                             text = "등록",
                             style = SusuTheme.typography.title_xxs,

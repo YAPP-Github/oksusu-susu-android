@@ -126,6 +126,9 @@ internal fun MainScreen(
                         navigateToInfo = navigator::navigateMyPageInfo,
                         navigateToSocial = navigator::navigateMyPageSocial,
                         popBackStack = navigator::popBackStackIfNotHome,
+                        onShowSnackbar = viewModel::onShowSnackbar,
+                        onShowDialog = viewModel::onShowDialog,
+                        handleException = viewModel::handleException,
                     )
                 }
 

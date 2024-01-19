@@ -5,6 +5,8 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
+import com.susu.core.ui.DialogToken
+import com.susu.core.ui.SnackbarToken
 import com.susu.feature.mypage.info.MyPageInfoRoute
 import com.susu.feature.mypage.main.MyPageDefaultRoute
 import com.susu.feature.mypage.social.MyPageSocialRoute
@@ -27,6 +29,9 @@ fun NavGraphBuilder.myPageNavGraph(
     navigateToInfo: () -> Unit,
     navigateToSocial: () -> Unit,
     popBackStack: () -> Unit,
+    onShowSnackbar: (SnackbarToken) -> Unit,
+    onShowDialog: (DialogToken) -> Unit,
+    handleException: (Throwable, () -> Unit) -> Unit,
 ) {
     composable(route = MyPageRoute.default) {
         MyPageDefaultRoute(
@@ -34,10 +39,18 @@ fun NavGraphBuilder.myPageNavGraph(
             navigateToLogin = navigateToLogin,
             navigateToInfo = navigateToInfo,
             navigateToSocial = navigateToSocial,
+            onShowSnackbar = onShowSnackbar,
+            onShowDialog = onShowDialog,
+            handleException = handleException,
         )
     }
     composable(route = MyPageRoute.info) {
-        MyPageInfoRoute(padding = padding, popBackStack = popBackStack)
+        MyPageInfoRoute(
+            padding = padding,
+            popBackStack = popBackStack,
+            onShowSnackbar = onShowSnackbar,
+            handleException = handleException,
+        )
     }
     composable(route = MyPageRoute.social) {
         MyPageSocialRoute(padding = padding, popBackStack = popBackStack)

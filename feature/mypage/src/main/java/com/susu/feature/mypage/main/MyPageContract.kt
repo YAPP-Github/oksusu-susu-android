@@ -7,11 +7,18 @@ sealed interface MyPageEffect : SideEffect {
     data object NavigateToLogin : MyPageEffect
     data object NavigateToInfo : MyPageEffect
     data object NavigateToSocial : MyPageEffect
-    data class ShowToast(val msg: String) : MyPageEffect
+    data class ShowSnackbar(val msg: String) : MyPageEffect
+    data object ShowLogoutDialog : MyPageEffect
+    data object ShowWithdrawDialog : MyPageEffect
+    data object ShowExportDialog : MyPageEffect
+    data object ShowLogoutSuccessSnackbar : MyPageEffect
+    data object ShowWithdrawSuccessSnackbar : MyPageEffect
+    data object ShowExportSuccessSnackbar : MyPageEffect
+    data class HandleException(val throwable: Throwable, val retry: () -> Unit) : MyPageEffect
 }
 
 data class MyPageState(
     val isLoading: Boolean = false,
     val userName: String = "",
-    val appVersion: String = ""
+    val appVersion: String = "",
 ) : UiState
