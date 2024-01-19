@@ -18,7 +18,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -53,6 +55,8 @@ fun MyPageDefaultRoute(
     onShowDialog: (DialogToken) -> Unit,
     handleException: (Throwable, () -> Unit) -> Unit,
 ) {
+    val context = LocalContext.current
+
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
             MyPageEffect.NavigateToLogin -> navigateToLogin()
@@ -62,9 +66,9 @@ fun MyPageDefaultRoute(
             MyPageEffect.ShowLogoutDialog -> {
                 onShowDialog(
                     DialogToken(
-                        title = "로그아웃 할까요?",
-                        dismissText = "취소",
-                        confirmText = "로그아웃",
+                        title = context.getString(com.susu.feature.mypage.R.string.dialog_logout_title),
+                        dismissText = context.getString(R.string.word_cancel),
+                        confirmText = context.getString(com.susu.feature.mypage.R.string.dialog_logout_confirm),
                         onConfirmRequest = viewModel::logout,
                     ),
                 )
@@ -73,10 +77,10 @@ fun MyPageDefaultRoute(
             MyPageEffect.ShowExportDialog -> {
                 onShowDialog(
                     DialogToken(
-                        title = "엑셀로 내보낼까요?",
-                        text = "모든 기록을 엑셀로 저장해요. 파일은 (경로)에서 확인할 수 있어요.",
-                        dismissText = "취소",
-                        confirmText = "내보내기",
+                        title = context.getString(com.susu.feature.mypage.R.string.dialog_export_title),
+                        text = context.getString(com.susu.feature.mypage.R.string.dialog_export_detail),
+                        dismissText = context.getString(R.string.word_cancel),
+                        confirmText = context.getString(com.susu.feature.mypage.R.string.dialog_export_confirm),
                         onConfirmRequest = viewModel::export,
                     ),
                 )
@@ -85,10 +89,10 @@ fun MyPageDefaultRoute(
             MyPageEffect.ShowWithdrawDialog -> {
                 onShowDialog(
                     DialogToken(
-                        title = "정말 탈퇴하시겠어요?",
-                        text = "계정 정보와 모든 기록이 삭제되며 다시 복구할 수 없어요",
-                        dismissText = "취소",
-                        confirmText = "탈퇴",
+                        title = context.getString(com.susu.feature.mypage.R.string.dialog_withdraw_title),
+                        text = context.getString(com.susu.feature.mypage.R.string.dialog_withdraw_detail),
+                        dismissText = context.getString(R.string.word_cancel),
+                        confirmText = context.getString(com.susu.feature.mypage.R.string.dialog_withdraw_confirm),
                         onConfirmRequest = viewModel::withdraw,
                     ),
                 )
@@ -97,7 +101,7 @@ fun MyPageDefaultRoute(
             MyPageEffect.ShowExportSuccessSnackbar -> {
                 onShowSnackbar(
                     SnackbarToken(
-                        message = "엑셀 내보내기가 완료됐어요",
+                        message = context.getString(com.susu.feature.mypage.R.string.snackbar_success_export),
                     ),
                 )
             }
@@ -105,7 +109,7 @@ fun MyPageDefaultRoute(
             MyPageEffect.ShowLogoutSuccessSnackbar -> {
                 onShowSnackbar(
                     SnackbarToken(
-                        message = "정상적으로 로그아웃 됐어요",
+                        message = context.getString(com.susu.feature.mypage.R.string.snackbar_success_logout),
                     ),
                 )
             }
@@ -113,7 +117,7 @@ fun MyPageDefaultRoute(
             MyPageEffect.ShowWithdrawSuccessSnackbar -> {
                 onShowSnackbar(
                     SnackbarToken(
-                        message = "회원 탈퇴가 완료됐어요",
+                        message = context.getString(com.susu.feature.mypage.R.string.snackbar_success_withdraw),
                     ),
                 )
             }
@@ -162,11 +166,15 @@ fun MyPageDefaultScreen(
                 Row(
                     modifier = Modifier.susuClickable(onClick = navigateToInfo),
                 ) {
-                    Text(text = "내 정보", style = SusuTheme.typography.title_xxs, color = Gray60)
+                    Text(
+                        text = stringResource(com.susu.feature.mypage.R.string.mypage_default_my_info),
+                        style = SusuTheme.typography.title_xxs,
+                        color = Gray60,
+                    )
                     Spacer(modifier = Modifier.width(SusuTheme.spacing.spacing_xxs))
                     Icon(
                         painter = painterResource(id = R.drawable.ic_arrow_right),
-                        contentDescription = "내 정보 보기",
+                        contentDescription = stringResource(com.susu.feature.mypage.R.string.mypage_default_show_my_info),
                         tint = Gray60,
                     )
                 }
@@ -178,34 +186,34 @@ fun MyPageDefaultScreen(
         MyPageDivider()
 
         MyPageMenuItem(
-            titleText = "연동된 소셜 계정",
+            titleText = stringResource(com.susu.feature.mypage.R.string.mypage_social_title),
             onMenuClick = navigateToSocial,
         )
         MyPageMenuItem(
-            titleText = "엑셀 파일 내보내기",
+            titleText = stringResource(com.susu.feature.mypage.R.string.mypage_export_title),
             onMenuClick = onExport,
         )
         MyPageMenuItem(
-            titleText = "개인정보 처리 방침",
+            titleText = stringResource(com.susu.feature.mypage.R.string.mypage_privacy_policy),
         )
 
         MyPageDivider()
 
         MyPageMenuItem(
-            titleText = "앱 버전",
+            titleText = stringResource(com.susu.feature.mypage.R.string.mypage_app_version),
             action = {
-                Text(text = "업데이트 하기", style = SusuTheme.typography.title_xxs, color = Gray60)
+                Text(text = stringResource(com.susu.feature.mypage.R.string.mypage_update), style = SusuTheme.typography.title_xxs, color = Gray60)
             },
         )
 
         MyPageDivider()
 
         MyPageMenuItem(
-            titleText = "로그아웃",
+            titleText = stringResource(com.susu.feature.mypage.R.string.mypage_logout_title),
             onMenuClick = onLogout,
         )
         MyPageMenuItem(
-            titleText = "탈퇴하기",
+            titleText = stringResource(com.susu.feature.mypage.R.string.mypage_withdraw_title),
             onMenuClick = onWithdraw,
         )
         Box(
@@ -216,7 +224,7 @@ fun MyPageDefaultScreen(
         ) {
             Text(
                 modifier = Modifier.align(Alignment.TopStart),
-                text = "앱 버전 ${uiState.appVersion}",
+                text = stringResource(com.susu.feature.mypage.R.string.mypage_app_version) + uiState.appVersion,
                 style = SusuTheme.typography.title_xxxs,
                 color = Gray50,
             )
@@ -224,7 +232,7 @@ fun MyPageDefaultScreen(
                 modifier = Modifier.align(Alignment.Center),
                 color = GhostButtonColor.Orange,
                 style = SmallButtonStyle.height40,
-                text = "수수에게 피드백 남기기",
+                text = stringResource(com.susu.feature.mypage.R.string.mypage_feedback),
             )
         }
     }

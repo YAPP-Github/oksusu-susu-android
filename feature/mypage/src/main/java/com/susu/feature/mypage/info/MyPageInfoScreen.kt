@@ -27,6 +27,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -45,6 +46,7 @@ import com.susu.core.ui.Gender
 import com.susu.core.ui.SnackbarToken
 import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.core.ui.extension.susuClickable
+import com.susu.feature.mypage.R
 import com.susu.feature.mypage.info.component.MyPageInfoItem
 
 @Composable
@@ -105,7 +107,9 @@ fun MyPageInfoScreen(
     var userNameWidth by remember { mutableStateOf(0.dp) }
 
     Box(
-        modifier = Modifier.fillMaxSize().padding(padding),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(padding),
     ) {
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -121,7 +125,7 @@ fun MyPageInfoScreen(
                         },
                     )
                 },
-                title = "내 정보",
+                title = stringResource(id = R.string.mypage_default_my_info),
                 actions = {
                     if (uiState.isEditing) {
                         Text(
@@ -131,7 +135,7 @@ fun MyPageInfoScreen(
                                     onClick = onEditComplete,
                                 )
                                 .padding(end = SusuTheme.spacing.spacing_m),
-                            text = "등록",
+                            text = stringResource(id = com.susu.core.ui.R.string.word_enrollment),
                             style = SusuTheme.typography.title_xxs,
                             color = Gray100,
                         )
@@ -140,7 +144,7 @@ fun MyPageInfoScreen(
                             modifier = Modifier
                                 .susuClickable(onClick = onEditStart)
                                 .padding(end = SusuTheme.spacing.spacing_m),
-                            text = "편집",
+                            text = stringResource(id = com.susu.core.ui.R.string.word_edit),
                             style = SusuTheme.typography.title_xxs,
                             color = Gray100,
                         )
@@ -149,9 +153,11 @@ fun MyPageInfoScreen(
             )
             Spacer(modifier = Modifier.height(SusuTheme.spacing.spacing_m))
             Image(
-                modifier = Modifier.size(88.dp).clip(CircleShape),
+                modifier = Modifier
+                    .size(88.dp)
+                    .clip(CircleShape),
                 painter = painterResource(id = com.susu.core.ui.R.drawable.img_default_profile),
-                contentDescription = "프로필 이미지",
+                contentDescription = stringResource(R.string.mypage_my_info_profile),
             )
             Spacer(modifier = Modifier.height(SusuTheme.spacing.spacing_m))
             MyPageInfoItem(
@@ -180,7 +186,7 @@ fun MyPageInfoScreen(
                 }
             }
             MyPageInfoItem(
-                title = "출생년도",
+                title = stringResource(id = com.susu.core.ui.R.string.word_birth),
             ) {
                 if (uiState.isEditing) {
                     Text(
@@ -196,7 +202,7 @@ fun MyPageInfoScreen(
                 }
             }
             MyPageInfoItem(
-                title = "성별",
+                title = stringResource(id = com.susu.core.ui.R.string.word_gender),
             ) {
                 if (uiState.isEditing) {
                     Row(
@@ -207,7 +213,7 @@ fun MyPageInfoScreen(
                             modifier = Modifier
                                 .weight(1f)
                                 .padding(vertical = SusuTheme.spacing.spacing_xxxxs),
-                            text = "여성",
+                            text = stringResource(id = com.susu.core.ui.R.string.word_female),
                             isClickable = true,
                             isActive = uiState.editGender == Gender.FEMALE,
                             color = FilledButtonColor.Orange,
@@ -219,7 +225,7 @@ fun MyPageInfoScreen(
                             modifier = Modifier
                                 .weight(1f)
                                 .padding(vertical = SusuTheme.spacing.spacing_xxxxs),
-                            text = "남성",
+                            text = stringResource(id = com.susu.core.ui.R.string.word_male),
                             isClickable = true,
                             isActive = uiState.editGender == Gender.MALE,
                             color = FilledButtonColor.Orange,
@@ -230,9 +236,9 @@ fun MyPageInfoScreen(
                 } else {
                     Text(
                         text = when (uiState.userGender) {
-                            Gender.NONE -> "미선택"
-                            Gender.MALE -> "남성"
-                            Gender.FEMALE -> "여성"
+                            Gender.NONE -> stringResource(id = com.susu.core.ui.R.string.word_not_select)
+                            Gender.MALE -> stringResource(id = com.susu.core.ui.R.string.word_male)
+                            Gender.FEMALE -> stringResource(id = com.susu.core.ui.R.string.word_female)
                         },
                         style = SusuTheme.typography.title_xs,
                         color = Gray100,

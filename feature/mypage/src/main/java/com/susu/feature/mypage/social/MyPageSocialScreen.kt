@@ -33,6 +33,7 @@ import com.susu.core.designsystem.theme.Gray50
 import com.susu.core.designsystem.theme.Gray70
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.ui.SnsProviders
+import com.susu.feature.mypage.R
 
 @Composable
 fun MyPageSocialRoute(
@@ -55,10 +56,10 @@ fun MyPageSocialScreen(
             leftIcon = {
                 BackIcon(onClick = popBackStack)
             },
-            title = "연동된 소셜 계정",
+            title = stringResource(id = R.string.mypage_social_title),
         )
         Spacer(modifier = Modifier.height(SusuTheme.spacing.spacing_m))
-        Text(text = "연결된 SNS 계정으로 로그인할 수 있어요", style = SusuTheme.typography.text_xxs, color = Gray70)
+        Text(text = stringResource(R.string.mypage_social_detail), style = SusuTheme.typography.text_xxs, color = Gray70)
         Spacer(modifier = Modifier.height(SusuTheme.spacing.spacing_xxl))
         Row(
             horizontalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_m),
@@ -76,10 +77,10 @@ fun MyPageSocialScreen(
             }
         }
         Spacer(modifier = Modifier.height(56.dp))
-        Text(text = "로그인에 문제가 있다면 팀 옥수수에게 알려주세요", style = SusuTheme.typography.text_xxxs, color = Gray50)
+        Text(text = stringResource(R.string.mypage_social_when_problem), style = SusuTheme.typography.text_xxxs, color = Gray50)
         Spacer(modifier = Modifier.height(SusuTheme.spacing.spacing_s))
         SusuFilledButton(
-            text = "문의 남기기",
+            text = stringResource(R.string.mypage_social_question),
             color = FilledButtonColor.Black,
             style = XSmallButtonStyle.height36,
             isActive = false,
