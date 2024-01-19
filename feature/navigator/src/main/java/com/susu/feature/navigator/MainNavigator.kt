@@ -14,6 +14,7 @@ import com.susu.feature.community.navigation.navigateCommunity
 import com.susu.feature.loginsignup.navigation.LoginSignupRoute
 import com.susu.feature.mypage.navigation.navigateMyPage
 import com.susu.feature.received.navigation.ReceivedRoute
+import com.susu.feature.received.navigation.navigateEnvelopeAdd
 import com.susu.feature.received.navigation.navigateLedgerAdd
 import com.susu.feature.received.navigation.navigateLedgerDetail
 import com.susu.feature.received.navigation.navigateLedgerEdit
@@ -132,6 +133,10 @@ internal class MainNavigator(
 
     fun navigateLedgerAdd() {
         navController.navigateLedgerAdd()
+    }
+
+    fun navigateEnvelopeAdd() {
+        navController.navigateEnvelopeAdd()
     }
 
     fun popBackStackIfNotHome() {

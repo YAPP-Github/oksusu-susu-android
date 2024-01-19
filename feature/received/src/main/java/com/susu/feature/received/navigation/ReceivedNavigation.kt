@@ -11,6 +11,7 @@ import com.susu.core.model.Ledger
 import com.susu.core.ui.DialogToken
 import com.susu.core.ui.SnackbarToken
 import com.susu.core.ui.extension.encodeToUri
+import com.susu.feature.received.envelopeadd.ReceivedEnvelopeAddRoute
 import com.susu.feature.received.ledgeradd.LedgerAddRoute
 import com.susu.feature.received.ledgerdetail.LedgerDetailRoute
 import com.susu.feature.received.ledgeredit.LedgerEditRoute
@@ -43,6 +44,10 @@ fun NavController.navigateLedgerAdd() {
     navigate(ReceivedRoute.ledgerAddRoute)
 }
 
+fun NavController.navigateEnvelopeAdd() {
+    navigate(ReceivedRoute.envelopeAddRoute)
+}
+
 fun NavGraphBuilder.receivedNavGraph(
     padding: PaddingValues,
     navigateLedgerDetail: (Ledger) -> Unit,
@@ -53,6 +58,7 @@ fun NavGraphBuilder.receivedNavGraph(
     navigateLedgerEdit: (Ledger) -> Unit,
     navigateLedgerFilter: () -> Unit,
     navigateLedgerAdd: () -> Unit,
+    navigateEnvelopAdd: () -> Unit,
     onShowSnackbar: (SnackbarToken) -> Unit,
     onShowDialog: (DialogToken) -> Unit,
     handleException: (Throwable, () -> Unit) -> Unit,
@@ -83,6 +89,7 @@ fun NavGraphBuilder.receivedNavGraph(
         LedgerDetailRoute(
             ledger = ledger,
             navigateLedgerEdit = navigateLedgerEdit,
+            navigateEnvelopAdd = navigateEnvelopAdd,
             popBackStackWithLedger = popBackStackWithLedger,
             popBackStackWithDeleteLedgerId = popBackStackWithDeleteLedgerId,
             onShowSnackbar = onShowSnackbar,
@@ -119,6 +126,14 @@ fun NavGraphBuilder.receivedNavGraph(
             popBackStack = popBackStack,
         )
     }
+
+    composable(
+        route = ReceivedRoute.envelopeAddRoute
+    ) {
+        ReceivedEnvelopeAddRoute(
+            popBackStack = popBackStack,
+        )
+    }
 }
 
 object ReceivedRoute {
@@ -131,4 +146,6 @@ object ReceivedRoute {
 
     const val ledgerAddRoute = "ledger-add" // TODO 파라미터 넘기는 방식으로 수정해야함.
     const val ledgerFilterRoute = "ledger-filter" // TODO 파라미터 넘기는 방식으로 수정해야함.
+
+    const val envelopeAddRoute = "envelope-add"
 }
