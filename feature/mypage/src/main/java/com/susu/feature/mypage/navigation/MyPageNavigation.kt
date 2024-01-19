@@ -12,15 +12,15 @@ import com.susu.feature.mypage.main.MyPageDefaultRoute
 import com.susu.feature.mypage.social.MyPageSocialRoute
 
 fun NavController.navigateMyPage(navOptions: NavOptions) {
-    navigate(MyPageRoute.default, navOptions)
+    navigate(MyPageRoute.defaultRoute, navOptions)
 }
 
 fun NavController.navigateMyPageInfo() {
-    navigate(MyPageRoute.info)
+    navigate(MyPageRoute.infoRoute)
 }
 
 fun NavController.navigateMyPageSocial() {
-    navigate(MyPageRoute.social)
+    navigate(MyPageRoute.socialRoute)
 }
 
 fun NavGraphBuilder.myPageNavGraph(
@@ -33,7 +33,7 @@ fun NavGraphBuilder.myPageNavGraph(
     onShowDialog: (DialogToken) -> Unit,
     handleException: (Throwable, () -> Unit) -> Unit,
 ) {
-    composable(route = MyPageRoute.default) {
+    composable(route = MyPageRoute.defaultRoute) {
         MyPageDefaultRoute(
             padding = padding,
             navigateToLogin = navigateToLogin,
@@ -44,7 +44,7 @@ fun NavGraphBuilder.myPageNavGraph(
             handleException = handleException,
         )
     }
-    composable(route = MyPageRoute.info) {
+    composable(route = MyPageRoute.infoRoute) {
         MyPageInfoRoute(
             padding = padding,
             popBackStack = popBackStack,
@@ -52,13 +52,13 @@ fun NavGraphBuilder.myPageNavGraph(
             handleException = handleException,
         )
     }
-    composable(route = MyPageRoute.social) {
+    composable(route = MyPageRoute.socialRoute) {
         MyPageSocialRoute(padding = padding, popBackStack = popBackStack)
     }
 }
 
 object MyPageRoute {
-    const val default = "my-page"
-    const val info = "info"
-    const val social = "social"
+    const val defaultRoute = "my-page"
+    const val infoRoute = "info"
+    const val socialRoute = "social"
 }

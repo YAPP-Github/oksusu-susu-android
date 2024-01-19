@@ -42,7 +42,7 @@ enum class MainNavigationTab(
         selectedIconId = R.drawable.ic_my_page_filled,
         unselectedIconId = R.drawable.ic_my_page_outlined,
         labelId = R.string.bottom_navigation_item_label_my_page,
-        route = MyPageRoute.default,
+        route = MyPageRoute.defaultRoute,
     ),
     ;
 
