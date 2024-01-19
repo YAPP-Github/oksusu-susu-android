@@ -34,4 +34,5 @@
     <string name="sns_naver">네이버</string>
     <string name="sns_google">구글</string>
     <string name="word_enrollment">등록</string>
+    <string name="money_unit_format">%s원</string>
 </resources>
