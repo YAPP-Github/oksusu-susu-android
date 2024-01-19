@@ -65,7 +65,14 @@ fun MyPageSocialScreen(
         ) {
             SnsProviders.entries.forEach {
                 // 추후 소셜 로그인 플랫폼 추가 시 수정
-                SocialProvider(isActive = AuthApiClient.instance.hasToken(), snsProviders = it)
+                SocialProvider(
+                    isActive = when (it) {
+                        SnsProviders.Kakao -> AuthApiClient.instance.hasToken()
+                        SnsProviders.Naver -> false
+                        SnsProviders.Google -> false
+                    },
+                    snsProviders = it,
+                )
             }
         }
         Spacer(modifier = Modifier.height(56.dp))
