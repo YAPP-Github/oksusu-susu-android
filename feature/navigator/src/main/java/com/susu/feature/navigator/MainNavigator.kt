@@ -13,6 +13,8 @@ import com.susu.core.model.Ledger
 import com.susu.feature.community.navigation.navigateCommunity
 import com.susu.feature.loginsignup.navigation.LoginSignupRoute
 import com.susu.feature.mypage.navigation.navigateMyPage
+import com.susu.feature.mypage.navigation.navigateMyPageInfo
+import com.susu.feature.mypage.navigation.navigateMyPageSocial
 import com.susu.feature.received.navigation.ReceivedRoute
 import com.susu.feature.received.navigation.navigateEnvelopeAdd
 import com.susu.feature.received.navigation.navigateLedgerAdd
@@ -133,6 +135,14 @@ internal class MainNavigator(
 
     fun navigateLedgerAdd() {
         navController.navigateLedgerAdd()
+    }
+
+    fun navigateMyPageInfo() {
+        navController.navigateMyPageInfo()
+    }
+
+    fun navigateMyPageSocial() {
+        navController.navigateMyPageSocial()
     }
 
     fun navigateEnvelopeAdd() {

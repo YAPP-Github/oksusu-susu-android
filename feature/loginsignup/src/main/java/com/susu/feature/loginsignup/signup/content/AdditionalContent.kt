@@ -19,7 +19,7 @@ import com.susu.core.designsystem.component.button.MediumButtonStyle
 import com.susu.core.designsystem.component.button.SusuGhostButton
 import com.susu.core.designsystem.theme.Gray60
 import com.susu.core.designsystem.theme.SusuTheme
-import com.susu.feature.loginsignup.signup.Gender
+import com.susu.core.ui.Gender
 import java.time.LocalDate
 
 @Composable

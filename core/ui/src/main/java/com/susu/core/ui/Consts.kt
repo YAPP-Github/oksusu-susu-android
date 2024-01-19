@@ -1,6 +1,9 @@
 package com.susu.core.ui
 
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 
 val alignList
@@ -14,3 +17,33 @@ val alignList
 
 const val USER_NAME_MAX_LENGTH = 10
 val nameRegex = Regex("[a-zA-Z가-힣]{0,10}")
+
+enum class SnsProviders(
+    val path: String,
+    @StringRes val nameId: Int,
+    @DrawableRes val iconId: Int,
+    val backgroundColor: Color,
+) {
+    Kakao(
+        path = "KAKAO",
+        nameId = R.string.sns_kakao,
+        iconId = R.drawable.ic_kakao_login,
+        backgroundColor = Color(0xFFFEE500),
+    ),
+    Naver(
+        path = "",
+        nameId = R.string.sns_naver,
+        iconId = R.drawable.ic_kakao_login,
+        backgroundColor = Color.Unspecified,
+    ),
+    Google(
+        path = "",
+        nameId = R.string.sns_google,
+        iconId = R.drawable.ic_kakao_login,
+        backgroundColor = Color.Unspecified,
+    ),
+}
+
+enum class Gender(val content: String?) {
+    NONE(null), MALE("M"), FEMALE("F")
+}

@@ -124,6 +124,12 @@ internal fun MainScreen(
                     myPageNavGraph(
                         padding = innerPadding,
                         navigateToLogin = navigator::navigateLogin,
+                        navigateToInfo = navigator::navigateMyPageInfo,
+                        navigateToSocial = navigator::navigateMyPageSocial,
+                        popBackStack = navigator::popBackStackIfNotHome,
+                        onShowSnackbar = viewModel::onShowSnackbar,
+                        onShowDialog = viewModel::onShowDialog,
+                        handleException = viewModel::handleException,
                     )
                 }
 

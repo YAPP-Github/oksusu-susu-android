@@ -1,6 +1,7 @@
 package com.susu.feature.loginsignup.signup
 
 import androidx.annotation.StringRes
+import com.susu.core.ui.Gender
 import com.susu.core.ui.base.SideEffect
 import com.susu.core.ui.base.UiState
 import com.susu.feature.loginsignup.R
@@ -46,8 +47,4 @@ enum class SignUpStep(
         description = R.string.signup_additional_description,
         bottomButtonText = com.susu.core.ui.R.string.word_done,
     ),
-}
-
-enum class Gender(val content: String) {
-    NONE(""), MALE("M"), FEMALE("F")
 }
