@@ -17,6 +17,7 @@ import com.susu.feature.mypage.navigation.navigateMyPageInfo
 import com.susu.feature.mypage.navigation.navigateMyPageSocial
 import com.susu.feature.received.navigation.ReceivedRoute
 import com.susu.feature.received.navigation.navigateEnvelopeAdd
+import com.susu.feature.received.navigation.navigateEnvelopeDetail
 import com.susu.feature.received.navigation.navigateLedgerAdd
 import com.susu.feature.received.navigation.navigateLedgerDetail
 import com.susu.feature.received.navigation.navigateLedgerEdit
@@ -50,6 +51,7 @@ internal class MainNavigator(
             in listOf(
                 ReceivedRoute.ledgerSearchRoute,
                 ReceivedRoute.ledgerFilterRoute,
+                ReceivedRoute.envelopeDetailRoute,
                 SentRoute.sentEnvelopeRoute,
                 SentRoute.sentEnvelopeDetailRoute,
                 SentRoute.sentEnvelopeEditRoute,
@@ -147,6 +149,10 @@ internal class MainNavigator(
 
     fun navigateEnvelopeAdd() {
         navController.navigateEnvelopeAdd()
+    }
+
+    fun navigateEnvelopeDetail() {
+        navController.navigateEnvelopeDetail()
     }
 
     fun popBackStackIfNotHome() {

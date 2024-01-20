@@ -108,6 +108,7 @@ internal fun MainScreen(
                         navigateLedgerFilter = navigator::navigateLedgerFilter,
                         navigateLedgerAdd = navigator::navigateLedgerAdd,
                         navigateEnvelopAdd = navigator::navigateEnvelopeAdd,
+                        navigateEnvelopeDetail = navigator::navigateEnvelopeDetail,
                         onShowSnackbar = viewModel::onShowSnackbar,
                         onShowDialog = viewModel::onShowDialog,
                         handleException = viewModel::handleException,

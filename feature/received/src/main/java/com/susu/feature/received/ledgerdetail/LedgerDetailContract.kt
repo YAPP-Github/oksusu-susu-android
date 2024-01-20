@@ -15,6 +15,7 @@ data class LedgerDetailState(
 
 sealed interface LedgerDetailSideEffect : SideEffect {
     data object NavigateEnvelopeAdd : LedgerDetailSideEffect
+    data object NavigateEnvelopeDetail : LedgerDetailSideEffect
     data class NavigateLedgerEdit(val ledger: Ledger) : LedgerDetailSideEffect
     data class PopBackStackWithLedger(val ledger: String) : LedgerDetailSideEffect
     data class PopBackStackWithDeleteLedgerId(val ledgerId: Int) : LedgerDetailSideEffect
