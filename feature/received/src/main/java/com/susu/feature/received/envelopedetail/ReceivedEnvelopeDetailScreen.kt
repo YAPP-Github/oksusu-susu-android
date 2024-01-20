@@ -1,4 +1,4 @@
-package com.susu.feature.received.envelopdetail
+package com.susu.feature.received.envelopedetail
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -19,7 +19,7 @@ import com.susu.core.designsystem.component.appbar.icon.DeleteText
 import com.susu.core.designsystem.component.appbar.icon.EditText
 import com.susu.core.designsystem.theme.Gray100
 import com.susu.core.designsystem.theme.SusuTheme
-import com.susu.feature.received.envelopdetail.component.DetailItem
+import com.susu.feature.received.envelopedetail.component.DetailItem
 
 @Composable
 fun ReceivedEnvelopeDetailRoute(

@@ -1,4 +1,4 @@
-package com.susu.feature.received.envelopdetail.component
+package com.susu.feature.received.envelopedetail.component
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row

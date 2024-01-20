@@ -11,8 +11,9 @@ import com.susu.core.model.Ledger
 import com.susu.core.ui.DialogToken
 import com.susu.core.ui.SnackbarToken
 import com.susu.core.ui.extension.encodeToUri
-import com.susu.feature.received.envelopdetail.ReceivedEnvelopeDetailRoute
+import com.susu.feature.received.envelopedetail.ReceivedEnvelopeDetailRoute
 import com.susu.feature.received.envelopeadd.ReceivedEnvelopeAddRoute
+import com.susu.feature.received.envelopeedit.ReceivedEnvelopeEditRoute
 import com.susu.feature.received.ledgeradd.LedgerAddRoute
 import com.susu.feature.received.ledgerdetail.LedgerDetailRoute
 import com.susu.feature.received.ledgeredit.LedgerEditRoute
@@ -45,12 +46,16 @@ fun NavController.navigateLedgerAdd() {
     navigate(ReceivedRoute.ledgerAddRoute)
 }
 
-fun NavController.navigateEnvelopeAdd() {
+fun NavController.navigateReceivedEnvelopeAdd() {
     navigate(ReceivedRoute.envelopeAddRoute)
 }
 
-fun NavController.navigateEnvelopeDetail() {
+fun NavController.navigateReceivedEnvelopeDetail() {
     navigate(ReceivedRoute.envelopeDetailRoute)
+}
+
+fun NavController.navigateReceivedEnvelopeEdit() {
+    navigate(ReceivedRoute.envelopeEditRoute)
 }
 
 fun NavGraphBuilder.receivedNavGraph(
@@ -65,6 +70,7 @@ fun NavGraphBuilder.receivedNavGraph(
     navigateLedgerAdd: () -> Unit,
     navigateEnvelopAdd: () -> Unit,
     navigateEnvelopeDetail: () -> Unit,
+    navigateEnvelopeEdit: () -> Unit,
     onShowSnackbar: (SnackbarToken) -> Unit,
     onShowDialog: (DialogToken) -> Unit,
     handleException: (Throwable, () -> Unit) -> Unit,
@@ -147,8 +153,14 @@ fun NavGraphBuilder.receivedNavGraph(
     ) {
         ReceivedEnvelopeDetailRoute(
             popBackStack = popBackStack,
-            navigateReceivedEnvelopeEdit = {},
+            navigateReceivedEnvelopeEdit = navigateEnvelopeEdit,
         )
+    }
+
+    composable(
+        route = ReceivedRoute.envelopeEditRoute,
+    ) {
+        ReceivedEnvelopeEditRoute(popBackStack = popBackStack)
     }
 }
 
@@ -165,4 +177,5 @@ object ReceivedRoute {
 
     const val envelopeAddRoute = "envelope-add"
     const val envelopeDetailRoute = "envelope-detail" // TODO 파라미터 넘기는 방식으로 수정해야함.
+    const val envelopeEditRoute = "envelope-edit" // TODO 파라미터 넘기는 방식으로 수정해야함.
 }
