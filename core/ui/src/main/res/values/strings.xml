@@ -35,4 +35,8 @@
     <string name="sns_google">구글</string>
     <string name="word_enrollment">등록</string>
     <string name="money_unit_format">%s원</string>
+    <string name="word_yes">예</string>
+    <string name="word_no">아니요</string>
+    <string name="word_phone_number">연락처</string>
+    <string name="word_memo">메모</string>
 </resources>

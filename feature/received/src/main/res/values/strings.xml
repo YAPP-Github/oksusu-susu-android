@@ -44,4 +44,12 @@
     <string name="relationship_content_title">나와는\n어떤 사이 인가요</string>
     <string name="visited_content_title">%s을 방문했나요?</string>
     <string name="visited_content_title_highlight">%s을</string>
+    <string name="received_envelope_edit_screen_name">이름</string>
+    <string name="received_envelope_edit_screen_name_placeholder">김철수</string>
+    <string name="received_envelope_edit_screen_relationship">나와의 관계</string>
+    <string name="received_envelope_edit_screen_visited">방문 여부</string>
+    <string name="received_envelope_edit_screen_present">선물</string>
+    <string name="received_envelope_edit_screen_present_placeholder">한끼 식사</string>
+    <string name="received_envelope_edit_screen_phone_number_placeholder">01012345678</string>
+    <string name="received_envelope_edit_screen_memo_placeholder">입력해주세요</string>
 </resources>
