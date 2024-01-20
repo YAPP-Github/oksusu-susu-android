@@ -23,10 +23,10 @@ import com.susu.feature.received.envelopedetail.component.DetailItem
 
 @Composable
 fun ReceivedEnvelopeDetailRoute(
+    @Suppress("detekt:UnusedParameter")
     popBackStack: () -> Unit,
     navigateReceivedEnvelopeEdit: () -> Unit,
 ) {
-
     ReceivedEnvelopeDetailScreen(
         onClickEdit = navigateReceivedEnvelopeEdit,
     )
