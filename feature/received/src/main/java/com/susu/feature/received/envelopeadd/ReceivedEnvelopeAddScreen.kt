@@ -15,6 +15,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.susu.core.designsystem.component.appbar.SusuProgressAppBar
 import com.susu.core.designsystem.component.appbar.icon.BackIcon
 import com.susu.core.designsystem.component.button.FilledButtonColor
@@ -45,8 +47,11 @@ enum class EnvelopeAddStep {
 
 @Composable
 fun ReceivedEnvelopeAddRoute(
+    viewModel: ReceivedEnvelopeAddViewModel = hiltViewModel(),
     popBackStack: () -> Unit,
 ) {
+    val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
+
     var currentStep by remember { mutableStateOf(EnvelopeAddStep.MONEY) }
 
     ReceivedEnvelopeAddScreen(
