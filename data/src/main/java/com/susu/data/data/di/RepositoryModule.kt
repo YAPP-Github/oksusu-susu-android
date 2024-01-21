@@ -1,6 +1,7 @@
 package com.susu.data.data.di
 
 import com.susu.data.data.repository.CategoryConfigRepositoryImpl
+import com.susu.data.data.repository.ExcelRepositoryImpl
 import com.susu.data.data.repository.LedgerRecentSearchRepositoryImpl
 import com.susu.data.data.repository.LedgerRepositoryImpl
 import com.susu.data.data.repository.LoginRepositoryImpl
@@ -9,6 +10,7 @@ import com.susu.data.data.repository.TermRepositoryImpl
 import com.susu.data.data.repository.TokenRepositoryImpl
 import com.susu.data.data.repository.UserRepositoryImpl
 import com.susu.domain.repository.CategoryConfigRepository
+import com.susu.domain.repository.ExcelRepository
 import com.susu.domain.repository.LedgerRecentSearchRepository
 import com.susu.domain.repository.LedgerRepository
 import com.susu.domain.repository.LoginRepository
@@ -64,4 +66,9 @@ abstract class RepositoryModule {
     abstract fun bindUserRepository(
         userRepositoryImpl: UserRepositoryImpl,
     ): UserRepository
+
+    @Binds
+    abstract fun bindExcelRepository(
+        excelRepositoryImpl: ExcelRepositoryImpl,
+    ): ExcelRepository
 }

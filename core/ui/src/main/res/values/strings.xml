@@ -30,6 +30,7 @@
     <string name="word_next">다음</string>
     <string name="word_done">완료</string>
     <string name="word_apply_filter">필터 적용하기</string>
+    <string name="word_input_placeholder">입력해주세요</string>
     <string name="sns_kakao">카카오톡</string>
     <string name="sns_naver">네이버</string>
     <string name="sns_google">구글</string>

@@ -56,6 +56,7 @@ fun SusuGhostButton(
     rightIcon: (@Composable () -> Unit)? = null,
     isActive: Boolean = true,
     isClickable: Boolean = true,
+    rippleEnabled: Boolean = true,
     onClick: () -> Unit = {},
 ) {
     val (paddingValues, iconSpacing, textStyle) = style()
@@ -73,6 +74,7 @@ fun SusuGhostButton(
             padding = paddingValues,
             iconSpacing = iconSpacing,
             isClickable = isClickable,
+            rippleEnabled = rippleEnabled,
             onClick = onClick,
         )
     }

@@ -5,6 +5,7 @@ import com.kakao.sdk.auth.TokenManagerProvider
 import com.kakao.sdk.user.UserApiClient
 import com.susu.core.model.exception.UserNotFoundException
 import com.susu.core.ui.base.BaseViewModel
+import com.susu.domain.usecase.mypage.DownloadExcelUseCase
 import com.susu.domain.usecase.mypage.GetUserUseCase
 import com.susu.domain.usecase.mypage.LogoutUseCase
 import com.susu.domain.usecase.mypage.WithdrawUseCase
@@ -17,6 +18,7 @@ class MyPageViewModel @Inject constructor(
     private val logoutUseCase: LogoutUseCase,
     private val withdrawUseCase: WithdrawUseCase,
     private val getUserUseCase: GetUserUseCase,
+    private val downloadExcelUseCase: DownloadExcelUseCase,
 ) : BaseViewModel<MyPageState, MyPageEffect>(MyPageState()) {
 
     init {
@@ -72,6 +74,10 @@ class MyPageViewModel @Inject constructor(
     }
 
     fun export() {
-        postSideEffect(MyPageEffect.ShowExportSuccessSnackbar)
+        viewModelScope.launch {
+            downloadExcelUseCase().onFailure {
+                postSideEffect(MyPageEffect.HandleException(it, ::export))
+            }
+        }
     }
 }

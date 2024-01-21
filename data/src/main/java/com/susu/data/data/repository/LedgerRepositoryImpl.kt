@@ -28,6 +28,10 @@ class LedgerRepositoryImpl @Inject constructor(
         sort = sort,
     ).getOrThrow().toModel()
 
+    override suspend fun createLedger(ledger: Ledger): Ledger = ledgerService.createLedger(
+        ledgerRequest = ledger.toData(),
+    ).getOrThrow().toModel()
+
     override suspend fun editLedger(ledger: Ledger): Ledger = ledgerService.editLedger(
         id = ledger.id,
         ledgerRequest = ledger.toData(),
