@@ -3,6 +3,7 @@ package com.susu.data.data.repository
 import android.app.DownloadManager
 import android.os.Environment
 import androidx.core.net.toUri
+import com.susu.core.model.exception.UnknownException
 import com.susu.domain.repository.ExcelRepository
 import com.susu.domain.repository.TokenRepository
 import kotlinx.coroutines.flow.firstOrNull
@@ -13,7 +14,7 @@ class ExcelRepositoryImpl @Inject constructor(
     private val tokenRepository: TokenRepository,
 ) : ExcelRepository {
     override suspend fun downloadEnvelopExcel(): Long {
-        val token = tokenRepository.getAccessToken().firstOrNull() ?: return -1L
+        val token = tokenRepository.getAccessToken().firstOrNull() ?: throw UnknownException()
 
         val request = DownloadManager.Request(url.toUri())
             .setMimeType(mimeType)
