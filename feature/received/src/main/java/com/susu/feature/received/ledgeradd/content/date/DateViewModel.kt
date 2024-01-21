@@ -10,10 +10,10 @@ import javax.inject.Inject
 class DateViewModel @Inject constructor() : BaseViewModel<DateState, DateSideEffect>(
     DateState(),
 ) {
-    fun updateNameAndCategory(name: String?, categoryName: String?) = intent {
+    fun updateNameAndCategory(name: String, categoryName: String) = intent {
         copy(
-            name = name ?: this.name,
-            categoryName = categoryName ?: this.categoryName,
+            name = name,
+            categoryName = categoryName,
         )
     }
 

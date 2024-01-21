@@ -12,14 +12,51 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.susu.core.designsystem.component.bottomsheet.datepicker.SusuLimitDatePickerBottomSheet
 import com.susu.core.designsystem.theme.Gray60
 import com.susu.core.designsystem.theme.SusuTheme
+import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.core.ui.util.AnnotatedText
 import com.susu.core.ui.util.currentDate
 import com.susu.core.ui.util.minDate
 import com.susu.feature.received.R
 import com.susu.feature.received.ledgeradd.content.date.component.SelectDateRow
+import java.time.LocalDateTime
+
+@Composable
+fun DateContentRoute(
+    viewModel: DateViewModel = hiltViewModel(),
+    name: String,
+    categoryName: String,
+    updateParentDate: (LocalDateTime?, LocalDateTime?) -> Unit,
+) {
+    val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
+    viewModel.sideEffect.collectWithLifecycle { sideEffect ->
+        when (sideEffect) {
+            is DateSideEffect.UpdateParentDate -> updateParentDate(sideEffect.startAt, sideEffect.endAt)
+        }
+    }
+
+    LaunchedEffect(key1 = Unit) {
+        updateParentDate(uiState.startAt, uiState.endAt)
+    }
+
+    LaunchedEffect(key1 = Unit) {
+        viewModel.updateNameAndCategory(name, categoryName)
+    }
+
+    DateContent(
+        uiState = uiState,
+        onStartDateItemSelected = viewModel::updateStartDate,
+        onClickStartDateText = viewModel::showStartDateBottomSheet,
+        onDismissStartDateBottomSheet = viewModel::hideStartDateBottomSheet,
+        onEndDateItemSelected = viewModel::updateEndDate,
+        onClickEndDateText = viewModel::showEndDateBottomSheet,
+        onDismissEndDateBottomSheet = viewModel::hideEndDateBottomSheet,
+    )
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -31,11 +68,7 @@ fun DateContent(
     onEndDateItemSelected: (Int, Int, Int) -> Unit = { _, _, _ -> },
     onClickEndDateText: () -> Unit = {},
     onDismissEndDateBottomSheet: () -> Unit = {},
-    updateParentDate: () -> Unit = {},
 ) {
-    LaunchedEffect(key1 = Unit) {
-        updateParentDate()
-    }
     Column(
         modifier = Modifier
             .fillMaxSize()

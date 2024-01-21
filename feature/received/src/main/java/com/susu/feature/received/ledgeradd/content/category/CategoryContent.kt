@@ -13,11 +13,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.susu.core.designsystem.component.button.FilledButtonColor
 import com.susu.core.designsystem.component.button.GhostButtonColor
 import com.susu.core.designsystem.component.button.MediumButtonStyle
@@ -28,8 +31,63 @@ import com.susu.core.designsystem.component.textfieldbutton.TextFieldButtonColor
 import com.susu.core.designsystem.component.textfieldbutton.style.MediumTextFieldButtonStyle
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.model.Category
+import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.feature.received.R
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.android.awaitFrame
+import kotlinx.coroutines.launch
+
+@Composable
+fun CategoryContentRoute(
+    viewModel: CategoryViewModel = hiltViewModel(),
+    updateParentSelectedCategory: (Category?) -> Unit = {},
+) {
+    val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
+    val focusRequester = remember { FocusRequester() }
+    val scope = rememberCoroutineScope()
+    viewModel.sideEffect.collectWithLifecycle { sideEffect ->
+        when (sideEffect) {
+            is CategorySideEffect.UpdateParentSelectedCategory -> {
+                updateParentSelectedCategory(sideEffect.category)
+//                viewModel.updateSelectedCategory(sideEffect.category)
+//                dateViewModel.updateNameAndCategory(
+//                    name = null,
+//                    categoryName = sideEffect.category?.customCategory ?: sideEffect.category?.name,
+//                )
+            }
+
+            CategorySideEffect.FocusCustomCategory -> scope.launch {
+                awaitFrame()
+                focusRequester.requestFocus()
+            }
+        }
+    }
+
+    LaunchedEffect(key1 = Unit) {
+        viewModel.getCategoryConfig()
+    }
+
+    LaunchedEffect(
+        key1 = uiState.selectedCategory,
+        key2 = uiState.isSavedCustomCategory,
+    ) {
+        snapshotFlow { uiState.selectedCategory }
+            .collect {
+                viewModel.updateParentSelectedCategory()
+            }
+    }
+
+    CategoryContent(
+        uiState = uiState,
+        focusRequester = focusRequester,
+        onClickCategoryButton = viewModel::selectCategory,
+        onClickCustomCategoryButton = viewModel::showCustomCategoryTextField,
+        onClickCustomCategoryTextFieldCloseIcon = viewModel::hideCustomCategoryTextField,
+        onClickCustomCategoryTextField = viewModel::selectCustomCategory,
+        onClickCustomCategoryTextFieldClearIcon = { viewModel.updateCustomCategoryText("") },
+        onTextChangeCustomCategoryTextField = viewModel::updateCustomCategoryText,
+        onClickTextFieldInnerButton = viewModel::toggleTextFieldSaved,
+    )
+}
 
 @Composable
 fun CategoryContent(
@@ -42,18 +100,7 @@ fun CategoryContent(
     onClickCustomCategoryTextFieldClearIcon: () -> Unit = {},
     onTextChangeCustomCategoryTextField: (String) -> Unit = {},
     onClickTextFieldInnerButton: () -> Unit = {},
-    updateParentSelectedCategory: () -> Unit = {},
 ) {
-    LaunchedEffect(
-        key1 = uiState.selectedCategory,
-        key2 = uiState.isSavedCustomCategory,
-    ) {
-        snapshotFlow { uiState.selectedCategory }
-            .collect {
-                updateParentSelectedCategory()
-            }
-    }
-
     val scrollState = rememberScrollState()
 
     Column(

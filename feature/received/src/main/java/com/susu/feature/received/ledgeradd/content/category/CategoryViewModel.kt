@@ -1,11 +1,9 @@
-package com.susu.feature.received.Category.category
+package com.susu.feature.received.ledgeradd.content.category
 
 import androidx.lifecycle.viewModelScope
 import com.susu.core.model.Category
 import com.susu.core.ui.base.BaseViewModel
 import com.susu.domain.usecase.categoryconfig.GetCategoryConfigUseCase
-import com.susu.feature.received.ledgeradd.content.category.CategorySideEffect
-import com.susu.feature.received.ledgeradd.content.category.CategoryState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
@@ -27,6 +25,8 @@ class CategoryViewModel @Inject constructor(
         }
 
     fun getCategoryConfig() = viewModelScope.launch {
+        if (currentState.categoryConfig.isNotEmpty()) return@launch
+
         getCategoryConfigUseCase()
             .onSuccess {
                 intent {
@@ -75,5 +75,7 @@ class CategoryViewModel @Inject constructor(
         )
     }
 
-    fun updateParentSelectedCategory() = postSideEffect(CategorySideEffect.UpdateParentSelectedCategory(parentSelectedCategory))
+    fun updateParentSelectedCategory(category: Category? = parentSelectedCategory) = postSideEffect(
+        CategorySideEffect.UpdateParentSelectedCategory(category),
+    )
 }

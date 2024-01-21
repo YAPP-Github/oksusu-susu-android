@@ -11,9 +11,36 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.susu.core.designsystem.component.textfield.SusuBasicTextField
 import com.susu.core.designsystem.theme.SusuTheme
+import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.feature.received.R
+
+@Composable
+fun NameContentRoute(
+    viewModel: NameViewModel = hiltViewModel(),
+    updateParentName: (String) -> Unit = {},
+) {
+    val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
+    viewModel.sideEffect.collectWithLifecycle { sideEffect ->
+        when (sideEffect) {
+            is NameSideEffect.UpdateParentName -> {
+                updateParentName(sideEffect.name)
+//                dateViewModel.updateNameAndCategory(
+//                    name = sideEffect.name,
+//                    categoryName = null,
+//                )
+            }
+        }
+    }
+
+    NameContent(
+        uiState = uiState,
+        onTextChangeName = viewModel::updateName,
+    )
+}
 
 @Composable
 fun NameContent(
