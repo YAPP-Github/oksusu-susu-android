@@ -1,10 +1,8 @@
 package com.susu.core.ui.util
 
+import android.util.Log
 import java.time.DateTimeException
-import java.time.LocalDate
 import java.time.LocalDateTime
-import java.time.Month
-import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 
 val currentDate: LocalDateTime = LocalDateTime.now()
@@ -19,5 +17,6 @@ fun LocalDateTime.to_yyyy_dot_MM_dot_dd(): String {
 fun getSafeLocalDateTime(year: Int, month: Int, day: Int): LocalDateTime = try {
     LocalDateTime.of(year, month, day, 0, 0)
 } catch (e: DateTimeException) {
+    Log.e("DateTimeError", "Invalid date provided: $year-$month-$day", e)
     LocalDateTime.of(year, month, 1, 0, 0)
 }

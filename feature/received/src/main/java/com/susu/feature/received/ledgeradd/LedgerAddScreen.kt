@@ -45,7 +45,6 @@ import com.susu.feature.received.ledgeradd.content.name.NameViewModel
 import kotlinx.coroutines.android.awaitFrame
 import kotlinx.coroutines.launch
 
-
 @Composable
 fun LedgerAddRoute(
     viewModel: LedgerAddViewModel = hiltViewModel(),
@@ -107,7 +106,6 @@ fun LedgerAddRoute(
         when (sideEffect) {
             is DateSideEffect.UpdateParentDate -> viewModel.updateDate(sideEffect.startAt, sideEffect.endAt)
         }
-
     }
 
     BackHandler {

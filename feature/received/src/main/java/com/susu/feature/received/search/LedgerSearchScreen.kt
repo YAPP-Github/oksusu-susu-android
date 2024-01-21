@@ -1,6 +1,5 @@
 package com.susu.feature.received.search
 
-import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -37,7 +36,6 @@ import com.susu.feature.received.R
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.filter
 
 @OptIn(FlowPreview::class)
 @Composable
@@ -138,7 +136,6 @@ fun LedgerSearchScreen(
                         onClickItem = onClickSearchResultContainer,
                     )
                 }
-
             }
         }
     }

@@ -1,10 +1,7 @@
 package com.susu.feature.received.ledgeradd.content.date
 
-import com.susu.core.model.Category
 import com.susu.core.ui.base.SideEffect
 import com.susu.core.ui.base.UiState
-import kotlinx.collections.immutable.PersistentList
-import kotlinx.collections.immutable.persistentListOf
 import java.time.LocalDateTime
 
 data class DateState(

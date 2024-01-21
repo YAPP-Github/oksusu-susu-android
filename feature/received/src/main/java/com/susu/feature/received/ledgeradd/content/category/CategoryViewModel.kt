@@ -2,7 +2,6 @@ package com.susu.feature.received.Category.category
 
 import androidx.lifecycle.viewModelScope
 import com.susu.core.model.Category
-import com.susu.core.model.Ledger
 import com.susu.core.ui.base.BaseViewModel
 import com.susu.domain.usecase.categoryconfig.GetCategoryConfigUseCase
 import com.susu.feature.received.ledgeradd.content.category.CategorySideEffect
@@ -20,8 +19,11 @@ class CategoryViewModel @Inject constructor(
 ) {
     private val parentSelectedCategory
         get() = with(currentState) {
-            if (selectedCategory == customCategory && (customCategory.customCategory.isNullOrEmpty() || isSavedCustomCategory.not())) null
-            else selectedCategory
+            if (selectedCategory == customCategory && (customCategory.customCategory.isNullOrEmpty() || isSavedCustomCategory.not())) {
+                null
+            } else {
+                selectedCategory
+            }
         }
 
     fun getCategoryConfig() = viewModelScope.launch {

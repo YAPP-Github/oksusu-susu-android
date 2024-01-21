@@ -3,13 +3,11 @@ package com.susu.feature.received.ledgeradd.content.date
 import com.susu.core.ui.base.BaseViewModel
 import com.susu.core.ui.util.getSafeLocalDateTime
 import dagger.hilt.android.lifecycle.HiltViewModel
-import java.time.LocalDate
 import java.time.LocalDateTime
 import javax.inject.Inject
 
 @HiltViewModel
-class DateViewModel @Inject constructor(
-) : BaseViewModel<DateState, DateSideEffect>(
+class DateViewModel @Inject constructor() : BaseViewModel<DateState, DateSideEffect>(
     DateState(),
 ) {
     fun updateNameAndCategory(name: String?, categoryName: String?) = intent {
