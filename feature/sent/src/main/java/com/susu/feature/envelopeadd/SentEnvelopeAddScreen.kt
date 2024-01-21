@@ -1,5 +1,6 @@
 package com.susu.feature.envelopeadd
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -8,13 +9,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.susu.core.designsystem.component.appbar.SusuProgressAppBar
 import com.susu.core.designsystem.component.appbar.icon.BackIcon
 import com.susu.core.designsystem.component.button.FilledButtonColor
@@ -49,35 +50,25 @@ enum class EnvelopeAddStep {
 
 @Composable
 fun SentEnvelopeAddRoute(
+    viewModel: EnvelopeAddViewModel = hiltViewModel(),
     popBackStack: () -> Unit,
 ) {
-    var currentStep by remember { mutableStateOf(EnvelopeAddStep.MONEY) }
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    BackHandler {
+        viewModel.goPrevStep()
+    }
 
     SentEnvelopeAddScreen(
-        currentStep = currentStep,
-        onClickBack = popBackStack,
-        onClickNext = {
-            // TODO: 수정 필요 (MORE 이후 분리 필요)
-            currentStep = when (currentStep) {
-                EnvelopeAddStep.MONEY -> EnvelopeAddStep.NAME
-                EnvelopeAddStep.NAME -> EnvelopeAddStep.RELATIONSHIP
-                EnvelopeAddStep.RELATIONSHIP -> EnvelopeAddStep.EVENT
-                EnvelopeAddStep.EVENT -> EnvelopeAddStep.DATE
-                EnvelopeAddStep.DATE -> EnvelopeAddStep.MORE
-                EnvelopeAddStep.MORE -> EnvelopeAddStep.VISITED
-                EnvelopeAddStep.VISITED -> EnvelopeAddStep.PRESENT
-                EnvelopeAddStep.PRESENT -> EnvelopeAddStep.PHONE
-                EnvelopeAddStep.PHONE -> EnvelopeAddStep.MEMO
-                else -> EnvelopeAddStep.MEMO
-            }
-        },
+        uiState = uiState,
+        onClickBack = viewModel::goPrevStep,
+        onClickNext = viewModel::goNextStep,
     )
 }
 
 @Composable
 fun SentEnvelopeAddScreen(
-    modifier: Modifier = Modifier,
-    currentStep: EnvelopeAddStep = EnvelopeAddStep.MONEY,
+    uiState: EnvelopeAddState = EnvelopeAddState(),
     onClickBack: () -> Unit = {},
     onClickNext: () -> Unit = {},
 ) {
@@ -89,9 +80,9 @@ fun SentEnvelopeAddScreen(
     val visitedList = listOf("예", "아니요")
 
     Column(
-        modifier = modifier
-            .background(SusuTheme.colorScheme.background15)
-            .fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .background(SusuTheme.colorScheme.background15),
     ) {
         SusuProgressAppBar(
             leftIcon = {
@@ -99,12 +90,12 @@ fun SentEnvelopeAddScreen(
                     onClick = onClickBack,
                 )
             },
-            currentStep = currentStep.ordinal + 1,
+            currentStep = uiState.currentStep.ordinal + 1,
             entireStep = EnvelopeAddStep.entries.size,
         )
         AnimatedContent(
-            modifier = modifier.weight(1f),
-            targetState = currentStep,
+            modifier = Modifier.weight(1f),
+            targetState = uiState.currentStep,
             label = "SentEnvelopeAddScreen",
             transitionSpec = {
                 susuDefaultAnimatedContentTransitionSpec(
@@ -123,6 +114,7 @@ fun SentEnvelopeAddScreen(
                     event = "결혼식",
                     visitedList = visitedList,
                 )
+
                 EnvelopeAddStep.PRESENT -> PresentContent()
                 EnvelopeAddStep.PHONE -> PhoneContent(name = "김철수")
                 EnvelopeAddStep.MEMO -> MemoContent()
@@ -134,9 +126,7 @@ fun SentEnvelopeAddScreen(
             shape = RectangleShape,
             text = stringResource(R.string.sent_envelope_add_next),
             onClick = onClickNext,
-            modifier = modifier
-                .fillMaxWidth()
-                .imePadding(),
+            modifier = Modifier.fillMaxWidth().imePadding(),
         )
     }
 }
