@@ -75,6 +75,7 @@ fun SusuTextFieldFillMaxButton(
     onClickCloseIcon: () -> Unit = {},
     onClickFilledButton: () -> Unit = {},
     onClickButton: (isFocused: Boolean) -> Unit = {},
+    focusRequester: FocusRequester = remember { FocusRequester() },
 ) {
     val (backgroundColor, textColor) = with(color) {
         when {
@@ -88,7 +89,8 @@ fun SusuTextFieldFillMaxButton(
         BasicTextField(
             modifier = modifier
                 .fillMaxWidth()
-                .susuClickable { onClickButton(isFocused) },
+                .susuClickable { onClickButton(isFocused) }
+                .focusRequester(focusRequester),
             value = text,
             onValueChange = onTextChange,
             enabled = isSaved.not() && isFocused,
