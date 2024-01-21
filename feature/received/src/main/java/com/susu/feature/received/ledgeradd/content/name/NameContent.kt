@@ -28,10 +28,6 @@ fun NameContentRoute(
         when (sideEffect) {
             is NameSideEffect.UpdateParentName -> {
                 updateParentName(sideEffect.name)
-//                dateViewModel.updateNameAndCategory(
-//                    name = sideEffect.name,
-//                    categoryName = null,
-//                )
             }
         }
     }

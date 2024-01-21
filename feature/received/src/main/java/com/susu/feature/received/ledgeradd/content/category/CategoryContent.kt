@@ -48,11 +48,6 @@ fun CategoryContentRoute(
         when (sideEffect) {
             is CategorySideEffect.UpdateParentSelectedCategory -> {
                 updateParentSelectedCategory(sideEffect.category)
-//                viewModel.updateSelectedCategory(sideEffect.category)
-//                dateViewModel.updateNameAndCategory(
-//                    name = null,
-//                    categoryName = sideEffect.category?.customCategory ?: sideEffect.category?.name,
-//                )
             }
 
             CategorySideEffect.FocusCustomCategory -> scope.launch {
