@@ -20,6 +20,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import com.susu.core.designsystem.theme.SusuTheme
+import com.susu.core.ui.INTENT_ACTION_DOWNLOAD_COMPLETE
 import com.susu.core.ui.SnackbarToken
 import com.susu.feature.loginsignup.social.KakaoLoginHelper
 import dagger.hilt.android.AndroidEntryPoint
@@ -56,7 +57,7 @@ class MainActivity : ComponentActivity() {
 
         broadcastReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context, intent: Intent?) {
-                if (intent?.action == "android.intent.action.DOWNLOAD_COMPLETE") {
+                if (intent?.action == INTENT_ACTION_DOWNLOAD_COMPLETE) {
                     val id = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1L)
                     if (id != -1L) {
                         viewModel.onShowSnackbar(SnackbarToken(message = context.getString(com.susu.feature.mypage.R.string.snackbar_success_export)))

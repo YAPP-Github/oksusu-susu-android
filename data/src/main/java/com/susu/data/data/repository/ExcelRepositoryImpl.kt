@@ -14,16 +14,23 @@ class ExcelRepositoryImpl @Inject constructor(
 ) : ExcelRepository {
     override suspend fun downloadEnvelopExcel(): Long {
         val token = tokenRepository.getAccessToken().firstOrNull() ?: return -1L
-        val url = "https://api.oksusu.site/api/v1/excel/all-envelopes"
 
         val request = DownloadManager.Request(url.toUri())
-            .setMimeType("application/vnd.ms-excel")
+            .setMimeType(mimeType)
             .setAllowedOverMetered(true)
             .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE)
-            .setTitle("수수")
-            .addRequestHeader("X-SUSU-AUTH-TOKEN", token)
-            .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "수수_기록.xlsx")
+            .setTitle(downloaderName)
+            .addRequestHeader(headerTokenName, token)
+            .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName)
 
         return downloadManager.enqueue(request)
+    }
+
+    companion object {
+        private const val url = "https://api.oksusu.site/api/v1/excel/all-envelopes"
+        private const val mimeType = "application/vnd.ms-excel"
+        private const val downloaderName = "수수"
+        private const val headerTokenName = "X-SUSU-AUTH-TOKEN"
+        private const val fileName = "수수_기록.xlsx"
     }
 }
