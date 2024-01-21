@@ -1,5 +1,6 @@
 package com.susu.feature.received.envelopeadd
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -23,6 +24,7 @@ import com.susu.core.designsystem.component.button.FilledButtonColor
 import com.susu.core.designsystem.component.button.MediumButtonStyle
 import com.susu.core.designsystem.component.button.SusuFilledButton
 import com.susu.core.designsystem.theme.SusuTheme
+import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.core.ui.extension.susuDefaultAnimatedContentTransitionSpec
 import com.susu.feature.received.R
 import com.susu.feature.received.envelopeadd.content.MemoContent
@@ -34,49 +36,34 @@ import com.susu.feature.received.envelopeadd.content.PresentContent
 import com.susu.feature.received.envelopeadd.content.RelationshipContent
 import com.susu.feature.received.envelopeadd.content.VisitedContent
 
-enum class EnvelopeAddStep {
-    MONEY,
-    NAME,
-    RELATIONSHIP,
-    MORE,
-    VISITED,
-    PRESENT,
-    PHONE,
-    MEMO,
-}
-
 @Composable
 fun ReceivedEnvelopeAddRoute(
     viewModel: ReceivedEnvelopeAddViewModel = hiltViewModel(),
     popBackStack: () -> Unit,
+    handleException: (Throwable, () -> Unit) -> Unit,
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
+    viewModel.sideEffect.collectWithLifecycle { sideEffect ->
+        when (sideEffect) {
+            is ReceivedEnvelopeAddSideEffect.HandleException -> handleException(sideEffect.throwable, sideEffect.retry)
+            ReceivedEnvelopeAddSideEffect.PopBackStack -> popBackStack()
+        }
+    }
 
-    var currentStep by remember { mutableStateOf(EnvelopeAddStep.MONEY) }
+    BackHandler {
+        viewModel.goToPrevStep()
+    }
 
     ReceivedEnvelopeAddScreen(
-        currentStep = currentStep,
-        onClickBack = popBackStack,
-        onClickNext = {
-            // TODO: 수정 필요 (MORE 이후 분리 필요)
-            currentStep = when (currentStep) {
-                EnvelopeAddStep.MONEY -> EnvelopeAddStep.NAME
-                EnvelopeAddStep.NAME -> EnvelopeAddStep.RELATIONSHIP
-                EnvelopeAddStep.RELATIONSHIP -> EnvelopeAddStep.MORE
-                EnvelopeAddStep.MORE -> EnvelopeAddStep.VISITED
-                EnvelopeAddStep.VISITED -> EnvelopeAddStep.PRESENT
-                EnvelopeAddStep.PRESENT -> EnvelopeAddStep.PHONE
-                EnvelopeAddStep.PHONE -> EnvelopeAddStep.MEMO
-                else -> EnvelopeAddStep.MEMO
-            }
-        },
+        uiState = uiState,
+        onClickBack = viewModel::goToPrevStep,
+        onClickNext = viewModel::goToNextStep,
     )
 }
 
 @Composable
 fun ReceivedEnvelopeAddScreen(
-    modifier: Modifier = Modifier,
-    currentStep: EnvelopeAddStep = EnvelopeAddStep.MONEY,
+    uiState: ReceivedEnvelopeAddState = ReceivedEnvelopeAddState(),
     onClickBack: () -> Unit = {},
     onClickNext: () -> Unit = {},
 ) {
@@ -87,7 +74,7 @@ fun ReceivedEnvelopeAddScreen(
     val visitedList = listOf("예", "아니요")
 
     Column(
-        modifier = modifier
+        modifier = Modifier
             .background(SusuTheme.colorScheme.background15)
             .fillMaxSize(),
     ) {
@@ -97,13 +84,13 @@ fun ReceivedEnvelopeAddScreen(
                     onClick = onClickBack,
                 )
             },
-            currentStep = currentStep.ordinal + 1,
+            currentStep = uiState.currentStep.ordinal + 1,
             entireStep = EnvelopeAddStep.entries.size,
         )
         AnimatedContent(
-            modifier = modifier.weight(1f),
-            targetState = currentStep,
-            label = "SentEnvelopeAddScreen",
+            modifier = Modifier.weight(1f),
+            targetState = uiState.currentStep,
+            label = "ReceivedEnvelopeAddScreen",
             transitionSpec = {
                 susuDefaultAnimatedContentTransitionSpec(
                     leftDirectionCondition = targetState.ordinal > initialState.ordinal,
@@ -130,7 +117,7 @@ fun ReceivedEnvelopeAddScreen(
             shape = RectangleShape,
             text = stringResource(id = com.susu.core.ui.R.string.word_next),
             onClick = onClickNext,
-            modifier = modifier
+            modifier = Modifier
                 .fillMaxWidth()
                 .imePadding(),
         )

@@ -19,10 +19,8 @@ class LedgerAddViewModel @Inject constructor(
 ) : BaseViewModel<LedgerAddState, LedgerAddSideEffect>(
     LedgerAddState(),
 ) {
-    var selectedCategory: Category? = null
-        private set
-    var name: String = ""
-        private set
+    private var selectedCategory: Category? = null
+    private var name: String = ""
     private var startAt: LocalDateTime? = null
     private var endAt: LocalDateTime? = null
 

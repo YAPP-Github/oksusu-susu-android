@@ -147,6 +147,7 @@ fun NavGraphBuilder.receivedNavGraph(
     ) {
         ReceivedEnvelopeAddRoute(
             popBackStack = popBackStack,
+            handleException = handleException,
         )
     }
 
