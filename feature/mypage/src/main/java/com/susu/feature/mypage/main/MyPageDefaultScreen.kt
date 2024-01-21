@@ -1,5 +1,6 @@
 package com.susu.feature.mypage.main
 
+import android.os.Environment
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -78,7 +79,7 @@ fun MyPageDefaultRoute(
                 onShowDialog(
                     DialogToken(
                         title = context.getString(com.susu.feature.mypage.R.string.dialog_export_title),
-                        text = context.getString(com.susu.feature.mypage.R.string.dialog_export_detail),
+                        text = context.getString(com.susu.feature.mypage.R.string.dialog_export_detail, Environment.DIRECTORY_DOWNLOADS),
                         dismissText = context.getString(R.string.word_cancel),
                         confirmText = context.getString(com.susu.feature.mypage.R.string.dialog_export_confirm),
                         onConfirmRequest = viewModel::export,
