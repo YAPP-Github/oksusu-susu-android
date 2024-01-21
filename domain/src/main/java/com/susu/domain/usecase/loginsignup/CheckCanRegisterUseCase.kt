@@ -7,7 +7,7 @@ import javax.inject.Inject
 class CheckCanRegisterUseCase @Inject constructor(
     private val signUpRepository: SignUpRepository,
 ) {
-    suspend operator fun invoke(oauthAccessToken: String) = runCatchingIgnoreCancelled {
-        signUpRepository.canRegister(oauthAccessToken = oauthAccessToken)
+    suspend operator fun invoke(provider: String, oauthAccessToken: String) = runCatchingIgnoreCancelled {
+        signUpRepository.canRegister(provider = provider, oauthAccessToken = oauthAccessToken)
     }
 }

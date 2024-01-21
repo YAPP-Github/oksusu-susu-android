@@ -40,6 +40,7 @@ import com.susu.core.designsystem.theme.Gray10
 import com.susu.core.designsystem.theme.Gray50
 import com.susu.core.designsystem.theme.Orange60
 import com.susu.core.designsystem.theme.SusuTheme
+import com.susu.core.ui.SnsProviders
 import com.susu.core.ui.extension.susuClickable
 import com.susu.feature.loginsignup.R
 import com.susu.feature.loginsignup.social.KakaoLoginHelper
@@ -75,7 +76,7 @@ fun LoginRoute(
         onLoginClick = {
             KakaoLoginHelper.login(
                 context = context,
-                onSuccess = { viewModel.login(it) },
+                onSuccess = { viewModel.login(SnsProviders.Kakao, it) },
                 onFailed = { viewModel.showToast(it) },
             )
         },
@@ -186,7 +187,7 @@ fun KakaoLoginButton(
     ) {
         Image(
             modifier = Modifier.size(36.dp),
-            painter = painterResource(id = R.drawable.ic_kakao_login),
+            painter = painterResource(id = com.susu.core.ui.R.drawable.ic_kakao_login),
             contentDescription = null,
         )
         Text(

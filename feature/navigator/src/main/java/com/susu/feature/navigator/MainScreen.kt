@@ -82,6 +82,7 @@ internal fun MainScreen(
                         navigateSentEnvelope = navigator::navigateSentEnvelope,
                         navigateSentEnvelopeDetail = navigator::navigateSentEnvelopeDetail,
                         navigateSentEnvelopeEdit = navigator::navigateSentEnvelopeEdit,
+                        navigateSentEnvelopeAdd = navigator::navigateSentEnvelopeAdd,
                     )
 
                     receivedNavGraph(
@@ -106,6 +107,9 @@ internal fun MainScreen(
                         navigateLedgerEdit = navigator::navigateLedgerEdit,
                         navigateLedgerFilter = navigator::navigateLedgerFilter,
                         navigateLedgerAdd = navigator::navigateLedgerAdd,
+                        navigateEnvelopAdd = navigator::navigateReceivedEnvelopeAdd,
+                        navigateEnvelopeDetail = navigator::navigateReceivedEnvelopeDetail,
+                        navigateEnvelopeEdit = navigator::navigateReceivedEnvelopeEdit,
                         onShowSnackbar = viewModel::onShowSnackbar,
                         onShowDialog = viewModel::onShowDialog,
                         handleException = viewModel::handleException,
@@ -122,6 +126,12 @@ internal fun MainScreen(
                     myPageNavGraph(
                         padding = innerPadding,
                         navigateToLogin = navigator::navigateLogin,
+                        navigateToInfo = navigator::navigateMyPageInfo,
+                        navigateToSocial = navigator::navigateMyPageSocial,
+                        popBackStack = navigator::popBackStackIfNotHome,
+                        onShowSnackbar = viewModel::onShowSnackbar,
+                        onShowDialog = viewModel::onShowDialog,
+                        handleException = viewModel::handleException,
                     )
                 }
 

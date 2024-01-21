@@ -98,6 +98,7 @@ object NetworkModule {
             prettyPrint = true
             coerceInputValues = true
             ignoreUnknownKeys = true
+            encodeDefaults = true
         }
     }
 }

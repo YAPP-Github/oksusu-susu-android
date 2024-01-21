@@ -1,5 +1,6 @@
 package com.susu.data.remote.di
 
+import com.susu.data.remote.api.AuthService
 import com.susu.data.remote.api.CategoryService
 import com.susu.data.remote.api.LedgerService
 import com.susu.data.remote.api.SignUpService
@@ -11,7 +12,6 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
-import retrofit2.create
 import javax.inject.Singleton
 
 @Module
@@ -20,8 +20,8 @@ object ApiServiceModule {
 
     @Singleton
     @Provides
-    fun provideUserService(retrofit: Retrofit): UserService {
-        return retrofit.create(UserService::class.java)
+    fun provideUserService(retrofit: Retrofit): AuthService {
+        return retrofit.create(AuthService::class.java)
     }
 
     @Singleton
@@ -52,5 +52,11 @@ object ApiServiceModule {
     @Provides
     fun providesCategoryService(retrofit: Retrofit): CategoryService {
         return retrofit.create(CategoryService::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun providesUserService(retrofit: Retrofit): UserService {
+        return retrofit.create(UserService::class.java)
     }
 }
