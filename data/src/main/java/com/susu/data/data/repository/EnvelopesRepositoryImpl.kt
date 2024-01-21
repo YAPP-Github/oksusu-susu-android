@@ -1,6 +1,7 @@
 package com.susu.data.data.repository
 
 import com.susu.core.model.Envelope
+import com.susu.core.model.RelationShip
 import com.susu.data.remote.api.EnvelopesService
 import com.susu.data.remote.model.response.toModel
 import com.susu.domain.repository.EnvelopesRepository
@@ -24,4 +25,6 @@ class EnvelopesRepositoryImpl @Inject constructor(
         size = size,
         sort = sort,
     ).getOrThrow().toModel()
+
+    override suspend fun getRelationShipConfigList(): List<RelationShip> = envelopesService.getRelationShipConfigList().getOrThrow().toModel()
 }
