@@ -21,7 +21,7 @@ import com.susu.feature.received.R
 
 @Composable
 fun LedgerCategoryCard(
-    name: String
+    name: String,
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -63,7 +63,7 @@ fun LedgerCategoryCard(
 fun LedgerCategoryCardPreview() {
     SusuTheme {
         LedgerCategoryCard(
-            name = "결혼식"
+            name = "결혼식",
         )
     }
 }

@@ -8,5 +8,5 @@ import kotlinx.serialization.Serializable
 data class FilterArgument(
     val selectedCategoryList: List<Category> = emptyList(),
     val startAt: LocalDateTime? = null,
-    val endAt: LocalDateTime ? = null,
+    val endAt: LocalDateTime? = null,
 )

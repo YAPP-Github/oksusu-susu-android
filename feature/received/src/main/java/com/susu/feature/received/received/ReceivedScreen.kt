@@ -5,8 +5,6 @@ import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -45,24 +43,22 @@ import com.susu.core.designsystem.component.bottomsheet.SusuSelectionBottomSheet
 import com.susu.core.designsystem.component.button.FilledButtonColor
 import com.susu.core.designsystem.component.button.FilterButton
 import com.susu.core.designsystem.component.button.GhostButtonColor
+import com.susu.core.designsystem.component.button.SelectedFilterButton
 import com.susu.core.designsystem.component.button.SmallButtonStyle
 import com.susu.core.designsystem.component.button.SusuFloatingButton
 import com.susu.core.designsystem.component.button.SusuGhostButton
 import com.susu.core.designsystem.theme.Gray50
 import com.susu.core.designsystem.theme.SusuTheme
+import com.susu.core.model.Category
 import com.susu.core.model.Ledger
-import com.susu.core.ui.alignList
 import com.susu.core.ui.extension.OnBottomReached
 import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.core.ui.util.to_yyyy_dot_MM_dot_dd
 import com.susu.feature.received.R
-import com.susu.core.designsystem.component.button.SelectedFilterButton
-import com.susu.core.model.Category
 import com.susu.feature.received.navigation.argument.FilterArgument
 import com.susu.feature.received.received.component.LedgerAddCard
 import com.susu.feature.received.received.component.LedgerCard
 import com.susu.feature.received.received.component.LedgerCategoryCard
-import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.android.awaitFrame
 import kotlinx.coroutines.launch
@@ -177,7 +173,7 @@ fun ReceiveScreen(
                     Spacer(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(32.dp)
+                            .height(32.dp),
                     )
                     Row(
                         modifier = Modifier
@@ -227,7 +223,7 @@ fun ReceiveScreen(
 
                         Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_xxs))
                     }
-                }
+                },
             ) {
                 LazyVerticalGrid(
                     modifier = Modifier
@@ -246,7 +242,7 @@ fun ReceiveScreen(
                         uiState.ledgerList.groupBy { it.category }.forEach { (category, ledgerList) ->
                             item(
                                 span = { GridItemSpan(2) },
-                                contentType = "LedgerCategoryCard"
+                                contentType = "LedgerCategoryCard",
                             ) {
                                 LedgerCategoryCard(name = category.name)
                             }

@@ -15,7 +15,6 @@ import kotlinx.coroutines.sync.withLock
 import kotlinx.datetime.toJavaLocalDateTime
 import kotlinx.datetime.toKotlinLocalDateTime
 import kotlinx.serialization.json.Json
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -62,10 +61,10 @@ class ReceivedViewModel @Inject constructor(
     fun removeCategory(category: Category) {
         intent {
             filter = filter.copy(
-                selectedCategoryList = selectedCategoryList.minus(category)
+                selectedCategoryList = selectedCategoryList.minus(category),
             )
             copy(
-                selectedCategoryList = selectedCategoryList.minus(category).toPersistentList()
+                selectedCategoryList = selectedCategoryList.minus(category).toPersistentList(),
             )
         }
 

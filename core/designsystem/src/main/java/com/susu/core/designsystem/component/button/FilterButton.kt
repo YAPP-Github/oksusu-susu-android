@@ -53,7 +53,6 @@ fun FilterButton(
 fun FilterButtonPreview() {
     SusuTheme {
         FilterButton {
-
         }
     }
 }

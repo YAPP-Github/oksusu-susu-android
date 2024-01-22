@@ -28,6 +28,7 @@ import com.susu.core.designsystem.component.bottomsheet.datepicker.SusuLimitDate
 import com.susu.core.designsystem.component.button.FilledButtonColor
 import com.susu.core.designsystem.component.button.LinedButtonColor
 import com.susu.core.designsystem.component.button.RefreshButton
+import com.susu.core.designsystem.component.button.SelectedFilterButton
 import com.susu.core.designsystem.component.button.SmallButtonStyle
 import com.susu.core.designsystem.component.button.SusuFilledButton
 import com.susu.core.designsystem.component.button.SusuLinedButton
@@ -40,7 +41,6 @@ import com.susu.core.ui.util.minDate
 import com.susu.core.ui.util.to_yyyy_dot_MM_dot_dd
 import com.susu.feature.received.R
 import com.susu.feature.received.ledgerfilter.component.DateText
-import com.susu.core.designsystem.component.button.SelectedFilterButton
 
 @Composable
 fun LedgerFilterRoute(
@@ -126,7 +126,7 @@ fun LedgerFilterScreen(
                         style = XSmallButtonStyle.height28,
                         isActive = category in uiState.selectedCategoryList,
                         text = category.name,
-                        onClick = { onClickCategory(category) }
+                        onClick = { onClickCategory(category) },
                     )
                 }
             }
@@ -157,7 +157,7 @@ fun LedgerFilterScreen(
 
                 DateText(
                     date = uiState.endAt,
-                    onClick = onClickEndDateText
+                    onClick = onClickEndDateText,
                 )
 
                 Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_xxxxs))
@@ -190,7 +190,6 @@ fun LedgerFilterScreen(
                         )
                     }
                 }
-
 
                 Row(
                     modifier = Modifier.fillMaxWidth(),
