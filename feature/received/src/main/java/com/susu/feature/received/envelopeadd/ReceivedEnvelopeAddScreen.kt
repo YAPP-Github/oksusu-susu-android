@@ -8,10 +8,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.stringResource
@@ -26,15 +22,15 @@ import com.susu.core.designsystem.component.button.SusuFilledButton
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.core.ui.extension.susuDefaultAnimatedContentTransitionSpec
-import com.susu.feature.received.R
 import com.susu.feature.received.envelopeadd.content.MemoContent
-import com.susu.feature.received.envelopeadd.content.MoneyContent
+import com.susu.feature.received.envelopeadd.content.money.MoneyContent
 import com.susu.feature.received.envelopeadd.content.MoreContent
 import com.susu.feature.received.envelopeadd.content.NameContent
 import com.susu.feature.received.envelopeadd.content.PhoneContent
 import com.susu.feature.received.envelopeadd.content.PresentContent
 import com.susu.feature.received.envelopeadd.content.RelationshipContent
 import com.susu.feature.received.envelopeadd.content.VisitedContent
+import com.susu.feature.received.envelopeadd.content.money.MoneyContentRoute
 
 @Composable
 fun ReceivedEnvelopeAddRoute(
@@ -58,6 +54,7 @@ fun ReceivedEnvelopeAddRoute(
         uiState = uiState,
         onClickBack = viewModel::goToPrevStep,
         onClickNext = viewModel::goToNextStep,
+        updateParentMoney = viewModel::updateMoney
     )
 }
 
@@ -66,6 +63,7 @@ fun ReceivedEnvelopeAddScreen(
     uiState: ReceivedEnvelopeAddState = ReceivedEnvelopeAddState(),
     onClickBack: () -> Unit = {},
     onClickNext: () -> Unit = {},
+    updateParentMoney: (Long) -> Unit = {},
 ) {
     // TODO: 수정 필요
     val relationshipList = listOf("친구", "가족", "친척", "동료", "직접 입력")
@@ -98,7 +96,10 @@ fun ReceivedEnvelopeAddScreen(
             },
         ) { targetState ->
             when (targetState) {
-                EnvelopeAddStep.MONEY -> MoneyContent()
+                EnvelopeAddStep.MONEY -> MoneyContentRoute(
+                    updateParentMoney = updateParentMoney,
+                )
+
                 EnvelopeAddStep.NAME -> NameContent(friendList = friendList)
                 EnvelopeAddStep.RELATIONSHIP -> RelationshipContent(relationshipList = relationshipList)
                 EnvelopeAddStep.MORE -> MoreContent(moreList = moreList)
@@ -106,6 +107,7 @@ fun ReceivedEnvelopeAddScreen(
                     event = "결혼식",
                     visitedList = visitedList,
                 )
+
                 EnvelopeAddStep.PRESENT -> PresentContent()
                 EnvelopeAddStep.PHONE -> PhoneContent(name = "김철수")
                 EnvelopeAddStep.MEMO -> MemoContent()
@@ -117,6 +119,8 @@ fun ReceivedEnvelopeAddScreen(
             shape = RectangleShape,
             text = stringResource(id = com.susu.core.ui.R.string.word_next),
             onClick = onClickNext,
+            isClickable = uiState.buttonEnabled,
+            isActive = uiState.buttonEnabled,
             modifier = Modifier
                 .fillMaxWidth()
                 .imePadding(),

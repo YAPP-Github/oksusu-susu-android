@@ -5,7 +5,9 @@ import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import kotlinx.collections.immutable.persistentListOf
 
+// TODO REMOVE
 val alignList
     @Composable
     get() = listOf(
@@ -14,6 +16,8 @@ val alignList
         stringResource(id = R.string.word_align_high_amount),
         stringResource(id = R.string.word_align_low_amount),
     )
+
+val moneyList = persistentListOf(10_000, 30_000, 50_000, 100_000, 500_000)
 
 const val USER_NAME_MAX_LENGTH = 10
 val nameRegex = Regex("[a-zA-Z가-힣]{0,10}")
