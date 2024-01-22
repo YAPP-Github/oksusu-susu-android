@@ -1,19 +1,25 @@
 package com.susu.feature.received.envelopeadd
 
+import androidx.lifecycle.SavedStateHandle
 import com.susu.core.model.RelationShip
 import com.susu.core.ui.base.BaseViewModel
+import com.susu.feature.received.navigation.ReceivedRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class ReceivedEnvelopeAddViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<ReceivedEnvelopeAddState, ReceivedEnvelopeAddSideEffect>(
     ReceivedEnvelopeAddState(),
 ) {
+    val categoryName = savedStateHandle.get<String>(ReceivedRoute.CATEGORY_ARGUMENT_NAME)!!
+
     private var money: Long = 0
     private var name: String = ""
     private var relationShip: RelationShip? = null
     private var moreStep: List<EnvelopeAddStep> = emptyList()
+    private var hasVisited: Boolean? = null
 
     fun goToPrevStep() = intent {
         val prevStep = when (currentStep) {
@@ -105,5 +111,12 @@ class ReceivedEnvelopeAddViewModel @Inject constructor(
 
     fun updateMoreStep(moreStep: List<EnvelopeAddStep>) {
         this@ReceivedEnvelopeAddViewModel.moreStep = moreStep
+    }
+
+    fun updateHasVisited(hasVisited: Boolean?) = intent {
+        this@ReceivedEnvelopeAddViewModel.hasVisited = hasVisited
+        copy(
+            buttonEnabled = hasVisited != null,
+        )
     }
 }

@@ -7,7 +7,12 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.stringResource
@@ -24,14 +29,15 @@ import com.susu.core.model.RelationShip
 import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.core.ui.extension.susuDefaultAnimatedContentTransitionSpec
 import com.susu.feature.received.envelopeadd.content.MemoContent
-import com.susu.feature.received.envelopeadd.content.more.MoreContent
 import com.susu.feature.received.envelopeadd.content.PhoneContent
 import com.susu.feature.received.envelopeadd.content.PresentContent
-import com.susu.feature.received.envelopeadd.content.VisitedContent
+import com.susu.feature.received.envelopeadd.content.visited.VisitedContent
 import com.susu.feature.received.envelopeadd.content.money.MoneyContentRoute
 import com.susu.feature.received.envelopeadd.content.more.MoreContentRoute
 import com.susu.feature.received.envelopeadd.content.name.NameContentRoute
 import com.susu.feature.received.envelopeadd.content.relationship.RelationShipContentRoute
+import com.susu.feature.received.envelopeadd.content.visited.VisitedContentRoute
+import com.susu.feature.received.envelopeadd.content.visited.VisitedViewModel
 
 @Composable
 fun ReceivedEnvelopeAddRoute(
@@ -47,6 +53,10 @@ fun ReceivedEnvelopeAddRoute(
         }
     }
 
+    var friendName by remember {
+        mutableStateOf("")
+    }
+
     BackHandler {
         viewModel.goToPrevStep()
     }
@@ -59,6 +69,8 @@ fun ReceivedEnvelopeAddRoute(
         updateParentName = viewModel::updateName,
         updateParentSelectedRelationShip = viewModel::updateSelectedRelationShip,
         updateParentMoreStep = viewModel::updateMoreStep,
+        categoryName = viewModel.categoryName,
+        updateParentVisited = viewModel::updateHasVisited,
     )
 }
 
@@ -71,9 +83,9 @@ fun ReceivedEnvelopeAddScreen(
     updateParentName: (String) -> Unit = {},
     updateParentSelectedRelationShip: (RelationShip?) -> Unit = {},
     updateParentMoreStep: (List<EnvelopeAddStep>) -> Unit = {},
+    categoryName: String = "",
+    updateParentVisited: (Boolean?) -> Unit = {},
 ) {
-    // TODO: 수정 필요
-    val visitedList = listOf("예", "아니요")
 
     Column(
         modifier = Modifier
@@ -113,9 +125,9 @@ fun ReceivedEnvelopeAddScreen(
                 EnvelopeAddStep.MORE -> MoreContentRoute(
                     updateParentMoreStep = updateParentMoreStep,
                 )
-                EnvelopeAddStep.VISITED -> VisitedContent(
-                    event = "결혼식",
-                    visitedList = visitedList,
+                EnvelopeAddStep.VISITED -> VisitedContentRoute(
+                    categoryName = categoryName,
+                    updateParentVisited = updateParentVisited,
                 )
 
                 EnvelopeAddStep.PRESENT -> PresentContent()

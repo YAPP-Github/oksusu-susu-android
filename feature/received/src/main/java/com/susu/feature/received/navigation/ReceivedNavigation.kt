@@ -46,8 +46,8 @@ fun NavController.navigateLedgerAdd() {
     navigate(ReceivedRoute.ledgerAddRoute)
 }
 
-fun NavController.navigateReceivedEnvelopeAdd() {
-    navigate(ReceivedRoute.envelopeAddRoute)
+fun NavController.navigateReceivedEnvelopeAdd(categoryName: String) {
+    navigate(ReceivedRoute.envelopeAddRoute(categoryName))
 }
 
 fun NavController.navigateReceivedEnvelopeDetail() {
@@ -68,7 +68,7 @@ fun NavGraphBuilder.receivedNavGraph(
     navigateLedgerEdit: (Ledger) -> Unit,
     navigateLedgerFilter: () -> Unit,
     navigateLedgerAdd: () -> Unit,
-    navigateEnvelopAdd: () -> Unit,
+    navigateEnvelopAdd: (String) -> Unit,
     navigateEnvelopeDetail: () -> Unit,
     navigateEnvelopeEdit: () -> Unit,
     onShowSnackbar: (SnackbarToken) -> Unit,
@@ -143,7 +143,12 @@ fun NavGraphBuilder.receivedNavGraph(
     }
 
     composable(
-        route = ReceivedRoute.envelopeAddRoute,
+        route = ReceivedRoute.envelopeAddRoute("{${ReceivedRoute.CATEGORY_ARGUMENT_NAME}}"),
+        arguments = listOf(
+            navArgument(ReceivedRoute.CATEGORY_ARGUMENT_NAME) {
+                type = NavType.StringType
+            },
+        ),
     ) {
         ReceivedEnvelopeAddRoute(
             popBackStack = popBackStack,
@@ -171,6 +176,8 @@ object ReceivedRoute {
     const val route = "received"
     const val LEDGER_ARGUMENT_NAME = "ledger"
     const val LEDGER_ID_ARGUMENT_NAME = "ledger-id"
+    const val CATEGORY_ARGUMENT_NAME = "category-name"
+
     fun ledgerDetailRoute(ledger: String) = "ledger-detail/$ledger"
     fun ledgerEditRoute(ledger: String) = "ledger-edit/$ledger"
     const val ledgerSearchRoute = "ledger-search"
@@ -178,7 +185,7 @@ object ReceivedRoute {
     const val ledgerAddRoute = "ledger-add" // TODO 파라미터 넘기는 방식으로 수정해야함.
     const val ledgerFilterRoute = "ledger-filter" // TODO 파라미터 넘기는 방식으로 수정해야함.
 
-    const val envelopeAddRoute = "envelope-add"
+    fun envelopeAddRoute(categoryName: String) = "envelope-add/$categoryName"
     const val envelopeDetailRoute = "envelope-detail" // TODO 파라미터 넘기는 방식으로 수정해야함.
     const val envelopeEditRoute = "envelope-edit" // TODO 파라미터 넘기는 방식으로 수정해야함.
 }
