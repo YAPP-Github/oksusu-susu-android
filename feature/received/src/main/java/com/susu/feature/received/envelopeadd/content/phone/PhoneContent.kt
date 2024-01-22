@@ -1,4 +1,4 @@
-package com.susu.feature.received.envelopeadd.content.name
+package com.susu.feature.received.envelopeadd.content.phone
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -7,9 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Text
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -18,90 +16,83 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.susu.core.designsystem.component.textfield.SusuBasicTextField
-import com.susu.core.designsystem.theme.Gray100
 import com.susu.core.designsystem.theme.Gray40
+import com.susu.core.designsystem.theme.Gray60
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.ui.extension.collectWithLifecycle
+import com.susu.core.ui.util.AnnotatedText
 import com.susu.feature.received.R
-import com.susu.feature.received.envelopeadd.content.component.FriendListItem
-import com.susu.feature.received.envelopeadd.content.money.MoneySideEffect
-import com.susu.feature.received.envelopeadd.content.money.MoneyState
+import com.susu.feature.received.envelopeadd.content.present.PresentContent
+import com.susu.feature.received.envelopeadd.content.present.PresentSideEffect
+import com.susu.feature.received.envelopeadd.content.present.PresentViewModel
+import kotlin.io.path.fileVisitor
 
 @Composable
-fun NameContentRoute(
-    viewModel: NameViewModel = hiltViewModel(),
-    updateParentName: (String) -> Unit,
+fun PhoneContentRoute(
+    viewModel: PhoneViewModel = hiltViewModel(),
+    friendName: String,
+    updateParentPhone: (String?) -> Unit
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
-            is NameSideEffect.UpdateParentName -> updateParentName(sideEffect.name)
+            is PhoneSideEffect.UpdateParentPhone -> updateParentPhone(sideEffect.phone)
         }
     }
 
     LaunchedEffect(key1 = Unit) {
-        viewModel.updateName(uiState.name)
+        viewModel.updateName(friendName)
+        viewModel.updatePhone(uiState.phone)
     }
 
-    NameContent(
+    PhoneContent(
         uiState = uiState,
-        onTextChangeName = viewModel::updateName,
+        onTextChangePhone = viewModel::updatePhone,
     )
 }
 
 @Composable
-fun NameContent(
-    uiState: NameState = NameState(),
-    onTextChangeName: (String) -> Unit = {},
-    friendList: List<String> = emptyList(),
+fun PhoneContent(
+    uiState: PhoneState = PhoneState(),
+    onTextChangePhone: (String) -> Unit = {},
 ) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(
-                horizontal = SusuTheme.spacing.spacing_m,
-                vertical = SusuTheme.spacing.spacing_xl,
-            ),
+            .padding(horizontal = SusuTheme.spacing.spacing_m,
+                vertical = SusuTheme.spacing.spacing_xl,),
     ) {
-        Text(
-            text = stringResource(R.string.name_content_title),
-            style = SusuTheme.typography.title_m,
-            color = Gray100,
+        AnnotatedText(
+            originalText = stringResource(R.string.phone_content_title, uiState.name),
+            originalTextStyle = SusuTheme.typography.title_m,
+            targetTextList = listOf(stringResource(R.string.phone_content_title_highlight, uiState.name)),
+            spanStyle = SusuTheme.typography.title_m.copy(Gray60).toSpanStyle(),
         )
         Spacer(
             modifier = Modifier
                 .size(SusuTheme.spacing.spacing_m),
         )
         SusuBasicTextField(
-            text = uiState.name,
-            onTextChange = onTextChangeName,
-            placeholder = stringResource(R.string.name_content_placeholder),
+            text = uiState.phone,
+            onTextChange = onTextChangePhone,
+            placeholder = stringResource(R.string.phone_content_placeholder),
             placeholderColor = Gray40,
             modifier = Modifier.fillMaxWidth(),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
         )
         Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_xl))
-
-        if (friendList.isNotEmpty()) {
-            // TODO: 친구 목록 서버 연동
-            LazyColumn {
-                items(friendList) { friend ->
-                    FriendListItem(friend)
-                }
-            }
-        }
     }
 }
 
 @Preview(showBackground = true, backgroundColor = 0xFFF6F6F6)
 @Composable
-fun NameContentPreview() {
+fun PhoneContentPreview() {
     SusuTheme {
-        val friendList = listOf("김철수", "국영수", "가나다")
-
-        NameContent(friendList = friendList)
+        PhoneContent()
     }
 }

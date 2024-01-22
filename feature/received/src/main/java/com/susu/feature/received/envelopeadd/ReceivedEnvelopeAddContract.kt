@@ -30,8 +30,8 @@ enum class EnvelopeAddStep(
     MORE,
     VISITED(R.string.envelop_add_step_visited),
     PRESENT(R.string.envelop_add_step_present),
-    MEMO(R.string.envelop_add_step_memo),
     PHONE(R.string.envelop_add_step_phone),
+    MEMO(R.string.envelop_add_step_memo),
 }
 
 sealed interface ReceivedEnvelopeAddSideEffect : SideEffect {

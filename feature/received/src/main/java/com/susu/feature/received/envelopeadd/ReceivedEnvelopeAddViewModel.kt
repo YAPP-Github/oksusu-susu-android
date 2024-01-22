@@ -20,6 +20,9 @@ class ReceivedEnvelopeAddViewModel @Inject constructor(
     private var relationShip: RelationShip? = null
     private var moreStep: List<EnvelopeAddStep> = emptyList()
     private var hasVisited: Boolean? = null
+    private var present: String? = null
+    private var phoneNumber: String? = null
+    private var memo: String? = null
 
     fun goToPrevStep() = intent {
         val prevStep = when (currentStep) {
@@ -117,6 +120,27 @@ class ReceivedEnvelopeAddViewModel @Inject constructor(
         this@ReceivedEnvelopeAddViewModel.hasVisited = hasVisited
         copy(
             buttonEnabled = hasVisited != null,
+        )
+    }
+
+    fun updatePresent(present: String?) = intent {
+        this@ReceivedEnvelopeAddViewModel.present = present
+        copy(
+            buttonEnabled = !present.isNullOrEmpty(),
+        )
+    }
+
+    fun updatePhoneNumber(phoneNumber: String?) = intent {
+        this@ReceivedEnvelopeAddViewModel.phoneNumber = phoneNumber
+        copy(
+            buttonEnabled = !phoneNumber.isNullOrEmpty(),
+        )
+    }
+
+    fun updateMemo(memo: String?) = intent {
+        this@ReceivedEnvelopeAddViewModel.memo = memo
+        copy(
+            buttonEnabled = !memo.isNullOrEmpty(),
         )
     }
 }
