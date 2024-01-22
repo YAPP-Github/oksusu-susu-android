@@ -97,6 +97,7 @@ fun ReceivedRoute(
     LaunchedEffect(key1 = Unit) {
         viewModel.initData()
         viewModel.filterIfNeed(filter)
+        viewModel.addLedgerIfNeed(ledger)
         viewModel.updateLedgerIfNeed(ledger = ledger, toDeleteLedgerId = toDeleteLedgerId)
     }
 
