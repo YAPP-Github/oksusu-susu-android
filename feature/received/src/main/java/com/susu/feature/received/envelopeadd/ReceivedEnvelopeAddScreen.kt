@@ -20,17 +20,16 @@ import com.susu.core.designsystem.component.button.FilledButtonColor
 import com.susu.core.designsystem.component.button.MediumButtonStyle
 import com.susu.core.designsystem.component.button.SusuFilledButton
 import com.susu.core.designsystem.theme.SusuTheme
-import com.susu.core.model.Category
 import com.susu.core.model.RelationShip
 import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.core.ui.extension.susuDefaultAnimatedContentTransitionSpec
 import com.susu.feature.received.envelopeadd.content.MemoContent
-import com.susu.feature.received.envelopeadd.content.MoreContent
+import com.susu.feature.received.envelopeadd.content.more.MoreContent
 import com.susu.feature.received.envelopeadd.content.PhoneContent
 import com.susu.feature.received.envelopeadd.content.PresentContent
-import com.susu.feature.received.envelopeadd.content.relationship.RelationShipContent
 import com.susu.feature.received.envelopeadd.content.VisitedContent
 import com.susu.feature.received.envelopeadd.content.money.MoneyContentRoute
+import com.susu.feature.received.envelopeadd.content.more.MoreContentRoute
 import com.susu.feature.received.envelopeadd.content.name.NameContentRoute
 import com.susu.feature.received.envelopeadd.content.relationship.RelationShipContentRoute
 
@@ -58,7 +57,8 @@ fun ReceivedEnvelopeAddRoute(
         onClickNext = viewModel::goToNextStep,
         updateParentMoney = viewModel::updateMoney,
         updateParentName = viewModel::updateName,
-        updateParentSelectedRelationShip = viewModel::updateSelectedRelationShip
+        updateParentSelectedRelationShip = viewModel::updateSelectedRelationShip,
+        updateParentMoreStep = viewModel::updateMoreStep,
     )
 }
 
@@ -70,9 +70,9 @@ fun ReceivedEnvelopeAddScreen(
     updateParentMoney: (Long) -> Unit = {},
     updateParentName: (String) -> Unit = {},
     updateParentSelectedRelationShip: (RelationShip?) -> Unit = {},
+    updateParentMoreStep: (List<EnvelopeAddStep>) -> Unit = {},
 ) {
     // TODO: 수정 필요
-    val moreList = listOf("방문여부", "선물", "메모", "보낸 이의 연락처")
     val visitedList = listOf("예", "아니요")
 
     Column(
@@ -86,7 +86,7 @@ fun ReceivedEnvelopeAddScreen(
                     onClick = onClickBack,
                 )
             },
-            currentStep = uiState.currentStep.ordinal + 1,
+            currentStep = uiState.progress,
             entireStep = EnvelopeAddStep.entries.size,
         )
         AnimatedContent(
@@ -110,7 +110,9 @@ fun ReceivedEnvelopeAddScreen(
                 EnvelopeAddStep.RELATIONSHIP -> RelationShipContentRoute(
                     updateParentSelectedRelation = updateParentSelectedRelationShip,
                 )
-                EnvelopeAddStep.MORE -> MoreContent(moreList = moreList)
+                EnvelopeAddStep.MORE -> MoreContentRoute(
+                    updateParentMoreStep = updateParentMoreStep,
+                )
                 EnvelopeAddStep.VISITED -> VisitedContent(
                     event = "결혼식",
                     visitedList = visitedList,
@@ -125,7 +127,7 @@ fun ReceivedEnvelopeAddScreen(
             color = FilledButtonColor.Black,
             style = MediumButtonStyle.height60,
             shape = RectangleShape,
-            text = stringResource(id = com.susu.core.ui.R.string.word_next),
+            text = stringResource(id = uiState.buttonResId),
             onClick = onClickNext,
             isClickable = uiState.buttonEnabled,
             isActive = uiState.buttonEnabled,

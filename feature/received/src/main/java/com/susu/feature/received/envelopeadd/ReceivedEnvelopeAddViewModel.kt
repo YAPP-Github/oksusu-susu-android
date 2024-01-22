@@ -1,25 +1,8 @@
 package com.susu.feature.received.envelopeadd
 
-import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.viewModelScope
-import com.susu.core.model.Category
-import com.susu.core.model.Ledger
 import com.susu.core.model.RelationShip
-import com.susu.core.model.exception.NotFoundLedgerException
 import com.susu.core.ui.base.BaseViewModel
-import com.susu.core.ui.extension.decodeFromUri
-import com.susu.core.ui.extension.encodeToUri
-import com.susu.core.ui.util.to_yyyy_dot_MM_dot_dd
-import com.susu.domain.usecase.ledger.DeleteLedgerUseCase
-import com.susu.feature.received.ledgeradd.LedgerAddSideEffect
-import com.susu.feature.received.ledgeradd.LedgerAddStep
-import com.susu.feature.received.navigation.ReceivedRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
-import kotlinx.datetime.toJavaLocalDateTime
-import kotlinx.datetime.toKotlinLocalDateTime
-import kotlinx.serialization.json.Json
-import java.time.LocalDateTime
 import javax.inject.Inject
 
 @HiltViewModel
@@ -30,9 +13,10 @@ class ReceivedEnvelopeAddViewModel @Inject constructor(
     private var money: Long = 0
     private var name: String = ""
     private var relationShip: RelationShip? = null
+    private var moreStep: List<EnvelopeAddStep> = emptyList()
 
     fun goToPrevStep() = intent {
-        val prevStep = when (currentState.currentStep) {
+        val prevStep = when (currentStep) {
             EnvelopeAddStep.MONEY -> {
                 postSideEffect(ReceivedEnvelopeAddSideEffect.PopBackStack)
                 EnvelopeAddStep.MONEY
@@ -41,31 +25,61 @@ class ReceivedEnvelopeAddViewModel @Inject constructor(
             EnvelopeAddStep.NAME -> EnvelopeAddStep.MONEY
             EnvelopeAddStep.RELATIONSHIP -> EnvelopeAddStep.NAME
             EnvelopeAddStep.MORE -> EnvelopeAddStep.RELATIONSHIP
-            EnvelopeAddStep.VISITED -> EnvelopeAddStep.MORE
-            EnvelopeAddStep.PRESENT -> EnvelopeAddStep.VISITED
-            EnvelopeAddStep.PHONE -> EnvelopeAddStep.PRESENT
-            EnvelopeAddStep.MEMO -> EnvelopeAddStep.PHONE
+            else -> goToPrevStepInMore(currentStep)
         }
 
-        copy(currentStep = prevStep)
+        copy(
+            currentStep = prevStep,
+            lastPage = false,
+        )
+    }
+
+    private fun goToPrevStepInMore(currentStep: EnvelopeAddStep): EnvelopeAddStep {
+        if (moreStep.isEmpty()) {
+            return EnvelopeAddStep.MORE
+        }
+
+        val prevStepIndex = run {
+            val currentStepIndex = moreStep.indexOf(currentStep)
+            if (currentStepIndex == -1) EnvelopeAddStep.MORE.ordinal else currentStepIndex - 1
+        }
+
+        return moreStep.getOrNull(prevStepIndex) ?: EnvelopeAddStep.MORE
     }
 
     fun goToNextStep() = intent {
-        val nextStep = when (currentState.currentStep) {
+        val nextStep = when (currentStep) {
             EnvelopeAddStep.MONEY -> EnvelopeAddStep.NAME
             EnvelopeAddStep.NAME -> EnvelopeAddStep.RELATIONSHIP
             EnvelopeAddStep.RELATIONSHIP -> EnvelopeAddStep.MORE
-            EnvelopeAddStep.MORE -> EnvelopeAddStep.VISITED
-            EnvelopeAddStep.VISITED -> EnvelopeAddStep.PRESENT
-            EnvelopeAddStep.PRESENT -> EnvelopeAddStep.PHONE
-            EnvelopeAddStep.PHONE -> EnvelopeAddStep.MEMO
-            EnvelopeAddStep.MEMO -> {
-                /* 봉투 생성 */
-                EnvelopeAddStep.MEMO
-            }
+            else -> goToNextStepInMore(currentStep)
         }
 
-        copy(currentStep = nextStep)
+        if (nextStep == null) {
+            // TODO 봉투 생성
+            copy()
+        } else {
+            copy(
+                currentStep = nextStep,
+                lastPage = nextStep == moreStep.lastOrNull(),
+            )
+        }
+    }
+
+    private fun goToNextStepInMore(currentStep: EnvelopeAddStep): EnvelopeAddStep? {
+        if (moreStep.isEmpty() || currentState.lastPage) {
+            return null
+        }
+
+        val nextStepIndex = when (currentStep) {
+            EnvelopeAddStep.MORE -> 0
+            else -> {
+                val currentStepIndex = moreStep.indexOf(currentStep)
+                if (currentStepIndex == -1) null else currentStepIndex + 1
+            }
+        } ?: return null
+
+        return moreStep.getOrNull(nextStepIndex)
     }
 
     fun updateMoney(money: Long) = intent {
@@ -85,7 +99,11 @@ class ReceivedEnvelopeAddViewModel @Inject constructor(
     fun updateSelectedRelationShip(relationShip: RelationShip?) = intent {
         this@ReceivedEnvelopeAddViewModel.relationShip = relationShip
         copy(
-            buttonEnabled = relationShip != null
+            buttonEnabled = relationShip != null,
         )
+    }
+
+    fun updateMoreStep(moreStep: List<EnvelopeAddStep>) {
+        this@ReceivedEnvelopeAddViewModel.moreStep = moreStep
     }
 }

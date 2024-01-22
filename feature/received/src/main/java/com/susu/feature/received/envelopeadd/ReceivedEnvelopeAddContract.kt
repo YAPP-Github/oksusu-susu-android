@@ -1,24 +1,37 @@
 package com.susu.feature.received.envelopeadd
 
+import androidx.annotation.StringRes
 import com.susu.core.ui.base.SideEffect
 import com.susu.core.ui.base.UiState
+import com.susu.feature.received.R
 import com.susu.feature.received.ledgeradd.LedgerAddStep
 
 data class ReceivedEnvelopeAddState(
     val currentStep: EnvelopeAddStep = EnvelopeAddStep.MONEY,
     val buttonEnabled: Boolean = false,
+    val lastPage: Boolean = false,
     val isLoading: Boolean = false,
-) : UiState
+) : UiState {
+    val buttonResId = if (lastPage) {
+        com.susu.core.ui.R.string.word_done
+    } else {
+        com.susu.core.ui.R.string.word_next
+    }
 
-enum class EnvelopeAddStep {
+    val progress = if (lastPage) EnvelopeAddStep.entries.size else currentStep.ordinal + 1
+}
+
+enum class EnvelopeAddStep(
+    @StringRes val stringResId: Int? = null,
+) {
     MONEY,
     NAME,
     RELATIONSHIP,
     MORE,
-    VISITED,
-    PRESENT,
-    PHONE,
-    MEMO,
+    VISITED(R.string.envelop_add_step_visited),
+    PRESENT(R.string.envelop_add_step_present),
+    MEMO(R.string.envelop_add_step_memo),
+    PHONE(R.string.envelop_add_step_phone),
 }
 
 sealed interface ReceivedEnvelopeAddSideEffect : SideEffect {
