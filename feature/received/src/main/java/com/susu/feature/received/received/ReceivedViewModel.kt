@@ -78,7 +78,7 @@ class ReceivedViewModel @Inject constructor(
                 categoryId = null, // TODO
                 fromStartAt = currentState.startAt,
                 toEndAt = currentState.endAt,
-                sort = null,
+                sort = LedgerAlign.entries[currentState.selectedAlignPosition].query,
             ),
         ).onSuccess { ledgerList ->
             isLast = ledgerList.isEmpty()
@@ -122,4 +122,9 @@ class ReceivedViewModel @Inject constructor(
             },
         ),
     )
+
+    fun updateSelectedAlignPosition(position: Int) {
+        intent { copy(selectedAlignPosition = position) }
+        getLedgerList(true)
+    }
 }

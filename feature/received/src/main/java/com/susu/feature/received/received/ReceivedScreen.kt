@@ -53,6 +53,7 @@ import com.susu.feature.received.navigation.argument.FilterArgument
 import com.susu.feature.received.received.component.LedgerAddCard
 import com.susu.feature.received.received.component.LedgerCard
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.android.awaitFrame
 
 @Composable
@@ -98,6 +99,10 @@ fun ReceivedRoute(
         onClickFloatingAddButton = viewModel::navigateLedgerAdd,
         onClickFilterButton = viewModel::navigateLedgerFilter,
         onClickAlignButton = viewModel::showAlignBottomSheet,
+        onClickAlignBottomSheetItem = { position ->
+            viewModel.updateSelectedAlignPosition(position)
+            viewModel.hideAlignBottomSheet()
+        },
         onDismissAlignBottomSheet = viewModel::hideAlignBottomSheet,
         onClickDateClose = viewModel::clearDate,
     )
@@ -112,6 +117,7 @@ fun ReceiveScreen(
     onClickSearchIcon: () -> Unit = {},
     onClickNotificationIcon: () -> Unit = {},
     onClickAlignButton: () -> Unit = {},
+    onClickAlignBottomSheetItem: (Int) -> Unit = {},
     onClickFilterButton: () -> Unit = {},
     onClickLedgerAddCard: () -> Unit = {},
     onClickLedgerCard: (Ledger) -> Unit = {},
@@ -162,7 +168,7 @@ fun ReceiveScreen(
                         SusuGhostButton(
                             color = GhostButtonColor.Black,
                             style = SmallButtonStyle.height32,
-                            text = alignList[0], // TODO State 변환
+                            text = stringResource(id = LedgerAlign.entries[uiState.selectedAlignPosition].stringResId),
                             leftIcon = {
                                 Icon(
                                     painter = painterResource(id = com.susu.core.ui.R.drawable.ic_align),
@@ -226,9 +232,9 @@ fun ReceiveScreen(
             SusuSelectionBottomSheet(
                 onDismissRequest = onDismissAlignBottomSheet,
                 containerHeight = 250.dp,
-                items = alignList.toImmutableList(),
-                selectedItemPosition = 0, // TODO State 변환
-                onClickItem = {},
+                items = LedgerAlign.entries.map { stringResource(id = it.stringResId) }.toPersistentList(),
+                selectedItemPosition = uiState.selectedAlignPosition,
+                onClickItem = onClickAlignBottomSheetItem,
             )
         }
     }
