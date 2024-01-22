@@ -40,6 +40,7 @@ fun BasicButton(
     rightIcon: (@Composable () -> Unit)? = null,
     iconSpacing: Dp = 0.dp,
     isClickable: Boolean = true,
+    rippleEnabled: Boolean = true,
     onClick: () -> Unit = {},
 ) {
     Box(
@@ -52,6 +53,7 @@ fun BasicButton(
                 shape = shape,
             )
             .susuClickable(
+                rippleEnabled = rippleEnabled,
                 rippleColor = rippleColor,
                 runIf = isClickable,
                 onClick = onClick,

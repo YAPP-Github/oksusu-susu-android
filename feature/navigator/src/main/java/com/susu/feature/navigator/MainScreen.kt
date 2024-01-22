@@ -74,14 +74,14 @@ internal fun MainScreen(
                     onShowToast = viewModel::onShowSnackbar,
                     padding = innerPadding,
                 )
-
-                sentNavGraph(
-                    padding = innerPadding,
-                    popBackStack = navigator::popBackStackIfNotHome,
-                    navigateSentEnvelope = navigator::navigateSentEnvelope,
-                    navigateSentEnvelopeDetail = navigator::navigateSentEnvelopeDetail,
-                    navigateSentEnvelopeEdit = navigator::navigateSentEnvelopeEdit,
-                )
+                    sentNavGraph(
+                        padding = innerPadding,
+                        popBackStack = navigator::popBackStackIfNotHome,
+                        navigateSentEnvelope = navigator::navigateSentEnvelope,
+                        navigateSentEnvelopeDetail = navigator::navigateSentEnvelopeDetail,
+                        navigateSentEnvelopeEdit = navigator::navigateSentEnvelopeEdit,
+                        navigateSentEnvelopeAdd = navigator::navigateSentEnvelopeAdd,
+                    )
 
                 receivedNavGraph(
                     padding = innerPadding,
@@ -116,6 +116,35 @@ internal fun MainScreen(
                     onShowDialog = viewModel::onShowDialog,
                     handleException = viewModel::handleException,
                 )
+                    receivedNavGraph(
+                        padding = innerPadding,
+                        popBackStack = navigator::popBackStackIfNotHome,
+                        popBackStackWithLedger = { ledger ->
+                            navigator.navController.previousBackStackEntry?.savedStateHandle?.set(
+                                ReceivedRoute.LEDGER_ARGUMENT_NAME,
+                                ledger,
+                            )
+                            navigator.popBackStackIfNotHome()
+                        },
+                        popBackStackWithDeleteLedgerId = { ledgerId ->
+                            navigator.navController.previousBackStackEntry?.savedStateHandle?.set(
+                                ReceivedRoute.LEDGER_ID_ARGUMENT_NAME,
+                                ledgerId,
+                            )
+                            navigator.popBackStackIfNotHome()
+                        },
+                        navigateLedgerSearch = navigator::navigateLedgerSearch,
+                        navigateLedgerDetail = navigator::navigateLedgerDetail,
+                        navigateLedgerEdit = navigator::navigateLedgerEdit,
+                        navigateLedgerFilter = navigator::navigateLedgerFilter,
+                        navigateLedgerAdd = navigator::navigateLedgerAdd,
+                        navigateEnvelopAdd = navigator::navigateReceivedEnvelopeAdd,
+                        navigateEnvelopeDetail = navigator::navigateReceivedEnvelopeDetail,
+                        navigateEnvelopeEdit = navigator::navigateReceivedEnvelopeEdit,
+                        onShowSnackbar = viewModel::onShowSnackbar,
+                        onShowDialog = viewModel::onShowDialog,
+                        handleException = viewModel::handleException,
+                    )
 
                 statisticsNavGraph(
                     padding = innerPadding,
@@ -124,12 +153,18 @@ internal fun MainScreen(
                 communityNavGraph(
                     padding = innerPadding,
                 )
-
-                myPageNavGraph(
-                    padding = innerPadding,
-                    navigateToLogin = navigator::navigateLogin,
-                )
-            }
+                    )
+                    myPageNavGraph(
+                        padding = innerPadding,
+                        navigateToLogin = navigator::navigateLogin,
+                        navigateToInfo = navigator::navigateMyPageInfo,
+                        navigateToSocial = navigator::navigateMyPageSocial,
+                        popBackStack = navigator::popBackStackIfNotHome,
+                        onShowSnackbar = viewModel::onShowSnackbar,
+                        onShowDialog = viewModel::onShowDialog,
+                        handleException = viewModel::handleException,
+                    )
+                }
 
             with(uiState) {
                 SusuSnackbar(

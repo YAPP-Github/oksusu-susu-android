@@ -11,6 +11,9 @@ import com.susu.core.model.Ledger
 import com.susu.core.ui.DialogToken
 import com.susu.core.ui.SnackbarToken
 import com.susu.core.ui.extension.encodeToUri
+import com.susu.feature.received.envelopeadd.ReceivedEnvelopeAddRoute
+import com.susu.feature.received.envelopedetail.ReceivedEnvelopeDetailRoute
+import com.susu.feature.received.envelopeedit.ReceivedEnvelopeEditRoute
 import com.susu.feature.received.ledgeradd.LedgerAddRoute
 import com.susu.feature.received.ledgerdetail.LedgerDetailRoute
 import com.susu.feature.received.ledgeredit.LedgerEditRoute
@@ -44,6 +47,18 @@ fun NavController.navigateLedgerAdd() {
     navigate(ReceivedRoute.ledgerAddRoute)
 }
 
+fun NavController.navigateReceivedEnvelopeAdd() {
+    navigate(ReceivedRoute.envelopeAddRoute)
+}
+
+fun NavController.navigateReceivedEnvelopeDetail() {
+    navigate(ReceivedRoute.envelopeDetailRoute)
+}
+
+fun NavController.navigateReceivedEnvelopeEdit() {
+    navigate(ReceivedRoute.envelopeEditRoute)
+}
+
 fun NavGraphBuilder.receivedNavGraph(
     padding: PaddingValues,
     navigateLedgerDetail: (Ledger) -> Unit,
@@ -55,6 +70,9 @@ fun NavGraphBuilder.receivedNavGraph(
     navigateLedgerEdit: (Ledger) -> Unit,
     navigateLedgerFilter: (FilterArgument) -> Unit,
     navigateLedgerAdd: () -> Unit,
+    navigateEnvelopAdd: () -> Unit,
+    navigateEnvelopeDetail: () -> Unit,
+    navigateEnvelopeEdit: () -> Unit,
     onShowSnackbar: (SnackbarToken) -> Unit,
     onShowDialog: (DialogToken) -> Unit,
     handleException: (Throwable, () -> Unit) -> Unit,
@@ -87,6 +105,8 @@ fun NavGraphBuilder.receivedNavGraph(
         LedgerDetailRoute(
             ledger = ledger,
             navigateLedgerEdit = navigateLedgerEdit,
+            navigateEnvelopAdd = navigateEnvelopAdd,
+            navigateEnvelopeDetail = navigateEnvelopeDetail,
             popBackStackWithLedger = popBackStackWithLedger,
             popBackStackWithDeleteLedgerId = popBackStackWithDeleteLedgerId,
             onShowSnackbar = onShowSnackbar,
@@ -124,7 +144,32 @@ fun NavGraphBuilder.receivedNavGraph(
     ) {
         LedgerAddRoute(
             popBackStack = popBackStack,
+            popBackStackWithLedger = popBackStackWithLedger,
+            handleException = handleException,
         )
+    }
+
+    composable(
+        route = ReceivedRoute.envelopeAddRoute,
+    ) {
+        ReceivedEnvelopeAddRoute(
+            popBackStack = popBackStack,
+        )
+    }
+
+    composable(
+        route = ReceivedRoute.envelopeDetailRoute,
+    ) {
+        ReceivedEnvelopeDetailRoute(
+            popBackStack = popBackStack,
+            navigateReceivedEnvelopeEdit = navigateEnvelopeEdit,
+        )
+    }
+
+    composable(
+        route = ReceivedRoute.envelopeEditRoute,
+    ) {
+        ReceivedEnvelopeEditRoute(popBackStack = popBackStack)
     }
 }
 
@@ -139,4 +184,8 @@ object ReceivedRoute {
     const val ledgerSearchRoute = "ledger-search"
 
     const val ledgerAddRoute = "ledger-add" // TODO 파라미터 넘기는 방식으로 수정해야함.
+
+    const val envelopeAddRoute = "envelope-add"
+    const val envelopeDetailRoute = "envelope-detail" // TODO 파라미터 넘기는 방식으로 수정해야함.
+    const val envelopeEditRoute = "envelope-edit" // TODO 파라미터 넘기는 방식으로 수정해야함.
 }

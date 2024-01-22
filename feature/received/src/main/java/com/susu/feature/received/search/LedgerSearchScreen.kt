@@ -1,6 +1,5 @@
 package com.susu.feature.received.search
 
-import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -11,9 +10,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -42,10 +45,13 @@ fun LedgerSearchRoute(
     navigateLedgerDetail: (Ledger) -> Unit,
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
+    val focusRequester = remember { FocusRequester() }
+    val focusManager = LocalFocusManager.current
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
             LedgerSearchSideEffect.PopBackStack -> popBackStack()
             is LedgerSearchSideEffect.NavigateLedgerDetail -> navigateLedgerDetail(sideEffect.ledger)
+            LedgerSearchSideEffect.FocusClear -> focusManager.clearFocus()
         }
     }
 
@@ -61,10 +67,13 @@ fun LedgerSearchRoute(
 
     LedgerSearchScreen(
         uiState = uiState,
+        focusRequester = focusRequester,
         onClickBackIcon = viewModel::popBackStack,
         onValueChangeSearchBar = viewModel::updateSearch,
         onClickSearchClearIcon = { viewModel.updateSearch("") },
         onClickRecentSearchContainer = { search ->
+            viewModel.clearFocus()
+            viewModel.hideSearchResultEmpty()
             viewModel.updateSearch(search)
             viewModel.upsertLedgerRecentSearch(search)
         },
@@ -79,6 +88,7 @@ fun LedgerSearchRoute(
 @Composable
 fun LedgerSearchScreen(
     uiState: LedgerSearchState = LedgerSearchState(),
+    focusRequester: FocusRequester = remember { FocusRequester() },
     onClickBackIcon: () -> Unit = {},
     onClickSearchClearIcon: () -> Unit = {},
     onValueChangeSearchBar: (String) -> Unit = {},
@@ -106,26 +116,25 @@ fun LedgerSearchScreen(
                 ),
             ) {
                 SusuSearchBar(
+                    modifier = Modifier.focusRequester(focusRequester),
                     value = uiState.searchKeyword,
                     onValueChange = onValueChangeSearchBar,
                     onClickClearIcon = onClickSearchClearIcon,
                     placeholder = stringResource(R.string.ledger_search_screen_search_placeholder),
                 )
 
-                Crossfade(targetState = uiState.searchKeyword.isEmpty(), label = "SearchColumn") { showRecentSearch ->
-                    if (showRecentSearch) {
-                        RecentSearchColumn(
-                            recentSearchList = uiState.recentSearchKeywordList,
-                            onClickItem = onClickRecentSearchContainer,
-                            onClickCloseIcon = onClickRecentSearchContainerCloseIcon,
-                        )
-                    } else {
-                        SearchResultColumn(
-                            showSearchResultEmpty = uiState.showSearchResultEmpty,
-                            ledgerList = uiState.ledgerList,
-                            onClickItem = onClickSearchResultContainer,
-                        )
-                    }
+                if (uiState.searchKeyword.isEmpty()) {
+                    RecentSearchColumn(
+                        recentSearchList = uiState.recentSearchKeywordList,
+                        onClickItem = onClickRecentSearchContainer,
+                        onClickCloseIcon = onClickRecentSearchContainerCloseIcon,
+                    )
+                } else {
+                    SearchResultColumn(
+                        showSearchResultEmpty = uiState.showSearchResultEmpty,
+                        ledgerList = uiState.ledgerList,
+                        onClickItem = onClickSearchResultContainer,
+                    )
                 }
             }
         }
@@ -137,7 +146,9 @@ private fun ResultEmptyColumn(
     title: String,
 ) {
     Column(
-        modifier = Modifier.fillMaxWidth().padding(top = 136.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 136.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxxxs),
     ) {

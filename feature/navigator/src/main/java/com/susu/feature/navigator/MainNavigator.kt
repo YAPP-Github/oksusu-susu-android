@@ -13,6 +13,8 @@ import com.susu.core.model.Ledger
 import com.susu.feature.community.navigation.navigateCommunity
 import com.susu.feature.loginsignup.navigation.LoginSignupRoute
 import com.susu.feature.mypage.navigation.navigateMyPage
+import com.susu.feature.mypage.navigation.navigateMyPageInfo
+import com.susu.feature.mypage.navigation.navigateMyPageSocial
 import com.susu.feature.received.navigation.ReceivedRoute
 import com.susu.feature.received.navigation.argument.FilterArgument
 import com.susu.feature.received.navigation.navigateLedgerAdd
@@ -21,9 +23,13 @@ import com.susu.feature.received.navigation.navigateLedgerEdit
 import com.susu.feature.received.navigation.navigateLedgerFilter
 import com.susu.feature.received.navigation.navigateLedgerSearch
 import com.susu.feature.received.navigation.navigateReceived
+import com.susu.feature.received.navigation.navigateReceivedEnvelopeAdd
+import com.susu.feature.received.navigation.navigateReceivedEnvelopeDetail
+import com.susu.feature.received.navigation.navigateReceivedEnvelopeEdit
 import com.susu.feature.sent.navigation.SentRoute
 import com.susu.feature.sent.navigation.navigateSent
 import com.susu.feature.sent.navigation.navigateSentEnvelope
+import com.susu.feature.sent.navigation.navigateSentEnvelopeAdd
 import com.susu.feature.sent.navigation.navigateSentEnvelopeDetail
 import com.susu.feature.sent.navigation.navigateSentEnvelopeEdit
 import com.susu.feature.statistics.navigation.navigateStatistics
@@ -47,6 +53,8 @@ internal class MainNavigator(
             in listOf(
                 ReceivedRoute.ledgerSearchRoute,
                 ReceivedRoute.ledgerFilterRoute("{${ReceivedRoute.FILTER_ARGUMENT_NAME}}"),
+                ReceivedRoute.envelopeDetailRoute,
+                ReceivedRoute.envelopeEditRoute,
                 SentRoute.sentEnvelopeRoute,
                 SentRoute.sentEnvelopeDetailRoute,
                 SentRoute.sentEnvelopeEditRoute,
@@ -94,6 +102,10 @@ internal class MainNavigator(
         navController.navigateSentEnvelopeEdit()
     }
 
+    fun navigateSentEnvelopeAdd() {
+        navController.navigateSentEnvelopeAdd()
+    }
+
     fun navigateLogin() {
         navController.navigate(LoginSignupRoute.Parent.Login.route) {
             popUpTo(id = navController.graph.id) {
@@ -128,6 +140,26 @@ internal class MainNavigator(
 
     fun navigateLedgerAdd() {
         navController.navigateLedgerAdd()
+    }
+
+    fun navigateMyPageInfo() {
+        navController.navigateMyPageInfo()
+    }
+
+    fun navigateMyPageSocial() {
+        navController.navigateMyPageSocial()
+    }
+
+    fun navigateReceivedEnvelopeAdd() {
+        navController.navigateReceivedEnvelopeAdd()
+    }
+
+    fun navigateReceivedEnvelopeDetail() {
+        navController.navigateReceivedEnvelopeDetail()
+    }
+
+    fun navigateReceivedEnvelopeEdit() {
+        navController.navigateReceivedEnvelopeEdit()
     }
 
     fun popBackStackIfNotHome() {

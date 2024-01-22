@@ -22,11 +22,23 @@
     <string name="content_description_add_button">더하기 버튼</string>
     <string name="content_description_close_icon">닫기 아이콘</string>
     <string name="word_input_yourself">직접 입력</string>
+    <string name="word_gender">성별</string>
     <string name="word_male">남성</string>
     <string name="word_female">여성</string>
+    <string name="word_not_select">미선택</string>
     <string name="word_birth">출생년도</string>
     <string name="word_next">다음</string>
     <string name="word_done">완료</string>
     <string name="word_apply_filter">필터 적용하기</string>
     <string name="content_description_refresh">새로고침</string>
+    <string name="word_input_placeholder">입력해주세요</string>
+    <string name="sns_kakao">카카오톡</string>
+    <string name="sns_naver">네이버</string>
+    <string name="sns_google">구글</string>
+    <string name="word_enrollment">등록</string>
+    <string name="money_unit_format">%s원</string>
+    <string name="word_yes">예</string>
+    <string name="word_no">아니요</string>
+    <string name="word_phone_number">연락처</string>
+    <string name="word_memo">메모</string>
 </resources>

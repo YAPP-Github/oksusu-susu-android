@@ -9,9 +9,9 @@ class LoginUseCase @Inject constructor(
     private val loginRepository: LoginRepository,
     private val tokenRepository: TokenRepository,
 ) {
-    suspend operator fun invoke(oauthAccessToken: String) = runCatchingIgnoreCancelled {
+    suspend operator fun invoke(provider: String, oauthAccessToken: String) = runCatchingIgnoreCancelled {
         tokenRepository.saveTokens(
-            token = loginRepository.login(oauthAccessToken = oauthAccessToken),
+            token = loginRepository.login(provider = provider, oauthAccessToken = oauthAccessToken),
         )
     }
 }

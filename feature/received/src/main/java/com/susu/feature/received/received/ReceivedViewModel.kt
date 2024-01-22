@@ -131,6 +131,22 @@ class ReceivedViewModel @Inject constructor(
         intent { copy(ledgerList = newList) }
     }
 
+    fun addLedgerIfNeed(ledger: String?) {
+        val toAddLedger = ledger?.let {
+            Json.decodeFromUri<Ledger>(ledger)
+        } ?: return
+
+        if (toAddLedger in currentState.ledgerList) return
+
+        intent {
+            copy(
+                ledgerList = currentState
+                    .ledgerList
+                    .add(0, toAddLedger),
+            )
+        }
+    }
+
     fun showAlignBottomSheet() = intent { copy(showAlignBottomSheet = true) }
     fun hideAlignBottomSheet() = intent { copy(showAlignBottomSheet = false) }
     fun navigateLedgerDetail(ledger: Ledger) = postSideEffect(ReceivedEffect.NavigateLedgerDetail(ledger))
