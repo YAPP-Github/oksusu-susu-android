@@ -27,4 +27,5 @@
     <string name="ledger_detail_screen_dialog_title">장부를 삭제할까요?</string>
     <string name="ledger_detail_screen_dialog_description">삭제한 장부와 봉투는 다시 복구할 수 없어요</string>
     <string name="ledger_detail_screen_snackbar_message">장부가 삭제되었어요</string>
+    <string name="ledger_category_card_event_category">경조사 카테고리</string>
 </resources>

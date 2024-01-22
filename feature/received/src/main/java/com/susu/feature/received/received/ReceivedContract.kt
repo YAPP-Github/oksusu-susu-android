@@ -51,4 +51,5 @@ sealed interface ReceivedEffect : SideEffect {
     data object NavigateLedgerAdd : ReceivedEffect
     data object NavigateLedgerSearch : ReceivedEffect
     data class NavigateLedgerFilter(val filter: FilterArgument) : ReceivedEffect
+    data object ScrollToTop : ReceivedEffect
 }

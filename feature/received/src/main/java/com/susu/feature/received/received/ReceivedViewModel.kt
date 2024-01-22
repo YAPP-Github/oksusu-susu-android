@@ -1,6 +1,7 @@
 package com.susu.feature.received.received
 
 import androidx.lifecycle.viewModelScope
+import com.susu.core.model.Category
 import com.susu.core.model.Ledger
 import com.susu.core.ui.base.BaseViewModel
 import com.susu.core.ui.extension.decodeFromUri
@@ -9,6 +10,8 @@ import com.susu.feature.received.navigation.argument.FilterArgument
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.datetime.toJavaLocalDateTime
 import kotlinx.datetime.toKotlinLocalDateTime
 import kotlinx.serialization.json.Json
@@ -21,6 +24,8 @@ class ReceivedViewModel @Inject constructor(
 ) : BaseViewModel<ReceivedState, ReceivedEffect>(
     ReceivedState(),
 ) {
+    private val mutex = Mutex()
+
     private var page = 0
     private var isLast = false
     private var filter: FilterArgument = FilterArgument()
@@ -50,6 +55,19 @@ class ReceivedViewModel @Inject constructor(
         getLedgerList(true)
     }
 
+    fun removeCategory(category: Category) {
+        intent {
+            filter = filter.copy(
+                selectedCategoryList = selectedCategoryList.minus(category)
+            )
+            copy(
+                selectedCategoryList = selectedCategoryList.minus(category).toPersistentList()
+            )
+        }
+
+        getLedgerList(true)
+    }
+
     fun clearDate() {
         intent {
             copy(
@@ -62,34 +80,38 @@ class ReceivedViewModel @Inject constructor(
     }
 
     fun getLedgerList(needClear: Boolean = false) = viewModelScope.launch {
-        val currentList = if (needClear) {
-            page = 0
-            isLast = false
-            emptyList()
-        } else {
-            currentState.ledgerList
-        }
-
-        if (isLast) return@launch
-
-        getLedgerListUseCase(
-            GetLedgerListUseCase.Param(
-                page = page,
-                categoryId = null, // TODO
-                fromStartAt = currentState.startAt,
-                toEndAt = currentState.endAt,
-                sort = LedgerAlign.entries[currentState.selectedAlignPosition].query,
-            ),
-        ).onSuccess { ledgerList ->
-            isLast = ledgerList.isEmpty()
-            page++
-            val newLedgerList = currentList.plus(ledgerList).toPersistentList()
-            intent {
-                copy(
-                    ledgerList = newLedgerList,
-                    showEmptyLedger = newLedgerList.isEmpty(),
-                )
+        mutex.withLock {
+            val currentList = if (needClear) {
+                page = 0
+                isLast = false
+                emptyList()
+            } else {
+                currentState.ledgerList
             }
+
+            if (isLast) return@launch
+
+            getLedgerListUseCase(
+                GetLedgerListUseCase.Param(
+                    page = page,
+                    categoryIdList = filter.selectedCategoryList.map { it.id },
+                    fromStartAt = currentState.startAt,
+                    toEndAt = currentState.endAt,
+                    sort = LedgerAlign.entries[currentState.selectedAlignPosition].query,
+                ),
+            ).onSuccess { ledgerList ->
+                isLast = ledgerList.isEmpty()
+                page++
+                val newLedgerList = currentList.plus(ledgerList).toPersistentList()
+                intent {
+                    copy(
+                        ledgerList = newLedgerList,
+                        showEmptyLedger = newLedgerList.isEmpty(),
+                    )
+                }
+            }
+
+            if (needClear) postSideEffect(ReceivedEffect.ScrollToTop)
         }
     }
 

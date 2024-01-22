@@ -12,7 +12,7 @@ class GetLedgerListUseCase @Inject constructor(
         with(param) {
             ledgerRepository.getLedgerList(
                 title = title,
-                categoryId = categoryId,
+                categoryIdList = categoryIdList,
                 fromStartAt = fromStartAt ?: LocalDateTime.now().minusYears(10),
                 toEndAt = toEndAt ?: LocalDateTime.now().plusYears(10),
                 page = page,
@@ -23,7 +23,7 @@ class GetLedgerListUseCase @Inject constructor(
 
     data class Param(
         val title: String? = null,
-        val categoryId: Long? = null,
+        val categoryIdList: List<Int>? = null,
         val fromStartAt: LocalDateTime? = null,
         val toEndAt: LocalDateTime? = null,
         val page: Int? = null,

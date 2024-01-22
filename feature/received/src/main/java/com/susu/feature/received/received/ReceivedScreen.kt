@@ -1,6 +1,7 @@
 package com.susu.feature.received.received
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -8,21 +9,28 @@ import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -49,12 +57,18 @@ import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.core.ui.util.to_yyyy_dot_MM_dot_dd
 import com.susu.feature.received.R
 import com.susu.core.designsystem.component.button.SelectedFilterButton
+import com.susu.core.model.Category
 import com.susu.feature.received.navigation.argument.FilterArgument
 import com.susu.feature.received.received.component.LedgerAddCard
 import com.susu.feature.received.received.component.LedgerCard
+import com.susu.feature.received.received.component.LedgerCategoryCard
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.android.awaitFrame
+import kotlinx.coroutines.launch
+import me.onebone.toolbar.CollapsingToolbarScaffold
+import me.onebone.toolbar.ScrollStrategy
+import me.onebone.toolbar.rememberCollapsingToolbarScaffoldState
 
 @Composable
 fun ReceivedRoute(
@@ -70,12 +84,17 @@ fun ReceivedRoute(
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
     val ledgerListState = rememberLazyGridState()
+    val scope = rememberCoroutineScope()
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
             ReceivedEffect.NavigateLedgerAdd -> navigateLedgerAdd()
             is ReceivedEffect.NavigateLedgerDetail -> navigateLedgerDetail(sideEffect.ledger)
             is ReceivedEffect.NavigateLedgerFilter -> navigateLedgerFilter(sideEffect.filter)
             ReceivedEffect.NavigateLedgerSearch -> navigateLedgerSearch()
+            ReceivedEffect.ScrollToTop -> scope.launch {
+                awaitFrame()
+                ledgerListState.animateScrollToItem(0)
+            }
         }
     }
 
@@ -105,10 +124,11 @@ fun ReceivedRoute(
         },
         onDismissAlignBottomSheet = viewModel::hideAlignBottomSheet,
         onClickDateClose = viewModel::clearDate,
+        onClickCategoryClose = viewModel::removeCategory,
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ReceiveScreen(
     uiState: ReceivedState = ReceivedState(),
@@ -124,6 +144,7 @@ fun ReceiveScreen(
     onClickFloatingAddButton: () -> Unit = {},
     onDismissAlignBottomSheet: () -> Unit = {},
     onClickDateClose: () -> Unit = {},
+    onClickCategoryClose: (Category) -> Unit = {},
 ) {
     Box(
         modifier = Modifier
@@ -146,25 +167,31 @@ fun ReceiveScreen(
                 },
             )
 
-            LazyVerticalGrid(
-                modifier = Modifier
-                    .fillMaxSize(),
-                state = ledgerListState,
-                contentPadding = PaddingValues(
-                    SusuTheme.spacing.spacing_m,
-                ),
-                columns = GridCells.Fixed(2),
-                verticalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxs),
-                horizontalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxs),
-            ) {
-                item(
-                    span = { GridItemSpan(2) },
-                ) {
-                    FlowRow(
-                        modifier = Modifier.padding(bottom = SusuTheme.spacing.spacing_xxs),
+            val state = rememberCollapsingToolbarScaffoldState()
+
+            CollapsingToolbarScaffold(
+                modifier = Modifier.fillMaxSize(),
+                state = state,
+                scrollStrategy = ScrollStrategy.EnterAlways,
+                toolbar = {
+                    Spacer(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(32.dp)
+                    )
+                    Row(
+                        modifier = Modifier
+                            .padding(
+                                vertical = SusuTheme.spacing.spacing_m,
+                            )
+                            .graphicsLayer {
+                                alpha = state.toolbarState.progress
+                            }
+                            .horizontalScroll(rememberScrollState()),
                         horizontalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxs),
-                        verticalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxs),
                     ) {
+                        Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_xxs))
+
                         SusuGhostButton(
                             color = GhostButtonColor.Black,
                             style = SmallButtonStyle.height32,
@@ -180,6 +207,15 @@ fun ReceiveScreen(
 
                         FilterButton(uiState.isFiltered, onClickFilterButton)
 
+                        uiState.selectedCategoryList.forEach { category ->
+                            SelectedFilterButton(
+                                color = FilledButtonColor.Black,
+                                style = SmallButtonStyle.height32,
+                                name = category.name,
+                                onClickCloseIcon = { onClickCategoryClose(category) },
+                            )
+                        }
+
                         if (uiState.startAt != null || uiState.endAt != null) {
                             SelectedFilterButton(
                                 color = FilledButtonColor.Black,
@@ -188,26 +224,66 @@ fun ReceiveScreen(
                                 onClickCloseIcon = onClickDateClose,
                             )
                         }
+
+                        Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_xxs))
                     }
                 }
+            ) {
+                LazyVerticalGrid(
+                    modifier = Modifier
+                        .fillMaxSize(),
+                    state = ledgerListState,
+                    contentPadding = PaddingValues(
+                        start = SusuTheme.spacing.spacing_m,
+                        end = SusuTheme.spacing.spacing_m,
+                        bottom = SusuTheme.spacing.spacing_m,
+                    ),
+                    columns = GridCells.Fixed(2),
+                    verticalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxs),
+                    horizontalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxs),
+                ) {
+                    if (uiState.isFiltered) {
+                        uiState.ledgerList.groupBy { it.category }.forEach { (category, ledgerList) ->
+                            item(
+                                span = { GridItemSpan(2) },
+                                contentType = "LedgerCategoryCard"
+                            ) {
+                                LedgerCategoryCard(name = category.name)
+                            }
 
-                items(
-                    items = uiState.ledgerList,
-                    key = { it.id },
-                ) { ledger ->
-                    LedgerCard(
-                        ledgerType = ledger.category.name,
-                        title = ledger.title,
-                        money = ledger.totalAmounts,
-                        count = ledger.totalCounts,
-                        onClick = { onClickLedgerCard(ledger) },
-                    )
-                }
+                            items(
+                                items = ledgerList,
+                                key = { it.id },
+                            ) { ledger ->
+                                LedgerCard(
+                                    ledgerType = ledger.category.name,
+                                    title = ledger.title,
+                                    money = ledger.totalAmounts,
+                                    count = ledger.totalCounts,
+                                    onClick = { onClickLedgerCard(ledger) },
+                                )
+                            }
+                        }
+                    } else {
+                        items(
+                            items = uiState.ledgerList,
+                            key = { it.id },
+                        ) { ledger ->
+                            LedgerCard(
+                                ledgerType = ledger.category.name,
+                                title = ledger.title,
+                                money = ledger.totalAmounts,
+                                count = ledger.totalCounts,
+                                onClick = { onClickLedgerCard(ledger) },
+                            )
+                        }
 
-                item {
-                    LedgerAddCard(
-                        onClick = onClickLedgerAddCard,
-                    )
+                        item {
+                            LedgerAddCard(
+                                onClick = onClickLedgerAddCard,
+                            )
+                        }
+                    }
                 }
             }
         }

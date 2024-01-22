@@ -6,7 +6,7 @@ import java.time.LocalDateTime
 interface LedgerRepository {
     suspend fun getLedgerList(
         title: String?,
-        categoryId: Long?,
+        categoryIdList: List<Int>?,
         fromStartAt: LocalDateTime,
         toEndAt: LocalDateTime,
         page: Int?,
