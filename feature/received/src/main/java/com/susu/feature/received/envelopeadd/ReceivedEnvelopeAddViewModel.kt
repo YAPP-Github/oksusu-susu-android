@@ -27,6 +27,7 @@ class ReceivedEnvelopeAddViewModel @Inject constructor(
     ReceivedEnvelopeAddState(),
 ) {
     private var money: Long = 0
+    private var name: String = ""
 
     fun goToPrevStep() = intent {
         val prevStep = when (currentState.currentStep) {
@@ -69,6 +70,13 @@ class ReceivedEnvelopeAddViewModel @Inject constructor(
         this@ReceivedEnvelopeAddViewModel.money = money
         copy(
             buttonEnabled = money > 0,
+        )
+    }
+
+    fun updateName(name: String) = intent {
+        this@ReceivedEnvelopeAddViewModel.name = name
+        copy(
+            buttonEnabled = name.isNotEmpty(),
         )
     }
 }
