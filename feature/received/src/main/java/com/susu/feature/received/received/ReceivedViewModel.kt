@@ -29,6 +29,7 @@ class ReceivedViewModel @Inject constructor(
     private var page = 0
     private var isLast = false
     private var filter: FilterArgument = FilterArgument()
+    private var filterUri: String? = null
     private var isFirstVisit = true
 
     fun initData() {
@@ -39,6 +40,9 @@ class ReceivedViewModel @Inject constructor(
 
     fun filterIfNeed(filterUri: String?) {
         if (filterUri == null) return
+
+        if (this.filterUri == filterUri) return
+        this.filterUri = filterUri
 
         val filterArgument = Json.decodeFromUri<FilterArgument>(filterUri)
         if (filter == filterArgument) return
