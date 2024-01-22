@@ -4,7 +4,7 @@ import androidx.compose.runtime.Stable
 
 @Stable
 data class RelationShip(
-    val id: Int,
-    val relation: String,
+    val id: Int = -1,
+    val relation: String = "",
     val customRelation: String? = null
 )

@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.susu.core.model.Category
 import com.susu.core.model.Ledger
+import com.susu.core.model.RelationShip
 import com.susu.core.model.exception.NotFoundLedgerException
 import com.susu.core.ui.base.BaseViewModel
 import com.susu.core.ui.extension.decodeFromUri
@@ -28,6 +29,7 @@ class ReceivedEnvelopeAddViewModel @Inject constructor(
 ) {
     private var money: Long = 0
     private var name: String = ""
+    private var relationShip: RelationShip? = null
 
     fun goToPrevStep() = intent {
         val prevStep = when (currentState.currentStep) {
@@ -77,6 +79,13 @@ class ReceivedEnvelopeAddViewModel @Inject constructor(
         this@ReceivedEnvelopeAddViewModel.name = name
         copy(
             buttonEnabled = name.isNotEmpty(),
+        )
+    }
+
+    fun updateSelectedRelationShip(relationShip: RelationShip?) = intent {
+        this@ReceivedEnvelopeAddViewModel.relationShip = relationShip
+        copy(
+            buttonEnabled = relationShip != null
         )
     }
 }

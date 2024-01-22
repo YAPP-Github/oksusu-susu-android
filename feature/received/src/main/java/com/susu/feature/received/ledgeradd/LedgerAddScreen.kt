@@ -77,9 +77,7 @@ fun LedgerAddRoute(
         },
         dateContentName = dateContentName,
         dateContentCategoryName = dateContentCategoryName,
-        updateParentDate = { startAt, endAt ->
-            viewModel.updateDate(startAt, endAt)
-        },
+        updateParentDate = viewModel::updateDate,
     )
 }
 

@@ -20,17 +20,19 @@ import com.susu.core.designsystem.component.button.FilledButtonColor
 import com.susu.core.designsystem.component.button.MediumButtonStyle
 import com.susu.core.designsystem.component.button.SusuFilledButton
 import com.susu.core.designsystem.theme.SusuTheme
+import com.susu.core.model.Category
+import com.susu.core.model.RelationShip
 import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.core.ui.extension.susuDefaultAnimatedContentTransitionSpec
 import com.susu.feature.received.envelopeadd.content.MemoContent
 import com.susu.feature.received.envelopeadd.content.MoreContent
-import com.susu.feature.received.envelopeadd.content.name.NameContent
 import com.susu.feature.received.envelopeadd.content.PhoneContent
 import com.susu.feature.received.envelopeadd.content.PresentContent
-import com.susu.feature.received.envelopeadd.content.RelationshipContent
+import com.susu.feature.received.envelopeadd.content.relationship.RelationShipContent
 import com.susu.feature.received.envelopeadd.content.VisitedContent
 import com.susu.feature.received.envelopeadd.content.money.MoneyContentRoute
 import com.susu.feature.received.envelopeadd.content.name.NameContentRoute
+import com.susu.feature.received.envelopeadd.content.relationship.RelationShipContentRoute
 
 @Composable
 fun ReceivedEnvelopeAddRoute(
@@ -56,6 +58,7 @@ fun ReceivedEnvelopeAddRoute(
         onClickNext = viewModel::goToNextStep,
         updateParentMoney = viewModel::updateMoney,
         updateParentName = viewModel::updateName,
+        updateParentSelectedRelationShip = viewModel::updateSelectedRelationShip
     )
 }
 
@@ -66,9 +69,9 @@ fun ReceivedEnvelopeAddScreen(
     onClickNext: () -> Unit = {},
     updateParentMoney: (Long) -> Unit = {},
     updateParentName: (String) -> Unit = {},
+    updateParentSelectedRelationShip: (RelationShip?) -> Unit = {},
 ) {
     // TODO: 수정 필요
-    val relationshipList = listOf("친구", "가족", "친척", "동료", "직접 입력")
     val moreList = listOf("방문여부", "선물", "메모", "보낸 이의 연락처")
     val visitedList = listOf("예", "아니요")
 
@@ -104,7 +107,9 @@ fun ReceivedEnvelopeAddScreen(
                 EnvelopeAddStep.NAME -> NameContentRoute(
                     updateParentName = updateParentName,
                 )
-                EnvelopeAddStep.RELATIONSHIP -> RelationshipContent(relationshipList = relationshipList)
+                EnvelopeAddStep.RELATIONSHIP -> RelationShipContentRoute(
+                    updateParentSelectedRelation = updateParentSelectedRelationShip,
+                )
                 EnvelopeAddStep.MORE -> MoreContent(moreList = moreList)
                 EnvelopeAddStep.VISITED -> VisitedContent(
                     event = "결혼식",
