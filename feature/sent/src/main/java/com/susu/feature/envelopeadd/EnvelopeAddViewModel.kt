@@ -59,4 +59,9 @@ class EnvelopeAddViewModel @Inject constructor() : BaseViewModel<EnvelopeAddStat
             else -> intent { copy(currentStep = EnvelopeAddStep.MORE) }
         }
     }
+
+    fun updateMoney(money: Long) = intent {
+        this@EnvelopeAddViewModel.money = money
+        copy(buttonEnabled = money > 0L)
+    }
 }

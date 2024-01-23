@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.stringResource
@@ -26,13 +25,14 @@ import com.susu.core.ui.extension.susuDefaultAnimatedContentTransitionSpec
 import com.susu.feature.envelopeadd.content.DateContent
 import com.susu.feature.envelopeadd.content.EventContent
 import com.susu.feature.envelopeadd.content.MemoContent
-import com.susu.feature.envelopeadd.content.MoneyContent
+import com.susu.feature.envelopeadd.content.money.MoneyContent
 import com.susu.feature.envelopeadd.content.MoreContent
 import com.susu.feature.envelopeadd.content.NameContent
 import com.susu.feature.envelopeadd.content.PhoneContent
 import com.susu.feature.envelopeadd.content.PresentContent
 import com.susu.feature.envelopeadd.content.RelationshipContent
 import com.susu.feature.envelopeadd.content.VisitedContent
+import com.susu.feature.envelopeadd.content.money.MoneyContentRoute
 import com.susu.feature.sent.R
 
 @Composable
@@ -50,6 +50,7 @@ fun SentEnvelopeAddRoute(
         uiState = uiState,
         onClickBack = viewModel::goPrevStep,
         onClickNext = viewModel::goNextStep,
+        updateParentMoney = viewModel::updateMoney,
     )
 }
 
@@ -58,6 +59,7 @@ fun SentEnvelopeAddScreen(
     uiState: EnvelopeAddState = EnvelopeAddState(),
     onClickBack: () -> Unit = {},
     onClickNext: () -> Unit = {},
+    updateParentMoney: (Long) -> Unit = {},
 ) {
     // TODO: 수정 필요
     val relationshipList = listOf("친구", "가족", "친척", "동료", "직접 입력")
@@ -91,7 +93,7 @@ fun SentEnvelopeAddScreen(
             },
         ) { targetState ->
             when (targetState) {
-                EnvelopeAddStep.MONEY -> MoneyContent()
+                EnvelopeAddStep.MONEY -> MoneyContentRoute(updateParentMoney = updateParentMoney)
                 EnvelopeAddStep.NAME -> NameContent(friendList = friendList)
                 EnvelopeAddStep.RELATIONSHIP -> RelationshipContent(relationshipList = relationshipList)
                 EnvelopeAddStep.EVENT -> EventContent(eventList = eventList)
@@ -113,7 +115,9 @@ fun SentEnvelopeAddScreen(
             shape = RectangleShape,
             text = stringResource(R.string.sent_envelope_add_next),
             onClick = onClickNext,
-            modifier = Modifier.fillMaxWidth().imePadding(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .imePadding(),
         )
     }
 }
