@@ -121,9 +121,7 @@ internal fun MainScreen(
                     handleException = viewModel::handleException,
                 )
 
-                statisticsNavGraph(
-                    padding = innerPadding,
-                )
+                statisticsNavGraph()
 
                 communityNavGraph(
                     padding = innerPadding,

@@ -2,6 +2,15 @@
 <resources>
     <string name="statistics_recent_8_total_money">최근 8개월 간 쓴 금액</string>
     <string name="statistics_total_man_format">총 %s만원</string>
+    <string name="statistics_tab_my">나의 수수</string>
+    <string name="statistics_tab_average">수수 평균</string>
     <string name="word_unknown">\?</string>
-    <string name="word_unknown_count">총 ?번</string>
+    <string name="word_entire_count">총 %s번</string>
+    <string name="statistics_word">통계</string>
+    <string name="statistics_most_spent_month">경조사비를 가장 많이 쓴 달</string>
+    <string name="word_month_format">%s월</string>
+    <string name="statistics_most_susu_relationship">최다 수수 관계</string>
+    <string name="statistics_most_susu_event">최다 수수 경조사</string>
+    <string name="statistics_most_received_money">가장 많이 받은 금액</string>
+    <string name="statistics_most_sent_money">가장 많이 보낸 금액</string>
 </resources>

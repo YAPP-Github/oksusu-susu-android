@@ -56,7 +56,7 @@ fun StatisticsVerticalItem(
             )
             Text(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
-                text = description,
+                text = stringResource(R.string.word_entire_count, description),
                 style = SusuTheme.typography.title_xxxs,
                 color = Gray60,
             )
@@ -69,7 +69,7 @@ fun StatisticsVerticalItem(
             )
             Text(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
-                text = stringResource(R.string.word_unknown_count),
+                text = stringResource(R.string.word_entire_count, stringResource(id = R.string.word_unknown)),
                 style = SusuTheme.typography.title_xxxs,
                 color = Gray40,
             )
