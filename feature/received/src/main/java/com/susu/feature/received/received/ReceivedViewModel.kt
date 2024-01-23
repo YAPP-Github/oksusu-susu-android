@@ -128,7 +128,12 @@ class ReceivedViewModel @Inject constructor(
             .map { if (it.id == toUpdateLedger.id) toUpdateLedger else it }
             .toPersistentList()
 
-        intent { copy(ledgerList = newList) }
+        intent {
+            copy(
+                ledgerList = newList,
+                showEmptyLedger = newList.isEmpty(),
+            )
+        }
     }
 
     fun addLedgerIfNeed(ledger: String?) {
@@ -143,6 +148,7 @@ class ReceivedViewModel @Inject constructor(
                 ledgerList = currentState
                     .ledgerList
                     .add(0, toAddLedger),
+                showEmptyLedger = false,
             )
         }
     }
