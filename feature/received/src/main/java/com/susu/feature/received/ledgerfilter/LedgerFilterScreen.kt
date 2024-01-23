@@ -47,11 +47,12 @@ fun LedgerFilterRoute(
     viewModel: LedgerFilterViewModel = hiltViewModel(),
     popBackStack: () -> Unit,
     popBackStackWithFilter: (String) -> Unit,
+    handleException: (Throwable, () -> Unit) -> Unit,
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
-            is LedgerFilterSideEffect.HandleException -> TODO()
+            is LedgerFilterSideEffect.HandleException -> handleException(sideEffect.throwable, sideEffect.retry)
             LedgerFilterSideEffect.PopBackStack -> popBackStack()
             is LedgerFilterSideEffect.PopBackStackWithFilter -> popBackStackWithFilter(sideEffect.filter)
         }

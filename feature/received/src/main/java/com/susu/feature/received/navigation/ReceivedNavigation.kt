@@ -136,6 +136,7 @@ fun NavGraphBuilder.receivedNavGraph(
         LedgerFilterRoute(
             popBackStack = popBackStack,
             popBackStackWithFilter = popBackStackWithFilter,
+            handleException = handleException,
         )
     }
 
