@@ -14,15 +14,18 @@ import com.susu.core.designsystem.theme.Gray100
 import com.susu.core.designsystem.theme.Gray40
 import com.susu.core.designsystem.theme.Gray60
 import com.susu.core.designsystem.theme.SusuTheme
+import com.susu.core.ui.extension.susuClickable
 
 @Composable
 fun FriendListItem(
     friend: String,
+    onClick: (String) -> Unit, // TODO: 친구 id 반환
     modifier: Modifier = Modifier,
 ) {
     Row(
         modifier = modifier
             .fillMaxWidth()
+            .susuClickable(onClick = { onClick(friend) })
             .padding(
                 vertical = SusuTheme.spacing.spacing_s,
             ),
@@ -60,7 +63,7 @@ fun FriendListItemPreview() {
     SusuTheme {
         Column {
             for (friend in friendList) {
-                FriendListItem(friend = friend)
+                FriendListItem(friend = friend, onClick = {})
             }
         }
     }

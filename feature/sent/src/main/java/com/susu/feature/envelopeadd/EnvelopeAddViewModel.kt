@@ -64,4 +64,9 @@ class EnvelopeAddViewModel @Inject constructor() : BaseViewModel<EnvelopeAddStat
         this@EnvelopeAddViewModel.money = money
         copy(buttonEnabled = money > 0L)
     }
+
+    fun updateName(name: String) = intent {
+        this@EnvelopeAddViewModel.name = name
+        copy(buttonEnabled = name.isNotEmpty())
+    }
 }

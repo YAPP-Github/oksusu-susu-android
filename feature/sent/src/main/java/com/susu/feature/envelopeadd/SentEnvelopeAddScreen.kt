@@ -25,14 +25,13 @@ import com.susu.core.ui.extension.susuDefaultAnimatedContentTransitionSpec
 import com.susu.feature.envelopeadd.content.DateContent
 import com.susu.feature.envelopeadd.content.EventContent
 import com.susu.feature.envelopeadd.content.MemoContent
-import com.susu.feature.envelopeadd.content.money.MoneyContent
 import com.susu.feature.envelopeadd.content.MoreContent
-import com.susu.feature.envelopeadd.content.NameContent
 import com.susu.feature.envelopeadd.content.PhoneContent
 import com.susu.feature.envelopeadd.content.PresentContent
 import com.susu.feature.envelopeadd.content.RelationshipContent
 import com.susu.feature.envelopeadd.content.VisitedContent
 import com.susu.feature.envelopeadd.content.money.MoneyContentRoute
+import com.susu.feature.envelopeadd.content.name.NameContentRoute
 import com.susu.feature.sent.R
 
 @Composable
@@ -51,6 +50,7 @@ fun SentEnvelopeAddRoute(
         onClickBack = viewModel::goPrevStep,
         onClickNext = viewModel::goNextStep,
         updateParentMoney = viewModel::updateMoney,
+        updateParentName = viewModel::updateName,
     )
 }
 
@@ -60,10 +60,10 @@ fun SentEnvelopeAddScreen(
     onClickBack: () -> Unit = {},
     onClickNext: () -> Unit = {},
     updateParentMoney: (Long) -> Unit = {},
+    updateParentName: (String) -> Unit = {},
 ) {
     // TODO: 수정 필요
     val relationshipList = listOf("친구", "가족", "친척", "동료", "직접 입력")
-    val friendList = listOf("김철수", "국영수", "신짱구", "홍길동")
     val eventList = listOf("결혼식", "돌잔치", "장례식", "생일 기념일", "직접 입력")
     val moreList = listOf("방문여부", "선물", "메모", "보낸 이의 연락처")
     val visitedList = listOf("예", "아니요")
@@ -94,7 +94,7 @@ fun SentEnvelopeAddScreen(
         ) { targetState ->
             when (targetState) {
                 EnvelopeAddStep.MONEY -> MoneyContentRoute(updateParentMoney = updateParentMoney)
-                EnvelopeAddStep.NAME -> NameContent(friendList = friendList)
+                EnvelopeAddStep.NAME -> NameContentRoute(updateParentName = updateParentName)
                 EnvelopeAddStep.RELATIONSHIP -> RelationshipContent(relationshipList = relationshipList)
                 EnvelopeAddStep.EVENT -> EventContent(eventList = eventList)
                 EnvelopeAddStep.DATE -> DateContent(name = "김철수")
