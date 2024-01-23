@@ -1,12 +1,16 @@
 package com.susu.feature.received.received
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -15,13 +19,16 @@ import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -33,49 +40,68 @@ import com.susu.core.designsystem.component.appbar.icon.LogoIcon
 import com.susu.core.designsystem.component.appbar.icon.NotificationIcon
 import com.susu.core.designsystem.component.appbar.icon.SearchIcon
 import com.susu.core.designsystem.component.bottomsheet.SusuSelectionBottomSheet
+import com.susu.core.designsystem.component.button.FilledButtonColor
+import com.susu.core.designsystem.component.button.FilterButton
 import com.susu.core.designsystem.component.button.GhostButtonColor
+import com.susu.core.designsystem.component.button.SelectedFilterButton
 import com.susu.core.designsystem.component.button.SmallButtonStyle
 import com.susu.core.designsystem.component.button.SusuFloatingButton
 import com.susu.core.designsystem.component.button.SusuGhostButton
 import com.susu.core.designsystem.theme.Gray50
 import com.susu.core.designsystem.theme.SusuTheme
+import com.susu.core.model.Category
 import com.susu.core.model.Ledger
-import com.susu.core.ui.alignList
 import com.susu.core.ui.extension.OnBottomReached
 import com.susu.core.ui.extension.collectWithLifecycle
+import com.susu.core.ui.util.to_yyyy_dot_MM_dot_dd
 import com.susu.feature.received.R
+import com.susu.feature.received.navigation.argument.FilterArgument
 import com.susu.feature.received.received.component.LedgerAddCard
 import com.susu.feature.received.received.component.LedgerCard
-import kotlinx.collections.immutable.toImmutableList
+import com.susu.feature.received.received.component.LedgerCategoryCard
+import kotlinx.collections.immutable.toPersistentList
+import kotlinx.coroutines.android.awaitFrame
+import kotlinx.coroutines.launch
+import me.onebone.toolbar.CollapsingToolbarScaffold
+import me.onebone.toolbar.ScrollStrategy
+import me.onebone.toolbar.rememberCollapsingToolbarScaffoldState
 
 @Composable
 fun ReceivedRoute(
     viewModel: ReceivedViewModel = hiltViewModel(),
     ledger: String?,
     toDeleteLedgerId: Int,
+    filter: String?,
     padding: PaddingValues,
     navigateLedgerDetail: (Ledger) -> Unit,
     navigateLedgerSearch: () -> Unit,
-    navigateLedgerFilter: () -> Unit,
+    navigateLedgerFilter: (FilterArgument) -> Unit,
     navigateLedgerAdd: () -> Unit,
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
     val ledgerListState = rememberLazyGridState()
+    val scope = rememberCoroutineScope()
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
             ReceivedEffect.NavigateLedgerAdd -> navigateLedgerAdd()
             is ReceivedEffect.NavigateLedgerDetail -> navigateLedgerDetail(sideEffect.ledger)
-            ReceivedEffect.NavigateLedgerFilter -> navigateLedgerFilter()
+            is ReceivedEffect.NavigateLedgerFilter -> navigateLedgerFilter(sideEffect.filter)
             ReceivedEffect.NavigateLedgerSearch -> navigateLedgerSearch()
+            ReceivedEffect.ScrollToTop -> scope.launch {
+                awaitFrame()
+                ledgerListState.animateScrollToItem(0)
+            }
         }
     }
 
     LaunchedEffect(key1 = Unit) {
-        viewModel.addLedgerIfNeed(ledger = ledger)
+        viewModel.initData()
+        viewModel.filterIfNeed(filter)
+        viewModel.addLedgerIfNeed(ledger)
         viewModel.updateLedgerIfNeed(ledger = ledger, toDeleteLedgerId = toDeleteLedgerId)
     }
 
-    ledgerListState.OnBottomReached {
+    ledgerListState.OnBottomReached(minItemsCount = 2) {
         viewModel.getLedgerList()
     }
 
@@ -89,7 +115,13 @@ fun ReceivedRoute(
         onClickFloatingAddButton = viewModel::navigateLedgerAdd,
         onClickFilterButton = viewModel::navigateLedgerFilter,
         onClickAlignButton = viewModel::showAlignBottomSheet,
+        onClickAlignBottomSheetItem = { position ->
+            viewModel.updateSelectedAlignPosition(position)
+            viewModel.hideAlignBottomSheet()
+        },
         onDismissAlignBottomSheet = viewModel::hideAlignBottomSheet,
+        onClickDateClose = viewModel::clearDate,
+        onClickCategoryClose = viewModel::removeCategory,
     )
 }
 
@@ -102,11 +134,14 @@ fun ReceiveScreen(
     onClickSearchIcon: () -> Unit = {},
     onClickNotificationIcon: () -> Unit = {},
     onClickAlignButton: () -> Unit = {},
+    onClickAlignBottomSheetItem: (Int) -> Unit = {},
     onClickFilterButton: () -> Unit = {},
     onClickLedgerAddCard: () -> Unit = {},
     onClickLedgerCard: (Ledger) -> Unit = {},
     onClickFloatingAddButton: () -> Unit = {},
     onDismissAlignBottomSheet: () -> Unit = {},
+    onClickDateClose: () -> Unit = {},
+    onClickCategoryClose: (Category) -> Unit = {},
 ) {
     Box(
         modifier = Modifier
@@ -129,28 +164,35 @@ fun ReceiveScreen(
                 },
             )
 
-            LazyVerticalGrid(
-                modifier = Modifier
-                    .fillMaxSize(),
-                state = ledgerListState,
-                contentPadding = PaddingValues(
-                    SusuTheme.spacing.spacing_m,
-                ),
-                columns = GridCells.Fixed(2),
-                verticalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxs),
-                horizontalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxs),
-            ) {
-                item(
-                    span = { GridItemSpan(2) },
-                ) {
+            val state = rememberCollapsingToolbarScaffoldState()
+
+            CollapsingToolbarScaffold(
+                modifier = Modifier.fillMaxSize(),
+                state = state,
+                scrollStrategy = ScrollStrategy.EnterAlways,
+                toolbar = {
+                    Spacer(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(32.dp),
+                    )
                     Row(
-                        modifier = Modifier.padding(bottom = SusuTheme.spacing.spacing_xxs),
+                        modifier = Modifier
+                            .padding(
+                                vertical = SusuTheme.spacing.spacing_m,
+                            )
+                            .graphicsLayer {
+                                alpha = state.toolbarState.progress
+                            }
+                            .horizontalScroll(rememberScrollState()),
                         horizontalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxs),
                     ) {
+                        Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_xxs))
+
                         SusuGhostButton(
                             color = GhostButtonColor.Black,
                             style = SmallButtonStyle.height32,
-                            text = alignList[0], // TODO State 변환
+                            text = stringResource(id = LedgerAlign.entries[uiState.selectedAlignPosition].stringResId),
                             leftIcon = {
                                 Icon(
                                     painter = painterResource(id = com.susu.core.ui.R.drawable.ic_align),
@@ -159,39 +201,86 @@ fun ReceiveScreen(
                             },
                             onClick = onClickAlignButton,
                         )
-                        SusuGhostButton(
-                            color = GhostButtonColor.Black,
-                            style = SmallButtonStyle.height32,
-                            text = stringResource(com.susu.core.ui.R.string.word_filter),
-                            leftIcon = {
-                                Icon(
-                                    modifier = Modifier.size(16.dp),
-                                    painter = painterResource(id = com.susu.core.ui.R.drawable.ic_filter),
-                                    contentDescription = stringResource(R.string.content_description_filter_icon),
-                                )
-                            },
-                            onClick = onClickFilterButton,
-                        )
+
+                        FilterButton(uiState.isFiltered, onClickFilterButton)
+
+                        uiState.selectedCategoryList.forEach { category ->
+                            SelectedFilterButton(
+                                color = FilledButtonColor.Black,
+                                style = SmallButtonStyle.height32,
+                                name = category.name,
+                                onClickCloseIcon = { onClickCategoryClose(category) },
+                            )
+                        }
+
+                        if (uiState.startAt != null || uiState.endAt != null) {
+                            SelectedFilterButton(
+                                color = FilledButtonColor.Black,
+                                style = SmallButtonStyle.height32,
+                                name = "${uiState.startAt?.to_yyyy_dot_MM_dot_dd() ?: ""}~${uiState.endAt?.to_yyyy_dot_MM_dot_dd() ?: ""}",
+                                onClickCloseIcon = onClickDateClose,
+                            )
+                        }
+
+                        Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_xxs))
                     }
-                }
+                },
+            ) {
+                LazyVerticalGrid(
+                    modifier = Modifier
+                        .fillMaxSize(),
+                    state = ledgerListState,
+                    contentPadding = PaddingValues(
+                        start = SusuTheme.spacing.spacing_m,
+                        end = SusuTheme.spacing.spacing_m,
+                        bottom = SusuTheme.spacing.spacing_m,
+                    ),
+                    columns = GridCells.Fixed(2),
+                    verticalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxs),
+                    horizontalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxs),
+                ) {
+                    if (uiState.isFiltered) {
+                        uiState.ledgerList.groupBy { it.category }.forEach { (category, ledgerList) ->
+                            item(
+                                span = { GridItemSpan(2) },
+                                contentType = "LedgerCategoryCard",
+                            ) {
+                                LedgerCategoryCard(name = category.name)
+                            }
 
-                items(
-                    items = uiState.ledgerList,
-                    key = { it.id },
-                ) { ledger ->
-                    LedgerCard(
-                        ledgerType = ledger.category.name,
-                        title = ledger.title,
-                        money = ledger.totalAmounts,
-                        count = ledger.totalCounts,
-                        onClick = { onClickLedgerCard(ledger) },
-                    )
-                }
+                            items(
+                                items = ledgerList,
+                                key = { it.id },
+                            ) { ledger ->
+                                LedgerCard(
+                                    ledgerType = ledger.category.name,
+                                    title = ledger.title,
+                                    money = ledger.totalAmounts,
+                                    count = ledger.totalCounts,
+                                    onClick = { onClickLedgerCard(ledger) },
+                                )
+                            }
+                        }
+                    } else {
+                        items(
+                            items = uiState.ledgerList,
+                            key = { it.id },
+                        ) { ledger ->
+                            LedgerCard(
+                                ledgerType = ledger.category.name,
+                                title = ledger.title,
+                                money = ledger.totalAmounts,
+                                count = ledger.totalCounts,
+                                onClick = { onClickLedgerCard(ledger) },
+                            )
+                        }
 
-                item {
-                    LedgerAddCard(
-                        onClick = onClickLedgerAddCard,
-                    )
+                        item {
+                            LedgerAddCard(
+                                onClick = onClickLedgerAddCard,
+                            )
+                        }
+                    }
                 }
             }
         }
@@ -216,9 +305,9 @@ fun ReceiveScreen(
             SusuSelectionBottomSheet(
                 onDismissRequest = onDismissAlignBottomSheet,
                 containerHeight = 250.dp,
-                items = alignList.toImmutableList(),
-                selectedItemPosition = 0, // TODO State 변환
-                onClickItem = {},
+                items = LedgerAlign.entries.map { stringResource(id = it.stringResId) }.toPersistentList(),
+                selectedItemPosition = uiState.selectedAlignPosition,
+                onClickItem = onClickAlignBottomSheetItem,
             )
         }
     }

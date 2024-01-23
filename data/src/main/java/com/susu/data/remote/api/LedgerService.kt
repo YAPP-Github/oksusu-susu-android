@@ -17,7 +17,7 @@ interface LedgerService {
     @GET("ledgers")
     suspend fun getLedgerList(
         @Query("title") title: String?,
-        @Query("categoryId") categoryId: Long?,
+        @Query("categoryIds") categoryIdList: List<Int>?,
         @Query("fromStartAt") fromStartAt: LocalDateTime,
         @Query("toEndAt") toEndAt: LocalDateTime,
         @Query("page") page: Int?,
