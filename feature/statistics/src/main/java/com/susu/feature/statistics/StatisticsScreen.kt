@@ -10,8 +10,15 @@ import androidx.compose.ui.unit.dp
 import com.susu.core.designsystem.theme.SusuTheme
 
 @Composable
-fun StatisticsScreen(
+fun StatisticsRoute(
     padding: PaddingValues,
+) {
+    StatisticsScreen()
+}
+
+@Composable
+fun StatisticsScreen(
+    padding: PaddingValues = PaddingValues(),
 ) {
     Text(
         modifier = Modifier.padding(padding),
