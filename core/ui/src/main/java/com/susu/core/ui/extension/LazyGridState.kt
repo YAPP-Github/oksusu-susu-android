@@ -14,6 +14,7 @@ fun LazyGridState.OnBottomReached(
     // tells how many items before we reach the bottom of the list
     // to call onLoadMore function
     buffer: Int = 0,
+    minItemsCount: Int = 0,
     onLoadMore: () -> Unit,
 ) {
     // Buffer must be positive.
@@ -23,6 +24,7 @@ fun LazyGridState.OnBottomReached(
     val shouldLoadMore = remember {
         derivedStateOf {
             val lastVisibleItem = layoutInfo.visibleItemsInfo.lastOrNull() ?: return@derivedStateOf false
+            if (lastVisibleItem.index < minItemsCount) return@derivedStateOf false
 
             lastVisibleItem.index >= layoutInfo.totalItemsCount - 1 - buffer
         }

@@ -18,6 +18,7 @@ import com.susu.feature.received.ledgeradd.LedgerAddRoute
 import com.susu.feature.received.ledgerdetail.LedgerDetailRoute
 import com.susu.feature.received.ledgeredit.LedgerEditRoute
 import com.susu.feature.received.ledgerfilter.LedgerFilterRoute
+import com.susu.feature.received.navigation.argument.FilterArgument
 import com.susu.feature.received.received.ReceivedRoute
 import com.susu.feature.received.search.LedgerSearchRoute
 import kotlinx.serialization.json.Json
@@ -38,8 +39,8 @@ fun NavController.navigateLedgerEdit(ledger: Ledger) {
     navigate(ReceivedRoute.ledgerEditRoute(Json.encodeToUri(ledger)))
 }
 
-fun NavController.navigateLedgerFilter() {
-    navigate(ReceivedRoute.ledgerFilterRoute)
+fun NavController.navigateLedgerFilter(filter: FilterArgument) {
+    navigate(ReceivedRoute.ledgerFilterRoute(Json.encodeToUri(filter)))
 }
 
 fun NavController.navigateLedgerAdd() {
@@ -64,9 +65,10 @@ fun NavGraphBuilder.receivedNavGraph(
     popBackStack: () -> Unit,
     popBackStackWithLedger: (String) -> Unit,
     popBackStackWithDeleteLedgerId: (Int) -> Unit,
+    popBackStackWithFilter: (String) -> Unit,
     navigateLedgerSearch: () -> Unit,
     navigateLedgerEdit: (Ledger) -> Unit,
-    navigateLedgerFilter: () -> Unit,
+    navigateLedgerFilter: (FilterArgument) -> Unit,
     navigateLedgerAdd: () -> Unit,
     navigateEnvelopAdd: (String) -> Unit,
     navigateEnvelopeDetail: () -> Unit,
@@ -78,9 +80,11 @@ fun NavGraphBuilder.receivedNavGraph(
     composable(route = ReceivedRoute.route) { navBackStackEntry ->
         val ledger = navBackStackEntry.savedStateHandle.get<String>(ReceivedRoute.LEDGER_ARGUMENT_NAME)
         val toDeleteLedgerId = navBackStackEntry.savedStateHandle.get<Int>(ReceivedRoute.LEDGER_ID_ARGUMENT_NAME) ?: -1
+        val filter = navBackStackEntry.savedStateHandle.get<String>(ReceivedRoute.FILTER_ARGUMENT_NAME)
         ReceivedRoute(
             ledger = ledger,
             toDeleteLedgerId = toDeleteLedgerId,
+            filter = filter,
             padding = padding,
             navigateLedgerDetail = navigateLedgerDetail,
             navigateLedgerSearch = navigateLedgerSearch,
@@ -127,9 +131,13 @@ fun NavGraphBuilder.receivedNavGraph(
     }
 
     composable(
-        route = ReceivedRoute.ledgerFilterRoute,
+        route = ReceivedRoute.ledgerFilterRoute("{${ReceivedRoute.FILTER_ARGUMENT_NAME}}"),
     ) {
-        LedgerFilterRoute(popBackStack = popBackStack)
+        LedgerFilterRoute(
+            popBackStack = popBackStack,
+            popBackStackWithFilter = popBackStackWithFilter,
+            handleException = handleException,
+        )
     }
 
     composable(
@@ -178,12 +186,13 @@ object ReceivedRoute {
     const val LEDGER_ID_ARGUMENT_NAME = "ledger-id"
     const val CATEGORY_ARGUMENT_NAME = "category-name"
 
+    const val FILTER_ARGUMENT_NAME = "filter"
     fun ledgerDetailRoute(ledger: String) = "ledger-detail/$ledger"
     fun ledgerEditRoute(ledger: String) = "ledger-edit/$ledger"
+    fun ledgerFilterRoute(filter: String) = "ledger-filter/$filter"
     const val ledgerSearchRoute = "ledger-search"
 
     const val ledgerAddRoute = "ledger-add" // TODO 파라미터 넘기는 방식으로 수정해야함.
-    const val ledgerFilterRoute = "ledger-filter" // TODO 파라미터 넘기는 방식으로 수정해야함.
 
     fun envelopeAddRoute(categoryName: String) = "envelope-add/$categoryName"
     const val envelopeDetailRoute = "envelope-detail" // TODO 파라미터 넘기는 방식으로 수정해야함.

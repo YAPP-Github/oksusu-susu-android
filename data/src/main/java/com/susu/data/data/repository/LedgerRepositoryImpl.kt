@@ -14,14 +14,14 @@ class LedgerRepositoryImpl @Inject constructor(
 ) : LedgerRepository {
     override suspend fun getLedgerList(
         title: String?,
-        categoryId: Long?,
+        categoryIdList: List<Int>?,
         fromStartAt: LocalDateTime,
         toEndAt: LocalDateTime,
         page: Int?,
         sort: String?,
     ): List<Ledger> = ledgerService.getLedgerList(
         title = title,
-        categoryId = categoryId,
+        categoryIdList = categoryIdList,
         fromStartAt = fromStartAt.toKotlinLocalDateTime(),
         toEndAt = toEndAt.toKotlinLocalDateTime(),
         page = page,

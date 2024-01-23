@@ -3,51 +3,98 @@ package com.susu.feature.received.ledgerfilter
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.Icon
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.susu.core.designsystem.component.appbar.SusuDefaultAppBar
 import com.susu.core.designsystem.component.appbar.icon.BackIcon
+import com.susu.core.designsystem.component.bottomsheet.datepicker.SusuLimitDatePickerBottomSheet
 import com.susu.core.designsystem.component.button.FilledButtonColor
 import com.susu.core.designsystem.component.button.LinedButtonColor
 import com.susu.core.designsystem.component.button.RefreshButton
+import com.susu.core.designsystem.component.button.SelectedFilterButton
 import com.susu.core.designsystem.component.button.SmallButtonStyle
 import com.susu.core.designsystem.component.button.SusuFilledButton
 import com.susu.core.designsystem.component.button.SusuLinedButton
 import com.susu.core.designsystem.component.button.XSmallButtonStyle
-import com.susu.core.designsystem.theme.Gray10
 import com.susu.core.designsystem.theme.SusuTheme
-import com.susu.core.ui.extension.susuClickable
+import com.susu.core.model.Category
+import com.susu.core.ui.extension.collectWithLifecycle
+import com.susu.core.ui.util.currentDate
+import com.susu.core.ui.util.minDate
+import com.susu.core.ui.util.to_yyyy_dot_MM_dot_dd
 import com.susu.feature.received.R
 import com.susu.feature.received.ledgerfilter.component.DateText
 
 @Composable
 fun LedgerFilterRoute(
-    @Suppress("unused")
+    viewModel: LedgerFilterViewModel = hiltViewModel(),
     popBackStack: () -> Unit,
+    popBackStackWithFilter: (String) -> Unit,
+    handleException: (Throwable, () -> Unit) -> Unit,
 ) {
+    val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
+    viewModel.sideEffect.collectWithLifecycle { sideEffect ->
+        when (sideEffect) {
+            is LedgerFilterSideEffect.HandleException -> handleException(sideEffect.throwable, sideEffect.retry)
+            LedgerFilterSideEffect.PopBackStack -> popBackStack()
+            is LedgerFilterSideEffect.PopBackStackWithFilter -> popBackStackWithFilter(sideEffect.filter)
+        }
+    }
+
+    LaunchedEffect(key1 = Unit) {
+        viewModel.initData()
+    }
+
     LedgerFilterScreen(
-        onClickBackIcon = popBackStack,
+        uiState = uiState,
+        onClickBackIcon = viewModel::popBackStack,
+        onClickApplyFilterButton = viewModel::popBackStackWithFilter,
+        onStartDateItemSelected = viewModel::updateStartDate,
+        onClickStartDateText = viewModel::showStartDateBottomSheet,
+        onDismissStartDateBottomSheet = viewModel::hideStartDateBottomSheet,
+        onEndDateItemSelected = viewModel::updateEndDate,
+        onClickEndDateText = viewModel::showEndDateBottomSheet,
+        onDismissEndDateBottomSheet = viewModel::hideEndDateBottomSheet,
+        onClickCategory = viewModel::selectCategory,
+        onClickCategoryClose = viewModel::unselectCategory,
+        onClickDateClose = viewModel::clearDate,
+        onClickRefreshButton = viewModel::clearFilter,
     )
 }
 
+@OptIn(ExperimentalLayoutApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun LedgerFilterScreen(
+    uiState: LedgerFilterState = LedgerFilterState(),
     onClickBackIcon: () -> Unit = {},
+    onClickApplyFilterButton: () -> Unit = {},
+    onStartDateItemSelected: (Int, Int, Int) -> Unit = { _, _, _ -> },
+    onClickStartDateText: () -> Unit = {},
+    onDismissStartDateBottomSheet: () -> Unit = {},
+    onEndDateItemSelected: (Int, Int, Int) -> Unit = { _, _, _ -> },
+    onClickEndDateText: () -> Unit = {},
+    onDismissEndDateBottomSheet: () -> Unit = {},
+    onClickCategory: (Category) -> Unit = {},
+    onClickCategoryClose: (Category) -> Unit = {},
+    onClickDateClose: () -> Unit = {},
+    onClickRefreshButton: () -> Unit = {},
 ) {
     Column(
         modifier = Modifier
@@ -74,33 +121,15 @@ fun LedgerFilterScreen(
             Row(
                 horizontalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxs),
             ) {
-                SusuLinedButton(
-                    color = LinedButtonColor.Black,
-                    style = XSmallButtonStyle.height28,
-                    isActive = false,
-                    text = "결혼식",
-                )
-
-                SusuLinedButton(
-                    color = LinedButtonColor.Black,
-                    style = XSmallButtonStyle.height28,
-                    isActive = false,
-                    text = "돌잔치",
-                )
-
-                SusuLinedButton(
-                    color = LinedButtonColor.Black,
-                    style = XSmallButtonStyle.height28,
-                    isActive = false,
-                    text = "장례식",
-                )
-
-                SusuLinedButton(
-                    color = LinedButtonColor.Black,
-                    style = XSmallButtonStyle.height28,
-                    isActive = true,
-                    text = "생일 기념일",
-                )
+                uiState.categoryConfig.forEach { category ->
+                    SusuLinedButton(
+                        color = LinedButtonColor.Black,
+                        style = XSmallButtonStyle.height28,
+                        isActive = category in uiState.selectedCategoryList,
+                        text = category.name,
+                        onClick = { onClickCategory(category) },
+                    )
+                }
             }
 
             Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_xxxxxxl))
@@ -113,7 +142,10 @@ fun LedgerFilterScreen(
             Row(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                DateText()
+                DateText(
+                    date = uiState.startAt,
+                    onClick = onClickStartDateText,
+                )
 
                 Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_xxxxs))
 
@@ -124,7 +156,10 @@ fun LedgerFilterScreen(
 
                 Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_m))
 
-                DateText()
+                DateText(
+                    date = uiState.endAt,
+                    onClick = onClickEndDateText,
+                )
 
                 Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_xxxxs))
 
@@ -139,29 +174,29 @@ fun LedgerFilterScreen(
             Column(
                 verticalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxs),
             ) {
-                SusuFilledButton(
-                    color = FilledButtonColor.Orange,
-                    style = XSmallButtonStyle.height28,
-                    text = "결혼식",
-                    isClickable = false,
-                    rightIcon = {
-                        Icon(
-                            modifier = Modifier
-                                .clip(CircleShape)
-                                .size(12.dp)
-                                .susuClickable { /* TODO */ },
-                            painter = painterResource(id = com.susu.core.ui.R.drawable.ic_close),
-                            contentDescription = stringResource(id = com.susu.core.ui.R.string.content_description_close_icon),
-                            tint = Gray10,
+                FlowRow(
+                    verticalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxs),
+                    horizontalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxs),
+                ) {
+                    uiState.selectedCategoryList.forEach { category ->
+                        SelectedFilterButton(
+                            name = category.name,
+                        ) { onClickCategoryClose(category) }
+                    }
+
+                    if (uiState.startAt != null || uiState.endAt != null) {
+                        SelectedFilterButton(
+                            name = "${uiState.startAt?.to_yyyy_dot_MM_dot_dd() ?: ""}~${uiState.endAt?.to_yyyy_dot_MM_dot_dd() ?: ""}",
+                            onClickCloseIcon = onClickDateClose,
                         )
-                    },
-                )
+                    }
+                }
 
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_m),
                 ) {
-                    RefreshButton()
+                    RefreshButton(onClick = onClickRefreshButton)
 
                     SusuFilledButton(
                         modifier = Modifier.fillMaxWidth(),
@@ -169,10 +204,41 @@ fun LedgerFilterScreen(
                         style = SmallButtonStyle.height48,
                         isActive = true,
                         text = stringResource(com.susu.core.ui.R.string.word_apply_filter),
+                        onClick = onClickApplyFilterButton,
                     )
                 }
             }
         }
+    }
+
+    if (uiState.showStartDateBottomSheet) {
+        SusuLimitDatePickerBottomSheet(
+            initialYear = uiState.startAt?.year ?: currentDate.year,
+            initialMonth = uiState.startAt?.monthValue ?: currentDate.monthValue,
+            initialDay = uiState.startAt?.dayOfMonth ?: currentDate.dayOfMonth,
+            initialCriteriaYear = uiState.endAt?.year,
+            initialCriteriaMonth = uiState.endAt?.monthValue,
+            initialCriteriaDay = uiState.endAt?.dayOfMonth,
+            afterDate = false,
+            maximumContainerHeight = 346.dp,
+            onDismissRequest = { _, _, _ -> onDismissStartDateBottomSheet() },
+            onItemSelected = onStartDateItemSelected,
+        )
+    }
+
+    if (uiState.showEndDateBottomSheet) {
+        SusuLimitDatePickerBottomSheet(
+            initialYear = uiState.endAt?.year ?: currentDate.year,
+            initialMonth = uiState.endAt?.monthValue ?: currentDate.monthValue,
+            initialDay = uiState.endAt?.dayOfMonth ?: currentDate.dayOfMonth,
+            initialCriteriaYear = uiState.startAt?.year ?: minDate.year,
+            initialCriteriaMonth = uiState.startAt?.monthValue ?: minDate.monthValue,
+            initialCriteriaDay = uiState.startAt?.dayOfMonth ?: minDate.dayOfMonth,
+            afterDate = true,
+            maximumContainerHeight = 346.dp,
+            onDismissRequest = { _, _, _ -> onDismissEndDateBottomSheet() },
+            onItemSelected = onEndDateItemSelected,
+        )
     }
 }
 
