@@ -35,19 +35,6 @@ import com.susu.feature.envelopeadd.content.RelationshipContent
 import com.susu.feature.envelopeadd.content.VisitedContent
 import com.susu.feature.sent.R
 
-enum class EnvelopeAddStep {
-    MONEY,
-    NAME,
-    RELATIONSHIP,
-    EVENT,
-    DATE,
-    MORE,
-    VISITED,
-    PRESENT,
-    PHONE,
-    MEMO,
-}
-
 @Composable
 fun SentEnvelopeAddRoute(
     viewModel: EnvelopeAddViewModel = hiltViewModel(),

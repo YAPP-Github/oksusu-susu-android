@@ -1,5 +1,6 @@
 package com.susu.feature.envelopeadd
 
+import com.susu.core.model.RelationShip
 import com.susu.core.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -7,12 +8,22 @@ import javax.inject.Inject
 @HiltViewModel
 class EnvelopeAddViewModel @Inject constructor() : BaseViewModel<EnvelopeAddState, EnvelopeAddEffect>(EnvelopeAddState()) {
 
+    private var money: Long = 0
+    private var name: String = ""
+    private var relationShip: RelationShip? = null
+    private var categoryId: Int? = null
+    private var customCategory: String? = null
+    private var hasVisited: Boolean? = null
+    private var present: String? = null
+    private var phoneNumber: String? = null
+    private var memo: String? = null
+
     fun goNextStep() {
         when (uiState.value.currentStep) {
             EnvelopeAddStep.MONEY -> intent { copy(currentStep = EnvelopeAddStep.NAME) }
             EnvelopeAddStep.NAME -> {
                 intent {
-                    if (uiState.value.friendId == null) {
+                    if (relationShip == null) {
                         copy(currentStep = EnvelopeAddStep.RELATIONSHIP)
                     } else {
                         copy(currentStep = EnvelopeAddStep.EVENT)
@@ -35,7 +46,7 @@ class EnvelopeAddViewModel @Inject constructor() : BaseViewModel<EnvelopeAddStat
             EnvelopeAddStep.RELATIONSHIP -> intent { copy(currentStep = EnvelopeAddStep.NAME) }
             EnvelopeAddStep.EVENT -> {
                 intent {
-                    if (uiState.value.friendId == null) {
+                    if (relationShip == null) {
                         copy(currentStep = EnvelopeAddStep.RELATIONSHIP)
                     } else {
                         copy(currentStep = EnvelopeAddStep.NAME)
@@ -48,5 +59,4 @@ class EnvelopeAddViewModel @Inject constructor() : BaseViewModel<EnvelopeAddStat
             else -> intent { copy(currentStep = EnvelopeAddStep.MORE) }
         }
     }
-
 }
