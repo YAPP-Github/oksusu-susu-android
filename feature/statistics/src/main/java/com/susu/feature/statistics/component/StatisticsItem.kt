@@ -18,12 +18,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.susu.core.designsystem.theme.Gray10
 import com.susu.core.designsystem.theme.Gray100
+import com.susu.core.designsystem.theme.Gray40
 import com.susu.core.designsystem.theme.Gray50
 import com.susu.core.designsystem.theme.Gray60
 import com.susu.core.designsystem.theme.Gray80
 import com.susu.core.designsystem.theme.Orange60
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.ui.extension.toMoneyFormat
+import com.susu.feature.statistics.R
 
 @Composable
 fun StatisticsVerticalItem(
@@ -31,6 +33,7 @@ fun StatisticsVerticalItem(
     content: String,
     description: String,
     modifier: Modifier = Modifier,
+    isActive: Boolean = true,
 ) {
     Column(
         modifier = modifier
@@ -44,18 +47,33 @@ fun StatisticsVerticalItem(
             color = Gray100,
         )
         Spacer(modifier = Modifier.height(SusuTheme.spacing.spacing_xxs))
-        Text(
-            modifier = Modifier.align(Alignment.CenterHorizontally),
-            text = content,
-            style = SusuTheme.typography.title_l,
-            color = Orange60,
-        )
-        Text(
-            modifier = Modifier.align(Alignment.CenterHorizontally),
-            text = description,
-            style = SusuTheme.typography.title_xxxs,
-            color = Gray60,
-        )
+        if (isActive) {
+            Text(
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+                text = content,
+                style = SusuTheme.typography.title_l,
+                color = Orange60,
+            )
+            Text(
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+                text = description,
+                style = SusuTheme.typography.title_xxxs,
+                color = Gray60,
+            )
+        } else {
+            Text(
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+                text = stringResource(id = R.string.word_unknown),
+                style = SusuTheme.typography.title_l,
+                color = Gray40,
+            )
+            Text(
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+                text = stringResource(R.string.word_unknown_count),
+                style = SusuTheme.typography.title_xxxs,
+                color = Gray40,
+            )
+        }
     }
 }
 
@@ -65,6 +83,7 @@ fun StatisticsHorizontalItem(
     name: String,
     money: Int,
     modifier: Modifier = Modifier,
+    isActive: Boolean = true,
 ) {
     Column(
         modifier = modifier
@@ -83,12 +102,21 @@ fun StatisticsHorizontalItem(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
-            Text(text = name, style = SusuTheme.typography.title_s, color = Gray80)
-            Text(
-                text = stringResource(id = com.susu.core.ui.R.string.money_unit_format, money.toMoneyFormat()),
-                style = SusuTheme.typography.title_s,
-                color = Gray100,
-            )
+            if (isActive) {
+                Text(text = name, style = SusuTheme.typography.title_s, color = Gray80)
+                Text(
+                    text = stringResource(id = com.susu.core.ui.R.string.money_unit_format, money.toMoneyFormat()),
+                    style = SusuTheme.typography.title_s,
+                    color = Gray100,
+                )
+            } else {
+                Text(text = stringResource(id = R.string.word_unknown), style = SusuTheme.typography.title_s, color = Gray40)
+                Text(
+                    text = stringResource(id = com.susu.core.ui.R.string.money_unit_format, stringResource(id = R.string.word_unknown)),
+                    style = SusuTheme.typography.title_s,
+                    color = Gray40,
+                )
+            }
         }
     }
 }
@@ -100,6 +128,8 @@ fun StatisticsItemPreview() {
         Column {
             StatisticsVerticalItem(title = "자주 개발하는 시간", content = "밤", description = "낮에 좀 해라")
             StatisticsHorizontalItem(title = "이번달에 허투루 쓴 돈", name = "배달음식", money = 60000)
+            StatisticsVerticalItem(title = "자주 개발하는 시간", content = "밤", description = "낮에 좀 해라", isActive = false)
+            StatisticsHorizontalItem(title = "이번달에 허투루 쓴 돈", name = "배달음식", money = 60000, isActive = false)
         }
     }
 }
