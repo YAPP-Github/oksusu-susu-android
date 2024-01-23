@@ -2,5 +2,6 @@
 <resources>
     <string name="statistics_recent_8_total_money">최근 8개월 간 쓴 금액</string>
     <string name="statistics_total_man_format">총 %s만원</string>
-    <string name="word_unkown">\?</string>
+    <string name="word_unknown">\?</string>
+    <string name="word_unknown_count">총 ?번</string>
 </resources>

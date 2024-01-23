@@ -81,7 +81,7 @@ fun RecentSpentGraph(
                 )
             } else {
                 Text(
-                    text = stringResource(R.string.statistics_total_man_format, stringResource(R.string.word_unkown)),
+                    text = stringResource(R.string.statistics_total_man_format, stringResource(R.string.word_unknown)),
                     style = SusuTheme.typography.title_xs,
                     color = Gray40,
                 )
