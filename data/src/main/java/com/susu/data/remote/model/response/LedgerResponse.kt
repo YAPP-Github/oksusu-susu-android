@@ -30,6 +30,7 @@ data class CategoryInfo(
     val seq: Int,
     val category: String,
     val customCategory: String? = null,
+    val style: String,
 )
 
 internal fun LedgerResponse.toModel() = Ledger(
@@ -48,4 +49,5 @@ internal fun CategoryInfo.toModel() = Category(
     seq = seq,
     name = category,
     customCategory = customCategory,
+    style = style,
 )
