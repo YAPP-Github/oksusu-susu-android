@@ -1,7 +1,7 @@
 package com.susu.domain.repository
 
 import com.susu.core.model.Envelope
-import com.susu.core.model.RelationShip
+import com.susu.core.model.Relationship
 
 interface EnvelopesRepository {
     suspend fun getEnvelopesList(
@@ -13,5 +13,5 @@ interface EnvelopesRepository {
         sort: String?,
     ): List<Envelope>
 
-    suspend fun getRelationShipConfigList(): List<RelationShip>
+    suspend fun getRelationShipConfigList(): List<Relationship>
 }

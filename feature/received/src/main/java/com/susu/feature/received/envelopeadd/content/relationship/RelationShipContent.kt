@@ -2,7 +2,6 @@ package com.susu.feature.received.envelopeadd.content.relationship
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,11 +12,8 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -35,19 +31,16 @@ import com.susu.core.designsystem.component.textfieldbutton.TextFieldButtonColor
 import com.susu.core.designsystem.component.textfieldbutton.style.MediumTextFieldButtonStyle
 import com.susu.core.designsystem.theme.Gray100
 import com.susu.core.designsystem.theme.SusuTheme
-import com.susu.core.model.Category
-import com.susu.core.model.RelationShip
+import com.susu.core.model.Relationship
 import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.feature.received.R
-import com.susu.feature.received.ledgeradd.content.category.CategoryContent
-import com.susu.feature.received.ledgeradd.content.category.CategorySideEffect
 import kotlinx.coroutines.android.awaitFrame
 import kotlinx.coroutines.launch
 
 @Composable
 fun RelationShipContentRoute(
     viewModel: RelationShipViewModel = hiltViewModel(),
-    updateParentSelectedRelation: (RelationShip?) -> Unit = {},
+    updateParentSelectedRelation: (Relationship?) -> Unit = {},
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
     val focusRequester = remember { FocusRequester() }
@@ -70,10 +63,10 @@ fun RelationShipContentRoute(
     }
 
     LaunchedEffect(
-        key1 = uiState.selectedRelationShip,
+        key1 = uiState.selectedRelationship,
         key2 = uiState.isSavedCustomRelationShip,
     ) {
-        snapshotFlow { uiState.selectedRelationShip }
+        snapshotFlow { uiState.selectedRelationship }
             .collect {
                 viewModel.updateParentSelectedRelationShip()
             }
@@ -96,7 +89,7 @@ fun RelationShipContentRoute(
 fun RelationShipContent(
     uiState: RelationShipState = RelationShipState(),
     focusRequester: FocusRequester = remember { FocusRequester() },
-    onClickRelationShipButton: (RelationShip) -> Unit = {},
+    onClickRelationShipButton: (Relationship) -> Unit = {},
     onClickCustomRelationShipButton: () -> Unit = {},
     onClickCustomRelationShipTextFieldCloseIcon: () -> Unit = {},
     onClickCustomRelationShipTextField: () -> Unit = {},
@@ -127,8 +120,8 @@ fun RelationShipContent(
         Column(
             verticalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxs),
         ) {
-            uiState.relationShipConfig.forEach { relationship ->
-                if (relationship == uiState.selectedRelationShip) {
+            uiState.relationshipConfig.forEach { relationship ->
+                if (relationship == uiState.selectedRelationship) {
                     SusuFilledButton(
                         color = FilledButtonColor.Orange,
                         style = MediumButtonStyle.height60,
@@ -151,12 +144,12 @@ fun RelationShipContent(
             if (uiState.showTextFieldButton) {
                 SusuTextFieldFillMaxButton(
                     color = if (uiState.isCustomRelationShipSelected) TextFieldButtonColor.Orange else TextFieldButtonColor.Black,
-                    text = uiState.customRelationShip.customRelation ?: "",
+                    text = uiState.customRelationship.customRelation ?: "",
                     onTextChange = onTextChangeCustomRelationShipTextField,
                     focusRequester = focusRequester,
                     style = MediumTextFieldButtonStyle.height60,
                     isSaved = uiState.isSavedCustomRelationShip,
-                    isFocused = uiState.customRelationShip == uiState.selectedRelationShip,
+                    isFocused = uiState.customRelationship == uiState.selectedRelationship,
                     placeholder = stringResource(com.susu.core.ui.R.string.word_input_placeholder),
                     onClickCloseIcon = onClickCustomRelationShipTextFieldCloseIcon,
                     onClickClearIcon = onClickCustomRelationShipTextFieldClearIcon,

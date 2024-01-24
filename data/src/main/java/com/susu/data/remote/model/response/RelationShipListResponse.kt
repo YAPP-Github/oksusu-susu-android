@@ -1,7 +1,6 @@
 package com.susu.data.remote.model.response
 
-import com.susu.core.model.Category
-import com.susu.core.model.RelationShip
+import com.susu.core.model.Relationship
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -17,7 +16,7 @@ data class RelationConfigShipResponse(
 
 internal fun RelationShipListResponse.toModel() = relationships.map { it.toModel() }
 
-internal fun RelationConfigShipResponse.toModel() = RelationShip(
+internal fun RelationConfigShipResponse.toModel() = Relationship(
     id = id,
     relation = relation,
 )

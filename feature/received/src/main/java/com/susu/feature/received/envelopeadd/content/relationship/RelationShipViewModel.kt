@@ -1,7 +1,7 @@
 package com.susu.feature.received.envelopeadd.content.relationship
 
 import androidx.lifecycle.viewModelScope
-import com.susu.core.model.RelationShip
+import com.susu.core.model.Relationship
 import com.susu.core.ui.base.BaseViewModel
 import com.susu.domain.usecase.envelope.GetRelationShipConfigListUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,46 +17,46 @@ class RelationShipViewModel @Inject constructor(
 ) {
     private val parentSelectedRelationShip
         get() = with(currentState) {
-            if (selectedRelationShip == customRelationShip && (customRelationShip.customRelation.isNullOrEmpty() || isSavedCustomRelationShip.not())) {
+            if (selectedRelationship == customRelationship && (customRelationship.customRelation.isNullOrEmpty() || isSavedCustomRelationShip.not())) {
                 null
             } else {
-                selectedRelationShip
+                selectedRelationship
             }
         }
 
     fun getRelationShipConfig() = viewModelScope.launch {
-        if (currentState.relationShipConfig.isNotEmpty()) return@launch
+        if (currentState.relationshipConfig.isNotEmpty()) return@launch
 
         getRelationShipConfigUseCase()
             .onSuccess {
                 intent {
                     copy(
-                        relationShipConfig = it.dropLast(1).toPersistentList(),
-                        customRelationShip = it.last(),
+                        relationshipConfig = it.dropLast(1).toPersistentList(),
+                        customRelationship = it.last(),
                     )
                 }
             }
             .onFailure { }
     }
 
-    fun selectRelationShip(relationShip: RelationShip) = intent { copy(selectedRelationShip = relationShip) }
+    fun selectRelationShip(relationShip: Relationship) = intent { copy(selectedRelationship = relationShip) }
 
     fun selectCustomRelationShip() = intent {
         postSideEffect(RelationShipSideEffect.FocusCustomRelationShip)
-        copy(selectedRelationShip = customRelationShip)
+        copy(selectedRelationship = customRelationship)
     }
 
     fun updateCustomRelationShipText(text: String) = intent {
         copy(
-            selectedRelationShip = customRelationShip.copy(customRelation = text),
-            customRelationShip = customRelationShip.copy(customRelation = text),
+            selectedRelationship = customRelationship.copy(customRelation = text),
+            customRelationship = customRelationship.copy(customRelation = text),
         )
     }
 
     fun showCustomRelationShipTextField() = intent {
         copy(
             showTextFieldButton = true,
-            selectedRelationShip = customRelationShip,
+            selectedRelationship = customRelationship,
         )
     }
 
@@ -64,8 +64,8 @@ class RelationShipViewModel @Inject constructor(
         copy(
             isSavedCustomRelationShip = false,
             showTextFieldButton = false,
-            selectedRelationShip = if (isCustomRelationShipSelected) null else selectedRelationShip,
-            customRelationShip = customRelationShip.copy(customRelation = ""),
+            selectedRelationship = if (isCustomRelationShipSelected) null else selectedRelationship,
+            customRelationship = customRelationship.copy(customRelation = ""),
         )
     }
 
@@ -75,7 +75,7 @@ class RelationShipViewModel @Inject constructor(
         )
     }
 
-    fun updateParentSelectedRelationShip(relationShip: RelationShip? = parentSelectedRelationShip) = postSideEffect(
+    fun updateParentSelectedRelationShip(relationShip: Relationship? = parentSelectedRelationShip) = postSideEffect(
         RelationShipSideEffect.UpdateParentSelectedRelationShip(relationShip),
     )
 }

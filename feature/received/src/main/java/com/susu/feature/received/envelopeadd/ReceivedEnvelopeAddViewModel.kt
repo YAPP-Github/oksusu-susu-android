@@ -1,7 +1,7 @@
 package com.susu.feature.received.envelopeadd
 
 import androidx.lifecycle.SavedStateHandle
-import com.susu.core.model.RelationShip
+import com.susu.core.model.Relationship
 import com.susu.core.ui.base.BaseViewModel
 import com.susu.feature.received.navigation.ReceivedRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,7 +17,7 @@ class ReceivedEnvelopeAddViewModel @Inject constructor(
 
     private var money: Long = 0
     private var name: String = ""
-    private var relationShip: RelationShip? = null
+    private var relationShip: Relationship? = null
     private var moreStep: List<EnvelopeAddStep> = emptyList()
     private var hasVisited: Boolean? = null
     private var present: String? = null
@@ -105,7 +105,7 @@ class ReceivedEnvelopeAddViewModel @Inject constructor(
         )
     }
 
-    fun updateSelectedRelationShip(relationShip: RelationShip?) = intent {
+    fun updateSelectedRelationShip(relationShip: Relationship?) = intent {
         this@ReceivedEnvelopeAddViewModel.relationShip = relationShip
         copy(
             buttonEnabled = relationShip != null,

@@ -24,10 +24,9 @@ import com.susu.core.designsystem.component.button.FilledButtonColor
 import com.susu.core.designsystem.component.button.MediumButtonStyle
 import com.susu.core.designsystem.component.button.SusuFilledButton
 import com.susu.core.designsystem.theme.SusuTheme
-import com.susu.core.model.RelationShip
+import com.susu.core.model.Relationship
 import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.core.ui.extension.susuDefaultAnimatedContentTransitionSpec
-import com.susu.feature.received.envelopeadd.content.memo.MemoContent
 import com.susu.feature.received.envelopeadd.content.memo.MemoContentRoute
 import com.susu.feature.received.envelopeadd.content.money.MoneyContentRoute
 import com.susu.feature.received.envelopeadd.content.more.MoreContentRoute
@@ -86,7 +85,7 @@ fun ReceivedEnvelopeAddScreen(
     onClickNext: () -> Unit = {},
     updateParentMoney: (Long) -> Unit = {},
     updateParentName: (String) -> Unit = {},
-    updateParentSelectedRelationShip: (RelationShip?) -> Unit = {},
+    updateParentSelectedRelationShip: (Relationship?) -> Unit = {},
     updateParentMoreStep: (List<EnvelopeAddStep>) -> Unit = {},
     categoryName: String = "",
     updateParentVisited: (Boolean?) -> Unit = {},

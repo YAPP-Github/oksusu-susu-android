@@ -1,10 +1,8 @@
 package com.susu.feature.received.envelopeadd.content.more
 
-import com.susu.core.model.RelationShip
 import com.susu.core.ui.base.SideEffect
 import com.susu.core.ui.base.UiState
 import com.susu.feature.received.envelopeadd.EnvelopeAddStep
-import com.susu.feature.received.ledgeradd.LedgerAddStep
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
 
