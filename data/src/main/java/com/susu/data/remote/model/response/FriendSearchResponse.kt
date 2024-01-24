@@ -6,6 +6,11 @@ import kotlinx.datetime.toJavaLocalDateTime
 import kotlinx.serialization.Serializable
 
 @Serializable
+data class FriendSearchListResponse(
+    val data: List<FriendSearchResponse>,
+)
+
+@Serializable
 data class FriendSearchResponse(
     val friend: Friend,
     val relationship: Relationship,

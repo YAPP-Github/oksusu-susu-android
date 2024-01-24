@@ -24,7 +24,7 @@ class FriendRepositoryImpl @Inject constructor(
         ),
     ).getOrThrow().id
 
-    override suspend fun searchFriend(name: String): FriendSearch = friendService.searchFriend(
+    override suspend fun searchFriend(name: String): List<FriendSearch> = friendService.searchFriend(
         name = name,
-    ).getOrThrow().toModel()
+    ).getOrThrow().data.map { it.toModel() }
 }

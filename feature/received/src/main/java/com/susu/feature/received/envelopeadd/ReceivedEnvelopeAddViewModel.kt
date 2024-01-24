@@ -19,12 +19,16 @@ class ReceivedEnvelopeAddViewModel @Inject constructor(
 
     private var money: Long = 0
     private var name: String = ""
+    private var friendId: Int? = null
     private var relationShip: Relationship? = null
     private var moreStep: List<EnvelopeAddStep> = emptyList()
     private var hasVisited: Boolean? = null
     private var present: String? = null
     private var phoneNumber: String? = null
     private var memo: String? = null
+
+    private val skipRelationshipStep
+        get() = friendId != null
 
     fun goToPrevStep() = intent {
         val prevStep = when (currentStep) {
@@ -35,7 +39,10 @@ class ReceivedEnvelopeAddViewModel @Inject constructor(
 
             EnvelopeAddStep.NAME -> EnvelopeAddStep.MONEY
             EnvelopeAddStep.RELATIONSHIP -> EnvelopeAddStep.NAME
-            EnvelopeAddStep.MORE -> EnvelopeAddStep.RELATIONSHIP
+            EnvelopeAddStep.MORE -> {
+                if (skipRelationshipStep) EnvelopeAddStep.NAME
+                else EnvelopeAddStep.RELATIONSHIP
+            }
             else -> goToPrevStepInMore(currentStep)
         }
 
@@ -61,7 +68,10 @@ class ReceivedEnvelopeAddViewModel @Inject constructor(
     fun goToNextStep() = intent {
         val nextStep = when (currentStep) {
             EnvelopeAddStep.MONEY -> EnvelopeAddStep.NAME
-            EnvelopeAddStep.NAME -> EnvelopeAddStep.RELATIONSHIP
+            EnvelopeAddStep.NAME -> {
+                if (skipRelationshipStep) EnvelopeAddStep.MORE
+                else EnvelopeAddStep.RELATIONSHIP
+            }
             EnvelopeAddStep.RELATIONSHIP -> EnvelopeAddStep.MORE
             else -> goToNextStepInMore(currentStep)
         }
@@ -105,6 +115,10 @@ class ReceivedEnvelopeAddViewModel @Inject constructor(
         copy(
             buttonEnabled = name.isNotEmpty(),
         )
+    }
+
+    fun updateFriendId(friendId: Int?) {
+        this.friendId = friendId
     }
 
     fun updateSelectedRelationShip(relationShip: Relationship?) = intent {

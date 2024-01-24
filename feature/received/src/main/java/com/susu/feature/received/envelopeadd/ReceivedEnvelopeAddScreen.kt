@@ -67,6 +67,7 @@ fun ReceivedEnvelopeAddRoute(
             viewModel.updateName(name)
             friendName = name
         },
+        updateParentFriendId = viewModel::updateFriendId,
         updateParentSelectedRelationShip = viewModel::updateSelectedRelationShip,
         updateParentMoreStep = viewModel::updateMoreStep,
         categoryName = viewModel.categoryName,
@@ -85,6 +86,7 @@ fun ReceivedEnvelopeAddScreen(
     onClickNext: () -> Unit = {},
     updateParentMoney: (Long) -> Unit = {},
     updateParentName: (String) -> Unit = {},
+    updateParentFriendId: (Int?) -> Unit = {},
     updateParentSelectedRelationShip: (Relationship?) -> Unit = {},
     updateParentMoreStep: (List<EnvelopeAddStep>) -> Unit = {},
     categoryName: String = "",
@@ -126,6 +128,7 @@ fun ReceivedEnvelopeAddScreen(
 
                 EnvelopeAddStep.NAME -> NameContentRoute(
                     updateParentName = updateParentName,
+                    updateParentFriendId = updateParentFriendId,
                 )
                 EnvelopeAddStep.RELATIONSHIP -> RelationShipContentRoute(
                     updateParentSelectedRelation = updateParentSelectedRelationShip,
