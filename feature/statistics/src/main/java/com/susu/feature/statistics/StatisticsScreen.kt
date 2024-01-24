@@ -13,6 +13,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -35,16 +36,17 @@ fun StatisticsRoute(
     handleException: (Throwable, () -> Unit) -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val context = LocalContext.current
 
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
             is StatisticsEffect.HandleException -> handleException(sideEffect.throwable, sideEffect.retry)
             StatisticsEffect.ShowAdditionalInfoDialog -> onShowDialog(
                 DialogToken(
-                    title = "통계를 위한 정보를 알려주세요",
-                    text = "나의 평균 거래 상황을 분석하기 위해\n필요한 정보가 있어요",
-                    dismissText = "닫기",
-                    confirmText = "정보 입력하기",
+                    title = context.getString(R.string.statistics_dialog_title),
+                    text = context.getString(R.string.statistics_dialog_description),
+                    dismissText = context.getString(com.susu.core.ui.R.string.word_close),
+                    confirmText = context.getString(R.string.statistics_dialog_confirm),
                     onConfirmRequest = navigateToMyInfo,
                 ),
             )
@@ -57,6 +59,7 @@ fun StatisticsRoute(
 
     StatisticsScreen(
         uiState = uiState,
+        onTabSelected = viewModel::selectStatisticsTab,
     )
 }
 
@@ -74,7 +77,6 @@ fun StatisticsScreen(
             verticalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxs),
         ) {
             SusuDefaultAppBar(
-                modifier = Modifier.padding(horizontal = SusuTheme.spacing.spacing_xs),
                 leftIcon = { LogoIcon() },
                 title = stringResource(R.string.statistics_word),
             )
