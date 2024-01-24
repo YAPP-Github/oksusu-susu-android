@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,6 +22,7 @@ import com.susu.core.designsystem.component.appbar.SusuDefaultAppBar
 import com.susu.core.designsystem.component.appbar.icon.LogoIcon
 import com.susu.core.designsystem.component.screen.LoadingScreen
 import com.susu.core.designsystem.theme.SusuTheme
+import com.susu.core.ui.DialogToken
 import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.feature.statistics.component.StatisticsTab
 import com.susu.feature.statistics.content.MyStatisticsRoute
@@ -29,13 +31,28 @@ import com.susu.feature.statistics.content.MyStatisticsRoute
 fun StatisticsRoute(
     viewModel: StatisticsViewModel = hiltViewModel(),
     navigateToMyInfo: () -> Unit,
+    onShowDialog: (DialogToken) -> Unit,
+    handleException: (Throwable, () -> Unit) -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
-            StatisticsEffect.NavigateToMyInfo -> navigateToMyInfo()
+            is StatisticsEffect.HandleException -> handleException(sideEffect.throwable, sideEffect.retry)
+            StatisticsEffect.ShowAdditionalInfoDialog -> onShowDialog(
+                DialogToken(
+                    title = "통계를 위한 정보를 알려주세요",
+                    text = "나의 평균 거래 상황을 분석하기 위해\n필요한 정보가 있어요",
+                    dismissText = "닫기",
+                    confirmText = "정보 입력하기",
+                    onConfirmRequest = navigateToMyInfo,
+                ),
+            )
         }
+    }
+
+    LaunchedEffect(key1 = Unit) {
+        viewModel.checkAdditionalInfo()
     }
 
     StatisticsScreen(
@@ -46,6 +63,7 @@ fun StatisticsRoute(
 @Composable
 fun StatisticsScreen(
     uiState: StatisticsState = StatisticsState(),
+    onTabSelected: (StatisticsTab) -> Unit = {},
 ) {
     Box(
         modifier = Modifier.fillMaxSize()
@@ -64,8 +82,8 @@ fun StatisticsScreen(
                 modifier = Modifier
                     .height(52.dp)
                     .padding(vertical = SusuTheme.spacing.spacing_xxs),
-                selectedTab = StatisticsTab.MY,
-                onTabSelect = {},
+                selectedTab = uiState.currentTab,
+                onTabSelect = onTabSelected,
             )
             when (uiState.currentTab) {
                 StatisticsTab.MY -> MyStatisticsRoute(

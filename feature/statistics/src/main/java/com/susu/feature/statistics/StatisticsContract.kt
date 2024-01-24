@@ -11,10 +11,11 @@ enum class StatisticsTab(@StringRes val stringId: Int) {
 
 data class StatisticsState(
     val isLoading: Boolean = false,
-    val isBlind: Boolean = false,
+    val isBlind: Boolean = true,
     val currentTab: StatisticsTab = StatisticsTab.MY,
 ) : UiState
 
 sealed interface StatisticsEffect : SideEffect {
-    data object NavigateToMyInfo : StatisticsEffect
+    data object ShowAdditionalInfoDialog : StatisticsEffect
+    data class HandleException(val throwable: Throwable, val retry: () -> Unit) : StatisticsEffect
 }

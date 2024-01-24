@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.susu.core.designsystem.theme.Blue60
 import com.susu.core.designsystem.theme.Gray10
 import com.susu.core.designsystem.theme.Gray100
 import com.susu.core.designsystem.theme.Gray40
@@ -47,6 +48,7 @@ fun MyStatisticsContent(
         verticalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxs),
     ) {
         RecentSpentGraph(
+            isActive = !isBlind,
             spentData = spentData, // TODO: 서버 값으로 교체
         )
         Row(
@@ -57,11 +59,19 @@ fun MyStatisticsContent(
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             Text(text = stringResource(R.string.statistics_most_spent_month), style = SusuTheme.typography.title_xs, color = Gray100)
-            Text(
-                text = stringResource(R.string.word_month_format, stringResource(id = R.string.word_unknown)),
-                style = SusuTheme.typography.title_xs,
-                color = Gray40,
-            )
+            if (isBlind) {
+                Text(
+                    text = stringResource(R.string.word_month_format, stringResource(id = R.string.word_unknown)),
+                    style = SusuTheme.typography.title_xs,
+                    color = Gray40,
+                )
+            } else {
+                Text(
+                    text = stringResource(R.string.word_month_format, "3"),
+                    style = SusuTheme.typography.title_xs,
+                    color = Blue60,
+                )
+            }
         }
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -71,6 +81,7 @@ fun MyStatisticsContent(
                 title = stringResource(R.string.statistics_most_susu_relationship),
                 content = "",
                 description = "",
+                isActive = !isBlind,
             )
             Spacer(modifier = Modifier.width(SusuTheme.spacing.spacing_xxs))
             StatisticsVerticalItem(
@@ -78,17 +89,20 @@ fun MyStatisticsContent(
                 title = stringResource(R.string.statistics_most_susu_event),
                 content = "",
                 description = "",
+                isActive = !isBlind,
             )
         }
         StatisticsHorizontalItem(
             title = stringResource(R.string.statistics_most_received_money),
             name = "김수수",
             money = 0,
+            isActive = !isBlind,
         )
         StatisticsHorizontalItem(
             title = stringResource(R.string.statistics_most_sent_money),
             name = "양수수",
             money = 0,
+            isActive = !isBlind,
         )
     }
 }

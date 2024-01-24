@@ -4,6 +4,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
+import com.susu.core.ui.DialogToken
 import com.susu.feature.statistics.StatisticsRoute
 
 fun NavController.navigateStatistics(navOptions: NavOptions) {
@@ -12,10 +13,14 @@ fun NavController.navigateStatistics(navOptions: NavOptions) {
 
 fun NavGraphBuilder.statisticsNavGraph(
     navigateToMyInfo: () -> Unit,
+    onShowDialog: (DialogToken) -> Unit,
+    handleException: (Throwable, () -> Unit) -> Unit,
 ) {
     composable(route = StatisticsRoute.route) {
         StatisticsRoute(
-            navigateToMyInfo = navigateToMyInfo
+            navigateToMyInfo = navigateToMyInfo,
+            onShowDialog = onShowDialog,
+            handleException = handleException,
         )
     }
 }

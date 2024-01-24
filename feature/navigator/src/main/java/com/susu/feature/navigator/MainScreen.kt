@@ -123,6 +123,8 @@ internal fun MainScreen(
 
                 statisticsNavGraph(
                     navigateToMyInfo = navigator::navigateMyPageInfo,
+                    onShowDialog = viewModel::onShowDialog,
+                    handleException = viewModel::handleException,
                 )
 
                 communityNavGraph(
