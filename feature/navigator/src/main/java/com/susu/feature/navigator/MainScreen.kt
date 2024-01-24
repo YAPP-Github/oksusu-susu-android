@@ -127,6 +127,11 @@ internal fun MainScreen(
 
                 communityNavGraph(
                     padding = innerPadding,
+                    navigateVoteAdd = navigator::navigateVoteAdd,
+                    popBackStack = navigator::popBackStackIfNotHome,
+                    onShowSnackbar = viewModel::onShowSnackbar,
+                    onShowDialog = viewModel::onShowDialog,
+                    handleException = viewModel::handleException,
                 )
 
                 myPageNavGraph(

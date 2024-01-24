@@ -41,4 +41,5 @@
     <string name="word_no">아니요</string>
     <string name="word_phone_number">연락처</string>
     <string name="word_memo">메모</string>
+    <string name="word_register">등록</string>
 </resources>

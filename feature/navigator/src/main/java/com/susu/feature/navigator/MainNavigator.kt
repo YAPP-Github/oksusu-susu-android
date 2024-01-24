@@ -10,7 +10,9 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.model.Ledger
+import com.susu.feature.community.navigation.CommunityRoute
 import com.susu.feature.community.navigation.navigateCommunity
+import com.susu.feature.community.navigation.navigateVoteAdd
 import com.susu.feature.loginsignup.navigation.LoginSignupRoute
 import com.susu.feature.mypage.navigation.navigateMyPage
 import com.susu.feature.mypage.navigation.navigateMyPageInfo
@@ -58,6 +60,7 @@ internal class MainNavigator(
                 SentRoute.sentEnvelopeRoute,
                 SentRoute.sentEnvelopeDetailRoute,
                 SentRoute.sentEnvelopeEditRoute,
+                CommunityRoute.voteAddRoute,
             ),
             -> SusuTheme.colorScheme.background10
 
@@ -160,6 +163,10 @@ internal class MainNavigator(
 
     fun navigateReceivedEnvelopeEdit() {
         navController.navigateReceivedEnvelopeEdit()
+    }
+
+    fun navigateVoteAdd() {
+        navController.navigateVoteAdd()
     }
 
     fun popBackStackIfNotHome() {
