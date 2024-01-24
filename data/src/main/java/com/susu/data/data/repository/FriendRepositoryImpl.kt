@@ -1,13 +1,9 @@
 package com.susu.data.data.repository
 
-import com.susu.core.model.Envelope
 import com.susu.core.model.FriendSearch
-import com.susu.core.model.Relationship
-import com.susu.data.remote.api.EnvelopesService
 import com.susu.data.remote.api.FriendService
 import com.susu.data.remote.model.request.FriendRequest
 import com.susu.data.remote.model.response.toModel
-import com.susu.domain.repository.EnvelopesRepository
 import com.susu.domain.repository.FriendRepository
 import javax.inject.Inject
 
@@ -19,7 +15,7 @@ class FriendRepositoryImpl @Inject constructor(
         phoneNumber: String?,
         relationshipId: Int,
         customRelation: String?,
-    ): Int = friendService.createFriend(
+    ): Long = friendService.createFriend(
         FriendRequest(
             name = name,
             phoneNumber = phoneNumber,

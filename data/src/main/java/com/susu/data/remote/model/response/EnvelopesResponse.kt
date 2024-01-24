@@ -1,6 +1,6 @@
 package com.susu.data.remote.model.response
 
-import com.susu.core.model.Envelope
+import com.susu.core.model.EnvelopeStatics
 import com.susu.core.model.Friend
 import kotlinx.serialization.Serializable
 
@@ -31,7 +31,7 @@ internal fun FriendInfo.toModel() = Friend(
     modifiedAt = modifiedAt,
 )
 
-internal fun EnvelopesResponse.toModel() = Envelope(
+internal fun EnvelopesResponse.toModel() = EnvelopeStatics(
     friend = friend.toModel(),
     receivedAmounts = receivedAmounts,
     sentAmounts = sentAmounts,

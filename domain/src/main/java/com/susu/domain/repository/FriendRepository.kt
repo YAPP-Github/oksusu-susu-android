@@ -1,8 +1,6 @@
 package com.susu.domain.repository
 
-import com.susu.core.model.Envelope
 import com.susu.core.model.FriendSearch
-import com.susu.core.model.Relationship
 
 interface FriendRepository {
     suspend fun createFriend(
@@ -10,7 +8,7 @@ interface FriendRepository {
         phoneNumber: String? = null,
         relationshipId: Int,
         customRelation: String? = null,
-    ): Int
+    ): Long
 
     suspend fun searchFriend(
         name: String,

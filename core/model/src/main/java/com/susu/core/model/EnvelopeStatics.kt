@@ -1,6 +1,6 @@
 package com.susu.core.model
 
-data class Envelope(
+data class EnvelopeStatics(
     val friend: Friend = Friend(),
     val receivedAmounts: Int = 0,
     val sentAmounts: Int = 0,
