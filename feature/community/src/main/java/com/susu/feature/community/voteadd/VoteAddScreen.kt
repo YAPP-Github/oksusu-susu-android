@@ -73,7 +73,7 @@ fun VoteAddRoute(
     VoteAddScreen(
         uiState = uiState,
         onClickBack = viewModel::popBackStack,
-        onClickRegister = {},
+        onClickRegister = viewModel::createVote,
         onClickCategoryButton = viewModel::selectCategory,
         onTextChangeContent = viewModel::updateContent,
         onTextChangeOptionContent = viewModel::updateOptionContent,
