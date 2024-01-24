@@ -22,6 +22,7 @@
     <string name="content_description_add_button">더하기 버튼</string>
     <string name="content_description_close_icon">닫기 아이콘</string>
     <string name="word_input_yourself">직접 입력</string>
+    <string name="word_name">이름</string>
     <string name="word_gender">성별</string>
     <string name="word_male">남성</string>
     <string name="word_female">여성</string>

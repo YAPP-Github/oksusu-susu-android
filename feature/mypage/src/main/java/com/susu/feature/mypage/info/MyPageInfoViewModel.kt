@@ -50,7 +50,7 @@ class MyPageInfoViewModel @Inject constructor(
         intent {
             copy(
                 isEditing = true,
-                editName = "",
+                editName = uiState.value.userName,
                 editGender = uiState.value.userGender,
                 editBirth = uiState.value.userBirth,
             )

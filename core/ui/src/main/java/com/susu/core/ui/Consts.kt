@@ -18,6 +18,8 @@ val alignList
 const val USER_NAME_MAX_LENGTH = 10
 val nameRegex = Regex("[a-zA-Z가-힣]{0,10}")
 
+val USER_BIRTH_RANGE = 1930..2030
+
 const val INTENT_ACTION_DOWNLOAD_COMPLETE = "android.intent.action.DOWNLOAD_COMPLETE"
 
 enum class SnsProviders(

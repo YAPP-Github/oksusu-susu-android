@@ -179,6 +179,7 @@ fun SusuLimitDatePickerBottomSheet(
                             initialMonth == criteriaMonth && initialDay > criteriaDay
                         )
                 -> criteriaDay
+
                 else -> initialDay
             },
         )
@@ -334,7 +335,8 @@ fun SusuYearPickerBottomSheet(
 ) {
     val currentYear = remember { LocalDate.now().year }
     var selectedYear by remember { mutableIntStateOf(initialYear ?: currentYear) }
-    val yearList = yearRange.map { stringResource(id = R.string.word_year_format, it) }.toImmutableList()
+    val yearList =
+        (yearRange.map { stringResource(id = R.string.word_year_format, it) } + listOf(stringResource(R.string.word_not_select))).toImmutableList()
     SusuBottomSheet(
         sheetState = sheetState,
         containerHeight = minOf(maximumContainerHeight, itemHeight * numberOfDisplayedItems + 32.dp),
@@ -350,10 +352,10 @@ fun SusuYearPickerBottomSheet(
             itemHeight = itemHeight,
             numberOfDisplayedItems = numberOfDisplayedItems,
             onItemSelected = { _, item ->
-                selectedYear = item.dropLast(1).toIntOrNull() ?: currentYear
+                selectedYear = item.dropLast(1).toIntOrNull() ?: 0
                 onItemSelected(selectedYear)
             },
-            onItemClicked = { onItemClicked(it.dropLast(1).toIntOrNull() ?: currentYear) },
+            onItemClicked = { onItemClicked(it.dropLast(1).toIntOrNull() ?: 0) },
         )
     }
 }
