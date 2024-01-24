@@ -81,6 +81,7 @@ fun NavGraphBuilder.receivedNavGraph(
         val ledger = navBackStackEntry.savedStateHandle.get<String>(ReceivedRoute.LEDGER_ARGUMENT_NAME)
         val toDeleteLedgerId = navBackStackEntry.savedStateHandle.get<Int>(ReceivedRoute.LEDGER_ID_ARGUMENT_NAME) ?: -1
         val filter = navBackStackEntry.savedStateHandle.get<String>(ReceivedRoute.FILTER_ARGUMENT_NAME)
+        navBackStackEntry.savedStateHandle.set<String>(ReceivedRoute.FILTER_ARGUMENT_NAME, null)
         ReceivedRoute(
             ledger = ledger,
             toDeleteLedgerId = toDeleteLedgerId,

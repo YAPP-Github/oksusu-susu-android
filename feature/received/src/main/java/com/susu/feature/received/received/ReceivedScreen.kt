@@ -257,6 +257,7 @@ fun ReceiveScreen(
                                     title = ledger.title,
                                     money = ledger.totalAmounts,
                                     count = ledger.totalCounts,
+                                    style = ledger.category.style,
                                     onClick = { onClickLedgerCard(ledger) },
                                 )
                             }
@@ -271,6 +272,7 @@ fun ReceiveScreen(
                                 title = ledger.title,
                                 money = ledger.totalAmounts,
                                 count = ledger.totalCounts,
+                                style = ledger.category.style,
                                 onClick = { onClickLedgerCard(ledger) },
                             )
                         }

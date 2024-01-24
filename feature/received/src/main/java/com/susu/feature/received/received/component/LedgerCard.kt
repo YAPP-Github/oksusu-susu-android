@@ -24,12 +24,15 @@ import com.susu.core.ui.extension.toMoneyFormat
 @Composable
 fun LedgerCard(
     modifier: Modifier = Modifier,
-    ledgerType: String, // TODO LedgerType에 따라 Badger 색상 변경 필요
+    ledgerType: String,
+    style: String,
     title: String,
     money: Int,
     count: Int,
     onClick: () -> Unit = {},
 ) {
+    val badgeColor = BadgeColor.safeValueOf(style)
+
     Column(
         modifier = modifier
             .aspectRatio(1f)
@@ -38,7 +41,7 @@ fun LedgerCard(
             .padding(SusuTheme.spacing.spacing_m),
     ) {
         SusuBadge(
-            color = BadgeColor.Orange60,
+            color = badgeColor,
             text = ledgerType,
             padding = BadgeStyle.smallBadge,
         )
@@ -75,8 +78,9 @@ fun LedgerCardPreview() {
         LedgerCard(
             ledgerType = "결혼식",
             title = "나의 결혼식",
-            money = 4335000,
+            style = "",
             count = 164,
+            money = 10000,
         )
     }
 }
