@@ -78,6 +78,9 @@ fun SusuDatePickerBottomSheet(
                     }
                     onItemSelected(selectedYear, selectedMonth, selectedDay)
                 },
+                onItemClicked = { item ->
+                    selectedYear = item.dropLast(1).toIntOrNull() ?: currentDate.year
+                },
             )
             InfiniteColumn(
                 modifier = Modifier.width(100.dp),
@@ -95,6 +98,9 @@ fun SusuDatePickerBottomSheet(
                     }
                     onItemSelected(selectedYear, selectedMonth, selectedDay)
                 },
+                onItemClicked = { item ->
+                    selectedMonth = item.dropLast(1).toIntOrNull() ?: currentDate.monthValue
+                },
             )
             InfiniteColumn(
                 modifier = Modifier.width(100.dp),
@@ -105,6 +111,9 @@ fun SusuDatePickerBottomSheet(
                 onItemSelected = { _, item ->
                     selectedDay = item.dropLast(1).toIntOrNull() ?: 1
                     onItemSelected(selectedYear, selectedMonth, selectedDay)
+                },
+                onItemClicked = { item ->
+                    selectedMonth = item.dropLast(1).toIntOrNull() ?: 1
                 },
             )
         }
@@ -234,6 +243,9 @@ fun SusuLimitDatePickerBottomSheet(
                     selectedYear = item.dropLast(1).toIntOrNull() ?: criteriaYear
                     onItemSelected(selectedYear, selectedMonth, selectedDay)
                 },
+                onItemClicked = { item ->
+                    selectedYear = item.dropLast(1).toIntOrNull() ?: criteriaYear
+                },
             )
             if (monthRange.count() > 1) {
                 InfiniteColumn(
@@ -245,6 +257,9 @@ fun SusuLimitDatePickerBottomSheet(
                     onItemSelected = { _, item ->
                         selectedMonth = item.dropLast(1).toIntOrNull() ?: criteriaMonth
                         onItemSelected(selectedYear, selectedMonth, selectedDay)
+                    },
+                    onItemClicked = { item ->
+                        selectedMonth = item.dropLast(1).toIntOrNull() ?: criteriaMonth
                     },
                 )
             } else {
@@ -275,6 +290,9 @@ fun SusuLimitDatePickerBottomSheet(
                     onItemSelected = { _, item ->
                         selectedDay = item.dropLast(1).toIntOrNull() ?: 1
                         onItemSelected(selectedYear, selectedMonth, selectedDay)
+                    },
+                    onItemClicked = { item ->
+                        selectedDay = item.dropLast(1).toIntOrNull() ?: 1
                     },
                 )
             } else {
@@ -312,6 +330,7 @@ fun SusuYearPickerBottomSheet(
     cornerRadius: Dp = 24.dp,
     onDismissRequest: (Int) -> Unit = {},
     onItemSelected: (Int) -> Unit = {},
+    onItemClicked: (Int) -> Unit = {},
 ) {
     val currentYear = remember { LocalDate.now().year }
     var selectedYear by remember { mutableIntStateOf(initialYear ?: currentYear) }
@@ -334,6 +353,7 @@ fun SusuYearPickerBottomSheet(
                 selectedYear = item.dropLast(1).toIntOrNull() ?: currentYear
                 onItemSelected(selectedYear)
             },
+            onItemClicked = { onItemClicked(it.dropLast(1).toIntOrNull() ?: currentYear) },
         )
     }
 }
@@ -365,5 +385,14 @@ fun SusuLimitDatePickerBottomSheetPreview() {
             maximumContainerHeight = 346.dp,
             onDismissRequest = { _, _, _ -> },
         )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Preview
+@Composable
+fun SusuYearPickerBottomSheetPreview() {
+    SusuTheme {
+        SusuYearPickerBottomSheet(maximumContainerHeight = 300.dp)
     }
 }
