@@ -34,7 +34,10 @@ fun NavGraphBuilder.communityNavGraph(
     }
 
     composable(route = CommunityRoute.voteAddRoute) {
-        VoteAddRoute()
+        VoteAddRoute(
+            popBackStack = popBackStack,
+            handleException = handleException,
+        )
     }
 }
 

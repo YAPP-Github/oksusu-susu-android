@@ -42,4 +42,5 @@
     <string name="word_phone_number">연락처</string>
     <string name="word_memo">메모</string>
     <string name="word_register">등록</string>
+    <string name="word_free">자유</string>
 </resources>
