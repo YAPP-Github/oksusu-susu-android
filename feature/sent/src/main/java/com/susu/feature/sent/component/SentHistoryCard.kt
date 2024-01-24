@@ -12,6 +12,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.susu.core.designsystem.component.button.FilledButtonColor
 import com.susu.core.designsystem.component.button.SusuFilledButton
@@ -24,7 +25,7 @@ import com.susu.feature.sent.R
 @Composable
 fun SentHistoryCard(
     modifier: Modifier = Modifier,
-    historyCount: Int,
+    historyCount: Int = 3,
     onClick: () -> Unit = {},
 ) {
     Card(
@@ -50,7 +51,7 @@ fun SentHistoryCard(
                 ),
         ) {
             repeat(historyCount) {
-                SentHistoryItem(isSent = true)
+                SentHistoryItem() // TODO: id에 해당하는 envelopeInfo 넣어주기
                 Spacer(modifier = modifier.size(SusuTheme.spacing.spacing_xxs))
             }
             Spacer(modifier = modifier.size(SusuTheme.spacing.spacing_xxs))
@@ -63,5 +64,13 @@ fun SentHistoryCard(
                 onClick = onClick,
             )
         }
+    }
+}
+
+@Preview
+@Composable
+fun SentHistoryCardPreview() {
+    SusuTheme {
+        SentHistoryCard()
     }
 }

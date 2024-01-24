@@ -10,7 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.tooling.preview.Preview
 import com.susu.core.designsystem.component.badge.BadgeColor
 import com.susu.core.designsystem.component.badge.BadgeStyle
 import com.susu.core.designsystem.component.badge.SusuBadge
@@ -19,12 +19,22 @@ import com.susu.core.designsystem.theme.Gray40
 import com.susu.core.designsystem.theme.Gray50
 import com.susu.core.designsystem.theme.Orange60
 import com.susu.core.designsystem.theme.SusuTheme
+import com.susu.core.ui.extension.toMoneyFormat
+import com.susu.core.ui.util.to_yyyy_dot_MM_dot_dd
 import com.susu.feature.sent.R
+import java.time.LocalDateTime
+
+enum class EnvelopeType {
+    SENT, RECEIVED
+}
 
 @Composable
 fun SentHistoryItem(
     modifier: Modifier = Modifier,
-    isSent: Boolean = true,
+    type: String = "",
+    event: String = "",
+    date: LocalDateTime = LocalDateTime.now(),
+    money: Int = 0,
 ) {
     Row(
         modifier = modifier.fillMaxWidth(),
@@ -32,35 +42,47 @@ fun SentHistoryItem(
     ) {
         Icon(
             painter = painterResource(
-                id = if (isSent) {
+                id = if (type == EnvelopeType.SENT.name) {
                     R.drawable.ic_round_arrow_sent
                 } else {
                     R.drawable.ic_round_arrow_received
                 },
             ),
             contentDescription = null,
-            tint = if (isSent) Orange60 else Gray40,
-            modifier = modifier.size(20.dp),
+            tint = if (type == EnvelopeType.SENT.name) Orange60 else Gray40,
+            modifier = modifier.size(SusuTheme.spacing.spacing_l),
         )
         Spacer(modifier = modifier.size(SusuTheme.spacing.spacing_s))
 
-        // TODO: text 수정 필요
         SusuBadge(
-            color = if (isSent) BadgeColor.Gray90 else BadgeColor.Gray40,
-            text = "돌잔치",
+            color = if (type == EnvelopeType.SENT.name) BadgeColor.Gray90 else BadgeColor.Gray40,
+            text = event,
             padding = BadgeStyle.extraSmallBadge,
         )
         Spacer(modifier = modifier.size(SusuTheme.spacing.spacing_s))
         Text(
-            text = "23.07.18",
+            text = date.to_yyyy_dot_MM_dot_dd().substring(2),
             style = SusuTheme.typography.title_xxxs,
-            color = if (isSent) Gray100 else Gray50,
+            color = if (type == EnvelopeType.SENT.name) Gray100 else Gray50,
         )
         Spacer(modifier = modifier.weight(1f))
         Text(
-            text = "50,000원",
+            text = "${money.toMoneyFormat()}원",
             style = SusuTheme.typography.title_xxs,
-            color = if (isSent) Gray100 else Gray50,
+            color = if (type == EnvelopeType.SENT.name) Gray100 else Gray50,
+        )
+    }
+}
+
+@Preview(showBackground = true, backgroundColor = 0xFFFFFF)
+@Composable
+fun SentHistoryItemPreview() {
+    SusuTheme {
+        SentHistoryItem(
+            type = "SENT",
+            event = "돌잔치",
+            date = LocalDateTime.now(),
+            money = 50000,
         )
     }
 }

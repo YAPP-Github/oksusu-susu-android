@@ -12,8 +12,7 @@ data class SentState(
     val showEmptyEnvelopes: Boolean = false,
 ) : UiState
 
-sealed interface SentSideEffect : SideEffect {
-    data object NavigateEnvelopeDetail : SentSideEffect
-    data object NavigateEnvelopeAdd : SentSideEffect
-    data object NavigateEnvelopeSearch : SentSideEffect
+sealed interface SentEffect : SideEffect {
+    data object NavigateEnvelope : SentEffect
+    data object NavigateEnvelopeAdd : SentEffect
 }

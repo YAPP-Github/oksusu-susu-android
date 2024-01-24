@@ -34,6 +34,7 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.susu.core.designsystem.component.badge.BadgeColor
 import com.susu.core.designsystem.component.badge.BadgeStyle
@@ -43,18 +44,23 @@ import com.susu.core.designsystem.theme.Gray60
 import com.susu.core.designsystem.theme.Gray90
 import com.susu.core.designsystem.theme.Orange20
 import com.susu.core.designsystem.theme.SusuTheme
+import com.susu.core.model.Friend
 import com.susu.core.ui.extension.susuClickable
+import com.susu.core.ui.extension.toMoneyFormat
 import com.susu.feature.sent.R
 
 @Composable
 fun SentCard(
     modifier: Modifier = Modifier,
+    friend: Friend = Friend(),
+    totalAmounts: Int,
+    sentAmounts: Int,
+    receivedAmounts: Int,
     onClick: () -> Unit = {},
 ) {
     // TODO: 수정 필요
     var expanded by remember { mutableStateOf(false) }
     val degrees by animateFloatAsState(if (expanded) 180f else 0f, label = "")
-    val historyCount = 3
 
     Box(
         modifier = modifier
@@ -76,14 +82,14 @@ fun SentCard(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
-                    text = "김철수",
+                    text = friend.name,
                     style = SusuTheme.typography.title_xs,
                     color = Gray100,
                 )
                 Spacer(modifier = modifier.size(SusuTheme.spacing.spacing_s))
                 SusuBadge(
                     color = BadgeColor.Gray20,
-                    text = "전체 100,000원",
+                    text = "전체 ${totalAmounts.toMoneyFormat()}",
                     padding = BadgeStyle.smallBadge,
                 )
                 Spacer(modifier = modifier.weight(1f))
@@ -118,13 +124,13 @@ fun SentCard(
                 )
             }
             LinearProgressIndicator(
-                progress = { 0.7f },
-                color = SusuTheme.colorScheme.primary,
-                trackColor = Orange20,
-                strokeCap = StrokeCap.Round,
+                progress = { sentAmounts.toFloat() / totalAmounts },
                 modifier = modifier
                     .fillMaxWidth()
                     .padding(vertical = SusuTheme.spacing.spacing_xxxxs),
+                color = SusuTheme.colorScheme.primary,
+                trackColor = Orange20,
+                strokeCap = StrokeCap.Round,
             )
             Row(
                 modifier = modifier
@@ -133,12 +139,12 @@ fun SentCard(
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 Text(
-                    text = "70,000원",
+                    text = "${sentAmounts.toMoneyFormat()}원",
                     style = SusuTheme.typography.title_xxxs,
                     color = Gray90,
                 )
                 Text(
-                    text = "30,000원",
+                    text = "${receivedAmounts.toMoneyFormat()}원",
                     style = SusuTheme.typography.title_xxxs,
                     color = Gray60,
                 )
@@ -151,8 +157,19 @@ fun SentCard(
         exit = fadeOut() + shrinkVertically(),
     ) {
         SentHistoryCard(
-            historyCount = historyCount,
             onClick = onClick,
+        )
+    }
+}
+
+@Preview
+@Composable
+fun SentCardPreview() {
+    SusuTheme {
+        SentCard(
+            totalAmounts = 100000,
+            sentAmounts = 70000,
+            receivedAmounts = 30000,
         )
     }
 }
