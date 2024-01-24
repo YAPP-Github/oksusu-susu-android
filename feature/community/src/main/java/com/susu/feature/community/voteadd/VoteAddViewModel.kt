@@ -64,8 +64,11 @@ class VoteAddViewModel @Inject constructor(
     fun updateOptionContent(index: Int, content: String) = intent {
         copy(
             voteOptionStateList = voteOptionStateList.mapIndexed { voteIndex, voteOptionState ->
-                if (index == voteIndex) voteOptionState.copy(content = content)
-                else voteOptionState
+                if (index == voteIndex) {
+                    voteOptionState.copy(content = content)
+                } else {
+                    voteOptionState
+                }
             }.toPersistentList(),
         )
     }
@@ -73,8 +76,11 @@ class VoteAddViewModel @Inject constructor(
     fun toggleOptionSavedState(index: Int) = intent {
         copy(
             voteOptionStateList = voteOptionStateList.mapIndexed { voteIndex, voteOptionState ->
-                if (index == voteIndex) voteOptionState.copy(isSaved = voteOptionState.isSaved.not())
-                else voteOptionState
+                if (index == voteIndex) {
+                    voteOptionState.copy(isSaved = voteOptionState.isSaved.not())
+                } else {
+                    voteOptionState
+                }
             }.toPersistentList(),
         )
     }

@@ -5,5 +5,5 @@ data class Vote(
     val category: String,
     val content: String,
     val isModified: Boolean,
-    val optionList: List<String>
+    val optionList: List<String>,
 )

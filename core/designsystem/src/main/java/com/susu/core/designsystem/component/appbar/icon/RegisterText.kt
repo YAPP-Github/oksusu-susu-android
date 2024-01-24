@@ -9,7 +9,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.susu.core.designsystem.R
 import com.susu.core.designsystem.theme.Gray100
 import com.susu.core.designsystem.theme.SusuTheme
-import com.susu.core.ui.extension.susuClickable
 
 @Composable
 fun RegisterText(

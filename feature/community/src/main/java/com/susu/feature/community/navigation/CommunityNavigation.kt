@@ -22,7 +22,9 @@ fun NavGraphBuilder.communityNavGraph(
     padding: PaddingValues,
     navigateVoteAdd: () -> Unit,
     popBackStack: () -> Unit,
+    @Suppress("detekt:UnusedParameter")
     onShowSnackbar: (SnackbarToken) -> Unit,
+    @Suppress("detekt:UnusedParameter")
     onShowDialog: (DialogToken) -> Unit,
     handleException: (Throwable, () -> Unit) -> Unit,
 ) {

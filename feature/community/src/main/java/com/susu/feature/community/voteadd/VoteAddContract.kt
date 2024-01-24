@@ -5,7 +5,6 @@ import com.susu.core.ui.base.SideEffect
 import com.susu.core.ui.base.UiState
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
-import java.util.UUID
 
 data class VoteAddState(
     val categoryConfigList: PersistentList<Category> = persistentListOf(),
@@ -14,8 +13,8 @@ data class VoteAddState(
     val content: String = "",
     val isLoading: Boolean = false,
 ) : UiState {
-    val buttonEnabled = content.length in 1 .. 50 &&
-        voteOptionStateList.all { it.content.length in  1 ..10 }
+    val buttonEnabled = content.length in 1..50 &&
+        voteOptionStateList.all { it.content.length in 1..10 }
 }
 
 data class VoteOptionState(

@@ -1,9 +1,7 @@
 package com.susu.feature.community.voteadd
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -14,10 +12,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -26,13 +22,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.susu.core.designsystem.component.appbar.SusuDefaultAppBar
 import com.susu.core.designsystem.component.appbar.icon.BackIcon
-import com.susu.core.designsystem.component.appbar.icon.DeleteText
-import com.susu.core.designsystem.component.appbar.icon.EditText
 import com.susu.core.designsystem.component.appbar.icon.RegisterText
 import com.susu.core.designsystem.component.button.FilledButtonColor
 import com.susu.core.designsystem.component.button.SusuFilledButton
@@ -41,7 +34,6 @@ import com.susu.core.designsystem.component.textfield.SusuBasicTextField
 import com.susu.core.designsystem.component.textfieldbutton.SusuTextFieldFillMaxButton
 import com.susu.core.designsystem.component.textfieldbutton.TextFieldButtonColor
 import com.susu.core.designsystem.component.textfieldbutton.style.MediumTextFieldButtonStyle
-import com.susu.core.designsystem.component.textfieldbutton.style.TextFieldButtonStyle
 import com.susu.core.designsystem.theme.Gray10
 import com.susu.core.designsystem.theme.Gray100
 import com.susu.core.designsystem.theme.Gray40
@@ -116,9 +108,9 @@ fun VoteAddScreen(
                         .susuClickable(
                             rippleEnabled = false,
                             runIf = uiState.buttonEnabled,
-                            onClick = onClickRegister
+                            onClick = onClickRegister,
                         ),
-                    color = if (uiState.buttonEnabled) Gray100 else Gray40
+                    color = if (uiState.buttonEnabled) Gray100 else Gray40,
                 )
             },
         )
@@ -130,7 +122,7 @@ fun VoteAddScreen(
                 .verticalScroll(rememberScrollState()),
         ) {
             Row(
-                horizontalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxxxs)
+                horizontalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxxxs),
             ) {
                 uiState.categoryConfigList.dropLast(1).forEach {
                     SusuFilledButton(
@@ -167,7 +159,7 @@ fun VoteAddScreen(
             Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_xl))
 
             Column(
-                verticalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxs)
+                verticalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxs),
             ) {
                 uiState.voteOptionStateList.forEachIndexed { index, option ->
                     SusuTextFieldFillMaxButton(

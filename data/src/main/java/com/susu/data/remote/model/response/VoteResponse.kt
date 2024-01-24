@@ -12,7 +12,7 @@ data class VoteResponse(
     val content: String,
     val isModified: Boolean,
     @SerialName("options")
-    val optionList: List<VoteOption>
+    val optionList: List<VoteOption>,
 )
 
 internal fun VoteResponse.toModel() = Vote(

@@ -10,6 +10,6 @@ interface VoteService {
 
     @POST("/api/v1/votes")
     suspend fun createVote(
-        @Body createVoteRequest: CreateVoteRequest
+        @Body createVoteRequest: CreateVoteRequest,
     ): ApiResult<VoteResponse>
 }

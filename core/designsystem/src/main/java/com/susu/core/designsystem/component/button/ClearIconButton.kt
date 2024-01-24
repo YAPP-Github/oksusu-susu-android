@@ -1,6 +1,5 @@
 package com.susu.core.designsystem.component.button
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon

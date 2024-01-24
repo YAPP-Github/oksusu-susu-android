@@ -50,7 +50,7 @@ enum class TextFieldButtonColor(
         editTextColor = Gray100,
         savedTextColor = Gray100,
         placeholderColor = Gray40,
-    )
+    ),
 }
 
 enum class TextButtonInnerButtonColor(
