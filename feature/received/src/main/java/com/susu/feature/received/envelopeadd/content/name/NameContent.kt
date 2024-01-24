@@ -62,6 +62,12 @@ fun NameContentRoute(
             .collect(viewModel::getFriendList)
     }
 
+    LaunchedEffect(key1 = uiState.name) {
+        snapshotFlow { uiState.name }
+            .debounce(100L)
+            .collect(viewModel::getFriendList)
+    }
+
     NameContent(
         uiState = uiState,
         onTextChangeName = viewModel::updateName,
