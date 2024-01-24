@@ -1,106 +1,85 @@
 package com.susu.feature.statistics
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.susu.core.designsystem.component.appbar.SusuDefaultAppBar
 import com.susu.core.designsystem.component.appbar.icon.LogoIcon
-import com.susu.core.designsystem.theme.Gray10
-import com.susu.core.designsystem.theme.Gray100
-import com.susu.core.designsystem.theme.Gray40
+import com.susu.core.designsystem.component.screen.LoadingScreen
 import com.susu.core.designsystem.theme.SusuTheme
-import com.susu.feature.statistics.component.RecentSpentGraph
-import com.susu.feature.statistics.component.StatisticsHorizontalItem
+import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.feature.statistics.component.StatisticsTab
-import com.susu.feature.statistics.component.StatisticsVerticalItem
+import com.susu.feature.statistics.content.MyStatisticsRoute
 
 @Composable
-fun StatisticsRoute() {
-    StatisticsScreen()
+fun StatisticsRoute(
+    viewModel: StatisticsViewModel = hiltViewModel(),
+    navigateToMyInfo: () -> Unit,
+) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    viewModel.sideEffect.collectWithLifecycle { sideEffect ->
+        when (sideEffect) {
+            StatisticsEffect.NavigateToMyInfo -> navigateToMyInfo()
+        }
+    }
+
+    StatisticsScreen(
+        uiState = uiState,
+    )
 }
 
 @Composable
 fun StatisticsScreen(
-    spentData: List<Pair<String, Int>> = emptyList(), // TODO: Preview 데이터
+    uiState: StatisticsState = StatisticsState(),
 ) {
-    Column(
+    Box(
         modifier = Modifier.fillMaxSize()
-            .verticalScroll(rememberScrollState())
-            .padding(horizontal = SusuTheme.spacing.spacing_m),
-        verticalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxs),
+            .verticalScroll(rememberScrollState()),
     ) {
-        SusuDefaultAppBar(
-            modifier = Modifier.padding(horizontal = SusuTheme.spacing.spacing_xs),
-            leftIcon = { LogoIcon() },
-            title = stringResource(R.string.statistics_word),
-        )
-        StatisticsTab(
-            modifier = Modifier
-                .height(52.dp)
-                .padding(vertical = SusuTheme.spacing.spacing_xxs),
-            selectedTab = StatisticsTab.MY,
-            onTabSelect = {},
-        )
-        RecentSpentGraph(
-            spentData = spentData, // TODO: 서버 값으로 교체
-        )
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(color = Gray10, shape = RoundedCornerShape(4.dp))
-                .padding(SusuTheme.spacing.spacing_m),
-            horizontalArrangement = Arrangement.SpaceBetween,
+        Column(
+            modifier = Modifier.fillMaxSize().padding(horizontal = SusuTheme.spacing.spacing_m),
+            verticalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxs),
         ) {
-            Text(text = stringResource(R.string.statistics_most_spent_month), style = SusuTheme.typography.title_xs, color = Gray100)
-            Text(
-                text = stringResource(R.string.word_month_format, stringResource(id = R.string.word_unknown)),
-                style = SusuTheme.typography.title_xs,
-                color = Gray40,
+            SusuDefaultAppBar(
+                modifier = Modifier.padding(horizontal = SusuTheme.spacing.spacing_xs),
+                leftIcon = { LogoIcon() },
+                title = stringResource(R.string.statistics_word),
             )
+            StatisticsTab(
+                modifier = Modifier
+                    .height(52.dp)
+                    .padding(vertical = SusuTheme.spacing.spacing_xxs),
+                selectedTab = StatisticsTab.MY,
+                onTabSelect = {},
+            )
+            when (uiState.currentTab) {
+                StatisticsTab.MY -> MyStatisticsRoute(
+                    isBlind = uiState.isBlind,
+                    modifier = Modifier.fillMaxSize(),
+                )
+
+                StatisticsTab.AVERAGE -> {}
+            }
         }
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-        ) {
-            StatisticsVerticalItem(
-                modifier = Modifier.weight(1f),
-                title = stringResource(R.string.statistics_most_susu_relationship),
-                content = "",
-                description = "",
-            )
-            Spacer(modifier = Modifier.width(SusuTheme.spacing.spacing_xxs))
-            StatisticsVerticalItem(
-                modifier = Modifier.weight(1f),
-                title = stringResource(R.string.statistics_most_susu_event),
-                content = "",
-                description = "",
-            )
+
+        if (uiState.isLoading) {
+            LoadingScreen(modifier = Modifier.align(Alignment.Center))
         }
-        StatisticsHorizontalItem(
-            title = stringResource(R.string.statistics_most_received_money),
-            name = "김수수",
-            money = 0,
-        )
-        StatisticsHorizontalItem(
-            title = stringResource(R.string.statistics_most_sent_money),
-            name = "양수수",
-            money = 0,
-        )
     }
 }
 
@@ -108,17 +87,6 @@ fun StatisticsScreen(
 @Composable
 fun SentScreenPreview() {
     SusuTheme {
-        StatisticsScreen(
-            spentData = listOf(
-                Pair("1월", 10000),
-                Pair("2월", 20000),
-                Pair("3월", 30000),
-                Pair("4월", 40000),
-                Pair("5월", 50000),
-                Pair("6월", 60000),
-                Pair("7월", 70000),
-                Pair("8월", 80000),
-            ),
-        )
+        StatisticsScreen()
     }
 }

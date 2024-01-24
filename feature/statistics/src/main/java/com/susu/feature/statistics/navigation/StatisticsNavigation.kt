@@ -10,9 +10,13 @@ fun NavController.navigateStatistics(navOptions: NavOptions) {
     navigate(StatisticsRoute.route, navOptions)
 }
 
-fun NavGraphBuilder.statisticsNavGraph() {
+fun NavGraphBuilder.statisticsNavGraph(
+    navigateToMyInfo: () -> Unit,
+) {
     composable(route = StatisticsRoute.route) {
-        StatisticsRoute()
+        StatisticsRoute(
+            navigateToMyInfo = navigateToMyInfo
+        )
     }
 }
 
