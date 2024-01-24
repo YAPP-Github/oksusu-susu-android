@@ -12,5 +12,5 @@ interface FriendRepository {
 
     suspend fun searchFriend(
         name: String,
-    ): FriendSearch
+    ): List<FriendSearch>
 }
