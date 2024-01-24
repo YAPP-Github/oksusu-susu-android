@@ -118,7 +118,7 @@ class ReceivedViewModel @Inject constructor(
         }
     }
 
-    fun updateLedgerIfNeed(ledger: String?, toDeleteLedgerId: Int) {
+    fun updateLedgerIfNeed(ledger: String?, toDeleteLedgerId: Long) {
         val toUpdateLedger = ledger?.let {
             Json.decodeFromUri<Ledger>(ledger)
         } ?: Ledger()

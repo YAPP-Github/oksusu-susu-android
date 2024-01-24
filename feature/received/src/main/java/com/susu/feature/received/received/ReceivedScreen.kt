@@ -70,7 +70,7 @@ import me.onebone.toolbar.rememberCollapsingToolbarScaffoldState
 fun ReceivedRoute(
     viewModel: ReceivedViewModel = hiltViewModel(),
     ledger: String?,
-    toDeleteLedgerId: Int,
+    toDeleteLedgerId: Long,
     filter: String?,
     padding: PaddingValues,
     navigateLedgerDetail: (Ledger) -> Unit,

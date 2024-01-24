@@ -150,8 +150,8 @@ internal class MainNavigator(
         navController.navigateMyPageSocial()
     }
 
-    fun navigateReceivedEnvelopeAdd(categoryName: String) {
-        navController.navigateReceivedEnvelopeAdd(categoryName)
+    fun navigateReceivedEnvelopeAdd(categoryName: String, ledgerId: Long) {
+        navController.navigateReceivedEnvelopeAdd(categoryName, ledgerId)
     }
 
     fun navigateReceivedEnvelopeDetail() {

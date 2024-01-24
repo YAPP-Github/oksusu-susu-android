@@ -17,7 +17,7 @@ data class LedgerResponse(
 
 @Serializable
 data class LedgerInfo(
-    val id: Int,
+    val id: Long,
     val title: String,
     val description: String = "",
     val startAt: LocalDateTime,

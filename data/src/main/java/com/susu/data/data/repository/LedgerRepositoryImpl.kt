@@ -37,7 +37,7 @@ class LedgerRepositoryImpl @Inject constructor(
         ledgerRequest = ledger.toData(),
     ).getOrThrow().toModel()
 
-    override suspend fun deleteLedger(id: Int) = ledgerService.deleteLedgerList(
+    override suspend fun deleteLedger(id: Long) = ledgerService.deleteLedgerList(
         listOf(id),
     ).getOrThrow()
 }

@@ -5,6 +5,7 @@ import com.susu.core.model.Relationship
 import com.susu.core.ui.base.BaseViewModel
 import com.susu.feature.received.navigation.ReceivedRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -14,6 +15,7 @@ class ReceivedEnvelopeAddViewModel @Inject constructor(
     ReceivedEnvelopeAddState(),
 ) {
     val categoryName = savedStateHandle.get<String>(ReceivedRoute.CATEGORY_ARGUMENT_NAME)!!
+    val ledgerId = savedStateHandle.get<String>(ReceivedRoute.LEDGER_ID_ARGUMENT_NAME)!!
 
     private var money: Long = 0
     private var name: String = ""
