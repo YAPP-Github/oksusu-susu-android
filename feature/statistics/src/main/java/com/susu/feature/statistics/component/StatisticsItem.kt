@@ -31,7 +31,7 @@ import com.susu.feature.statistics.R
 fun StatisticsVerticalItem(
     title: String,
     content: String,
-    description: String,
+    count: Int,
     modifier: Modifier = Modifier,
     isActive: Boolean = true,
 ) {
@@ -56,7 +56,7 @@ fun StatisticsVerticalItem(
             )
             Text(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
-                text = stringResource(R.string.word_entire_count, description),
+                text = stringResource(R.string.word_entire_count, count.toString()),
                 style = SusuTheme.typography.title_xxxs,
                 color = Gray60,
             )
@@ -126,9 +126,9 @@ fun StatisticsHorizontalItem(
 fun StatisticsItemPreview() {
     SusuTheme {
         Column {
-            StatisticsVerticalItem(title = "자주 개발하는 시간", content = "밤", description = "낮에 좀 해라")
+            StatisticsVerticalItem(title = "자주 개발하는 시간", content = "밤", count = 1)
             StatisticsHorizontalItem(title = "이번달에 허투루 쓴 돈", name = "배달음식", money = 60000)
-            StatisticsVerticalItem(title = "자주 개발하는 시간", content = "밤", description = "낮에 좀 해라", isActive = false)
+            StatisticsVerticalItem(title = "자주 개발하는 시간", content = "밤", count = 1, isActive = false)
             StatisticsHorizontalItem(title = "이번달에 허투루 쓴 돈", name = "배달음식", money = 60000, isActive = false)
         }
     }

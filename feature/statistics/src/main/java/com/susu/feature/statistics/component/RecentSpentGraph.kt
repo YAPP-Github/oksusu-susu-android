@@ -45,6 +45,7 @@ import com.susu.core.designsystem.theme.Gray90
 import com.susu.core.designsystem.theme.Orange30
 import com.susu.core.designsystem.theme.Orange60
 import com.susu.core.designsystem.theme.SusuTheme
+import com.susu.core.model.StatisticsElement
 import com.susu.feature.statistics.R
 import kotlin.random.Random
 
@@ -52,10 +53,10 @@ import kotlin.random.Random
 fun RecentSpentGraph(
     modifier: Modifier = Modifier,
     isActive: Boolean = true,
-    spentData: List<Pair<String, Int>> = emptyList(),
+    spentData: List<StatisticsElement> = emptyList(),
 ) {
-    val totalAmount by remember { mutableStateOf(spentData.sumOf { it.second } / 10000) }
-    val maximumAmount by remember { mutableStateOf(spentData.maxOfOrNull { it.second }) }
+    val totalAmount by remember { mutableStateOf(spentData.sumOf { it.value }) }
+    val maximumAmount by remember { mutableStateOf(spentData.maxOfOrNull { it.value }) }
 
     Column(
         modifier = modifier
@@ -65,7 +66,9 @@ fun RecentSpentGraph(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth().padding(SusuTheme.spacing.spacing_xxs),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(SusuTheme.spacing.spacing_xxs),
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             Text(
@@ -90,9 +93,14 @@ fun RecentSpentGraph(
         Spacer(modifier = Modifier.height(SusuTheme.spacing.spacing_xxs))
         Row(
             modifier = if (isActive) {
-                Modifier.fillMaxWidth().padding(SusuTheme.spacing.spacing_xxs)
+                Modifier
+                    .fillMaxWidth()
+                    .padding(SusuTheme.spacing.spacing_xxs)
             } else {
-                Modifier.fillMaxWidth().blur(8.dp).padding(SusuTheme.spacing.spacing_xxs)
+                Modifier
+                    .fillMaxWidth()
+                    .blur(8.dp)
+                    .padding(SusuTheme.spacing.spacing_xxs)
             },
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically,
@@ -103,7 +111,7 @@ fun RecentSpentGraph(
                         horizontalAlignment = Alignment.CenterHorizontally,
                     ) {
                         StickGraph(
-                            ratio = data.second.toFloat() / maximumAmount!!,
+                            ratio = data.value.toFloat() / maximumAmount!!,
                             color = if (isActive) {
                                 if (i == spentData.lastIndex) {
                                     Orange60
@@ -120,7 +128,7 @@ fun RecentSpentGraph(
                         )
                         Spacer(modifier = Modifier.height(SusuTheme.spacing.spacing_xxxxs))
                         Text(
-                            text = data.first,
+                            text = stringResource(id = R.string.word_month_format, data.title),
                             style = SusuTheme.typography.title_xxxs,
                             color = if (i == spentData.lastIndex) {
                                 Gray90
@@ -205,27 +213,27 @@ fun RecentSpentGraphPreview() {
             RecentSpentGraph(
                 modifier = Modifier.padding(16.dp),
                 spentData = listOf(
-                    Pair("1월", 10000),
-                    Pair("2월", 20000),
-                    Pair("3월", 30000),
-                    Pair("4월", 40000),
-                    Pair("5월", 50000),
-                    Pair("6월", 60000),
-                    Pair("7월", 70000),
-                    Pair("8월", 80000),
+                    StatisticsElement("1월", 10000),
+                    StatisticsElement("2월", 20000),
+                    StatisticsElement("3월", 30000),
+                    StatisticsElement("4월", 40000),
+                    StatisticsElement("5월", 50000),
+                    StatisticsElement("6월", 60000),
+                    StatisticsElement("7월", 70000),
+                    StatisticsElement("8월", 80000),
                 ),
             )
             RecentSpentGraph(
                 modifier = Modifier.padding(16.dp),
                 spentData = listOf(
-                    Pair("1월", 10000),
-                    Pair("2월", 20000),
-                    Pair("3월", 30000),
-                    Pair("4월", 40000),
-                    Pair("5월", 50000),
-                    Pair("6월", 60000),
-                    Pair("7월", 70000),
-                    Pair("8월", 80000),
+                    StatisticsElement("1월", 10000),
+                    StatisticsElement("2월", 20000),
+                    StatisticsElement("3월", 30000),
+                    StatisticsElement("4월", 40000),
+                    StatisticsElement("5월", 50000),
+                    StatisticsElement("6월", 60000),
+                    StatisticsElement("7월", 70000),
+                    StatisticsElement("8월", 80000),
                 ),
                 isActive = false,
             )

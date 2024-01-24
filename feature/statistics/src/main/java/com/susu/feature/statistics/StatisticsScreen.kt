@@ -60,6 +60,7 @@ fun StatisticsRoute(
     StatisticsScreen(
         uiState = uiState,
         onTabSelected = viewModel::selectStatisticsTab,
+        handleException = handleException,
     )
 }
 
@@ -67,6 +68,7 @@ fun StatisticsRoute(
 fun StatisticsScreen(
     uiState: StatisticsState = StatisticsState(),
     onTabSelected: (StatisticsTab) -> Unit = {},
+    handleException: (Throwable, () -> Unit) -> Unit = { _, _ -> },
 ) {
     Box(
         modifier = Modifier.fillMaxSize()
@@ -91,6 +93,7 @@ fun StatisticsScreen(
                 StatisticsTab.MY -> MyStatisticsRoute(
                     isBlind = uiState.isBlind,
                     modifier = Modifier.fillMaxSize(),
+                    handleException = handleException,
                 )
 
                 StatisticsTab.AVERAGE -> {}
@@ -98,7 +101,7 @@ fun StatisticsScreen(
         }
 
         if (uiState.isLoading) {
-            LoadingScreen(modifier = Modifier.align(Alignment.Center))
+            LoadingScreen(modifier = Modifier.fillMaxSize().align(Alignment.Center))
         }
     }
 }

@@ -4,6 +4,7 @@ import com.susu.data.remote.api.AuthService
 import com.susu.data.remote.api.CategoryService
 import com.susu.data.remote.api.LedgerService
 import com.susu.data.remote.api.SignUpService
+import com.susu.data.remote.api.StatisticsService
 import com.susu.data.remote.api.TermService
 import com.susu.data.remote.api.TokenService
 import com.susu.data.remote.api.UserService
@@ -58,5 +59,11 @@ object ApiServiceModule {
     @Provides
     fun providesUserService(retrofit: Retrofit): UserService {
         return retrofit.create(UserService::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun providesStatisticsService(retrofit: Retrofit): StatisticsService {
+        return retrofit.create(StatisticsService::class.java)
     }
 }
