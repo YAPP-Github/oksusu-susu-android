@@ -16,9 +16,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -26,27 +24,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.susu.core.designsystem.component.appbar.SusuDefaultAppBar
 import com.susu.core.designsystem.component.appbar.icon.LogoIcon
 import com.susu.core.designsystem.component.appbar.icon.SearchIcon
 import com.susu.core.designsystem.component.button.FilledButtonColor
-import com.susu.core.designsystem.component.button.GhostButtonColor
 import com.susu.core.designsystem.component.button.SusuFilledButton
 import com.susu.core.designsystem.component.button.SusuFloatingButton
-import com.susu.core.designsystem.component.button.SusuGhostButton
 import com.susu.core.designsystem.component.button.XSmallButtonStyle
-import com.susu.core.designsystem.theme.Blue60
 import com.susu.core.designsystem.theme.Gray10
-import com.susu.core.designsystem.theme.Gray15
 import com.susu.core.designsystem.theme.Gray20
 import com.susu.core.designsystem.theme.Gray30
 import com.susu.core.designsystem.theme.Gray40
-import com.susu.core.designsystem.theme.Gray50
-import com.susu.core.designsystem.theme.Gray60
-import com.susu.core.designsystem.theme.Orange60
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.feature.community.R
 import com.susu.feature.community.community.component.MostPopularVoteCard
@@ -77,7 +67,6 @@ fun CommunityScreen(
     ) {
         Column(
             modifier = Modifier
-
                 .background(SusuTheme.colorScheme.background10),
         ) {
             SusuDefaultAppBar(
@@ -115,7 +104,6 @@ fun CommunityScreen(
                                 MostPopularVoteCard()
                             }
                         }
-
                     }
                 }
 
