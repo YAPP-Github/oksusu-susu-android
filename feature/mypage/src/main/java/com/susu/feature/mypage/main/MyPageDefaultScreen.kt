@@ -30,7 +30,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.susu.core.designsystem.component.appbar.SusuDefaultAppBar
 import com.susu.core.designsystem.component.appbar.icon.LogoIcon
-import com.susu.core.designsystem.component.appbar.icon.NotificationIcon
 import com.susu.core.designsystem.component.button.GhostButtonColor
 import com.susu.core.designsystem.component.button.SmallButtonStyle
 import com.susu.core.designsystem.component.button.SusuGhostButton
@@ -160,7 +159,6 @@ fun MyPageDefaultScreen(
         SusuDefaultAppBar(
             modifier = Modifier.padding(SusuTheme.spacing.spacing_xs),
             leftIcon = { LogoIcon() },
-            actions = { NotificationIcon() },
         )
 
         MyPageMenuItem(
