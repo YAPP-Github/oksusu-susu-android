@@ -205,7 +205,11 @@ fun MyPageDefaultScreen(
         MyPageMenuItem(
             titleText = stringResource(com.susu.feature.mypage.R.string.mypage_app_version),
             action = {
-                Text(text = stringResource(com.susu.feature.mypage.R.string.mypage_update), style = SusuTheme.typography.title_xxs, color = Gray60)
+                Text(
+                    text = stringResource(com.susu.feature.mypage.R.string.mypage_update),
+                    style = SusuTheme.typography.title_xxs,
+                    color = Gray60,
+                )
             },
         )
 
@@ -244,9 +248,7 @@ fun MyPageDefaultScreen(
 
 private fun getAppVersion(context: Context): String {
     try {
-        val packageInfo = context.packageManager.getPackageInfo(
-            context.packageName, 0,
-        )
+        val packageInfo = context.packageManager.getPackageInfo(context.packageName, 0)
 
         if (packageInfo != null) {
             return packageInfo.versionName

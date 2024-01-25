@@ -203,7 +203,8 @@ fun MyPageInfoScreen(
                         } else {
                             stringResource(id = com.susu.core.ui.R.string.word_not_select)
                         },
-                        style = SusuTheme.typography.title_xs, color = Gray100,
+                        style = SusuTheme.typography.title_xs,
+                        color = Gray100,
                     )
                 }
             }
