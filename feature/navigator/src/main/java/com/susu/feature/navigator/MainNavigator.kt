@@ -60,6 +60,7 @@ internal class MainNavigator(
                 SentRoute.sentEnvelopeRoute,
                 SentRoute.sentEnvelopeDetailRoute,
                 SentRoute.sentEnvelopeEditRoute,
+                CommunityRoute.route,
                 CommunityRoute.voteAddRoute,
             ),
             -> SusuTheme.colorScheme.background10

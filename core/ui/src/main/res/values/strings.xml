@@ -43,4 +43,5 @@
     <string name="word_memo">메모</string>
     <string name="word_register">등록</string>
     <string name="word_free">자유</string>
+    <string name="content_description_report_button">신고 버튼</string>
 </resources>

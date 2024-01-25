@@ -7,6 +7,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.susu.core.ui.DialogToken
 import com.susu.core.ui.SnackbarToken
+import com.susu.feature.community.CommunityRoute
 import com.susu.feature.community.CommunityScreen
 import com.susu.feature.community.voteadd.VoteAddRoute
 
@@ -29,7 +30,7 @@ fun NavGraphBuilder.communityNavGraph(
     handleException: (Throwable, () -> Unit) -> Unit,
 ) {
     composable(route = CommunityRoute.route) {
-        CommunityScreen(
+        CommunityRoute(
             padding = padding,
             navigateVoteAdd = navigateVoteAdd,
         )
