@@ -1,4 +1,4 @@
-package com.susu.feature.statistics.content
+package com.susu.feature.statistics.content.my
 
 import com.susu.core.model.MyStatistics
 import com.susu.core.ui.base.SideEffect

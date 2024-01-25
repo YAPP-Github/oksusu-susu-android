@@ -1,4 +1,4 @@
-package com.susu.feature.statistics.content
+package com.susu.feature.statistics.content.my
 
 import androidx.lifecycle.viewModelScope
 import com.susu.core.ui.base.BaseViewModel

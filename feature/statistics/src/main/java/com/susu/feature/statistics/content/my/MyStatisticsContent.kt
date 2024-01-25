@@ -1,4 +1,4 @@
-package com.susu.feature.statistics.content
+package com.susu.feature.statistics.content.my
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -76,6 +76,7 @@ fun MyStatisticsContent(
                 spentData = uiState.statistics.recentSpent.toPersistentList(),
                 maximumAmount = uiState.statistics.recentMaximumSpent,
                 totalAmount = uiState.statistics.recentTotalSpent,
+                graphTitle = stringResource(R.string.statistics_recent_8_total_money)
             )
             Row(
                 modifier = Modifier

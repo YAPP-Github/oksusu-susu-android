@@ -59,6 +59,7 @@ fun RecentSpentGraph(
     spentData: PersistentList<StatisticsElement> = persistentListOf(),
     totalAmount: Int = 0,
     maximumAmount: Int = 0,
+    graphTitle: String = "",
 ) {
     Column(
         modifier = modifier
@@ -74,7 +75,7 @@ fun RecentSpentGraph(
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             Text(
-                text = stringResource(R.string.statistics_recent_8_total_money),
+                text = graphTitle,
                 style = SusuTheme.typography.title_xs,
                 color = Gray100,
             )

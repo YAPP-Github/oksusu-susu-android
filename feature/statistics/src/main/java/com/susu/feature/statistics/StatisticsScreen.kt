@@ -26,7 +26,7 @@ import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.ui.DialogToken
 import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.feature.statistics.component.StatisticsTab
-import com.susu.feature.statistics.content.MyStatisticsRoute
+import com.susu.feature.statistics.content.my.MyStatisticsRoute
 
 @Composable
 fun StatisticsRoute(
