@@ -14,6 +14,7 @@ import com.susu.feature.community.navigation.navigateCommunity
 import com.susu.feature.loginsignup.navigation.LoginSignupRoute
 import com.susu.feature.mypage.navigation.navigateMyPage
 import com.susu.feature.mypage.navigation.navigateMyPageInfo
+import com.susu.feature.mypage.navigation.navigateMyPagePrivacyPolicy
 import com.susu.feature.mypage.navigation.navigateMyPageSocial
 import com.susu.feature.received.navigation.ReceivedRoute
 import com.susu.feature.received.navigation.argument.FilterArgument
@@ -148,6 +149,10 @@ internal class MainNavigator(
 
     fun navigateMyPageSocial() {
         navController.navigateMyPageSocial()
+    }
+
+    fun navigateMyPagePrivacyPolicy() {
+        navController.navigateMyPagePrivacyPolicy()
     }
 
     fun navigateReceivedEnvelopeAdd() {

@@ -21,6 +21,7 @@ val nameRegex = Regex("[a-zA-Z가-힣]{0,10}")
 val USER_BIRTH_RANGE = 1930..2030
 
 const val INTENT_ACTION_DOWNLOAD_COMPLETE = "android.intent.action.DOWNLOAD_COMPLETE"
+const val PRIVACY_POLICY_URL = "https://sites.google.com/view/team-oksusu/%ED%99%88"
 enum class SnsProviders(
     val path: String,
     @StringRes val nameId: Int,

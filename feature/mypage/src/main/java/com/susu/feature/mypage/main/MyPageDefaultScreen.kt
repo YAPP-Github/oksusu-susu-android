@@ -53,6 +53,7 @@ fun MyPageDefaultRoute(
     navigateToLogin: () -> Unit,
     navigateToInfo: () -> Unit,
     navigateToSocial: () -> Unit,
+    navigateToPrivacyPolicy: () -> Unit,
     onShowSnackbar: (SnackbarToken) -> Unit,
     onShowDialog: (DialogToken) -> Unit,
     handleException: (Throwable, () -> Unit) -> Unit,
@@ -138,6 +139,7 @@ fun MyPageDefaultRoute(
         onExport = viewModel::showExportDialog,
         navigateToInfo = navigateToInfo,
         navigateToSocial = navigateToSocial,
+        navigateToPrivacyPolicy = navigateToPrivacyPolicy,
     )
 }
 
@@ -150,6 +152,7 @@ fun MyPageDefaultScreen(
     onExport: () -> Unit = {},
     navigateToInfo: () -> Unit = {},
     navigateToSocial: () -> Unit = {},
+    navigateToPrivacyPolicy: () -> Unit = {},
 ) {
     val context = LocalContext.current
     val currentAppVersion = remember { getAppVersion(context) }
@@ -201,6 +204,7 @@ fun MyPageDefaultScreen(
         )
         MyPageMenuItem(
             titleText = stringResource(com.susu.feature.mypage.R.string.mypage_privacy_policy),
+            onMenuClick = navigateToPrivacyPolicy,
         )
 
         MyPageDivider()

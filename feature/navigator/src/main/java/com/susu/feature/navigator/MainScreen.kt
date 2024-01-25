@@ -134,6 +134,7 @@ internal fun MainScreen(
                     navigateToLogin = navigator::navigateLogin,
                     navigateToInfo = navigator::navigateMyPageInfo,
                     navigateToSocial = navigator::navigateMyPageSocial,
+                    navigateToPrivacyPolicy = navigator::navigateMyPagePrivacyPolicy,
                     popBackStack = navigator::popBackStackIfNotHome,
                     onShowSnackbar = viewModel::onShowSnackbar,
                     onShowDialog = viewModel::onShowDialog,
