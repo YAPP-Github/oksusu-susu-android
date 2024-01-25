@@ -47,13 +47,16 @@ import com.susu.core.designsystem.theme.Orange60
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.model.StatisticsElement
 import com.susu.feature.statistics.R
+import kotlinx.collections.immutable.PersistentList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toPersistentList
 import kotlin.random.Random
 
 @Composable
 fun RecentSpentGraph(
     modifier: Modifier = Modifier,
     isActive: Boolean = true,
-    spentData: List<StatisticsElement> = emptyList(),
+    spentData: PersistentList<StatisticsElement> = persistentListOf(),
     totalAmount: Int = 0,
     maximumAmount: Int = 0,
 ) {
@@ -216,7 +219,7 @@ fun RecentSpentGraphPreview() {
                     StatisticsElement("6월", 60000),
                     StatisticsElement("7월", 70000),
                     StatisticsElement("8월", 80000),
-                ),
+                ).toPersistentList(),
             )
             RecentSpentGraph(
                 modifier = Modifier.padding(16.dp),
@@ -229,7 +232,7 @@ fun RecentSpentGraphPreview() {
                     StatisticsElement("6월", 60000),
                     StatisticsElement("7월", 70000),
                     StatisticsElement("8월", 80000),
-                ),
+                ).toPersistentList(),
                 isActive = false,
             )
         }

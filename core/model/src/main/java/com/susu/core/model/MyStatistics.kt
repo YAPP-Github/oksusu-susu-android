@@ -1,5 +1,8 @@
 package com.susu.core.model
 
+import androidx.compose.runtime.Stable
+
+@Stable
 data class MyStatistics(
     val highestAmountReceived: StatisticsElement = StatisticsElement(),
     val highestAmountSent: StatisticsElement = StatisticsElement(),

@@ -32,6 +32,7 @@ import com.susu.feature.statistics.R
 import com.susu.feature.statistics.component.RecentSpentGraph
 import com.susu.feature.statistics.component.StatisticsHorizontalItem
 import com.susu.feature.statistics.component.StatisticsVerticalItem
+import kotlinx.collections.immutable.toPersistentList
 
 @Composable
 fun MyStatisticsRoute(
@@ -72,7 +73,7 @@ fun MyStatisticsContent(
         ) {
             RecentSpentGraph(
                 isActive = !isBlind,
-                spentData = uiState.statistics.recentSpent,
+                spentData = uiState.statistics.recentSpent.toPersistentList(),
                 maximumAmount = uiState.statistics.recentMaximumSpent,
                 totalAmount = uiState.statistics.recentTotalSpent,
             )
