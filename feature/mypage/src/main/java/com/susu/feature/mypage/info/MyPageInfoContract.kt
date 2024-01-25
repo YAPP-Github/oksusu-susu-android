@@ -7,6 +7,7 @@ import com.susu.core.ui.nameRegex
 
 sealed interface MyPageInfoEffect : SideEffect {
     data object PopBackStack : MyPageInfoEffect
+    data object ShowNameNotValidSnackBar : MyPageInfoEffect
     data class ShowSnackBar(val msg: String) : MyPageInfoEffect
     data class HandleException(val throwable: Throwable, val retry: () -> Unit) : MyPageInfoEffect
 }

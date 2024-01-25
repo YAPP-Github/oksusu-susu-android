@@ -21,6 +21,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -37,9 +38,11 @@ import com.susu.core.designsystem.component.button.SusuFilledButton
 import com.susu.core.designsystem.component.textfield.SusuBasicTextField
 import com.susu.core.designsystem.theme.Gray100
 import com.susu.core.designsystem.theme.Gray40
+import com.susu.core.designsystem.theme.Gray50
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.ui.Gender
 import com.susu.core.ui.SnackbarToken
+import com.susu.core.ui.USER_BIRTH_RANGE
 import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.core.ui.extension.susuClickable
 import com.susu.feature.mypage.R
@@ -53,11 +56,16 @@ fun MyPageInfoRoute(
     onShowSnackbar: (SnackbarToken) -> Unit,
     handleException: (Throwable, () -> Unit) -> Unit,
 ) {
+    val context = LocalContext.current
+
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
             MyPageInfoEffect.PopBackStack -> popBackStack()
             is MyPageInfoEffect.ShowSnackBar -> onShowSnackbar(SnackbarToken(message = sideEffect.msg))
             is MyPageInfoEffect.HandleException -> handleException(sideEffect.throwable, sideEffect.retry)
+            MyPageInfoEffect.ShowNameNotValidSnackBar -> onShowSnackbar(
+                SnackbarToken(message = context.getString(R.string.mypage_my_info_snackbar_invalid_name)),
+            )
         }
     }
 
@@ -127,20 +135,19 @@ fun MyPageInfoScreen(
                     if (uiState.isEditing) {
                         Text(
                             modifier = Modifier
+                                .padding(end = SusuTheme.spacing.spacing_m)
                                 .susuClickable(
-                                    runIf = uiState.isEditNameValid,
                                     onClick = onEditComplete,
-                                )
-                                .padding(end = SusuTheme.spacing.spacing_m),
+                                ),
                             text = stringResource(id = com.susu.core.ui.R.string.word_enrollment),
                             style = SusuTheme.typography.title_xxs,
-                            color = Gray100,
+                            color = if (uiState.isEditNameValid) Gray100 else Gray50,
                         )
                     } else {
                         Text(
                             modifier = Modifier
-                                .susuClickable(onClick = onEditStart)
-                                .padding(end = SusuTheme.spacing.spacing_m),
+                                .padding(end = SusuTheme.spacing.spacing_m)
+                                .susuClickable(onClick = onEditStart),
                             text = stringResource(id = com.susu.core.ui.R.string.word_edit),
                             style = SusuTheme.typography.title_xxs,
                             color = Gray100,
@@ -158,7 +165,8 @@ fun MyPageInfoScreen(
             )
             Spacer(modifier = Modifier.height(SusuTheme.spacing.spacing_m))
             MyPageInfoItem(
-                title = "이름",
+                title = stringResource(id = com.susu.core.ui.R.string.word_name),
+                isWrong = uiState.isEditing && !uiState.isEditNameValid,
             ) {
                 if (uiState.isEditing) {
                     SusuBasicTextField(
@@ -185,12 +193,24 @@ fun MyPageInfoScreen(
                         modifier = Modifier.susuClickable(
                             onClick = onBirthClick,
                         ),
-                        text = uiState.editBirth.toString(),
+                        text = if (uiState.editBirth in USER_BIRTH_RANGE) {
+                            uiState.editBirth.toString()
+                        } else {
+                            stringResource(id = com.susu.core.ui.R.string.word_not_select)
+                        },
                         style = SusuTheme.typography.title_xs,
                         color = if (uiState.birthEdited) Gray100 else Gray40,
                     )
                 } else {
-                    Text(text = uiState.userBirth.toString(), style = SusuTheme.typography.title_xs, color = Gray100)
+                    Text(
+                        text = if (uiState.userBirth in USER_BIRTH_RANGE) {
+                            uiState.userBirth.toString()
+                        } else {
+                            stringResource(id = com.susu.core.ui.R.string.word_not_select)
+                        },
+                        style = SusuTheme.typography.title_xs,
+                        color = Gray100,
+                    )
                 }
             }
             MyPageInfoItem(

@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import com.susu.core.designsystem.theme.Gray100
 import com.susu.core.designsystem.theme.Gray30
 import com.susu.core.designsystem.theme.SusuTheme
+import com.susu.core.ui.extension.susuClickable
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -41,19 +42,29 @@ fun <T> InfiniteColumn(
     textColor: Color = Gray30,
     selectedTextColor: Color = Gray100,
     onItemSelected: (index: Int, item: T) -> Unit = { _, _ -> },
+    onItemClicked: (item: T) -> Unit = { },
 ) {
     val itemHalfHeight = LocalDensity.current.run { itemHeight.toPx() / 2f }
     var lastSelectedIndex by remember { mutableStateOf(0) }
     var itemsState by remember { mutableStateOf(items) }
     val lazyListState = rememberLazyListState(0)
     val flingBehavior: FlingBehavior = rememberSnapFlingBehavior(lazyListState)
+    var clickedIndex: Int? by remember { mutableStateOf(null) }
 
-    LaunchedEffect(items) {
+    LaunchedEffect(key1 = items) {
         var targetIndex = items.indexOf(initialItem)
         targetIndex += ((Int.MAX_VALUE / 2) / items.size) * items.size
         itemsState = items
         lastSelectedIndex = targetIndex
         lazyListState.scrollToItem(targetIndex - 2, scrollOffset = (itemHeight.value * 0.6f).toInt())
+    }
+
+    LaunchedEffect(clickedIndex) {
+        if (clickedIndex != null) {
+            lastSelectedIndex = clickedIndex!!
+            val targetIndex = clickedIndex!! - 2
+            lazyListState.animateScrollToItem(targetIndex, scrollOffset = (itemHeight.value * 0.6f).toInt())
+        }
     }
 
     LazyColumn(
@@ -85,6 +96,13 @@ fun <T> InfiniteColumn(
                     contentAlignment = Alignment.Center,
                 ) {
                     Text(
+                        modifier = Modifier.susuClickable(
+                            onClick = {
+                                clickedIndex = i
+                                onItemClicked(item)
+                            },
+                            rippleEnabled = false,
+                        ),
                         text = item.toString(),
                         style = if (lastSelectedIndex == i) {
                             selectedTextStyle

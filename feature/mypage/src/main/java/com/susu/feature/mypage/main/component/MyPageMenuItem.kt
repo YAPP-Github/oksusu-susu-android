@@ -40,7 +40,12 @@ fun MyPageMenuItem(
             .padding(padding),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Text(modifier = Modifier.weight(1f), text = titleText, style = titleTextStyle, color = titleTextColor)
+        Text(
+            modifier = Modifier.weight(1f),
+            text = titleText,
+            style = titleTextStyle,
+            color = titleTextColor,
+        )
         action?.let {
             Spacer(modifier = Modifier.width(actionItemPadding))
             it()
