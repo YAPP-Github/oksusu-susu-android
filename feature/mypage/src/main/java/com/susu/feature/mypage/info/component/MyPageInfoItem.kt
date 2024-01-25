@@ -57,7 +57,7 @@ fun WrongDot(
                 drawCircle(
                     color = color,
                     radius = dotRadius.toPx(),
-                    center = Offset(0f, 8.dp.toPx())
+                    center = Offset(0f, 8.dp.toPx()),
                 )
             },
     )
