@@ -1,0 +1,135 @@
+package com.susu.feature.statistics.content.susu
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import com.susu.core.designsystem.theme.Gray10
+import com.susu.core.designsystem.theme.Gray50
+import com.susu.core.designsystem.theme.Gray80
+import com.susu.core.designsystem.theme.Orange10
+import com.susu.core.designsystem.theme.Orange60
+import com.susu.core.designsystem.theme.SusuTheme
+import com.susu.core.ui.extension.susuClickable
+import com.susu.core.ui.extension.toMoneyFormat
+import com.susu.feature.statistics.R
+
+@Composable
+fun SusuStatisticsOptionSlot(
+    modifier: Modifier = Modifier,
+    age: String = "",
+    relationship: String = "",
+    category: String = "",
+    money: Int = 0,
+    title: String = "",
+    onAgeClick: () -> Unit = {},
+    onRelationshipClick: () -> Unit = {},
+    onCategoryClick: () -> Unit = {},
+) {
+    Column(
+        modifier = modifier.fillMaxWidth()
+            .background(color = Gray10, shape = RoundedCornerShape(4.dp))
+            .padding(SusuTheme.spacing.spacing_m),
+    ) {
+        Text(
+            text = title,
+            style = SusuTheme.typography.title_xs,
+            color = Gray50,
+        )
+        Spacer(modifier = Modifier.height(SusuTheme.spacing.spacing_xxs))
+        Column(
+            modifier = Modifier.fillMaxWidth().background(color = Orange10, shape = RoundedCornerShape(4.dp))
+                .padding(horizontal = 12.dp, vertical = 8.dp),
+            verticalArrangement = Arrangement.Bottom,
+        ) {
+            Row {
+                OptionSlot(text = age, onClick = onAgeClick)
+                Spacer(modifier = Modifier.width(4.dp))
+                Text(
+                    text = stringResource(R.string.word_statistics_is),
+                    style = SusuTheme.typography.title_xxs,
+                    color = Gray80,
+                )
+                OptionSlot(text = relationship, onClick = onRelationshipClick)
+                Spacer(modifier = Modifier.width(4.dp))
+                OptionSlot(text = category, onClick = onCategoryClick)
+                Spacer(modifier = Modifier.width(4.dp))
+                Text(
+                    text = stringResource(R.string.word_statistics_to),
+                    style = SusuTheme.typography.title_xxs,
+                    color = Gray80,
+                )
+            }
+            Spacer(modifier = Modifier.height(8.dp))
+            Row(
+                verticalAlignment = Alignment.Bottom,
+            ) {
+                Text(
+                    text = stringResource(id = com.susu.core.ui.R.string.money_unit_format, money.toMoneyFormat()),
+                    style = SusuTheme.typography.title_s,
+                    color = Orange60,
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = stringResource(R.string.word_statistics_send),
+                    style = SusuTheme.typography.title_xxs,
+                    color = Gray80,
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun OptionSlot(
+    modifier: Modifier = Modifier,
+    text: String = "",
+    onClick: () -> Unit = {},
+) {
+    Row(
+        modifier = modifier.background(color = Gray10, shape = RoundedCornerShape(4.dp))
+            .susuClickable(onClick = onClick)
+            .padding(
+                horizontal = SusuTheme.spacing.spacing_xxs,
+                vertical = SusuTheme.spacing.spacing_xxxxs,
+            ),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(text = text, color = Orange60, style = SusuTheme.typography.title_xxxs)
+        Spacer(modifier = Modifier.width(SusuTheme.spacing.spacing_xxxxs))
+        Icon(
+            painter = painterResource(id = R.drawable.ic_statistics_arrow_down),
+            tint = Orange60,
+            contentDescription = "옵션 선택",
+        )
+    }
+}
+
+@Preview
+@Composable
+fun SusuStatisticsOptionSlotPreview() {
+    SusuTheme {
+        SusuStatisticsOptionSlot(
+            title = "제목",
+            age = "20대",
+            relationship = "친구",
+            category = "결혼식",
+            money = 50000,
+        )
+    }
+}

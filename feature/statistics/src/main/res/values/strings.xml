@@ -16,4 +16,7 @@
     <string name="statistics_dialog_title">통계를 위한 정보를 알려주세요</string>
     <string name="statistics_dialog_description">나의 평균 거래 상황을 분석하기 위해\n필요한 정보가 있어요</string>
     <string name="statistics_dialog_confirm">정보 입력하기</string>
+    <string name="word_statistics_is">는</string>
+    <string name="word_statistics_to">에</string>
+    <string name="word_statistics_send">을 보내고 있어요</string>
 </resources>
