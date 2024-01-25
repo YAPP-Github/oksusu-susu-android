@@ -1,9 +1,8 @@
-package com.susu.feature.community
+package com.susu.feature.community.community
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,7 +11,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -26,17 +24,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.susu.core.designsystem.component.appbar.SusuDefaultAppBar
 import com.susu.core.designsystem.component.appbar.icon.LogoIcon
-import com.susu.core.designsystem.component.appbar.icon.NotificationIcon
 import com.susu.core.designsystem.component.appbar.icon.SearchIcon
 import com.susu.core.designsystem.component.button.FilledButtonColor
 import com.susu.core.designsystem.component.button.GhostButtonColor
@@ -54,7 +48,9 @@ import com.susu.core.designsystem.theme.Gray50
 import com.susu.core.designsystem.theme.Gray60
 import com.susu.core.designsystem.theme.Orange60
 import com.susu.core.designsystem.theme.SusuTheme
-import com.susu.core.ui.extension.susuClickable
+import com.susu.feature.community.R
+import com.susu.feature.community.community.component.MostPopularVoteCard
+import com.susu.feature.community.community.component.VoteCard
 
 @Composable
 fun CommunityRoute(
@@ -116,52 +112,7 @@ fun CommunityScreen(
                             horizontalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_m),
                         ) {
                             items(count = 5) {
-                                Column(
-                                    modifier = Modifier
-                                        .clip(RoundedCornerShape(8.dp))
-                                        .background(Gray15)
-                                        .size(
-                                            width = 296.dp,
-                                            height = 156.dp,
-                                        )
-                                        .padding(SusuTheme.spacing.spacing_m),
-                                ) {
-                                    Row(
-                                        verticalAlignment = Alignment.CenterVertically,
-                                    ) {
-                                        Text(text = "결혼식", color = Gray60, style = SusuTheme.typography.title_xxxs)
-                                        Icon(
-                                            modifier = Modifier.size(20.dp),
-                                            painter = painterResource(id = com.susu.core.ui.R.drawable.ic_arrow_right),
-                                            contentDescription = null,
-                                            tint = Gray50,
-                                        )
-                                    }
-
-                                    Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_xxs))
-
-                                    Text(
-                                        text = "고등학교 동창이고 좀 애매하게 친한 사인데 축의금 얼마 내야 돼?",
-                                        style = SusuTheme.typography.text_xxxs,
-                                    )
-
-                                    Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_xs))
-
-                                    SusuGhostButton(
-                                        textModifier = Modifier.weight(1f),
-                                        text = "12,430명 참여 중",
-                                        textAlign = TextAlign.Center,
-                                        color = GhostButtonColor.Black,
-                                        style = XSmallButtonStyle.height44,
-                                        isClickable = false,
-                                        leftIcon = {
-                                            Image(
-                                                painter = painterResource(id = R.drawable.ic_vote),
-                                                contentDescription = null,
-                                            )
-                                        },
-                                    )
-                                }
+                                MostPopularVoteCard()
                             }
                         }
 
@@ -251,80 +202,7 @@ fun CommunityScreen(
                 }
 
                 items(10) {
-                    Column(
-                        modifier = Modifier
-                            .padding(
-                                start = SusuTheme.spacing.spacing_m,
-                                end = SusuTheme.spacing.spacing_m,
-                                bottom = SusuTheme.spacing.spacing_xxs,
-                            )
-                            .fillMaxWidth()
-                            .clip(RoundedCornerShape(8.dp))
-                            .background(Gray15)
-                            .padding(SusuTheme.spacing.spacing_m),
-                    ) {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                        ) {
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                            ) {
-                                Text(text = "결혼식", color = Orange60, style = SusuTheme.typography.title_xxxs)
-                                Icon(
-                                    modifier = Modifier.size(20.dp),
-                                    painter = painterResource(id = com.susu.core.ui.R.drawable.ic_arrow_right),
-                                    contentDescription = null,
-                                    tint = Orange60,
-                                )
-                            }
-
-                            Text(
-                                text = "10분 전",
-                                style = SusuTheme.typography.text_xxxs,
-                                color = Gray40,
-                            )
-                        }
-
-                        Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_xxs))
-
-                        Text(
-                            text = "고등학교 동창이고 좀 애매하게 친한 사인데 축의금 얼마 내야 돼?",
-                            style = SusuTheme.typography.text_xxxs,
-                        )
-
-                        Column(
-                            verticalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxxxs),
-                        ) {
-                            repeat(5) {
-                                SusuGhostButton(
-                                    textModifier = Modifier.weight(1f),
-                                    text = "${it}만원",
-                                    color = GhostButtonColor.Black,
-                                    style = XSmallButtonStyle.height44,
-                                    isClickable = false,
-                                )
-                            }
-                        }
-
-                        Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_s))
-
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                        ) {
-                            Text(
-                                text = "8명 참여",
-                                style = SusuTheme.typography.title_xxxs,
-                                color = Blue60,
-                            )
-
-                            Image(
-                                painter = painterResource(id = R.drawable.ic_report),
-                                contentDescription = stringResource(com.susu.core.ui.R.string.content_description_report_button),
-                            )
-                        }
-                    }
+                    VoteCard()
                 }
             }
         }

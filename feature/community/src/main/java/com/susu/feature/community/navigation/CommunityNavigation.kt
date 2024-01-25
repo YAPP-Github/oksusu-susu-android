@@ -7,8 +7,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.susu.core.ui.DialogToken
 import com.susu.core.ui.SnackbarToken
-import com.susu.feature.community.CommunityRoute
-import com.susu.feature.community.CommunityScreen
+import com.susu.feature.community.community.CommunityRoute
 import com.susu.feature.community.voteadd.VoteAddRoute
 
 fun NavController.navigateVoteAdd() {
