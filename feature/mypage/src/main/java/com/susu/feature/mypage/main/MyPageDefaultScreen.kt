@@ -17,6 +17,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -151,6 +152,8 @@ fun MyPageDefaultScreen(
     navigateToSocial: () -> Unit = {},
 ) {
     val context = LocalContext.current
+    val currentAppVersion = remember { getAppVersion(context) }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -232,7 +235,7 @@ fun MyPageDefaultScreen(
         ) {
             Text(
                 modifier = Modifier.align(Alignment.TopStart),
-                text = stringResource(com.susu.feature.mypage.R.string.mypage_app_version) + " ${getAppVersion(context)}",
+                text = stringResource(com.susu.feature.mypage.R.string.mypage_app_version) + " $currentAppVersion",
                 style = SusuTheme.typography.title_xxxs,
                 color = Gray50,
             )
@@ -246,18 +249,10 @@ fun MyPageDefaultScreen(
     }
 }
 
-private fun getAppVersion(context: Context): String {
-    try {
-        val packageInfo = context.packageManager.getPackageInfo(context.packageName, 0)
-
-        if (packageInfo != null) {
-            return packageInfo.versionName
-        }
-    } catch (e: Exception) {
-        e.printStackTrace()
-    }
-    return ""
-}
+private fun getAppVersion(context: Context): String = runCatching {
+    val packageInfo = context.packageManager.getPackageInfo(context.packageName, 0)
+    packageInfo.versionName
+}.getOrNull() ?: ""
 
 @Composable
 fun MyPageDivider(
