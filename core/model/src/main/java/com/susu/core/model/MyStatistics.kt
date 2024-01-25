@@ -7,4 +7,6 @@ data class MyStatistics(
     val mostRelationship: StatisticsElement = StatisticsElement(),
     val mostSpentMonth: Int = 0,
     val recentSpent: List<StatisticsElement> = emptyList(),
+    val recentTotalSpent: Int = 0,
+    val recentMaximumSpent: Int = 0,
 )

@@ -73,6 +73,8 @@ fun MyStatisticsContent(
             RecentSpentGraph(
                 isActive = !isBlind,
                 spentData = uiState.statistics.recentSpent,
+                maximumAmount = uiState.statistics.recentMaximumSpent,
+                totalAmount = uiState.statistics.recentTotalSpent,
             )
             Row(
                 modifier = Modifier

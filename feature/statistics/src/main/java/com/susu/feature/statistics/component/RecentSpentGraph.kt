@@ -54,10 +54,9 @@ fun RecentSpentGraph(
     modifier: Modifier = Modifier,
     isActive: Boolean = true,
     spentData: List<StatisticsElement> = emptyList(),
+    totalAmount: Int = 0,
+    maximumAmount: Int = 0,
 ) {
-    val totalAmount by remember { mutableStateOf(spentData.sumOf { it.value }) }
-    val maximumAmount by remember { mutableStateOf(spentData.maxOfOrNull { it.value }) }
-
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -105,42 +104,38 @@ fun RecentSpentGraph(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            if (maximumAmount != null) {
-                spentData.forEachIndexed { i, data ->
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                    ) {
-                        StickGraph(
-                            ratio = data.value.toFloat() / maximumAmount!!,
-                            color = if (isActive) {
-                                if (i == spentData.lastIndex) {
-                                    Orange60
-                                } else {
-                                    Orange30
-                                }
+            spentData.forEachIndexed { i, data ->
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    StickGraph(
+                        ratio = data.value.toFloat() / maximumAmount,
+                        color = if (isActive) {
+                            if (i == spentData.lastIndex) {
+                                Orange60
                             } else {
-                                if (i == spentData.lastIndex) {
-                                    Gray60
-                                } else {
-                                    Gray30
-                                }
-                            },
-                        )
-                        Spacer(modifier = Modifier.height(SusuTheme.spacing.spacing_xxxxs))
-                        Text(
-                            text = stringResource(id = R.string.word_month_format, data.title),
-                            style = SusuTheme.typography.title_xxxs,
-                            color = if (i == spentData.lastIndex) {
-                                Gray90
+                                Orange30
+                            }
+                        } else {
+                            if (i == spentData.lastIndex) {
+                                Gray60
                             } else {
-                                Gray40
-                            },
-                        )
-                    }
-                    Spacer(modifier = Modifier.width(SusuTheme.spacing.spacing_s))
+                                Gray30
+                            }
+                        },
+                    )
+                    Spacer(modifier = Modifier.height(SusuTheme.spacing.spacing_xxxxs))
+                    Text(
+                        text = stringResource(id = R.string.word_month_format, data.title),
+                        style = SusuTheme.typography.title_xxxs,
+                        color = if (i == spentData.lastIndex) {
+                            Gray90
+                        } else {
+                            Gray40
+                        },
+                    )
                 }
-            } else {
-                Spacer(modifier = Modifier.height(100.dp)) // 임시
+                Spacer(modifier = Modifier.width(SusuTheme.spacing.spacing_s))
             }
         }
     }
