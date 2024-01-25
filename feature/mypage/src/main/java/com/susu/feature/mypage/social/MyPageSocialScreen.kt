@@ -69,8 +69,6 @@ fun MyPageSocialScreen(
                 SocialProvider(
                     isActive = when (it) {
                         SnsProviders.Kakao -> AuthApiClient.instance.hasToken()
-                        SnsProviders.Naver -> false
-                        SnsProviders.Google -> false
                     },
                     snsProviders = it,
                 )

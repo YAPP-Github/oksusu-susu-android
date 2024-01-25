@@ -21,7 +21,6 @@ val nameRegex = Regex("[a-zA-Z가-힣]{0,10}")
 val USER_BIRTH_RANGE = 1930..2030
 
 const val INTENT_ACTION_DOWNLOAD_COMPLETE = "android.intent.action.DOWNLOAD_COMPLETE"
-
 enum class SnsProviders(
     val path: String,
     @StringRes val nameId: Int,
@@ -33,18 +32,6 @@ enum class SnsProviders(
         nameId = R.string.sns_kakao,
         iconId = R.drawable.ic_kakao_login,
         backgroundColor = Color(0xFFFEE500),
-    ),
-    Naver(
-        path = "",
-        nameId = R.string.sns_naver,
-        iconId = R.drawable.ic_kakao_login,
-        backgroundColor = Color.Unspecified,
-    ),
-    Google(
-        path = "",
-        nameId = R.string.sns_google,
-        iconId = R.drawable.ic_kakao_login,
-        backgroundColor = Color.Unspecified,
     ),
 }
 
