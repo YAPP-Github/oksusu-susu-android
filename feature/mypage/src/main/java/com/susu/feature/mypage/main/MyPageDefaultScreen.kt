@@ -1,5 +1,6 @@
 package com.susu.feature.mypage.main
 
+import android.content.Context
 import android.os.Environment
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -150,8 +151,11 @@ fun MyPageDefaultScreen(
     navigateToInfo: () -> Unit = {},
     navigateToSocial: () -> Unit = {},
 ) {
+    val context = LocalContext.current
     Column(
-        modifier = Modifier.fillMaxSize().padding(padding),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(padding),
     ) {
         SusuDefaultAppBar(
             modifier = Modifier.padding(SusuTheme.spacing.spacing_xs),
@@ -218,14 +222,15 @@ fun MyPageDefaultScreen(
             onMenuClick = onWithdraw,
         )
         Box(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
                 .weight(1f)
                 .background(color = Gray20)
                 .padding(SusuTheme.spacing.spacing_m),
         ) {
             Text(
                 modifier = Modifier.align(Alignment.TopStart),
-                text = stringResource(com.susu.feature.mypage.R.string.mypage_app_version) + uiState.appVersion,
+                text = stringResource(com.susu.feature.mypage.R.string.mypage_app_version) + " ${getAppVersion(context)}",
                 style = SusuTheme.typography.title_xxxs,
                 color = Gray50,
             )
@@ -237,6 +242,21 @@ fun MyPageDefaultScreen(
             )
         }
     }
+}
+
+private fun getAppVersion(context: Context): String {
+    try {
+        val packageInfo = context.packageManager.getPackageInfo(
+            context.packageName, 0,
+        )
+
+        if (packageInfo != null) {
+            return packageInfo.versionName
+        }
+    } catch (e: Exception) {
+        e.printStackTrace()
+    }
+    return ""
 }
 
 @Composable
