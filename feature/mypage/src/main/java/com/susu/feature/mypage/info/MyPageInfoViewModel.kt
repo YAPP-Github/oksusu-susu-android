@@ -17,11 +17,7 @@ class MyPageInfoViewModel @Inject constructor(
     private val patchUserUseCase: PatchUserUseCase,
 ) : BaseViewModel<MyPageInfoState, MyPageInfoEffect>(MyPageInfoState()) {
 
-    init {
-        getUserInfo()
-    }
-
-    private fun getUserInfo() {
+    fun getUserInfo() {
         viewModelScope.launch {
             intent { copy(isLoading = true) }
             getUserUseCase().onSuccess {

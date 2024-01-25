@@ -6,6 +6,7 @@ import com.susu.data.data.repository.LedgerRecentSearchRepositoryImpl
 import com.susu.data.data.repository.LedgerRepositoryImpl
 import com.susu.data.data.repository.LoginRepositoryImpl
 import com.susu.data.data.repository.SignUpRepositoryImpl
+import com.susu.data.data.repository.StatisticsRepositoryImpl
 import com.susu.data.data.repository.TermRepositoryImpl
 import com.susu.data.data.repository.TokenRepositoryImpl
 import com.susu.data.data.repository.UserRepositoryImpl
@@ -16,6 +17,7 @@ import com.susu.domain.repository.LedgerRecentSearchRepository
 import com.susu.domain.repository.LedgerRepository
 import com.susu.domain.repository.LoginRepository
 import com.susu.domain.repository.SignUpRepository
+import com.susu.domain.repository.StatisticsRepository
 import com.susu.domain.repository.TermRepository
 import com.susu.domain.repository.TokenRepository
 import com.susu.domain.repository.UserRepository
@@ -73,6 +75,11 @@ abstract class RepositoryModule {
     abstract fun bindExcelRepository(
         excelRepositoryImpl: ExcelRepositoryImpl,
     ): ExcelRepository
+
+    @Binds
+    abstract fun bindStatisticsRepository(
+        statisticsRepositoryImpl: StatisticsRepositoryImpl,
+    ): StatisticsRepository
 
     @Binds
     abstract fun bindVoteRepository(
