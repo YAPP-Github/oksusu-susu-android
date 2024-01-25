@@ -20,6 +20,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -54,11 +55,16 @@ fun MyPageInfoRoute(
     onShowSnackbar: (SnackbarToken) -> Unit,
     handleException: (Throwable, () -> Unit) -> Unit,
 ) {
+    val context = LocalContext.current
+
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
             MyPageInfoEffect.PopBackStack -> popBackStack()
             is MyPageInfoEffect.ShowSnackBar -> onShowSnackbar(SnackbarToken(message = sideEffect.msg))
             is MyPageInfoEffect.HandleException -> handleException(sideEffect.throwable, sideEffect.retry)
+            MyPageInfoEffect.ShowNameNotValidSnackBar -> onShowSnackbar(
+                SnackbarToken(message = context.getString(R.string.mypage_my_info_snackbar_invalid_name)),
+            )
         }
     }
 
@@ -124,11 +130,10 @@ fun MyPageInfoScreen(
                     if (uiState.isEditing) {
                         Text(
                             modifier = Modifier
+                                .padding(end = SusuTheme.spacing.spacing_m)
                                 .susuClickable(
-                                    runIf = uiState.isEditNameValid,
                                     onClick = onEditComplete,
-                                )
-                                .padding(end = SusuTheme.spacing.spacing_m),
+                                ),
                             text = stringResource(id = com.susu.core.ui.R.string.word_enrollment),
                             style = SusuTheme.typography.title_xxs,
                             color = if (uiState.isEditNameValid) Gray100 else Gray50,
@@ -136,8 +141,8 @@ fun MyPageInfoScreen(
                     } else {
                         Text(
                             modifier = Modifier
-                                .susuClickable(onClick = onEditStart)
-                                .padding(end = SusuTheme.spacing.spacing_m),
+                                .padding(end = SusuTheme.spacing.spacing_m)
+                                .susuClickable(onClick = onEditStart),
                             text = stringResource(id = com.susu.core.ui.R.string.word_edit),
                             style = SusuTheme.typography.title_xxs,
                             color = Gray100,

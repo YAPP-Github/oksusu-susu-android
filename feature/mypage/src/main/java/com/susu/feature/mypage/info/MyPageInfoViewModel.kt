@@ -78,6 +78,11 @@ class MyPageInfoViewModel @Inject constructor(
     }
 
     fun completeEdit() {
+        if (!uiState.value.isEditNameValid) {
+            postSideEffect(MyPageInfoEffect.ShowNameNotValidSnackBar)
+            return
+        }
+
         viewModelScope.launch {
             intent { copy(isLoading = true) }
             patchUserUseCase(name = uiState.value.editName, gender = uiState.value.editGender.content, birth = uiState.value.editBirth)
