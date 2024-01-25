@@ -303,11 +303,11 @@ private fun InnerButtons(
     onClickCloseIcon: () -> Unit = {},
     onClickFilledButton: () -> Unit = {},
 ) {
-    val (innerButtonTextColor, innerButtonBackgroundColor) = with(color) {
+    val (innerButtonTextColor, innerButtonBackgroundColor, clearIconColor) = with(color) {
         when {
-            isFocused.not() -> (unFocusedContentColor to unFocusedBackgroundColor)
-            isActive || isSaved -> (activeContentColor to activeBackgroundColor)
-            else -> (inactiveContentColor to inactiveBackgroundColor)
+            isFocused.not() -> listOf(unFocusedContentColor, unFocusedBackgroundColor, activeClearIconColor)
+            isActive || isSaved -> listOf(activeContentColor, activeBackgroundColor, activeClearIconColor)
+            else -> listOf(inactiveContentColor, inactiveBackgroundColor, inactiveClearIconColor)
         }
     }
 
@@ -317,6 +317,7 @@ private fun InnerButtons(
                 ClearIconButton(
                     iconSize = clearIconSize,
                     onClick = onClickClearIcon,
+                    tint = clearIconColor,
                 )
             }
         }
@@ -423,7 +424,7 @@ fun TextFieldButtonPreview() {
                 onClickButton = { isFocused = !isFocused },
                 showClearIcon = false,
                 showCloseIcon = false,
-                color = TextFieldButtonColor.Orange,
+                color = TextFieldButtonColor.Gray,
                 style = LargeTextFieldButtonStyle.height46,
                 onClickFilledButton = { isSaved = isSaved.not() },
                 onClickClearIcon = { text = "" },
@@ -482,7 +483,7 @@ fun TextFieldButtonFocusedPreview() {
         ) {
             Text(text = "텍스트 길이에 딱 맞는 너비 (wrap)")
             SusuTextFieldWrapContentButton(
-                color = TextFieldButtonColor.Orange,
+                color = TextFieldButtonColor.Gray,
                 text = text,
                 onTextChange = { text = it },
                 placeholder = "",

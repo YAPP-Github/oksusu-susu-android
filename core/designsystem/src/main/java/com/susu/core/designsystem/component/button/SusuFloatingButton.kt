@@ -1,5 +1,6 @@
 package com.susu.core.designsystem.component.button
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -12,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.susu.core.designsystem.R
@@ -23,6 +25,7 @@ import com.susu.core.ui.extension.susuClickable
 @Composable
 fun SusuFloatingButton(
     modifier: Modifier = Modifier,
+    @DrawableRes imageResId: Int = R.drawable.ic_floating_button_add,
     onClick: () -> Unit = {},
 ) {
     Box(
@@ -34,7 +37,10 @@ fun SusuFloatingButton(
             .susuClickable(rippleColor = Gray10, onClick = onClick),
         contentAlignment = Alignment.Center,
     ) {
-        Image(painter = painterResource(id = R.drawable.ic_floating_button_add), contentDescription = "추가 아이콘")
+        Image(
+            painter = painterResource(id = imageResId),
+            contentDescription = stringResource(id = com.susu.core.ui.R.string.content_description_add_button),
+        )
     }
 }
 

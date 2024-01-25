@@ -8,6 +8,7 @@ import com.susu.data.remote.api.StatisticsService
 import com.susu.data.remote.api.TermService
 import com.susu.data.remote.api.TokenService
 import com.susu.data.remote.api.UserService
+import com.susu.data.remote.api.VoteService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -65,5 +66,10 @@ object ApiServiceModule {
     @Provides
     fun providesStatisticsService(retrofit: Retrofit): StatisticsService {
         return retrofit.create(StatisticsService::class.java)
+
+    @Singleton
+    @Provides
+    fun providesVoteService(retrofit: Retrofit): VoteService {
+        return retrofit.create(VoteService::class.java)
     }
 }
