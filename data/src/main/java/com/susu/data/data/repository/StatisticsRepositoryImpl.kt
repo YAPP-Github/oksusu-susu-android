@@ -12,8 +12,8 @@ class StatisticsRepositoryImpl @Inject constructor(
 ) : StatisticsRepository {
     override suspend fun getMyStatistics(): MyStatistics {
         val originalStatistic = statisticsService.getMyStatistics().getOrThrow().toModel()
-        val sortedRecentSpent = originalStatistic.recentSpent.sortedBy { it.title.replace(".", "").toInt() } // api 수정 후 replace 제거
-            .map { StatisticsElement(title = it.title.removeRange(0 until 5).toInt().toString(), value = it.value) } // api 수정 후 range 수정
+        val sortedRecentSpent = originalStatistic.recentSpent.sortedBy { it.title.toInt() }
+            .map { StatisticsElement(title = it.title.substring(it.title.length - 2).toInt().toString(), value = it.value) }
 
         return MyStatistics(
             highestAmountReceived = originalStatistic.highestAmountReceived,
