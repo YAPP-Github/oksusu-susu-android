@@ -66,6 +66,7 @@ object ApiServiceModule {
     @Provides
     fun providesStatisticsService(retrofit: Retrofit): StatisticsService {
         return retrofit.create(StatisticsService::class.java)
+    }
 
     @Singleton
     @Provides
