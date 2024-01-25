@@ -27,7 +27,7 @@ fun MyStatisticsResponse.toModel() = MyStatistics(
     mostSpentMonth = mostSpentMonth,
     recentSpent = recentSpent.map { it.toModel() },
     recentMaximumSpent = recentSpent.maxOfOrNull { it.value } ?: 0,
-    recentTotalSpent = recentSpent.sumOf { it.value }
+    recentTotalSpent = recentSpent.sumOf { it.value },
 )
 
 fun StatisticsElement.toModel() = com.susu.core.model.StatisticsElement(

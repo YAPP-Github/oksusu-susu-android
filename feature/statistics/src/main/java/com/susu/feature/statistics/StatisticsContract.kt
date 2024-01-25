@@ -6,7 +6,7 @@ import com.susu.core.ui.base.UiState
 
 enum class StatisticsTab(@StringRes val stringId: Int) {
     MY(R.string.statistics_tab_my),
-    AVERAGE(R.string.statistics_tab_average)
+    AVERAGE(R.string.statistics_tab_average),
 }
 
 data class StatisticsState(

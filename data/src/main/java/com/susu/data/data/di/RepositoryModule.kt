@@ -85,5 +85,4 @@ abstract class RepositoryModule {
     abstract fun bindVoteRepository(
         voteRepositoryImpl: VoteRepositoryImpl,
     ): VoteRepository
-
 }
