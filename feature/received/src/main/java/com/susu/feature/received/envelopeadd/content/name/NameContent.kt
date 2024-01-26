@@ -13,9 +13,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -40,10 +44,13 @@ fun NameContentRoute(
     updateParentFriendId: (Long?) -> Unit,
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
+    val focusRequester = remember { FocusRequester() }
+    val focusManager = LocalFocusManager.current
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
             is NameSideEffect.UpdateParentName -> updateParentName(sideEffect.name)
             is NameSideEffect.UpdateParentFriendId -> updateParentFriendId(sideEffect.friendId)
+            NameSideEffect.FocusClear -> focusManager.clearFocus()
         }
     }
 
@@ -59,6 +66,7 @@ fun NameContentRoute(
 
     NameContent(
         uiState = uiState,
+        focusRequester = focusRequester,
         onTextChangeName = viewModel::updateName,
         onClickFriendItem = viewModel::selectFriend,
     )
@@ -67,6 +75,7 @@ fun NameContentRoute(
 @Composable
 fun NameContent(
     uiState: NameState = NameState(),
+    focusRequester: FocusRequester = remember { FocusRequester() },
     onTextChangeName: (String) -> Unit = {},
     onClickFriendItem: (FriendSearch) -> Unit = {},
 ) {
@@ -88,11 +97,11 @@ fun NameContent(
                 .size(SusuTheme.spacing.spacing_m),
         )
         SusuBasicTextField(
+            modifier = Modifier.fillMaxWidth().focusRequester(focusRequester),
             text = uiState.name,
             onTextChange = onTextChangeName,
             placeholder = stringResource(R.string.name_content_placeholder),
             placeholderColor = Gray40,
-            modifier = Modifier.fillMaxWidth(),
         )
         Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_xl))
 

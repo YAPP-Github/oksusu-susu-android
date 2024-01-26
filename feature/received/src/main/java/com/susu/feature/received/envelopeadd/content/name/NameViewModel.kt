@@ -5,6 +5,7 @@ import com.susu.core.model.FriendSearch
 import com.susu.core.ui.base.BaseViewModel
 import com.susu.domain.usecase.friend.SearchFriendUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -22,13 +23,15 @@ class NameViewModel @Inject constructor(
         )
         copy(
             name = name,
+            friendList = if (name.isEmpty()) persistentListOf() else friendList,
             isSelectedFriend = false,
         )
     }
 
     fun selectFriend(friend: FriendSearch) = intent {
         postSideEffect(
-            NameSideEffect.UpdateParentName(name),
+            NameSideEffect.FocusClear,
+            NameSideEffect.UpdateParentName(friend.friend.name),
             NameSideEffect.UpdateParentFriendId(friend.friend.id),
         )
         copy(
@@ -38,6 +41,7 @@ class NameViewModel @Inject constructor(
     }
 
     fun getFriendList(search: String) = viewModelScope.launch {
+        if (search.isEmpty()) return@launch
         if (currentState.isSelectedFriend) return@launch
 
         searchFriendUseCase(name = search)

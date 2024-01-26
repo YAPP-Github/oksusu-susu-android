@@ -15,11 +15,11 @@ data class EnvelopesResponse(
 @Serializable
 data class FriendInfo(
     val id: Long,
-    val uid: Long,
-    val createdAt: String,
-    val modifiedAt: String,
+    val uid: Long = 0,
+    val createdAt: String = "",
+    val modifiedAt: String = "",
     val name: String,
-    val phoneNumber: String,
+    val phoneNumber: String = "",
 )
 
 internal fun FriendInfo.toModel() = Friend(
