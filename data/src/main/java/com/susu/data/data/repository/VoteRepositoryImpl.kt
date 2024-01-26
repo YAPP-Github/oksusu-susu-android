@@ -28,4 +28,24 @@ class VoteRepositoryImpl @Inject constructor(
             categoryId = categoryId,
         ),
     ).getOrThrow().toModel()
+
+    override suspend fun getVoteList(
+        content: String?,
+        mine: Boolean?,
+        sortType: String?,
+        categoryId: Long?,
+        page: Int?,
+        size: Int?,
+        sort: String?,
+    ): List<Vote> = api.getVoteList(
+        content = content,
+        mine = mine,
+        sortType = sortType,
+        categoryId = categoryId,
+        page = page,
+        size = size,
+        sort = sort,
+    ).getOrThrow().toModel()
+
+    override suspend fun getPopularVoteList(): Vote = api.getPopularVoteList().getOrThrow().toModel()
 }

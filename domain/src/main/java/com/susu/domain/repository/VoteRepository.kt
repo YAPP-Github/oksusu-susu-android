@@ -8,4 +8,16 @@ interface VoteRepository {
         optionList: List<String>,
         categoryId: Int,
     ): Vote
+
+    suspend fun getVoteList(
+        content: String?,
+        mine: Boolean?,
+        sortType: String?,
+        categoryId: Long?,
+        page: Int?,
+        size: Int?,
+        sort: String?,
+    ): List<Vote>
+
+    suspend fun getPopularVoteList(): Vote
 }

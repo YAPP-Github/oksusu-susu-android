@@ -31,7 +31,6 @@ class VoteAddViewModel @Inject constructor(
                 categoryId = currentState.selectedCategory.id,
             ),
         ).onSuccess {
-            Timber.tag("테스트").d("$it")
             popBackStack()
         }.onFailure {
             postSideEffect(VoteAddSideEffect.HandleException(it, ::createVote))
