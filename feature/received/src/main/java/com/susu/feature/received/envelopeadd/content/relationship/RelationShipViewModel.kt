@@ -17,7 +17,12 @@ class RelationShipViewModel @Inject constructor(
 ) {
     private val parentSelectedRelationShip
         get() = with(currentState) {
-            if (selectedRelationship == customRelationship && (customRelationship.customRelation.isNullOrEmpty() || isSavedCustomRelationShip.not())) {
+            if (selectedRelationship == customRelationship &&
+                (
+                    customRelationship.customRelation.isNullOrEmpty() ||
+                        isSavedCustomRelationShip.not()
+                    )
+            ) {
                 null
             } else {
                 selectedRelationship
