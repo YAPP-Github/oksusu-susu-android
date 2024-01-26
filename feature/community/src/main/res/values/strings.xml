@@ -8,4 +8,5 @@
     <string name="community_screen_vote_align_high">투표 많은 순</string>
     <string name="community_screen_most_popular_vote">가장 인기있는 투표</string>
     <string name="community_screen_title">투표</string>
+    <string name="word_people">%s명</string>
 </resources>
