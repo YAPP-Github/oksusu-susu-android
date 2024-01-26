@@ -27,6 +27,7 @@ import com.susu.core.ui.DialogToken
 import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.feature.statistics.component.StatisticsTab
 import com.susu.feature.statistics.content.my.MyStatisticsRoute
+import com.susu.feature.statistics.content.susu.SusuStatisticsRoute
 
 @Composable
 fun StatisticsRoute(
@@ -96,7 +97,11 @@ fun StatisticsScreen(
                     handleException = handleException,
                 )
 
-                StatisticsTab.AVERAGE -> {}
+                StatisticsTab.AVERAGE -> SusuStatisticsRoute(
+                    isBlind = uiState.isBlind,
+                    modifier = Modifier.fillMaxSize(),
+                    handleException = handleException,
+                )
             }
         }
 
