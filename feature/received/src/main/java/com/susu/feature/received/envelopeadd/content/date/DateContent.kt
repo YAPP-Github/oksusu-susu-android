@@ -28,7 +28,7 @@ import java.time.LocalDateTime
 fun DateContentRoute(
     viewModel: DateViewModel = hiltViewModel(),
     friendName: String,
-    updateParentDate: (LocalDateTime?) -> Unit
+    updateParentDate: (LocalDateTime?) -> Unit,
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->

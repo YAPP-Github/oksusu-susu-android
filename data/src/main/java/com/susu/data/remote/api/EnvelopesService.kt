@@ -26,6 +26,6 @@ interface EnvelopesService {
 
     @POST("envelopes")
     suspend fun createEnvelope(
-        @Body envelopeRequest: EnvelopeRequest
+        @Body envelopeRequest: EnvelopeRequest,
     ): ApiResult<EnvelopeResponse>
 }

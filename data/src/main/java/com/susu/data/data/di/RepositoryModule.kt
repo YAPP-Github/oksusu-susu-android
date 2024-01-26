@@ -1,8 +1,8 @@
 package com.susu.data.data.di
 
 import com.susu.data.data.repository.CategoryConfigRepositoryImpl
-import com.susu.data.data.repository.ExcelRepositoryImpl
 import com.susu.data.data.repository.EnvelopesRepositoryImpl
+import com.susu.data.data.repository.ExcelRepositoryImpl
 import com.susu.data.data.repository.FriendRepositoryImpl
 import com.susu.data.data.repository.LedgerRecentSearchRepositoryImpl
 import com.susu.data.data.repository.LedgerRepositoryImpl

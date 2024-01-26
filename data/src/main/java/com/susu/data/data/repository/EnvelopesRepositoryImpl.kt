@@ -55,10 +55,14 @@ class EnvelopesRepositoryImpl @Inject constructor(
             memo = memo,
             hasVisited = hasVisited,
             handedOverAt = handedOverAt,
-            category = if (categoryId != null) CategoryRequest(
-                id = categoryId,
-                customCategory = customCategory,
-            ) else null,
+            category = if (categoryId != null) {
+                CategoryRequest(
+                    id = categoryId,
+                    customCategory = customCategory,
+                )
+            } else {
+                null
+            },
         ),
     ).getOrThrow().toModel()
 }

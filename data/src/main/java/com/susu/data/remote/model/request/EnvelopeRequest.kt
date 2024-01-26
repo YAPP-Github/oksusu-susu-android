@@ -19,5 +19,5 @@ data class EnvelopeRequest(
 @Serializable
 data class CategoryRequest(
     val id: Long,
-    val customCategory: String? = null
+    val customCategory: String? = null,
 )

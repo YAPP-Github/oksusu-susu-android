@@ -19,8 +19,7 @@ class MoreViewModel @Inject constructor() : BaseViewModel<MoreState, MoreSideEff
 
         postSideEffect(MoreSideEffect.UpdateParentMoreStep(newStep.sortedBy { it.ordinal }))
         copy(
-            selectedMoreStop = newStep.toPersistentList()
+            selectedMoreStop = newStep.toPersistentList(),
         )
     }
-
 }

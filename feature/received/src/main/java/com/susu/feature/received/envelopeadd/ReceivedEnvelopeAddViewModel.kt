@@ -9,7 +9,6 @@ import com.susu.feature.received.navigation.ReceivedRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import kotlinx.datetime.toKotlinLocalDateTime
-import timber.log.Timber
 import java.time.LocalDateTime
 import javax.inject.Inject
 
@@ -50,8 +49,8 @@ class ReceivedEnvelopeAddViewModel @Inject constructor(
                 gift = present,
                 memo = memo,
                 handedOverAt = date!!.toKotlinLocalDateTime(),
-                hasVisited = hasVisited
-            )
+                hasVisited = hasVisited,
+            ),
         ).onSuccess {
             // TODO PopBackStackWithEnvelope로 변경 필요, 또한 Envelope에 friendName 추가 필요
             postSideEffect(ReceivedEnvelopeAddSideEffect.PopBackStack)
@@ -70,8 +69,11 @@ class ReceivedEnvelopeAddViewModel @Inject constructor(
             EnvelopeAddStep.NAME -> EnvelopeAddStep.MONEY
             EnvelopeAddStep.RELATIONSHIP -> EnvelopeAddStep.NAME
             EnvelopeAddStep.DATE -> {
-                if (skipRelationshipStep) EnvelopeAddStep.NAME
-                else EnvelopeAddStep.RELATIONSHIP
+                if (skipRelationshipStep) {
+                    EnvelopeAddStep.NAME
+                } else {
+                    EnvelopeAddStep.RELATIONSHIP
+                }
             }
 
             EnvelopeAddStep.MORE -> EnvelopeAddStep.DATE
@@ -101,8 +103,11 @@ class ReceivedEnvelopeAddViewModel @Inject constructor(
         val nextStep = when (currentStep) {
             EnvelopeAddStep.MONEY -> EnvelopeAddStep.NAME
             EnvelopeAddStep.NAME -> {
-                if (skipRelationshipStep) EnvelopeAddStep.DATE
-                else EnvelopeAddStep.RELATIONSHIP
+                if (skipRelationshipStep) {
+                    EnvelopeAddStep.DATE
+                } else {
+                    EnvelopeAddStep.RELATIONSHIP
+                }
             }
 
             EnvelopeAddStep.RELATIONSHIP -> EnvelopeAddStep.DATE

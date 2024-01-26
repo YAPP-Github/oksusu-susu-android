@@ -1,7 +1,6 @@
 package com.susu.feature.received.envelopeadd.content.present
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,8 +10,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -25,13 +22,11 @@ import com.susu.core.designsystem.theme.Gray40
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.feature.received.R
-import com.susu.feature.received.envelopeadd.content.name.NameSideEffect
-import com.susu.feature.received.envelopeadd.content.name.NameState
 
 @Composable
 fun PresentContentRoute(
     viewModel: PresentViewModel = hiltViewModel(),
-    updateParentPresent: (String?) -> Unit
+    updateParentPresent: (String?) -> Unit,
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->

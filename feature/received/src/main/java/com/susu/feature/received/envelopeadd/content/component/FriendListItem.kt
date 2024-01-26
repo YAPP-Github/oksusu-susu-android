@@ -62,7 +62,6 @@ fun FriendListItem(
 @Preview(showBackground = true, backgroundColor = 0xFFF6F6F6)
 @Composable
 fun FriendListItemPreview() {
-
     SusuTheme {
         Column {
             FriendListItem(

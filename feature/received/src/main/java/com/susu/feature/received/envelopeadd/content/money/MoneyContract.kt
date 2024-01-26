@@ -2,7 +2,6 @@ package com.susu.feature.received.envelopeadd.content.money
 
 import com.susu.core.ui.base.SideEffect
 import com.susu.core.ui.base.UiState
-import com.susu.feature.received.ledgeradd.LedgerAddStep
 
 data class MoneyState(
     val money: String = "",

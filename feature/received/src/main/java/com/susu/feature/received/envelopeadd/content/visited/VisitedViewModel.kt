@@ -12,7 +12,6 @@ class VisitedViewModel @Inject constructor() : BaseViewModel<VisitedState, Visit
         copy(categoryName = name)
     }
 
-
     fun updateVisited(visited: Boolean?) = intent {
         postSideEffect(VisitedSideEffect.UpdateParentVisited(visited))
         copy(visited = visited)

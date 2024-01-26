@@ -18,7 +18,7 @@ class MoneyViewModel @Inject constructor() : BaseViewModel<MoneyState, MoneySide
         val addedMoney = money + currentMoney
         postSideEffect(MoneySideEffect.UpdateParentMoney(addedMoney))
         copy(
-            money = addedMoney.toString()
+            money = addedMoney.toString(),
         )
     }
 }

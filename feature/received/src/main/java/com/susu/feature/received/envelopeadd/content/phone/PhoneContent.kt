@@ -27,7 +27,7 @@ import com.susu.feature.received.R
 fun PhoneContentRoute(
     viewModel: PhoneViewModel = hiltViewModel(),
     friendName: String,
-    updateParentPhone: (String?) -> Unit
+    updateParentPhone: (String?) -> Unit,
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
@@ -55,8 +55,10 @@ fun PhoneContent(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = SusuTheme.spacing.spacing_m,
-                vertical = SusuTheme.spacing.spacing_xl,),
+            .padding(
+                horizontal = SusuTheme.spacing.spacing_m,
+                vertical = SusuTheme.spacing.spacing_xl,
+            ),
     ) {
         AnnotatedText(
             originalText = stringResource(R.string.phone_content_title, uiState.name),

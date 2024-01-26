@@ -2,7 +2,6 @@ package com.susu.core.model
 
 import java.time.LocalDateTime
 
-
 data class FriendSearch(
     val friend: Friend,
     val relationship: Relationship,
@@ -11,5 +10,5 @@ data class FriendSearch(
 
 data class RecentEnvelope(
     val category: String,
-    val handedOverAt: LocalDateTime
+    val handedOverAt: LocalDateTime,
 )

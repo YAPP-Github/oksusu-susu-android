@@ -9,7 +9,7 @@ import kotlinx.collections.immutable.persistentListOf
 data class NameState(
     val name: String = "",
     val isSelectedFriend: Boolean = false,
-    val friendList: PersistentList<FriendSearch> = persistentListOf()
+    val friendList: PersistentList<FriendSearch> = persistentListOf(),
 ) : UiState
 
 sealed interface NameSideEffect : SideEffect {

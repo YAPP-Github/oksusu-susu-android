@@ -3,7 +3,6 @@ package com.susu.data.remote.api
 import com.susu.data.remote.model.request.FriendRequest
 import com.susu.data.remote.model.response.FriendResponse
 import com.susu.data.remote.model.response.FriendSearchListResponse
-import com.susu.data.remote.model.response.FriendSearchResponse
 import com.susu.data.remote.retrofit.ApiResult
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -14,7 +13,7 @@ interface FriendService {
 
     @POST("friends")
     suspend fun createFriend(
-        @Body friendRequest: FriendRequest
+        @Body friendRequest: FriendRequest,
     ): ApiResult<FriendResponse>
 
     @GET("friends")

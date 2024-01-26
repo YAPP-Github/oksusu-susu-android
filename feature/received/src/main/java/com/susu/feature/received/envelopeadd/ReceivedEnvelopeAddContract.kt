@@ -4,7 +4,6 @@ import androidx.annotation.StringRes
 import com.susu.core.ui.base.SideEffect
 import com.susu.core.ui.base.UiState
 import com.susu.feature.received.R
-import com.susu.feature.received.ledgeradd.LedgerAddStep
 
 data class ReceivedEnvelopeAddState(
     val currentStep: EnvelopeAddStep = EnvelopeAddStep.MONEY,

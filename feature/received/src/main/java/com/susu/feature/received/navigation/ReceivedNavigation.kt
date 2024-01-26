@@ -59,6 +59,7 @@ fun NavController.navigateReceivedEnvelopeEdit() {
     navigate(ReceivedRoute.envelopeEditRoute)
 }
 
+@Suppress("detekt:LongMethod")
 fun NavGraphBuilder.receivedNavGraph(
     padding: PaddingValues,
     navigateLedgerDetail: (Ledger) -> Unit,

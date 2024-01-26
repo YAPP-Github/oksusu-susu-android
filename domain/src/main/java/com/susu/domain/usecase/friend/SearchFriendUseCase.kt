@@ -1,7 +1,6 @@
 package com.susu.domain.usecase.friend
 
 import com.susu.core.common.runCatchingIgnoreCancelled
-import com.susu.domain.repository.CategoryConfigRepository
 import com.susu.domain.repository.FriendRepository
 import javax.inject.Inject
 

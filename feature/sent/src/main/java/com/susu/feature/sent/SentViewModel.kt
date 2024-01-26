@@ -9,10 +9,12 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SentViewModel @Inject constructor(
+    @Suppress("detekt:UnusedPrivateProperty")
     private val getEnvelopesListUseCase: GetEnvelopesListUseCase,
 ) : BaseViewModel<SentState, SentSideEffect>(
     SentState(),
 ) {
+    @Suppress("detekt:UnusedPrivateProperty")
     private var page = 0
 
     fun getEnvelopesList() = viewModelScope.launch {

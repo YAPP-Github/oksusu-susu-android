@@ -11,5 +11,5 @@ data class Envelope(
     val gift: String? = null,
     val memo: String? = null,
     val hasVisited: Boolean? = null,
-    val handedOverAt: LocalDateTime? = null
+    val handedOverAt: LocalDateTime? = null,
 )

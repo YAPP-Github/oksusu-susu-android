@@ -37,7 +37,8 @@ enum class BadgeColor(
     Red60(
         backgroundColor = com.susu.core.designsystem.theme.Red60,
         textColor = Gray10,
-    );
+    ),
+    ;
 
     companion object {
         fun safeValueOf(value: String) = try {

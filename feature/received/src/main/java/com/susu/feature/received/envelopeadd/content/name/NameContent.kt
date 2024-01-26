@@ -1,7 +1,6 @@
 package com.susu.feature.received.envelopeadd.content.name
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,8 +13,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
@@ -32,8 +29,6 @@ import com.susu.core.model.FriendSearch
 import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.feature.received.R
 import com.susu.feature.received.envelopeadd.content.component.FriendListItem
-import com.susu.feature.received.envelopeadd.content.money.MoneySideEffect
-import com.susu.feature.received.envelopeadd.content.money.MoneyState
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.debounce
 
@@ -114,7 +109,7 @@ fun NameContent(
                         relationship = it.relationship.customRelation ?: it.relationship.relation,
                         category = it.recentEnvelope?.category,
                         visitedAt = it.recentEnvelope?.handedOverAt,
-                        onClick = { onClickFriendItem(it) }
+                        onClick = { onClickFriendItem(it) },
                     )
                 }
             }
@@ -126,7 +121,6 @@ fun NameContent(
 @Composable
 fun NameContentPreview() {
     SusuTheme {
-
         NameContent()
     }
 }

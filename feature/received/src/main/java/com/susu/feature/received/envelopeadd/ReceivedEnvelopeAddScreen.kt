@@ -100,7 +100,6 @@ fun ReceivedEnvelopeAddScreen(
     updateParentPhoneNumber: (String?) -> Unit = {},
     updateParentMemo: (String?) -> Unit = {},
 ) {
-
     Column(
         modifier = Modifier
             .background(SusuTheme.colorScheme.background15)

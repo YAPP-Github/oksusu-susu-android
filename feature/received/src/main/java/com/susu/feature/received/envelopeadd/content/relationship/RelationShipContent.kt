@@ -173,7 +173,6 @@ fun RelationShipContent(
 @Preview(showBackground = true, backgroundColor = 0xFFF6F6F6)
 @Composable
 fun RelationshipContentPreview() {
-
     SusuTheme {
         RelationShipContent()
     }
