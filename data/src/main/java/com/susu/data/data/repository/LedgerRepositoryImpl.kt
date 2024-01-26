@@ -40,4 +40,6 @@ class LedgerRepositoryImpl @Inject constructor(
     override suspend fun deleteLedger(id: Long) = ledgerService.deleteLedgerList(
         listOf(id),
     ).getOrThrow()
+
+    override suspend fun getCreateLedgerConfig(): List<Int> = ledgerService.getCreateLedgerConfig().getOrThrow().onlyStartAtCategoryIds
 }

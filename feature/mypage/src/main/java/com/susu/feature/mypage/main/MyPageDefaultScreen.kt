@@ -1,5 +1,6 @@
 package com.susu.feature.mypage.main
 
+import android.content.Context
 import android.os.Environment
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -16,6 +17,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -29,7 +31,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.susu.core.designsystem.component.appbar.SusuDefaultAppBar
 import com.susu.core.designsystem.component.appbar.icon.LogoIcon
-import com.susu.core.designsystem.component.appbar.icon.NotificationIcon
 import com.susu.core.designsystem.component.button.GhostButtonColor
 import com.susu.core.designsystem.component.button.SmallButtonStyle
 import com.susu.core.designsystem.component.button.SusuGhostButton
@@ -52,6 +53,7 @@ fun MyPageDefaultRoute(
     navigateToLogin: () -> Unit,
     navigateToInfo: () -> Unit,
     navigateToSocial: () -> Unit,
+    navigateToPrivacyPolicy: () -> Unit,
     onShowSnackbar: (SnackbarToken) -> Unit,
     onShowDialog: (DialogToken) -> Unit,
     handleException: (Throwable, () -> Unit) -> Unit,
@@ -137,6 +139,7 @@ fun MyPageDefaultRoute(
         onExport = viewModel::showExportDialog,
         navigateToInfo = navigateToInfo,
         navigateToSocial = navigateToSocial,
+        navigateToPrivacyPolicy = navigateToPrivacyPolicy,
     )
 }
 
@@ -149,14 +152,19 @@ fun MyPageDefaultScreen(
     onExport: () -> Unit = {},
     navigateToInfo: () -> Unit = {},
     navigateToSocial: () -> Unit = {},
+    navigateToPrivacyPolicy: () -> Unit = {},
 ) {
+    val context = LocalContext.current
+    val currentAppVersion = remember { getAppVersion(context) }
+
     Column(
-        modifier = Modifier.fillMaxSize().padding(padding),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(padding),
     ) {
         SusuDefaultAppBar(
             modifier = Modifier.padding(SusuTheme.spacing.spacing_xs),
             leftIcon = { LogoIcon() },
-            actions = { NotificationIcon() },
         )
 
         MyPageMenuItem(
@@ -196,6 +204,7 @@ fun MyPageDefaultScreen(
         )
         MyPageMenuItem(
             titleText = stringResource(com.susu.feature.mypage.R.string.mypage_privacy_policy),
+            onMenuClick = navigateToPrivacyPolicy,
         )
 
         MyPageDivider()
@@ -203,7 +212,11 @@ fun MyPageDefaultScreen(
         MyPageMenuItem(
             titleText = stringResource(com.susu.feature.mypage.R.string.mypage_app_version),
             action = {
-                Text(text = stringResource(com.susu.feature.mypage.R.string.mypage_update), style = SusuTheme.typography.title_xxs, color = Gray60)
+                Text(
+                    text = stringResource(com.susu.feature.mypage.R.string.mypage_update),
+                    style = SusuTheme.typography.title_xxs,
+                    color = Gray60,
+                )
             },
         )
 
@@ -218,14 +231,15 @@ fun MyPageDefaultScreen(
             onMenuClick = onWithdraw,
         )
         Box(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
                 .weight(1f)
                 .background(color = Gray20)
                 .padding(SusuTheme.spacing.spacing_m),
         ) {
             Text(
                 modifier = Modifier.align(Alignment.TopStart),
-                text = stringResource(com.susu.feature.mypage.R.string.mypage_app_version) + uiState.appVersion,
+                text = stringResource(com.susu.feature.mypage.R.string.mypage_app_version) + " $currentAppVersion",
                 style = SusuTheme.typography.title_xxxs,
                 color = Gray50,
             )
@@ -238,6 +252,11 @@ fun MyPageDefaultScreen(
         }
     }
 }
+
+private fun getAppVersion(context: Context): String = runCatching {
+    val packageInfo = context.packageManager.getPackageInfo(context.packageName, 0)
+    packageInfo.versionName
+}.getOrNull() ?: ""
 
 @Composable
 fun MyPageDivider(

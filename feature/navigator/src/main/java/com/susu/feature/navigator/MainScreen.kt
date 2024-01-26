@@ -122,11 +122,18 @@ internal fun MainScreen(
                 )
 
                 statisticsNavGraph(
-                    padding = innerPadding,
+                    navigateToMyInfo = navigator::navigateMyPageInfo,
+                    onShowDialog = viewModel::onShowDialog,
+                    handleException = viewModel::handleException,
                 )
 
                 communityNavGraph(
                     padding = innerPadding,
+                    navigateVoteAdd = navigator::navigateVoteAdd,
+                    popBackStack = navigator::popBackStackIfNotHome,
+                    onShowSnackbar = viewModel::onShowSnackbar,
+                    onShowDialog = viewModel::onShowDialog,
+                    handleException = viewModel::handleException,
                 )
 
                 myPageNavGraph(
@@ -134,6 +141,7 @@ internal fun MainScreen(
                     navigateToLogin = navigator::navigateLogin,
                     navigateToInfo = navigator::navigateMyPageInfo,
                     navigateToSocial = navigator::navigateMyPageSocial,
+                    navigateToPrivacyPolicy = navigator::navigateMyPagePrivacyPolicy,
                     popBackStack = navigator::popBackStackIfNotHome,
                     onShowSnackbar = viewModel::onShowSnackbar,
                     onShowDialog = viewModel::onShowDialog,

@@ -59,4 +59,6 @@
     <string name="envelop_add_step_phone">보낸 이의 연락처</string>
     <string name="envelope_date_content_title">%s님에게 언제 받았나요</string>
     <string name="envelope_date_content_title_highlight">%s님에게</string>
+    <string name="date_content_show_endat">종료일 추가</string>
+    <string name="date_content_set_only_startat">시작일만 지정</string>
 </resources>
