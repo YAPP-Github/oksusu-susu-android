@@ -101,7 +101,7 @@ fun DateContent(
             year = uiState.startAt?.year,
             month = uiState.startAt?.monthValue,
             day = uiState.startAt?.dayOfMonth,
-            suffix = if(uiState.showOnlyStartAt.not()) stringResource(R.string.ledger_add_screen_from) else "",
+            suffix = if (uiState.showOnlyStartAt.not()) stringResource(R.string.ledger_add_screen_from) else "",
             onClick = onClickStartDateText,
         )
 
@@ -123,7 +123,13 @@ fun DateContent(
             modifier = Modifier.align(Alignment.CenterHorizontally),
             color = GhostButtonColor.Orange,
             style = SmallButtonStyle.height40,
-            text = if(uiState.showOnlyStartAt) stringResource(R.string.date_content_show_endat) else stringResource(R.string.date_content_set_only_startat),
+            text = if (uiState.showOnlyStartAt) {
+                stringResource(R.string.date_content_show_endat)
+            } else {
+                stringResource(
+                    R.string.date_content_set_only_startat,
+                )
+            },
             onClick = onClickSetDateButton,
         )
 

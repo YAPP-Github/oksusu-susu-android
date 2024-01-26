@@ -2,7 +2,6 @@ package com.susu.domain.usecase.ledger
 
 import com.susu.core.common.runCatchingIgnoreCancelled
 import com.susu.domain.repository.LedgerRepository
-import java.time.LocalDateTime
 import javax.inject.Inject
 
 typealias OnlyStartAtCategoryIdList = List<Int>

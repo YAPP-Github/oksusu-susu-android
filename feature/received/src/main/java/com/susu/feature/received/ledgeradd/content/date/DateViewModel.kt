@@ -7,7 +7,6 @@ import com.susu.core.ui.util.getSafeLocalDateTime
 import com.susu.domain.usecase.ledger.GetCreateLedgerConfigUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import java.time.LocalDateTime
 import javax.inject.Inject
 
@@ -62,13 +61,13 @@ class DateViewModel @Inject constructor(
             postSideEffect(DateSideEffect.UpdateParentDate(startAt, null))
             copy(
                 showOnlyStartAt = false,
-                endAt = null
+                endAt = null,
             )
         } else {
             postSideEffect(DateSideEffect.UpdateParentDate(startAt, startAt))
             copy(
                 showOnlyStartAt = true,
-                endAt = startAt
+                endAt = startAt,
             )
         }
     }
