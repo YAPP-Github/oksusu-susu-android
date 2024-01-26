@@ -51,8 +51,8 @@ fun LedgerAddRoute(
         }
     }
 
-    var dateContentCategoryName: String by remember {
-        mutableStateOf("")
+    var dateContentCategory: Category? by remember {
+        mutableStateOf(null)
     }
 
     var dateContentName: String by remember {
@@ -69,14 +69,14 @@ fun LedgerAddRoute(
         onClickNextButton = viewModel::goToNextStep,
         updateParentSelectedCategory = { category ->
             viewModel.updateSelectedCategory(category)
-            dateContentCategoryName = category?.customCategory ?: category?.name ?: ""
+            dateContentCategory = category
         },
         updateParentName = { name ->
             viewModel.updateName(name)
             dateContentName = name
         },
         dateContentName = dateContentName,
-        dateContentCategoryName = dateContentCategoryName,
+        dateContentCategory = dateContentCategory,
         updateParentDate = { startAt, endAt ->
             viewModel.updateDate(startAt, endAt)
         },
@@ -90,7 +90,7 @@ fun LedgerAddScreen(
     onClickNextButton: () -> Unit = {},
     updateParentSelectedCategory: (Category?) -> Unit = {},
     updateParentName: (String) -> Unit = {},
-    dateContentCategoryName: String = "",
+    dateContentCategory: Category? = Category(),
     dateContentName: String = "",
     updateParentDate: (LocalDateTime?, LocalDateTime?) -> Unit = { _, _ -> },
 ) {
@@ -129,7 +129,7 @@ fun LedgerAddScreen(
 
                     LedgerAddStep.DATE -> DateContentRoute(
                         name = dateContentName,
-                        categoryName = dateContentCategoryName,
+                        category = dateContentCategory,
                         updateParentDate = updateParentDate,
                     )
                 }
