@@ -42,7 +42,7 @@ class EnvelopesRepositoryImpl @Inject constructor(
         gift: String?,
         memo: String?,
         hasVisited: Boolean?,
-        handedOverAt: kotlinx.datetime.LocalDateTime?,
+        handedOverAt: kotlinx.datetime.LocalDateTime,
         categoryId: Long?,
         customCategory: String?,
     ): Envelope = envelopesService.createEnvelope(

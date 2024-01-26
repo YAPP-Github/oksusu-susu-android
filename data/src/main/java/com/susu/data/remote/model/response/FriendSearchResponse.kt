@@ -19,7 +19,7 @@ data class FriendSearchResponse(
 
 @Serializable
 data class Friend(
-    val id: Int,
+    val id: Long,
     val name: String,
     val phoneNumber: String? = null,
 )

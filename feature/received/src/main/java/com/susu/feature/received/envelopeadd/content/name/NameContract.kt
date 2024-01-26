@@ -14,5 +14,5 @@ data class NameState(
 
 sealed interface NameSideEffect : SideEffect {
     data class UpdateParentName(val name: String) : NameSideEffect
-    data class UpdateParentFriendId(val friendId: Int?) : NameSideEffect
+    data class UpdateParentFriendId(val friendId: Long?) : NameSideEffect
 }

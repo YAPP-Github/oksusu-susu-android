@@ -27,6 +27,7 @@ class CreateReceivedEnvelopeUseCase @Inject constructor(
                 gift = gift,
                 memo = memo,
                 hasVisited = hasVisited,
+                handedOverAt = handedOverAt,
             )
         }
     }
@@ -41,6 +42,7 @@ class CreateReceivedEnvelopeUseCase @Inject constructor(
         val amount: Long,
         val gift: String? = null,
         val memo: String? = null,
+        val handedOverAt: LocalDateTime,
         val hasVisited: Boolean? = null,
     )
 }

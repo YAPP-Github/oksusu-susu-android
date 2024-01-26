@@ -89,7 +89,7 @@ fun ReceivedEnvelopeAddScreen(
     onClickNext: () -> Unit = {},
     updateParentMoney: (Long) -> Unit = {},
     updateParentName: (String) -> Unit = {},
-    updateParentFriendId: (Int?) -> Unit = {},
+    updateParentFriendId: (Long?) -> Unit = {},
     updateParentSelectedRelationShip: (Relationship?) -> Unit = {},
     updateParentDate: (LocalDateTime?) -> Unit = {},
     updateParentMoreStep: (List<EnvelopeAddStep>) -> Unit = {},

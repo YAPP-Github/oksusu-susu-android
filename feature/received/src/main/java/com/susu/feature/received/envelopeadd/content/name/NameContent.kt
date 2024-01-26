@@ -42,7 +42,7 @@ import kotlinx.coroutines.flow.debounce
 fun NameContentRoute(
     viewModel: NameViewModel = hiltViewModel(),
     updateParentName: (String) -> Unit,
-    updateParentFriendId: (Int?) -> Unit,
+    updateParentFriendId: (Long?) -> Unit,
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->

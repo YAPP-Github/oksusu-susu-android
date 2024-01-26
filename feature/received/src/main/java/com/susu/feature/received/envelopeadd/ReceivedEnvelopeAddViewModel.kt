@@ -1,26 +1,31 @@
 package com.susu.feature.received.envelopeadd
 
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.viewModelScope
 import com.susu.core.model.Relationship
 import com.susu.core.ui.base.BaseViewModel
+import com.susu.domain.usecase.envelope.CreateReceivedEnvelopeUseCase
 import com.susu.feature.received.navigation.ReceivedRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
+import kotlinx.datetime.toKotlinLocalDateTime
 import timber.log.Timber
 import java.time.LocalDateTime
 import javax.inject.Inject
 
 @HiltViewModel
 class ReceivedEnvelopeAddViewModel @Inject constructor(
+    private val createReceivedEnvelopeUseCase: CreateReceivedEnvelopeUseCase,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<ReceivedEnvelopeAddState, ReceivedEnvelopeAddSideEffect>(
     ReceivedEnvelopeAddState(),
 ) {
     val categoryName = savedStateHandle.get<String>(ReceivedRoute.CATEGORY_ARGUMENT_NAME)!!
-    val ledgerId = savedStateHandle.get<String>(ReceivedRoute.LEDGER_ID_ARGUMENT_NAME)!!
+    private val ledgerId = savedStateHandle.get<String>(ReceivedRoute.LEDGER_ID_ARGUMENT_NAME)!!
 
     private var money: Long = 0
     private var name: String = ""
-    private var friendId: Int? = null
+    private var friendId: Long? = null
     private var relationShip: Relationship? = null
     private var date: LocalDateTime? = null
     private var moreStep: List<EnvelopeAddStep> = emptyList()
@@ -31,6 +36,29 @@ class ReceivedEnvelopeAddViewModel @Inject constructor(
 
     private val skipRelationshipStep
         get() = friendId != null
+
+    private fun createEnvelope() = viewModelScope.launch {
+        createReceivedEnvelopeUseCase(
+            param = CreateReceivedEnvelopeUseCase.Param(
+                friendId = friendId,
+                friendName = name,
+                phoneNumber = phoneNumber,
+                relationshipId = relationShip?.id,
+                customRelation = relationShip?.customRelation,
+                ledgerId = ledgerId.toLong(),
+                amount = money,
+                gift = present,
+                memo = memo,
+                handedOverAt = date!!.toKotlinLocalDateTime(),
+                hasVisited = hasVisited
+            )
+        ).onSuccess {
+            // TODO PopBackStackWithEnvelope로 변경 필요, 또한 Envelope에 friendName 추가 필요
+            postSideEffect(ReceivedEnvelopeAddSideEffect.PopBackStack)
+        }.onFailure {
+            postSideEffect(ReceivedEnvelopeAddSideEffect.HandleException(it, ::createEnvelope))
+        }
+    }
 
     fun goToPrevStep() = intent {
         val prevStep = when (currentStep) {
@@ -83,14 +111,14 @@ class ReceivedEnvelopeAddViewModel @Inject constructor(
         }
 
         if (nextStep == null) {
-            // TODO 봉투 생성
-            copy()
-        } else {
-            copy(
-                currentStep = nextStep,
-                lastPage = nextStep == moreStep.lastOrNull(),
-            )
+            createEnvelope()
+            return@intent this
         }
+
+        copy(
+            currentStep = nextStep,
+            lastPage = nextStep == moreStep.lastOrNull(),
+        )
     }
 
     private fun goToNextStepInMore(currentStep: EnvelopeAddStep): EnvelopeAddStep? {
@@ -123,7 +151,7 @@ class ReceivedEnvelopeAddViewModel @Inject constructor(
         )
     }
 
-    fun updateFriendId(friendId: Int?) {
+    fun updateFriendId(friendId: Long?) {
         this.friendId = friendId
     }
 

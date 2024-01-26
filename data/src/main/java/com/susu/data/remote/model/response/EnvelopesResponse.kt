@@ -14,8 +14,8 @@ data class EnvelopesResponse(
 
 @Serializable
 data class FriendInfo(
-    val id: Int,
-    val uid: Int,
+    val id: Long,
+    val uid: Long,
     val createdAt: String,
     val modifiedAt: String,
     val name: String,

@@ -25,7 +25,7 @@ interface EnvelopesRepository {
         gift: String? = null,
         memo: String? = null,
         hasVisited: Boolean? = null,
-        handedOverAt: LocalDateTime? = null,
+        handedOverAt: LocalDateTime,
         categoryId: Long? = null,
         customCategory: String? = null,
     ): Envelope
