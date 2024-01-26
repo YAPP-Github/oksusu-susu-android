@@ -27,6 +27,7 @@ import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.model.Relationship
 import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.core.ui.extension.susuDefaultAnimatedContentTransitionSpec
+import com.susu.feature.received.envelopeadd.content.date.DateContentRoute
 import com.susu.feature.received.envelopeadd.content.memo.MemoContentRoute
 import com.susu.feature.received.envelopeadd.content.money.MoneyContentRoute
 import com.susu.feature.received.envelopeadd.content.more.MoreContentRoute
@@ -35,6 +36,7 @@ import com.susu.feature.received.envelopeadd.content.phone.PhoneContentRoute
 import com.susu.feature.received.envelopeadd.content.present.PresentContentRoute
 import com.susu.feature.received.envelopeadd.content.relationship.RelationShipContentRoute
 import com.susu.feature.received.envelopeadd.content.visited.VisitedContentRoute
+import java.time.LocalDateTime
 
 @Composable
 fun ReceivedEnvelopeAddRoute(
@@ -70,6 +72,7 @@ fun ReceivedEnvelopeAddRoute(
         updateParentFriendId = viewModel::updateFriendId,
         updateParentSelectedRelationShip = viewModel::updateSelectedRelationShip,
         updateParentMoreStep = viewModel::updateMoreStep,
+        updateParentDate = viewModel::updateDate,
         categoryName = viewModel.categoryName,
         updateParentVisited = viewModel::updateHasVisited,
         updateParentPresent = viewModel::updatePresent,
@@ -88,6 +91,7 @@ fun ReceivedEnvelopeAddScreen(
     updateParentName: (String) -> Unit = {},
     updateParentFriendId: (Int?) -> Unit = {},
     updateParentSelectedRelationShip: (Relationship?) -> Unit = {},
+    updateParentDate: (LocalDateTime?) -> Unit = {},
     updateParentMoreStep: (List<EnvelopeAddStep>) -> Unit = {},
     categoryName: String = "",
     updateParentVisited: (Boolean?) -> Unit = {},
@@ -132,6 +136,10 @@ fun ReceivedEnvelopeAddScreen(
                 )
                 EnvelopeAddStep.RELATIONSHIP -> RelationShipContentRoute(
                     updateParentSelectedRelation = updateParentSelectedRelationShip,
+                )
+                EnvelopeAddStep.DATE -> DateContentRoute(
+                    friendName = friendName,
+                    updateParentDate = updateParentDate,
                 )
                 EnvelopeAddStep.MORE -> MoreContentRoute(
                     updateParentMoreStep = updateParentMoreStep,

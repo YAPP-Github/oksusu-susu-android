@@ -6,6 +6,7 @@ import com.susu.core.ui.base.BaseViewModel
 import com.susu.feature.received.navigation.ReceivedRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import timber.log.Timber
+import java.time.LocalDateTime
 import javax.inject.Inject
 
 @HiltViewModel
@@ -21,6 +22,7 @@ class ReceivedEnvelopeAddViewModel @Inject constructor(
     private var name: String = ""
     private var friendId: Int? = null
     private var relationShip: Relationship? = null
+    private var date: LocalDateTime? = null
     private var moreStep: List<EnvelopeAddStep> = emptyList()
     private var hasVisited: Boolean? = null
     private var present: String? = null
@@ -39,10 +41,12 @@ class ReceivedEnvelopeAddViewModel @Inject constructor(
 
             EnvelopeAddStep.NAME -> EnvelopeAddStep.MONEY
             EnvelopeAddStep.RELATIONSHIP -> EnvelopeAddStep.NAME
-            EnvelopeAddStep.MORE -> {
+            EnvelopeAddStep.DATE -> {
                 if (skipRelationshipStep) EnvelopeAddStep.NAME
                 else EnvelopeAddStep.RELATIONSHIP
             }
+
+            EnvelopeAddStep.MORE -> EnvelopeAddStep.DATE
             else -> goToPrevStepInMore(currentStep)
         }
 
@@ -69,10 +73,12 @@ class ReceivedEnvelopeAddViewModel @Inject constructor(
         val nextStep = when (currentStep) {
             EnvelopeAddStep.MONEY -> EnvelopeAddStep.NAME
             EnvelopeAddStep.NAME -> {
-                if (skipRelationshipStep) EnvelopeAddStep.MORE
+                if (skipRelationshipStep) EnvelopeAddStep.DATE
                 else EnvelopeAddStep.RELATIONSHIP
             }
-            EnvelopeAddStep.RELATIONSHIP -> EnvelopeAddStep.MORE
+
+            EnvelopeAddStep.RELATIONSHIP -> EnvelopeAddStep.DATE
+            EnvelopeAddStep.DATE -> EnvelopeAddStep.MORE
             else -> goToNextStepInMore(currentStep)
         }
 
@@ -157,6 +163,13 @@ class ReceivedEnvelopeAddViewModel @Inject constructor(
         this@ReceivedEnvelopeAddViewModel.memo = memo
         copy(
             buttonEnabled = !memo.isNullOrEmpty(),
+        )
+    }
+
+    fun updateDate(date: LocalDateTime?) = intent {
+        this@ReceivedEnvelopeAddViewModel.date = date
+        copy(
+            buttonEnabled = date != null,
         )
     }
 }

@@ -27,6 +27,7 @@ enum class EnvelopeAddStep(
     MONEY,
     NAME,
     RELATIONSHIP,
+    DATE,
     MORE,
     VISITED(R.string.envelop_add_step_visited),
     PRESENT(R.string.envelop_add_step_present),

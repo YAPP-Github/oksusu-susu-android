@@ -57,4 +57,6 @@
     <string name="envelop_add_step_present">선물</string>
     <string name="envelop_add_step_memo">메모</string>
     <string name="envelop_add_step_phone">보낸 이의 연락처</string>
+    <string name="envelope_date_content_title">%s님에게 언제 받았나요</string>
+    <string name="envelope_date_content_title_highlight">%s님에게</string>
 </resources>
