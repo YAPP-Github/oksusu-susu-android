@@ -24,4 +24,6 @@ interface LedgerRepository {
     suspend fun deleteLedger(
         id: Int,
     )
+
+    suspend fun getCreateLedgerConfig(): List<Int>
 }
