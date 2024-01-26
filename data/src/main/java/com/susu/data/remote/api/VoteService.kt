@@ -29,5 +29,5 @@ interface VoteService {
     ): ApiResult<VoteListResponse>
 
     @GET("votes/popular")
-    suspend fun getPopularVoteList(): ApiResult<PopularVoteResponse>
+    suspend fun getPopularVoteList(): ApiResult<List<PopularVoteResponse>>
 }

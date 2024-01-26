@@ -19,5 +19,5 @@ interface VoteRepository {
         sort: String?,
     ): List<Vote>
 
-    suspend fun getPopularVoteList(): Vote
+    suspend fun getPopularVoteList(): List<Vote>
 }

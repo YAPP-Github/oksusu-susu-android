@@ -9,4 +9,6 @@
     <string name="community_screen_most_popular_vote">가장 인기있는 투표</string>
     <string name="community_screen_title">투표</string>
     <string name="word_people">%s명</string>
+    <string name="popular_vote_card_count">%s명 참여 중</string>
+    <string name="vote_card_count">%d명 참여</string>
 </resources>

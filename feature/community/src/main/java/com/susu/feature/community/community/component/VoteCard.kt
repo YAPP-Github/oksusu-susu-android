@@ -28,10 +28,12 @@ import com.susu.core.designsystem.theme.Gray15
 import com.susu.core.designsystem.theme.Gray40
 import com.susu.core.designsystem.theme.Orange60
 import com.susu.core.designsystem.theme.SusuTheme
+import com.susu.core.model.Vote
+import com.susu.core.ui.util.to_yyyy_dot_MM_dot_dd
 import com.susu.feature.community.R
 
 @Composable
-fun VoteCard() {
+fun VoteCard(vote: Vote = Vote()) {
     Column(
         modifier = Modifier
             .padding(
@@ -51,7 +53,7 @@ fun VoteCard() {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                Text(text = "결혼식", color = Orange60, style = SusuTheme.typography.title_xxxs)
+                Text(text = vote.category, color = Orange60, style = SusuTheme.typography.title_xxxs)
                 Icon(
                     modifier = Modifier.size(20.dp),
                     painter = painterResource(id = com.susu.core.ui.R.drawable.ic_arrow_right),
@@ -61,7 +63,7 @@ fun VoteCard() {
             }
 
             Text(
-                text = "10분 전",
+                text = vote.createdAt.to_yyyy_dot_MM_dot_dd(), // TODO 1분 전, 1시간 전
                 style = SusuTheme.typography.text_xxxs,
                 color = Gray40,
             )
@@ -70,17 +72,20 @@ fun VoteCard() {
         Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_xxs))
 
         Text(
-            text = "고등학교 동창이고 좀 애매하게 친한 사인데 축의금 얼마 내야 돼?",
+            text = vote.content,
             style = SusuTheme.typography.text_xxxs,
         )
+
+        Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_s))
+
 
         Column(
             verticalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxxxs),
         ) {
-            repeat(5) {
+            vote.optionList.forEach { option ->
                 SusuGhostButton(
                     textModifier = Modifier.weight(1f),
-                    text = "${it}만원",
+                    text = option.content,
                     color = GhostButtonColor.Black,
                     style = XSmallButtonStyle.height44,
                     isClickable = false,
@@ -95,7 +100,7 @@ fun VoteCard() {
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             Text(
-                text = "8명 참여",
+                text = stringResource(R.string.vote_card_count, vote.count),
                 style = SusuTheme.typography.title_xxxs,
                 color = Blue60,
             )

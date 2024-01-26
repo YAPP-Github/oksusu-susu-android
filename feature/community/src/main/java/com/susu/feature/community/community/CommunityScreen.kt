@@ -14,11 +14,17 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.grid.LazyGridState
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -26,6 +32,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.susu.core.designsystem.component.appbar.SusuDefaultAppBar
 import com.susu.core.designsystem.component.appbar.icon.LogoIcon
 import com.susu.core.designsystem.component.appbar.icon.SearchIcon
@@ -38,6 +46,8 @@ import com.susu.core.designsystem.theme.Gray20
 import com.susu.core.designsystem.theme.Gray30
 import com.susu.core.designsystem.theme.Gray40
 import com.susu.core.designsystem.theme.SusuTheme
+import com.susu.core.ui.extension.OnBottomReached
+import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.feature.community.R
 import com.susu.feature.community.community.component.MostPopularVoteCard
 import com.susu.feature.community.community.component.VoteCard
@@ -45,10 +55,33 @@ import com.susu.feature.community.community.component.VoteCard
 @Composable
 fun CommunityRoute(
     padding: PaddingValues,
+    viewModel: CommunityViewModel = hiltViewModel(),
     navigateVoteAdd: () -> Unit,
 ) {
+    val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
+    viewModel.sideEffect.collectWithLifecycle { sideEffect ->
+        when (sideEffect) {
+            is CommunitySideEffect.HandleException -> TODO()
+        }
+    }
+
+    val voteListState = rememberLazyListState()
+
+
+    LaunchedEffect(key1 = Unit) {
+        viewModel.initData()
+        viewModel.getCategoryConfig()
+        viewModel.getPopularVoteList()
+    }
+
+    voteListState.OnBottomReached(minItemsCount = 4) {
+        viewModel.getVoteList()
+    }
+
     CommunityScreen(
         padding = padding,
+        uiState = uiState,
+        voteListState = voteListState,
         navigateVoteAdd = navigateVoteAdd,
     )
 }
@@ -57,6 +90,8 @@ fun CommunityRoute(
 @Composable
 fun CommunityScreen(
     padding: PaddingValues,
+    uiState: CommunityState = CommunityState(),
+    voteListState: LazyListState = rememberLazyListState(),
     onClickSearchIcon: () -> Unit = {},
     navigateVoteAdd: () -> Unit = {},
 ) {
@@ -84,6 +119,7 @@ fun CommunityScreen(
 
             LazyColumn(
                 modifier = Modifier.weight(1f),
+                state = voteListState,
                 contentPadding = PaddingValues(vertical = SusuTheme.spacing.spacing_m),
             ) {
                 item {
@@ -100,8 +136,11 @@ fun CommunityScreen(
                             contentPadding = PaddingValues(horizontal = SusuTheme.spacing.spacing_m),
                             horizontalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_m),
                         ) {
-                            items(count = 5) {
-                                MostPopularVoteCard()
+                            items(
+                                items = uiState.popularVoteList,
+                                key = { it.id },
+                            ) { vote ->
+                                MostPopularVoteCard(vote)
                             }
                         }
                     }
@@ -189,8 +228,11 @@ fun CommunityScreen(
                     Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_s))
                 }
 
-                items(10) {
-                    VoteCard()
+                items(
+                    items = uiState.voteList,
+                    key = { it.id },
+                ) { vote ->
+                    VoteCard(vote)
                 }
             }
         }

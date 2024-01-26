@@ -27,7 +27,7 @@ class GetVoteListUseCase @Inject constructor(
         val sortType: String?,
         val categoryId: Long?,
         val page: Int?,
-        val size: Int?,
+        val size: Int? = null,
         val sort: String?,
     )
 }

@@ -18,10 +18,6 @@ class VoteAddViewModel @Inject constructor(
 ) : BaseViewModel<VoteAddState, VoteAddSideEffect>(
     VoteAddState(),
 ) {
-    companion object {
-        private const val MIN_OPTION_COUNT = 2
-        private const val MAX_OPTION_COUNT = 5
-    }
 
     fun createVote() = viewModelScope.launch {
         createVoteUseCase(
@@ -96,5 +92,10 @@ class VoteAddViewModel @Inject constructor(
         copy(
             voteOptionStateList = voteOptionStateList.add(VoteOptionState()),
         )
+    }
+
+    companion object {
+        private const val MIN_OPTION_COUNT = 2
+        private const val MAX_OPTION_COUNT = 5
     }
 }
