@@ -1,7 +1,6 @@
 package com.susu.feature.statistics.content.susu
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -54,28 +53,30 @@ fun SusuStatisticsOptionSlot(
         Spacer(modifier = Modifier.height(SusuTheme.spacing.spacing_xxs))
         Column(
             modifier = Modifier.fillMaxWidth().background(color = Orange10, shape = RoundedCornerShape(4.dp))
-                .padding(horizontal = 12.dp, vertical = 8.dp),
-            verticalArrangement = Arrangement.Bottom,
+                .padding(horizontal = SusuTheme.spacing.spacing_s, vertical = SusuTheme.spacing.spacing_xxs),
         ) {
-            Row {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
                 OptionSlot(text = age, onClick = onAgeClick)
-                Spacer(modifier = Modifier.width(4.dp))
+                Spacer(modifier = Modifier.width(SusuTheme.spacing.spacing_xxxxs))
                 Text(
                     text = stringResource(R.string.word_statistics_is),
                     style = SusuTheme.typography.title_xxs,
                     color = Gray80,
                 )
+                Spacer(modifier = Modifier.width(SusuTheme.spacing.spacing_m))
                 OptionSlot(text = relationship, onClick = onRelationshipClick)
-                Spacer(modifier = Modifier.width(4.dp))
+                Spacer(modifier = Modifier.width(SusuTheme.spacing.spacing_xxxxs))
                 OptionSlot(text = category, onClick = onCategoryClick)
-                Spacer(modifier = Modifier.width(4.dp))
+                Spacer(modifier = Modifier.width(SusuTheme.spacing.spacing_xxxxs))
                 Text(
                     text = stringResource(R.string.word_statistics_to),
                     style = SusuTheme.typography.title_xxs,
                     color = Gray80,
                 )
             }
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(SusuTheme.spacing.spacing_xxs))
             Row(
                 verticalAlignment = Alignment.Bottom,
             ) {
@@ -84,7 +85,7 @@ fun SusuStatisticsOptionSlot(
                     style = SusuTheme.typography.title_s,
                     color = Orange60,
                 )
-                Spacer(modifier = Modifier.width(8.dp))
+                Spacer(modifier = Modifier.width(SusuTheme.spacing.spacing_xxs))
                 Text(
                     text = stringResource(R.string.word_statistics_send),
                     style = SusuTheme.typography.title_xxs,
@@ -115,7 +116,7 @@ fun OptionSlot(
         Icon(
             painter = painterResource(id = R.drawable.ic_statistics_arrow_down),
             tint = Orange60,
-            contentDescription = "옵션 선택",
+            contentDescription = stringResource(R.string.word_select_option),
         )
     }
 }

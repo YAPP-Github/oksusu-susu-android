@@ -19,4 +19,7 @@
     <string name="word_statistics_is">는</string>
     <string name="word_statistics_to">에</string>
     <string name="word_statistics_send">을 보내고 있어요</string>
+
+    <string name="word_age_unit">%d대</string>
+    <string name="word_select_option">옵션 선택</string>
 </resources>
