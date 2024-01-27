@@ -63,7 +63,7 @@ class CommunityViewModel @Inject constructor(
                     page = page,
                     content = null,
                     mine = currentState.isCheckShowMine,
-                    sortType = null,
+                    sortType = if (currentState.isCheckedVotePopular) "POPULAR" else "LATEST",
                     categoryId = currentState.selectedCategory?.id,
                     sort = null,
                 ),
@@ -103,6 +103,14 @@ class CommunityViewModel @Inject constructor(
     fun toggleShowMyVote() {
         intent {
             copy(isCheckShowMine = !isCheckShowMine)
+        }
+
+        getVoteList(true)
+    }
+
+    fun toggleShowVotePopular() {
+        intent {
+            copy(isCheckedVotePopular = !isCheckedVotePopular)
         }
 
         getVoteList(true)

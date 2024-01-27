@@ -32,6 +32,7 @@ fun NavGraphBuilder.communityNavGraph(
         CommunityRoute(
             padding = padding,
             navigateVoteAdd = navigateVoteAdd,
+            handleException = handleException,
         )
     }
 

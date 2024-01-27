@@ -61,11 +61,12 @@ fun CommunityRoute(
     padding: PaddingValues,
     viewModel: CommunityViewModel = hiltViewModel(),
     navigateVoteAdd: () -> Unit,
+    handleException: (Throwable, () -> Unit) -> Unit,
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
-            is CommunitySideEffect.HandleException -> TODO()
+            is CommunitySideEffect.HandleException -> handleException(sideEffect.throwable, sideEffect.retry)
         }
     }
 
@@ -89,6 +90,7 @@ fun CommunityRoute(
         navigateVoteAdd = navigateVoteAdd,
         onClickCategory = viewModel::selectCategory,
         onClickShowMine = viewModel::toggleShowMyVote,
+        onClickShowVotePopular = viewModel::toggleShowVotePopular,
     )
 }
 
