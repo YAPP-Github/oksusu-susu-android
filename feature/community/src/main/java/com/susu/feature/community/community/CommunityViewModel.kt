@@ -62,7 +62,7 @@ class CommunityViewModel @Inject constructor(
                 GetVoteListUseCase.Param(
                     page = page,
                     content = null,
-                    mine = null,
+                    mine = currentState.isCheckShowMine,
                     sortType = null,
                     categoryId = currentState.selectedCategory?.id,
                     sort = null,
@@ -95,6 +95,14 @@ class CommunityViewModel @Inject constructor(
     fun selectCategory(category: Category?) {
         intent {
             copy(selectedCategory = category)
+        }
+
+        getVoteList(true)
+    }
+
+    fun toggleShowMyVote() {
+        intent {
+            copy(isCheckShowMine = !isCheckShowMine)
         }
 
         getVoteList(true)

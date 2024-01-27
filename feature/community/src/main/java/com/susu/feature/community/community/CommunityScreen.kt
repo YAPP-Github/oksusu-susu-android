@@ -22,6 +22,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -45,10 +46,12 @@ import com.susu.core.designsystem.theme.Gray10
 import com.susu.core.designsystem.theme.Gray20
 import com.susu.core.designsystem.theme.Gray30
 import com.susu.core.designsystem.theme.Gray40
+import com.susu.core.designsystem.theme.Orange60
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.model.Category
 import com.susu.core.ui.extension.OnBottomReached
 import com.susu.core.ui.extension.collectWithLifecycle
+import com.susu.core.ui.extension.susuClickable
 import com.susu.feature.community.R
 import com.susu.feature.community.community.component.MostPopularVoteCard
 import com.susu.feature.community.community.component.VoteCard
@@ -85,6 +88,7 @@ fun CommunityRoute(
         voteListState = voteListState,
         navigateVoteAdd = navigateVoteAdd,
         onClickCategory = viewModel::selectCategory,
+        onClickShowMine = viewModel::toggleShowMyVote,
     )
 }
 
@@ -97,6 +101,8 @@ fun CommunityScreen(
     onClickSearchIcon: () -> Unit = {},
     navigateVoteAdd: () -> Unit = {},
     onClickCategory: (Category?) -> Unit = {},
+    onClickShowVotePopular: () -> Unit = {},
+    onClickShowMine: () -> Unit = {},
 ) {
     Box(
         modifier = Modifier
@@ -209,6 +215,10 @@ fun CommunityScreen(
                             horizontalArrangement = Arrangement.SpaceBetween,
                         ) {
                             Row(
+                                modifier = Modifier.susuClickable(
+                                    rippleEnabled = false,
+                                    onClick = onClickShowVotePopular,
+                                ),
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxs),
                             ) {
@@ -216,29 +226,36 @@ fun CommunityScreen(
                                     modifier = Modifier
                                         .clip(CircleShape)
                                         .size(6.dp)
-                                        .background(Gray30),
+                                        .background(if (uiState.isCheckedVotePopular) Orange60 else Gray30),
                                 )
 
                                 Text(
                                     text = stringResource(R.string.community_screen_vote_align_high),
                                     style = SusuTheme.typography.title_xxxs,
-                                    color = Gray40,
+                                    color = if (uiState.isCheckedVotePopular) Orange60 else Gray40,
                                 )
                             }
 
                             Row(
+                                modifier = Modifier.susuClickable(
+                                    rippleEnabled = false,
+                                    onClick = onClickShowMine,
+                                ),
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxxxs),
                             ) {
-                                Image(
-                                    painter = painterResource(id = R.drawable.ic_uncheck),
+                                Icon(
+                                    painter = painterResource(
+                                        id = if (uiState.isCheckShowMine) R.drawable.ic_vote_check else R.drawable.ic_uncheck,
+                                    ),
                                     contentDescription = null,
+                                    tint = if (uiState.isCheckShowMine) Orange60 else Gray40,
                                 )
 
                                 Text(
                                     text = stringResource(R.string.community_screen_show_my_article),
                                     style = SusuTheme.typography.title_xxxs,
-                                    color = Gray40,
+                                    color = if (uiState.isCheckShowMine) Orange60 else Gray40,
                                 )
                             }
                         }
