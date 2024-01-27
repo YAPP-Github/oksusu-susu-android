@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -15,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -25,24 +27,23 @@ import com.susu.core.designsystem.theme.Gray15
 import com.susu.core.designsystem.theme.Gray50
 import com.susu.core.designsystem.theme.Gray60
 import com.susu.core.designsystem.theme.SusuTheme
+import com.susu.core.model.Vote
+import com.susu.core.ui.extension.toMoneyFormat
 import com.susu.feature.community.R
 
 @Composable
-fun MostPopularVoteCard() {
+fun MostPopularVoteCard(vote: Vote) {
     Column(
         modifier = Modifier
             .clip(RoundedCornerShape(8.dp))
             .background(Gray15)
-            .size(
-                width = 296.dp,
-                height = 156.dp,
-            )
+            .width(296.dp)
             .padding(SusuTheme.spacing.spacing_m),
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Text(text = "결혼식", color = Gray60, style = SusuTheme.typography.title_xxxs)
+            Text(text = vote.category, color = Gray60, style = SusuTheme.typography.title_xxxs)
             Icon(
                 modifier = Modifier.size(20.dp),
                 painter = painterResource(id = com.susu.core.ui.R.drawable.ic_arrow_right),
@@ -54,7 +55,7 @@ fun MostPopularVoteCard() {
         Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_xxs))
 
         Text(
-            text = "고등학교 동창이고 좀 애매하게 친한 사인데 축의금 얼마 내야 돼?",
+            text = vote.content,
             style = SusuTheme.typography.text_xxxs,
         )
 
@@ -62,7 +63,7 @@ fun MostPopularVoteCard() {
 
         SusuGhostButton(
             textModifier = Modifier.weight(1f),
-            text = "12,430명 참여 중",
+            text = stringResource(R.string.popular_vote_card_count, vote.count.toMoneyFormat()),
             textAlign = TextAlign.Center,
             color = GhostButtonColor.Black,
             style = XSmallButtonStyle.height44,
@@ -81,6 +82,6 @@ fun MostPopularVoteCard() {
 @Composable
 fun MostPopularVoteCardPreview() {
     SusuTheme {
-        MostPopularVoteCard()
+        MostPopularVoteCard(vote = Vote())
     }
 }

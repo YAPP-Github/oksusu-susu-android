@@ -14,6 +14,7 @@ data class CreateVoteRequest(
 
 @Serializable
 data class VoteOption(
+    val id: Long? = null,
     val content: String,
     val seq: Int,
 )

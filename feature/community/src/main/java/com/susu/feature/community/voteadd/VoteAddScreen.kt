@@ -30,6 +30,7 @@ import com.susu.core.designsystem.component.appbar.icon.RegisterText
 import com.susu.core.designsystem.component.button.FilledButtonColor
 import com.susu.core.designsystem.component.button.SusuFilledButton
 import com.susu.core.designsystem.component.button.XSmallButtonStyle
+import com.susu.core.designsystem.component.screen.LoadingScreen
 import com.susu.core.designsystem.component.textfield.SusuBasicTextField
 import com.susu.core.designsystem.component.textfieldbutton.SusuTextFieldFillMaxButton
 import com.susu.core.designsystem.component.textfieldbutton.TextFieldButtonColor
@@ -48,6 +49,7 @@ import com.susu.feature.community.R
 fun VoteAddRoute(
     viewModel: VoteAddViewModel = hiltViewModel(),
     popBackStack: () -> Unit,
+    popBackStackWithVote: (String) -> Unit,
     handleException: (Throwable, () -> Unit) -> Unit,
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
@@ -55,6 +57,7 @@ fun VoteAddRoute(
         when (sideEffect) {
             is VoteAddSideEffect.HandleException -> handleException(sideEffect.throwable, sideEffect.retry)
             VoteAddSideEffect.PopBackStack -> popBackStack()
+            is VoteAddSideEffect.PopBackStackWithVote -> popBackStackWithVote(sideEffect.vote)
         }
     }
 
@@ -124,21 +127,11 @@ fun VoteAddScreen(
             Row(
                 horizontalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxxxs),
             ) {
-                uiState.categoryConfigList.dropLast(1).forEach {
+                uiState.categoryConfigList.forEach {
                     SusuFilledButton(
                         color = FilledButtonColor.Black,
                         style = XSmallButtonStyle.height28,
                         text = it.name,
-                        isActive = it == uiState.selectedCategory,
-                        onClick = { onClickCategoryButton(it) },
-                    )
-                }
-
-                uiState.categoryConfigList.lastOrNull()?.let {
-                    SusuFilledButton(
-                        color = FilledButtonColor.Black,
-                        style = XSmallButtonStyle.height28,
-                        text = stringResource(com.susu.core.ui.R.string.word_free),
                         isActive = it == uiState.selectedCategory,
                         onClick = { onClickCategoryButton(it) },
                     )
@@ -189,6 +182,10 @@ fun VoteAddScreen(
             contentDescription = stringResource(R.string.vote_add_screen_content_description_vote_add_button),
             tint = Gray10,
         )
+    }
+
+    if (uiState.isLoading) {
+        LoadingScreen()
     }
 }
 
