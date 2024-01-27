@@ -57,10 +57,16 @@ fun DateContentRoute(
         uiState = uiState,
         onStartDateItemSelected = viewModel::updateStartDate,
         onClickStartDateText = viewModel::showStartDateBottomSheet,
-        onDismissStartDateBottomSheet = viewModel::hideStartDateBottomSheet,
+        onDismissStartDateBottomSheet = { year, month, day ->
+            viewModel.updateStartDate(year, month, day)
+            viewModel.hideStartDateBottomSheet()
+        },
         onEndDateItemSelected = viewModel::updateEndDate,
         onClickEndDateText = viewModel::showEndDateBottomSheet,
-        onDismissEndDateBottomSheet = viewModel::hideEndDateBottomSheet,
+        onDismissEndDateBottomSheet = { year, month, day ->
+            viewModel.updateEndDate(year, month, day)
+            viewModel.hideEndDateBottomSheet()
+        },
         onClickSetDateButton = viewModel::toggleShowOnlyStartAt,
     )
 }
@@ -71,10 +77,10 @@ fun DateContent(
     uiState: DateState = DateState(),
     onStartDateItemSelected: (Int, Int, Int) -> Unit = { _, _, _ -> },
     onClickStartDateText: () -> Unit = {},
-    onDismissStartDateBottomSheet: () -> Unit = {},
+    onDismissStartDateBottomSheet: (Int, Int, Int) -> Unit = { _, _, _ -> },
     onEndDateItemSelected: (Int, Int, Int) -> Unit = { _, _, _ -> },
     onClickEndDateText: () -> Unit = {},
-    onDismissEndDateBottomSheet: () -> Unit = {},
+    onDismissEndDateBottomSheet: (Int, Int, Int) -> Unit = { _, _, _ -> },
     onClickSetDateButton: () -> Unit = {},
 ) {
     Column(
@@ -146,7 +152,7 @@ fun DateContent(
             initialCriteriaDay = uiState.endAt?.dayOfMonth,
             afterDate = false,
             maximumContainerHeight = 346.dp,
-            onDismissRequest = { _, _, _ -> onDismissStartDateBottomSheet() },
+            onDismissRequest = onDismissStartDateBottomSheet,
             onItemSelected = onStartDateItemSelected,
         )
     }
@@ -161,7 +167,7 @@ fun DateContent(
             initialCriteriaDay = uiState.startAt?.dayOfMonth ?: minDate.dayOfMonth,
             afterDate = true,
             maximumContainerHeight = 346.dp,
-            onDismissRequest = { _, _, _ -> onDismissEndDateBottomSheet() },
+            onDismissRequest = onDismissEndDateBottomSheet,
             onItemSelected = onEndDateItemSelected,
         )
     }

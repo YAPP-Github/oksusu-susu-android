@@ -46,7 +46,10 @@ fun DateContentRoute(
         uiState = uiState,
         onDateItemSelected = viewModel::updateDate,
         onClickDateText = viewModel::showDateBottomSheet,
-        onDismissDateBottomSheet = viewModel::hideDateBottomSheet,
+        onDismissDateBottomSheet = { year, month, day ->
+            viewModel.updateDate(year, month, day)
+            viewModel.hideDateBottomSheet()
+        },
     )
 }
 
@@ -56,7 +59,7 @@ fun DateContent(
     uiState: DateState = DateState(),
     onDateItemSelected: (Int, Int, Int) -> Unit = { _, _, _ -> },
     onClickDateText: () -> Unit = {},
-    onDismissDateBottomSheet: () -> Unit = {},
+    onDismissDateBottomSheet: (Int, Int, Int) -> Unit = { _, _, _ -> },
 ) {
     Column(
         modifier = Modifier
@@ -90,7 +93,7 @@ fun DateContent(
             initialMonth = uiState.date?.monthValue ?: currentDate.monthValue,
             initialDay = uiState.date?.dayOfMonth ?: currentDate.dayOfMonth,
             maximumContainerHeight = 346.dp,
-            onDismissRequest = { _, _, _ -> onDismissDateBottomSheet() },
+            onDismissRequest = onDismissDateBottomSheet,
             onItemSelected = onDateItemSelected,
         )
     }
