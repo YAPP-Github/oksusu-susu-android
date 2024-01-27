@@ -79,7 +79,6 @@ fun VoteCard(vote: Vote = Vote()) {
 
         Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_s))
 
-
         Column(
             verticalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxxxs),
         ) {

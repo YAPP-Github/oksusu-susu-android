@@ -10,5 +10,4 @@ class GetPopularVoteListUseCase @Inject constructor(
     suspend operator fun invoke() = runCatchingIgnoreCancelled {
         voteRepository.getPopularVoteList()
     }
-
 }

@@ -25,7 +25,7 @@ interface VoteService {
         @Query("categoryId") categoryId: Int?,
         @Query("page") page: Int?,
         @Query("size") size: Int?,
-        @Query("sort") sort: String?
+        @Query("sort") sort: String?,
     ): ApiResult<VoteListResponse>
 
     @GET("votes/popular")

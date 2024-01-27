@@ -17,7 +17,6 @@ import kotlinx.coroutines.sync.withLock
 import kotlinx.datetime.toJavaLocalDateTime
 import kotlinx.datetime.toKotlinLocalDateTime
 import kotlinx.serialization.json.Json
-import java.time.LocalDateTime
 import javax.inject.Inject
 
 @HiltViewModel
@@ -149,7 +148,9 @@ class ReceivedViewModel @Inject constructor(
                 start = filter.startAt?.toJavaLocalDateTime() ?: currentDate.minusYears(100),
                 end = filter.endAt?.toJavaLocalDateTime() ?: currentDate.plusYears(100),
             ).not()
-        ) return
+        ) {
+            return
+        }
 
         intent {
             copy(

@@ -3,7 +3,6 @@ package com.susu.data.remote.model.response
 import com.susu.core.model.Vote
 import com.susu.data.remote.model.request.VoteOption
 import kotlinx.datetime.LocalDateTime
-import kotlinx.datetime.toJavaLocalDateTime
 import kotlinx.datetime.toKotlinLocalDateTime
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

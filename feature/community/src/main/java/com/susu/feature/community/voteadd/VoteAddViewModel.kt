@@ -10,7 +10,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
