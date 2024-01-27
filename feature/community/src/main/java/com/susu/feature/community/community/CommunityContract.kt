@@ -9,7 +9,7 @@ import kotlinx.collections.immutable.persistentListOf
 
 data class CommunityState(
     val categoryConfigList: PersistentList<Category> = persistentListOf(),
-    val selectedCategory: Category = Category(),
+    val selectedCategory: Category? = null,
     val popularVoteList: PersistentList<Vote> = persistentListOf(),
     val voteList: PersistentList<Vote> = persistentListOf(),
     val isCheckedVotePopular: Boolean = false,

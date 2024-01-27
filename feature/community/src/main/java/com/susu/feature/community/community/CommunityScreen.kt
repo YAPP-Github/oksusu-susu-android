@@ -46,6 +46,7 @@ import com.susu.core.designsystem.theme.Gray20
 import com.susu.core.designsystem.theme.Gray30
 import com.susu.core.designsystem.theme.Gray40
 import com.susu.core.designsystem.theme.SusuTheme
+import com.susu.core.model.Category
 import com.susu.core.ui.extension.OnBottomReached
 import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.feature.community.R
@@ -83,6 +84,7 @@ fun CommunityRoute(
         uiState = uiState,
         voteListState = voteListState,
         navigateVoteAdd = navigateVoteAdd,
+        onClickCategory = viewModel::selectCategory,
     )
 }
 
@@ -94,6 +96,7 @@ fun CommunityScreen(
     voteListState: LazyListState = rememberLazyListState(),
     onClickSearchIcon: () -> Unit = {},
     navigateVoteAdd: () -> Unit = {},
+    onClickCategory: (Category?) -> Unit = {},
 ) {
     Box(
         modifier = Modifier
@@ -172,13 +175,31 @@ fun CommunityScreen(
                         Row(
                             horizontalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxxxs),
                         ) {
-                            listOf("전체", "결혼식", "장례식", "돌잔치", "생일 기념일", "자유").forEach {
+                            SusuFilledButton(
+                                color = FilledButtonColor.Black,
+                                style = XSmallButtonStyle.height28,
+                                text = stringResource(com.susu.core.ui.R.string.word_all),
+                                isActive = uiState.selectedCategory == null,
+                                onClick = { onClickCategory(null) },
+                            )
+
+                            uiState.categoryConfigList.dropLast(1).forEach { category ->
                                 SusuFilledButton(
                                     color = FilledButtonColor.Black,
                                     style = XSmallButtonStyle.height28,
-                                    text = it,
-                                    isActive = true,
-                                    onClick = { },
+                                    text = category.name,
+                                    isActive = uiState.selectedCategory == category,
+                                    onClick = { onClickCategory(category) },
+                                )
+                            }
+
+                            uiState.categoryConfigList.lastOrNull()?.let {
+                                SusuFilledButton(
+                                    color = FilledButtonColor.Black,
+                                    style = XSmallButtonStyle.height28,
+                                    text = stringResource(id = com.susu.core.ui.R.string.word_free),
+                                    isActive = uiState.selectedCategory == it,
+                                    onClick = { onClickCategory(it) },
                                 )
                             }
                         }

@@ -22,7 +22,7 @@ interface VoteService {
         @Query("content") content: String?,
         @Query("mine") mine: Boolean?,
         @Query("sortType") sortType: String?,
-        @Query("categoryId") categoryId: Long?,
+        @Query("categoryId") categoryId: Int?,
         @Query("page") page: Int?,
         @Query("size") size: Int?,
         @Query("sort") sort: String?

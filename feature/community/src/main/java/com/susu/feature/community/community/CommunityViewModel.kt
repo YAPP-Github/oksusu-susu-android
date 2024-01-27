@@ -41,7 +41,6 @@ class CommunityViewModel @Inject constructor(
                 intent {
                     copy(
                         categoryConfigList = categoryConfig.toPersistentList(),
-                        selectedCategory = categoryConfig.first(),
                     )
                 }
             }
@@ -65,7 +64,7 @@ class CommunityViewModel @Inject constructor(
                     content = null,
                     mine = null,
                     sortType = null,
-                    categoryId = null,
+                    categoryId = currentState.selectedCategory?.id,
                     sort = null,
                 ),
             ).onSuccess { voteList ->
@@ -93,7 +92,11 @@ class CommunityViewModel @Inject constructor(
             }
     }
 
-    fun selectCategory(category: Category) = intent {
-        copy(selectedCategory = category)
+    fun selectCategory(category: Category?) {
+        intent {
+            copy(selectedCategory = category)
+        }
+
+        getVoteList(true)
     }
 }

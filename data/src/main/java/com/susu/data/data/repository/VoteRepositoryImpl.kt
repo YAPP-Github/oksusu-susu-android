@@ -33,7 +33,7 @@ class VoteRepositoryImpl @Inject constructor(
         content: String?,
         mine: Boolean?,
         sortType: String?,
-        categoryId: Long?,
+        categoryId: Int?,
         page: Int?,
         size: Int?,
         sort: String?,
