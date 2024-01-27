@@ -24,5 +24,6 @@ data class VoteOptionState(
 
 sealed interface VoteAddSideEffect : SideEffect {
     data object PopBackStack : VoteAddSideEffect
+    data class PopBackStackWithVote(val vote: String) : VoteAddSideEffect
     data class HandleException(val throwable: Throwable, val retry: () -> Unit) : VoteAddSideEffect
 }

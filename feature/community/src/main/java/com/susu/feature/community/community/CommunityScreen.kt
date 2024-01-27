@@ -59,6 +59,7 @@ import com.susu.feature.community.community.component.VoteCard
 @Composable
 fun CommunityRoute(
     padding: PaddingValues,
+    vote: String?,
     viewModel: CommunityViewModel = hiltViewModel(),
     navigateVoteAdd: () -> Unit,
     handleException: (Throwable, () -> Unit) -> Unit,
@@ -77,6 +78,7 @@ fun CommunityRoute(
         viewModel.initData()
         viewModel.getCategoryConfig()
         viewModel.getPopularVoteList()
+        viewModel.addVoteIfNeed(vote)
     }
 
     voteListState.OnBottomReached(minItemsCount = 4) {

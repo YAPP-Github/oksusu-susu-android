@@ -31,6 +31,7 @@ import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.model.Vote
 import com.susu.core.ui.util.to_yyyy_dot_MM_dot_dd
 import com.susu.feature.community.R
+import kotlinx.datetime.toJavaLocalDateTime
 
 @Composable
 fun VoteCard(vote: Vote = Vote()) {
@@ -63,7 +64,7 @@ fun VoteCard(vote: Vote = Vote()) {
             }
 
             Text(
-                text = vote.createdAt.to_yyyy_dot_MM_dot_dd(), // TODO 1분 전, 1시간 전
+                text = vote.createdAt.toJavaLocalDateTime().to_yyyy_dot_MM_dot_dd(), // TODO 1분 전, 1시간 전
                 style = SusuTheme.typography.text_xxxs,
                 color = Gray40,
             )

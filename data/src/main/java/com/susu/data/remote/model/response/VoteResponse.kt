@@ -26,7 +26,7 @@ internal fun VoteResponse.toModel() = Vote(
     category = category,
     content = content,
     isModified = isModified,
-    createdAt = createdAt.toJavaLocalDateTime(),
+    createdAt = createdAt,
     optionList = optionList.sortedBy { it.seq }.map {
         com.susu.core.model.VoteOption(
             id = it.id ?: 0L,

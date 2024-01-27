@@ -21,6 +21,7 @@ import com.susu.core.designsystem.component.navigation.SusuNavigationItem
 import com.susu.core.designsystem.component.snackbar.SusuSnackbar
 import com.susu.core.ui.SnackbarToken
 import com.susu.core.ui.extension.collectWithLifecycle
+import com.susu.feature.community.navigation.CommunityRoute
 import com.susu.feature.community.navigation.communityNavGraph
 import com.susu.feature.loginsignup.navigation.loginSignupNavGraph
 import com.susu.feature.mypage.navigation.myPageNavGraph
@@ -131,6 +132,13 @@ internal fun MainScreen(
                     padding = innerPadding,
                     navigateVoteAdd = navigator::navigateVoteAdd,
                     popBackStack = navigator::popBackStackIfNotHome,
+                    popBackStackWithVote = { vote ->
+                        navigator.navController.previousBackStackEntry?.savedStateHandle?.set(
+                            CommunityRoute.VOTE_ARGUMENT_NAME,
+                            vote,
+                        )
+                        navigator.popBackStackIfNotHome()
+                    },
                     onShowSnackbar = viewModel::onShowSnackbar,
                     onShowDialog = viewModel::onShowDialog,
                     handleException = viewModel::handleException,

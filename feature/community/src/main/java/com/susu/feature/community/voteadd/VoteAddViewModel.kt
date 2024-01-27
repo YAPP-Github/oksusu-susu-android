@@ -3,11 +3,13 @@ package com.susu.feature.community.voteadd
 import androidx.lifecycle.viewModelScope
 import com.susu.core.model.Category
 import com.susu.core.ui.base.BaseViewModel
+import com.susu.core.ui.extension.encodeToUri
 import com.susu.domain.usecase.categoryconfig.GetCategoryConfigUseCase
 import com.susu.domain.usecase.vote.CreateVoteUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
+import kotlinx.serialization.json.Json
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -20,6 +22,7 @@ class VoteAddViewModel @Inject constructor(
 ) {
 
     fun createVote() = viewModelScope.launch {
+        intent { copy(isLoading = true) }
         createVoteUseCase(
             param = CreateVoteUseCase.Param(
                 content = currentState.content,
@@ -27,10 +30,11 @@ class VoteAddViewModel @Inject constructor(
                 categoryId = currentState.selectedCategory.id,
             ),
         ).onSuccess {
-            popBackStack()
+            postSideEffect(VoteAddSideEffect.PopBackStackWithVote(Json.encodeToUri(it)))
         }.onFailure {
             postSideEffect(VoteAddSideEffect.HandleException(it, ::createVote))
         }
+        intent { copy(isLoading = false) }
     }
 
     fun getCategoryConfig() = viewModelScope.launch {

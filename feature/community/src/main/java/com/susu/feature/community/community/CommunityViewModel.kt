@@ -2,7 +2,12 @@ package com.susu.feature.community.community
 
 import androidx.lifecycle.viewModelScope
 import com.susu.core.model.Category
+import com.susu.core.model.Ledger
+import com.susu.core.model.Vote
 import com.susu.core.ui.base.BaseViewModel
+import com.susu.core.ui.extension.decodeFromUri
+import com.susu.core.ui.util.currentDate
+import com.susu.core.ui.util.isBetween
 import com.susu.domain.usecase.categoryconfig.GetCategoryConfigUseCase
 import com.susu.domain.usecase.vote.GetPopularVoteListUseCase
 import com.susu.domain.usecase.vote.GetVoteListUseCase
@@ -11,6 +16,8 @@ import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import kotlinx.datetime.toJavaLocalDateTime
+import kotlinx.serialization.json.Json
 import javax.inject.Inject
 
 @HiltViewModel
@@ -26,6 +33,28 @@ class CommunityViewModel @Inject constructor(
     private var page = 0
     private var isLast = false
     private var isFirstVisit = true
+
+    fun addVoteIfNeed(vote: String?) {
+        val toAddVote = vote?.let {
+            Json.decodeFromUri<Vote>(vote)
+        } ?: return
+
+        if (toAddVote in currentState.voteList) return
+
+        if (currentState.selectedCategory != null &&
+            currentState.selectedCategory?.id != currentState.categoryConfigList.find { it.name == toAddVote.category }?.id
+        ) return
+
+        if (currentState.isCheckedVotePopular) return
+
+        intent {
+            copy(
+                voteList = currentState
+                    .voteList
+                    .add(0, toAddVote),
+            )
+        }
+    }
 
     fun initData() {
         if (isFirstVisit.not()) return

@@ -1,6 +1,7 @@
 package com.susu.data.remote.model.response
 
 import com.susu.core.model.Vote
+import kotlinx.datetime.toKotlinLocalDateTime
 import kotlinx.serialization.Serializable
 import java.time.LocalDateTime
 
@@ -20,6 +21,6 @@ internal fun PopularVoteResponse.toModel() = Vote(
     content = content,
     isModified = isModified,
     count = count,
-    createdAt = LocalDateTime.now(),
+    createdAt = LocalDateTime.now().toKotlinLocalDateTime(),
     optionList = listOf(),
 )
