@@ -7,6 +7,7 @@ import com.susu.core.ui.base.BaseViewModel
 import com.susu.core.ui.extension.decodeFromUri
 import com.susu.domain.usecase.categoryconfig.GetCategoryConfigUseCase
 import com.susu.domain.usecase.vote.GetPopularVoteListUseCase
+import com.susu.domain.usecase.vote.GetPostCategoryConfigUseCase
 import com.susu.domain.usecase.vote.GetVoteListUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toPersistentList
@@ -19,7 +20,7 @@ import javax.inject.Inject
 @HiltViewModel
 class CommunityViewModel @Inject constructor(
     private val getVoteListUseCase: GetVoteListUseCase,
-    private val getCategoryConfigUseCase: GetCategoryConfigUseCase,
+    private val getPostCategoryConfigUseCase: GetPostCategoryConfigUseCase,
     private val getPopularVoteListUseCase: GetPopularVoteListUseCase,
 ) : BaseViewModel<CommunityState, CommunitySideEffect>(
     CommunityState(),
@@ -63,7 +64,7 @@ class CommunityViewModel @Inject constructor(
     fun getCategoryConfig() = viewModelScope.launch {
         if (currentState.categoryConfigList.isNotEmpty()) return@launch
 
-        getCategoryConfigUseCase()
+        getPostCategoryConfigUseCase()
             .onSuccess { categoryConfig ->
                 intent {
                     copy(

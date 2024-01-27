@@ -1,5 +1,6 @@
 package com.susu.domain.repository
 
+import com.susu.core.model.Category
 import com.susu.core.model.Vote
 
 interface VoteRepository {
@@ -20,4 +21,6 @@ interface VoteRepository {
     ): List<Vote>
 
     suspend fun getPopularVoteList(): List<Vote>
+
+    suspend fun getPostCategoryConfig(): List<Category>
 }

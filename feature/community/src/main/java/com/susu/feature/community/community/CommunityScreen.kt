@@ -189,23 +189,13 @@ fun CommunityScreen(
                                 onClick = { onClickCategory(null) },
                             )
 
-                            uiState.categoryConfigList.dropLast(1).forEach { category ->
+                            uiState.categoryConfigList.forEach { category ->
                                 SusuFilledButton(
                                     color = FilledButtonColor.Black,
                                     style = XSmallButtonStyle.height28,
                                     text = category.name,
                                     isActive = uiState.selectedCategory == category,
                                     onClick = { onClickCategory(category) },
-                                )
-                            }
-
-                            uiState.categoryConfigList.lastOrNull()?.let {
-                                SusuFilledButton(
-                                    color = FilledButtonColor.Black,
-                                    style = XSmallButtonStyle.height28,
-                                    text = stringResource(id = com.susu.core.ui.R.string.word_free),
-                                    isActive = uiState.selectedCategory == it,
-                                    onClick = { onClickCategory(it) },
                                 )
                             }
                         }

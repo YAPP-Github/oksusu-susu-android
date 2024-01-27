@@ -1,5 +1,6 @@
 package com.susu.data.data.repository
 
+import com.susu.core.model.Category
 import com.susu.core.model.Vote
 import com.susu.data.local.model.toModel
 import com.susu.data.remote.api.VoteService
@@ -48,4 +49,6 @@ class VoteRepositoryImpl @Inject constructor(
     ).getOrThrow().toModel()
 
     override suspend fun getPopularVoteList(): List<Vote> = api.getPopularVoteList().getOrThrow().map { it.toModel() }
+
+    override suspend fun getPostCategoryConfig(): List<Category> = api.getPostCategoryConfig().getOrThrow().map { it.toModel() }
 }

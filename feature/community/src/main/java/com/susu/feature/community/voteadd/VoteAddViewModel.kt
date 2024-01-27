@@ -6,6 +6,7 @@ import com.susu.core.ui.base.BaseViewModel
 import com.susu.core.ui.extension.encodeToUri
 import com.susu.domain.usecase.categoryconfig.GetCategoryConfigUseCase
 import com.susu.domain.usecase.vote.CreateVoteUseCase
+import com.susu.domain.usecase.vote.GetPostCategoryConfigUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
@@ -14,7 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class VoteAddViewModel @Inject constructor(
-    private val getCategoryConfigUseCase: GetCategoryConfigUseCase,
+    private val getPostCategoryConfigUseCase: GetPostCategoryConfigUseCase,
     private val createVoteUseCase: CreateVoteUseCase,
 ) : BaseViewModel<VoteAddState, VoteAddSideEffect>(
     VoteAddState(),
@@ -39,7 +40,7 @@ class VoteAddViewModel @Inject constructor(
     fun getCategoryConfig() = viewModelScope.launch {
         if (currentState.categoryConfigList.isNotEmpty()) return@launch
 
-        getCategoryConfigUseCase()
+        getPostCategoryConfigUseCase()
             .onSuccess { categoryConfig ->
                 intent {
                     copy(

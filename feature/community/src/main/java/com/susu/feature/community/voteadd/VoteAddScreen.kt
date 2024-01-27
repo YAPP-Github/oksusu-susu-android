@@ -127,21 +127,11 @@ fun VoteAddScreen(
             Row(
                 horizontalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxxxs),
             ) {
-                uiState.categoryConfigList.dropLast(1).forEach {
+                uiState.categoryConfigList.forEach {
                     SusuFilledButton(
                         color = FilledButtonColor.Black,
                         style = XSmallButtonStyle.height28,
                         text = it.name,
-                        isActive = it == uiState.selectedCategory,
-                        onClick = { onClickCategoryButton(it) },
-                    )
-                }
-
-                uiState.categoryConfigList.lastOrNull()?.let {
-                    SusuFilledButton(
-                        color = FilledButtonColor.Black,
-                        style = XSmallButtonStyle.height28,
-                        text = stringResource(com.susu.core.ui.R.string.word_free),
                         isActive = it == uiState.selectedCategory,
                         onClick = { onClickCategoryButton(it) },
                     )
