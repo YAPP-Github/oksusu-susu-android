@@ -1,7 +1,9 @@
 package com.susu.data.data.di
 
 import com.susu.data.data.repository.CategoryConfigRepositoryImpl
+import com.susu.data.data.repository.EnvelopesRepositoryImpl
 import com.susu.data.data.repository.ExcelRepositoryImpl
+import com.susu.data.data.repository.FriendRepositoryImpl
 import com.susu.data.data.repository.LedgerRecentSearchRepositoryImpl
 import com.susu.data.data.repository.LedgerRepositoryImpl
 import com.susu.data.data.repository.LoginRepositoryImpl
@@ -12,7 +14,9 @@ import com.susu.data.data.repository.TokenRepositoryImpl
 import com.susu.data.data.repository.UserRepositoryImpl
 import com.susu.data.data.repository.VoteRepositoryImpl
 import com.susu.domain.repository.CategoryConfigRepository
+import com.susu.domain.repository.EnvelopesRepository
 import com.susu.domain.repository.ExcelRepository
+import com.susu.domain.repository.FriendRepository
 import com.susu.domain.repository.LedgerRecentSearchRepository
 import com.susu.domain.repository.LedgerRepository
 import com.susu.domain.repository.LoginRepository
@@ -75,6 +79,16 @@ abstract class RepositoryModule {
     abstract fun bindExcelRepository(
         excelRepositoryImpl: ExcelRepositoryImpl,
     ): ExcelRepository
+
+    @Binds
+    abstract fun bindEnvelopesRepository(
+        envelopesRepositoryImpl: EnvelopesRepositoryImpl,
+    ): EnvelopesRepository
+
+    @Binds
+    abstract fun bindFriendRepository(
+        friendRepositoryImpl: FriendRepositoryImpl,
+    ): FriendRepository
 
     @Binds
     abstract fun bindStatisticsRepository(

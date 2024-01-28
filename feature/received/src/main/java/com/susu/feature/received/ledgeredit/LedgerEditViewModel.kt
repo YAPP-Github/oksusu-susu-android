@@ -28,7 +28,7 @@ class LedgerEditViewModel @Inject constructor(
     LedgerEditState(),
 ) {
     private val argument = savedStateHandle.get<String>(ReceivedRoute.LEDGER_ARGUMENT_NAME)!!
-    private var ledgerId = 0
+    private var ledgerId = 0L
     private val toEditLedger
         get() = with(currentState) {
             Ledger(

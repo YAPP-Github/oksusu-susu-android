@@ -7,7 +7,7 @@ import javax.inject.Inject
 class DeleteLedgerUseCase @Inject constructor(
     private val ledgerRepository: LedgerRepository,
 ) {
-    suspend operator fun invoke(id: Int) = runCatchingIgnoreCancelled {
+    suspend operator fun invoke(id: Long) = runCatchingIgnoreCancelled {
         ledgerRepository.deleteLedger(id)
     }
 }

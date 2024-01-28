@@ -120,7 +120,7 @@ class ReceivedViewModel @Inject constructor(
         }
     }
 
-    fun updateLedgerIfNeed(ledger: String?, toDeleteLedgerId: Int) {
+    fun updateLedgerIfNeed(ledger: String?, toDeleteLedgerId: Long) {
         val toUpdateLedger = ledger?.let {
             Json.decodeFromUri<Ledger>(ledger)
         } ?: Ledger()
@@ -130,7 +130,12 @@ class ReceivedViewModel @Inject constructor(
             .map { if (it.id == toUpdateLedger.id) toUpdateLedger else it }
             .toPersistentList()
 
-        intent { copy(ledgerList = newList) }
+        intent {
+            copy(
+                ledgerList = newList,
+                showEmptyLedger = newList.isEmpty(),
+            )
+        }
     }
 
     fun addLedgerIfNeed(ledger: String?) {
@@ -157,6 +162,7 @@ class ReceivedViewModel @Inject constructor(
                 ledgerList = currentState
                     .ledgerList
                     .add(0, toAddLedger),
+                showEmptyLedger = false,
             )
         }
     }

@@ -155,12 +155,12 @@ internal class MainNavigator(
         navController.navigateMyPageSocial()
     }
 
-    fun navigateMyPagePrivacyPolicy() {
-        navController.navigateMyPagePrivacyPolicy()
+    fun navigateReceivedEnvelopeAdd(categoryName: String, ledgerId: Long) {
+        navController.navigateReceivedEnvelopeAdd(categoryName, ledgerId)
     }
 
-    fun navigateReceivedEnvelopeAdd() {
-        navController.navigateReceivedEnvelopeAdd()
+    fun navigateMyPagePrivacyPolicy() {
+        navController.navigateMyPagePrivacyPolicy()
     }
 
     fun navigateReceivedEnvelopeDetail() {

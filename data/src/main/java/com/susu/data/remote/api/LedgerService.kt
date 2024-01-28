@@ -27,7 +27,7 @@ interface LedgerService {
 
     @PATCH("ledgers/{id}")
     suspend fun editLedger(
-        @Path("id") id: Int,
+        @Path("id") id: Long,
         @Body ledgerRequest: LedgerRequest,
     ): ApiResult<LedgerResponse>
 
@@ -37,7 +37,7 @@ interface LedgerService {
     ): ApiResult<LedgerResponse>
 
     @DELETE("ledgers")
-    suspend fun deleteLedgerList(@Query("ids") idList: List<Int>): ApiResult<Unit>
+    suspend fun deleteLedgerList(@Query("ids") idList: List<Long>): ApiResult<Unit>
 
     @GET("ledgers/configs/create-ledger")
     suspend fun getCreateLedgerConfig(): ApiResult<CreateLedgerConfigResponse>

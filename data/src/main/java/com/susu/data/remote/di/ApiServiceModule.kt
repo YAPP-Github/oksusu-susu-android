@@ -2,6 +2,8 @@ package com.susu.data.remote.di
 
 import com.susu.data.remote.api.AuthService
 import com.susu.data.remote.api.CategoryService
+import com.susu.data.remote.api.EnvelopesService
+import com.susu.data.remote.api.FriendService
 import com.susu.data.remote.api.LedgerService
 import com.susu.data.remote.api.SignUpService
 import com.susu.data.remote.api.StatisticsService
@@ -22,7 +24,7 @@ object ApiServiceModule {
 
     @Singleton
     @Provides
-    fun provideUserService(retrofit: Retrofit): AuthService {
+    fun provideAuthService(retrofit: Retrofit): AuthService {
         return retrofit.create(AuthService::class.java)
     }
 
@@ -58,8 +60,20 @@ object ApiServiceModule {
 
     @Singleton
     @Provides
+    fun providesEnvelopeService(retrofit: Retrofit): EnvelopesService {
+        return retrofit.create(EnvelopesService::class.java)
+    }
+
+    @Singleton
+    @Provides
     fun providesUserService(retrofit: Retrofit): UserService {
         return retrofit.create(UserService::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun providesFriendService(retrofit: Retrofit): FriendService {
+        return retrofit.create(FriendService::class.java)
     }
 
     @Singleton
