@@ -8,16 +8,20 @@ import com.susu.core.ui.base.BaseViewModel
 import com.susu.core.ui.extension.decodeFromUri
 import com.susu.core.ui.extension.encodeToUri
 import com.susu.core.ui.util.to_yyyy_dot_MM_dot_dd
+import com.susu.domain.usecase.envelope.SearchReceivedEnvelopeListUseCase
 import com.susu.domain.usecase.ledger.DeleteLedgerUseCase
 import com.susu.feature.received.navigation.ReceivedRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
 import kotlinx.datetime.toJavaLocalDateTime
 import kotlinx.serialization.json.Json
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class LedgerDetailViewModel @Inject constructor(
+    private val searchReceivedEnvelopeListUseCase: SearchReceivedEnvelopeListUseCase,
     private val deleteLedgerUseCase: DeleteLedgerUseCase,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<LedgerDetailState, LedgerDetailSideEffect>(
@@ -25,6 +29,9 @@ class LedgerDetailViewModel @Inject constructor(
 ) {
     private val argument = savedStateHandle.get<String>(ReceivedRoute.LEDGER_ARGUMENT_NAME)!!
     private var ledger = Ledger()
+
+    private var page = 0
+    private var isLast = false
 
     fun initData(backStackEntryLedgerUri: String?) {
         if (backStackEntryLedgerUri == null) {
@@ -43,6 +50,7 @@ class LedgerDetailViewModel @Inject constructor(
 
     private fun updateLedgerInfo(ledger: Ledger) = intent {
         this@LedgerDetailViewModel.ledger = ledger
+        getReceivedEnvelopeList(true)
         ledger.let { ledger ->
             val category = ledger.category
             copy(
@@ -53,6 +61,39 @@ class LedgerDetailViewModel @Inject constructor(
                 startDate = ledger.startAt.toJavaLocalDateTime().to_yyyy_dot_MM_dot_dd(),
                 endDate = ledger.endAt.toJavaLocalDateTime().to_yyyy_dot_MM_dot_dd(),
             )
+        }
+    }
+
+    fun getReceivedEnvelopeList(needClear: Boolean = false) = viewModelScope.launch {
+        val currentList = if (needClear) {
+            page = 0
+            isLast = false
+            emptyList()
+        } else {
+            currentState.envelopeList
+        }
+
+
+        searchReceivedEnvelopeListUseCase(
+            param = SearchReceivedEnvelopeListUseCase.Param(
+                friendIds = null,
+                ledgerId = ledger.id,
+                fromAmount = null,
+                toAmount = null,
+                page = page,
+                sort = null
+            )
+        ).onSuccess { envelopeList ->
+            isLast = envelopeList.isEmpty()
+            page++
+            val newEnvelopeList = currentList.plus(envelopeList).toPersistentList()
+            intent {
+                copy(
+                    envelopeList = newEnvelopeList,
+                )
+            }
+        }.onFailure {
+            Timber.e(it)
         }
     }
 
