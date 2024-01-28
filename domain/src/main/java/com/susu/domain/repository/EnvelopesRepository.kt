@@ -3,7 +3,7 @@ package com.susu.domain.repository
 import com.susu.core.model.FriendStatistics
 import com.susu.core.model.Envelope
 import com.susu.core.model.Relationship
-import java.time.LocalDateTime
+import kotlinx.datetime.LocalDateTime
 
 interface EnvelopesRepository {
     suspend fun getEnvelopesList(

@@ -1,7 +1,6 @@
 package com.susu.data.remote.model.response
 
 import com.susu.core.model.FriendStatistics
-import com.susu.core.model.EnvelopeStatics
 import com.susu.core.model.Friend
 import kotlinx.serialization.Serializable
 
@@ -15,7 +14,7 @@ data class EnvelopesResponse(
 
 @Serializable
 data class FriendInfo(
-    val id: Int,
+    val id: Long,
     val name: String,
     val phoneNumber: String,
 )
