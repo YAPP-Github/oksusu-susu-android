@@ -1,6 +1,6 @@
 package com.susu.data.data.repository
 
-import com.susu.core.model.Envelope
+import com.susu.core.model.FriendStatistics
 import com.susu.data.remote.api.EnvelopesService
 import com.susu.data.remote.model.response.toModel
 import com.susu.domain.repository.EnvelopesRepository
@@ -16,7 +16,7 @@ class EnvelopesRepositoryImpl @Inject constructor(
         page: Int?,
         size: Int?,
         sort: String?,
-    ): List<Envelope> = envelopesService.getEnvelopesList(
+    ): List<FriendStatistics> = envelopesService.getEnvelopesList(
         friendIds = friendIds,
         fromTotalAmounts = fromTotalAmounts,
         toTotalAmounts = toTotalAmounts,

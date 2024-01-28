@@ -1,6 +1,6 @@
 package com.susu.domain.repository
 
-import com.susu.core.model.Envelope
+import com.susu.core.model.FriendStatistics
 
 interface EnvelopesRepository {
     suspend fun getEnvelopesList(
@@ -10,5 +10,5 @@ interface EnvelopesRepository {
         page: Int?,
         size: Int?,
         sort: String?,
-    ): List<Envelope>
+    ): List<FriendStatistics>
 }
