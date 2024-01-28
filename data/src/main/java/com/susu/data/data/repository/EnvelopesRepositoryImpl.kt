@@ -19,7 +19,7 @@ class EnvelopesRepositoryImpl @Inject constructor(
     ): List<Envelope> = envelopesService.getEnvelopesList(
         friendIds = friendIds,
         fromTotalAmounts = fromTotalAmounts,
-        toTotalMounts = toTotalAmounts,
+        toTotalAmounts = toTotalAmounts,
         page = page,
         size = size,
         sort = sort,

@@ -9,9 +9,9 @@ data class EnvelopesListResponse(
     val envelopesList: List<EnvelopesResponse>,
     val page: Int,
     val size: Int,
-    val sort: Sort,
-    val totalCount: Int,
     val totalPage: Int,
+    val totalCount: Int,
+    val sort: Sort,
 )
 
 @Serializable

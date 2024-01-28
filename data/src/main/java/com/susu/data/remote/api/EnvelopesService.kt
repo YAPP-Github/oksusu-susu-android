@@ -10,7 +10,7 @@ interface EnvelopesService {
     suspend fun getEnvelopesList(
         @Query("friendIds") friendIds: List<Int>?,
         @Query("fromTotalAmounts") fromTotalAmounts: Int?,
-        @Query("toTotalAmounts") toTotalMounts: Int?,
+        @Query("toTotalAmounts") toTotalAmounts: Int?,
         @Query("page") page: Int?,
         @Query("size") size: Int?,
         @Query("sort") sort: String?,
