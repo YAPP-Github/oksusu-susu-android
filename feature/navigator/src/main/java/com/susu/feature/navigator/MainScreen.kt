@@ -5,12 +5,11 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideIn
 import androidx.compose.animation.slideOut
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.IntOffset
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -22,6 +21,7 @@ import com.susu.core.designsystem.component.navigation.SusuNavigationItem
 import com.susu.core.designsystem.component.snackbar.SusuSnackbar
 import com.susu.core.ui.SnackbarToken
 import com.susu.core.ui.extension.collectWithLifecycle
+import com.susu.feature.community.navigation.CommunityRoute
 import com.susu.feature.community.navigation.communityNavGraph
 import com.susu.feature.loginsignup.navigation.loginSignupNavGraph
 import com.susu.feature.mypage.navigation.myPageNavGraph
@@ -39,6 +39,7 @@ internal fun MainScreen(
     navigator: MainNavigator = rememberMainNavigator(),
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
+    val context = LocalContext.current
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
             MainSideEffect.NavigateLogin -> navigator.navigateLogin()
@@ -47,10 +48,10 @@ internal fun MainScreen(
             is MainSideEffect.ShowNetworkErrorSnackbar -> {
                 viewModel.onShowSnackbar(
                     SnackbarToken(
-                        message = "네트워크 오류가 발생했어요",
+                        message = context.getString(R.string.main_screen_network_error_snackbar),
                         onClickActionButton = sideEffect.retry,
                         actionIcon = R.drawable.ic_refresh,
-                        actionIconContentDescription = "새로고침 아이콘",
+                        actionIconContentDescription = context.getString(com.susu.core.ui.R.string.content_description_refresh),
                     ),
                 )
             }
@@ -63,100 +64,129 @@ internal fun MainScreen(
     Scaffold(
         modifier = modifier,
         content = { innerPadding ->
-            Box(modifier = Modifier.fillMaxSize()) {
-                NavHost(
-                    navController = navigator.navController,
-                    startDestination = navigator.startDestination,
-                ) {
-                    loginSignupNavGraph(
-                        navigateToReceived = navigator::navigateSent,
-                        navigateToLogin = navigator::navigateLogin,
-                        navigateToSignUp = navigator::navigateSignup,
-                        onShowToast = viewModel::onShowSnackbar,
-                        padding = innerPadding,
-                    )
+            NavHost(
+                navController = navigator.navController,
+                startDestination = navigator.startDestination,
+            ) {
+                loginSignupNavGraph(
+                    navigateToReceived = navigator::navigateSent,
+                    navigateToLogin = navigator::navigateLogin,
+                    navigateToSignUp = navigator::navigateSignup,
+                    onShowToast = viewModel::onShowSnackbar,
+                    padding = innerPadding,
+                )
 
-                    sentNavGraph(
-                        padding = innerPadding,
-                        popBackStack = navigator::popBackStackIfNotHome,
-                        navigateSentEnvelope = navigator::navigateSentEnvelope,
-                        navigateSentEnvelopeDetail = navigator::navigateSentEnvelopeDetail,
-                        navigateSentEnvelopeEdit = navigator::navigateSentEnvelopeEdit,
-                        navigateSentEnvelopeAdd = navigator::navigateSentEnvelopeAdd,
-                    )
+                sentNavGraph(
+                    padding = innerPadding,
+                    popBackStack = navigator::popBackStackIfNotHome,
+                    navigateSentEnvelope = navigator::navigateSentEnvelope,
+                    navigateSentEnvelopeDetail = navigator::navigateSentEnvelopeDetail,
+                    navigateSentEnvelopeEdit = navigator::navigateSentEnvelopeEdit,
+                    navigateSentEnvelopeAdd = navigator::navigateSentEnvelopeAdd,
+                )
 
-                    receivedNavGraph(
-                        padding = innerPadding,
-                        popBackStack = navigator::popBackStackIfNotHome,
-                        popBackStackWithLedger = { ledger ->
-                            navigator.navController.previousBackStackEntry?.savedStateHandle?.set(
-                                ReceivedRoute.LEDGER_ARGUMENT_NAME,
-                                ledger,
-                            )
-                            navigator.popBackStackIfNotHome()
-                        },
-                        popBackStackWithDeleteLedgerId = { ledgerId ->
-                            navigator.navController.previousBackStackEntry?.savedStateHandle?.set(
-                                ReceivedRoute.LEDGER_ID_ARGUMENT_NAME,
-                                ledgerId,
-                            )
-                            navigator.popBackStackIfNotHome()
-                        },
-                        navigateLedgerSearch = navigator::navigateLedgerSearch,
-                        navigateLedgerDetail = navigator::navigateLedgerDetail,
-                        navigateLedgerEdit = navigator::navigateLedgerEdit,
-                        navigateLedgerFilter = navigator::navigateLedgerFilter,
-                        navigateLedgerAdd = navigator::navigateLedgerAdd,
-                        onShowSnackbar = viewModel::onShowSnackbar,
-                        onShowDialog = viewModel::onShowDialog,
-                        handleException = viewModel::handleException,
-                    )
-
-                    statisticsNavGraph(
-                        padding = innerPadding,
-                    )
-
-                    communityNavGraph(
-                        padding = innerPadding,
-                    )
-
-                    myPageNavGraph(
-                        padding = innerPadding,
-                        navigateToLogin = navigator::navigateLogin,
-                    )
-                }
-
-                with(uiState) {
-                    SusuSnackbar(
-                        modifier = Modifier.padding(innerPadding),
-                        visible = snackbarVisible,
-                        message = snackbarToken.message,
-                        actionIconId = snackbarToken.actionIcon,
-                        actionIconContentDescription = snackbarToken.actionIconContentDescription,
-                        actionButtonText = snackbarToken.actionButtonText,
-                        onClickActionButton = snackbarToken.onClickActionButton,
-                    )
-                }
-
-                if (uiState.dialogVisible) {
-                    with(uiState.dialogToken) {
-                        SusuDialog(
-                            title = title,
-                            text = text,
-                            confirmText = confirmText,
-                            dismissText = dismissText,
-                            isDimmed = isDimmed,
-                            textAlign = textAlign,
-                            onConfirmRequest = {
-                                onConfirmRequest()
-                                viewModel.dismissDialog()
-                            },
-                            onDismissRequest = {
-                                onDismissRequest()
-                                viewModel.dismissDialog()
-                            },
+                receivedNavGraph(
+                    padding = innerPadding,
+                    popBackStack = navigator::popBackStackIfNotHome,
+                    popBackStackWithLedger = { ledger ->
+                        navigator.navController.previousBackStackEntry?.savedStateHandle?.set(
+                            ReceivedRoute.LEDGER_ARGUMENT_NAME,
+                            ledger,
                         )
-                    }
+                        navigator.popBackStackIfNotHome()
+                    },
+                    popBackStackWithDeleteLedgerId = { ledgerId ->
+                        navigator.navController.previousBackStackEntry?.savedStateHandle?.set(
+                            ReceivedRoute.LEDGER_ID_ARGUMENT_NAME,
+                            ledgerId,
+                        )
+                        navigator.popBackStackIfNotHome()
+                    },
+                    popBackStackWithFilter = { filter ->
+                        navigator.navController.previousBackStackEntry?.savedStateHandle?.set(
+                            ReceivedRoute.FILTER_ARGUMENT_NAME,
+                            filter,
+                        )
+                        navigator.popBackStackIfNotHome()
+                    },
+                    navigateLedgerSearch = navigator::navigateLedgerSearch,
+                    navigateLedgerDetail = navigator::navigateLedgerDetail,
+                    navigateLedgerEdit = navigator::navigateLedgerEdit,
+                    navigateLedgerFilter = navigator::navigateLedgerFilter,
+                    navigateLedgerAdd = navigator::navigateLedgerAdd,
+                    navigateEnvelopAdd = navigator::navigateReceivedEnvelopeAdd,
+                    navigateEnvelopeDetail = navigator::navigateReceivedEnvelopeDetail,
+                    navigateEnvelopeEdit = navigator::navigateReceivedEnvelopeEdit,
+                    onShowSnackbar = viewModel::onShowSnackbar,
+                    onShowDialog = viewModel::onShowDialog,
+                    handleException = viewModel::handleException,
+                )
+
+                statisticsNavGraph(
+                    navigateToMyInfo = navigator::navigateMyPageInfo,
+                    onShowDialog = viewModel::onShowDialog,
+                    handleException = viewModel::handleException,
+                )
+
+                communityNavGraph(
+                    padding = innerPadding,
+                    navigateVoteAdd = navigator::navigateVoteAdd,
+                    popBackStack = navigator::popBackStackIfNotHome,
+                    popBackStackWithVote = { vote ->
+                        navigator.navController.previousBackStackEntry?.savedStateHandle?.set(
+                            CommunityRoute.VOTE_ARGUMENT_NAME,
+                            vote,
+                        )
+                        navigator.popBackStackIfNotHome()
+                    },
+                    onShowSnackbar = viewModel::onShowSnackbar,
+                    onShowDialog = viewModel::onShowDialog,
+                    handleException = viewModel::handleException,
+                )
+
+                myPageNavGraph(
+                    padding = innerPadding,
+                    navigateToLogin = navigator::navigateLogin,
+                    navigateToInfo = navigator::navigateMyPageInfo,
+                    navigateToSocial = navigator::navigateMyPageSocial,
+                    navigateToPrivacyPolicy = navigator::navigateMyPagePrivacyPolicy,
+                    popBackStack = navigator::popBackStackIfNotHome,
+                    onShowSnackbar = viewModel::onShowSnackbar,
+                    onShowDialog = viewModel::onShowDialog,
+                    handleException = viewModel::handleException,
+                )
+            }
+
+            with(uiState) {
+                SusuSnackbar(
+                    modifier = Modifier.padding(innerPadding),
+                    visible = snackbarVisible,
+                    message = snackbarToken.message,
+                    actionIconId = snackbarToken.actionIcon,
+                    actionIconContentDescription = snackbarToken.actionIconContentDescription,
+                    actionButtonText = snackbarToken.actionButtonText,
+                    onClickActionButton = snackbarToken.onClickActionButton,
+                )
+            }
+
+            if (uiState.dialogVisible) {
+                with(uiState.dialogToken) {
+                    SusuDialog(
+                        title = title,
+                        text = text,
+                        confirmText = confirmText,
+                        dismissText = dismissText,
+                        isDimmed = isDimmed,
+                        textAlign = textAlign,
+                        onConfirmRequest = {
+                            onConfirmRequest()
+                            viewModel.dismissDialog()
+                        },
+                        onDismissRequest = {
+                            onDismissRequest()
+                            viewModel.dismissDialog()
+                        },
+                    )
                 }
             }
         },

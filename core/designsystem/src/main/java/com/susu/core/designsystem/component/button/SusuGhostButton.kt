@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.susu.core.designsystem.R
@@ -49,6 +50,8 @@ enum class GhostButtonColor(
 fun SusuGhostButton(
     modifier: Modifier = Modifier,
     shape: Shape = RoundedCornerShape(4.dp),
+    textModifier: Modifier = Modifier,
+    textAlign: TextAlign = TextAlign.Unspecified,
     text: String? = null,
     color: GhostButtonColor,
     style: @Composable () -> ButtonStyle,
@@ -56,6 +59,7 @@ fun SusuGhostButton(
     rightIcon: (@Composable () -> Unit)? = null,
     isActive: Boolean = true,
     isClickable: Boolean = true,
+    rippleEnabled: Boolean = true,
     onClick: () -> Unit = {},
 ) {
     val (paddingValues, iconSpacing, textStyle) = style()
@@ -63,8 +67,9 @@ fun SusuGhostButton(
         BasicButton(
             modifier = modifier,
             shape = shape,
+            textModifier = textModifier,
             text = text,
-            textStyle = textStyle,
+            textStyle = textStyle.copy(textAlign = textAlign),
             contentColor = if (isActive) activeContentColor else inactiveContentColor,
             rippleColor = rippleColor,
             backgroundColor = if (isActive) activeBackgroundColor else inactiveBackgroundColor,
@@ -73,6 +78,7 @@ fun SusuGhostButton(
             padding = paddingValues,
             iconSpacing = iconSpacing,
             isClickable = isClickable,
+            rippleEnabled = rippleEnabled,
             onClick = onClick,
         )
     }

@@ -34,7 +34,7 @@ fun RefreshButton(
             .susuClickable(onClick = onClick)
             .padding(SusuTheme.spacing.spacing_xs),
         painter = painterResource(id = R.drawable.ic_refresh),
-        contentDescription = stringResource(R.string.content_description_refresh),
+        contentDescription = stringResource(com.susu.core.ui.R.string.content_description_refresh),
     )
 }
 

@@ -3,7 +3,5 @@ package com.susu.domain.repository
 import com.susu.core.model.Token
 
 interface LoginRepository {
-    suspend fun login(oauthAccessToken: String): Token
-    suspend fun logout()
-    suspend fun withdraw()
+    suspend fun login(provider: String, oauthAccessToken: String): Token
 }

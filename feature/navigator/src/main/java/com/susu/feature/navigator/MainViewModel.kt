@@ -5,6 +5,7 @@ import com.susu.core.android.throwUnknownException
 import com.susu.core.model.exception.NetworkException
 import com.susu.core.ui.DialogToken
 import com.susu.core.ui.SnackbarToken
+import com.susu.core.ui.SnsProviders
 import com.susu.core.ui.base.BaseViewModel
 import com.susu.domain.usecase.categoryconfig.GetCategoryConfigUseCase
 import com.susu.domain.usecase.loginsignup.CheckCanRegisterUseCase
@@ -70,7 +71,7 @@ class MainViewModel @Inject constructor(
             return@launch
         }
 
-        checkCanRegisterUseCase(kakaoAccessToken)
+        checkCanRegisterUseCase(provider = SnsProviders.Kakao.path, oauthAccessToken = kakaoAccessToken)
             .onSuccess { canRegister ->
                 handleCanRegisterSuccess(
                     canRegister = canRegister,
@@ -90,7 +91,7 @@ class MainViewModel @Inject constructor(
     }
 
     private suspend fun login(oauthAccessToken: String) {
-        loginUseCase(oauthAccessToken = oauthAccessToken)
+        loginUseCase(provider = SnsProviders.Kakao.path, oauthAccessToken = oauthAccessToken)
             .onSuccess {
                 postSideEffect(MainSideEffect.NavigateSent)
             }.onFailure {

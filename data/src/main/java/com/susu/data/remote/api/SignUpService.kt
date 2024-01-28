@@ -1,6 +1,6 @@
 package com.susu.data.remote.api
 
-import com.susu.data.remote.model.request.UserRequest
+import com.susu.data.remote.model.request.UserSignUpRequest
 import com.susu.data.remote.model.response.TokenResponse
 import com.susu.data.remote.model.response.ValidRegisterResponse
 import com.susu.data.remote.retrofit.ApiResult
@@ -15,7 +15,7 @@ interface SignUpService {
     suspend fun signUp(
         @Path("provider") provider: String,
         @Query("accessToken") accessToken: String,
-        @Body user: UserRequest,
+        @Body user: UserSignUpRequest,
     ): ApiResult<TokenResponse>
 
     @GET("oauth/{provider}/sign-up/valid")

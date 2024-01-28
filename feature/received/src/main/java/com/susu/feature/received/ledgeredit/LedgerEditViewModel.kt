@@ -28,7 +28,7 @@ class LedgerEditViewModel @Inject constructor(
     LedgerEditState(),
 ) {
     private val argument = savedStateHandle.get<String>(ReceivedRoute.LEDGER_ARGUMENT_NAME)!!
-    private var ledgerId = 0
+    private var ledgerId = 0L
     private val toEditLedger
         get() = with(currentState) {
             Ledger(
@@ -124,7 +124,7 @@ class LedgerEditViewModel @Inject constructor(
         }
     }
 
-    fun updateStartYear(year: Int, month: Int, day: Int) {
+    fun updateStartDate(year: Int, month: Int, day: Int) {
         intent {
             copy(
                 startYear = year,
@@ -134,7 +134,7 @@ class LedgerEditViewModel @Inject constructor(
         }
     }
 
-    fun updateEndYear(year: Int, month: Int, day: Int) = intent {
+    fun updateEndDate(year: Int, month: Int, day: Int) = intent {
         copy(
             endYear = year,
             endMonth = month,

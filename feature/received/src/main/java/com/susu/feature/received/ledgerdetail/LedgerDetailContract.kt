@@ -14,9 +14,11 @@ data class LedgerDetailState(
 ) : UiState
 
 sealed interface LedgerDetailSideEffect : SideEffect {
+    data class NavigateEnvelopeAdd(val categoryName: String, val ledgerId: Long) : LedgerDetailSideEffect
+    data object NavigateEnvelopeDetail : LedgerDetailSideEffect
     data class NavigateLedgerEdit(val ledger: Ledger) : LedgerDetailSideEffect
     data class PopBackStackWithLedger(val ledger: String) : LedgerDetailSideEffect
-    data class PopBackStackWithDeleteLedgerId(val ledgerId: Int) : LedgerDetailSideEffect
+    data class PopBackStackWithDeleteLedgerId(val ledgerId: Long) : LedgerDetailSideEffect
     data class ShowDeleteDialog(val onConfirmRequest: () -> Unit) : LedgerDetailSideEffect
     data object ShowDeleteSuccessSnackbar : LedgerDetailSideEffect
     data class ShowSnackbar(val msg: String) : LedgerDetailSideEffect

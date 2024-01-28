@@ -52,8 +52,10 @@ fun LedgerDetailRoute(
     viewModel: LedgerDetailViewModel = hiltViewModel(),
     ledger: String?,
     navigateLedgerEdit: (Ledger) -> Unit,
+    navigateEnvelopAdd: (String, Long) -> Unit,
+    navigateEnvelopeDetail: () -> Unit,
     popBackStackWithLedger: (String) -> Unit,
-    popBackStackWithDeleteLedgerId: (Int) -> Unit,
+    popBackStackWithDeleteLedgerId: (Long) -> Unit,
     onShowSnackbar: (SnackbarToken) -> Unit,
     onShowDialog: (DialogToken) -> Unit,
     handleException: (Throwable, () -> Unit) -> Unit,
@@ -87,6 +89,8 @@ fun LedgerDetailRoute(
             is LedgerDetailSideEffect.PopBackStackWithDeleteLedgerId -> popBackStackWithDeleteLedgerId(sideEffect.ledgerId)
             is LedgerDetailSideEffect.HandleException -> handleException(sideEffect.throwable, sideEffect.retry)
             is LedgerDetailSideEffect.ShowSnackbar -> onShowSnackbar(SnackbarToken(message = sideEffect.msg))
+            is LedgerDetailSideEffect.NavigateEnvelopeAdd -> navigateEnvelopAdd(sideEffect.categoryName, sideEffect.ledgerId)
+            LedgerDetailSideEffect.NavigateEnvelopeDetail -> navigateEnvelopeDetail()
         }
     }
 
@@ -101,6 +105,8 @@ fun LedgerDetailRoute(
         onClickEdit = viewModel::navigateLedgerEdit,
         onClickDelete = viewModel::showDeleteDialog,
         onClickBack = viewModel::popBackStackWithLedger,
+        onClickFloatingButton = viewModel::navigateEnvelopeAdd,
+        onClickSeeMoreIcon = viewModel::navigateEnvelopeDetail,
     )
 }
 

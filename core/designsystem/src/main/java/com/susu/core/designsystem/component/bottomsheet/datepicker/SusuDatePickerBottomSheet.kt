@@ -78,6 +78,9 @@ fun SusuDatePickerBottomSheet(
                     }
                     onItemSelected(selectedYear, selectedMonth, selectedDay)
                 },
+                onItemClicked = { item ->
+                    selectedYear = item.dropLast(1).toIntOrNull() ?: currentDate.year
+                },
             )
             InfiniteColumn(
                 modifier = Modifier.width(100.dp),
@@ -95,6 +98,9 @@ fun SusuDatePickerBottomSheet(
                     }
                     onItemSelected(selectedYear, selectedMonth, selectedDay)
                 },
+                onItemClicked = { item ->
+                    selectedMonth = item.dropLast(1).toIntOrNull() ?: currentDate.monthValue
+                },
             )
             InfiniteColumn(
                 modifier = Modifier.width(100.dp),
@@ -106,6 +112,9 @@ fun SusuDatePickerBottomSheet(
                     selectedDay = item.dropLast(1).toIntOrNull() ?: 1
                     onItemSelected(selectedYear, selectedMonth, selectedDay)
                 },
+                onItemClicked = { item ->
+                    selectedMonth = item.dropLast(1).toIntOrNull() ?: 1
+                },
             )
         }
     }
@@ -114,9 +123,9 @@ fun SusuDatePickerBottomSheet(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SusuLimitDatePickerBottomSheet(
-    criteriaYear: Int,
-    criteriaMonth: Int,
-    criteriaDay: Int,
+    initialCriteriaYear: Int? = null,
+    initialCriteriaMonth: Int? = null,
+    initialCriteriaDay: Int? = null,
     initialYear: Int? = null,
     initialMonth: Int? = null,
     initialDay: Int? = null,
@@ -130,6 +139,12 @@ fun SusuLimitDatePickerBottomSheet(
     onDismissRequest: (Int, Int, Int) -> Unit = { _, _, _ -> },
     onItemSelected: (Int, Int, Int) -> Unit = { _, _, _ -> },
 ) {
+    val (criteriaYear, criteriaMonth, criteriaDay) = listOf(
+        initialCriteriaYear ?: 2030,
+        initialCriteriaMonth ?: 12,
+        initialCriteriaDay ?: 31,
+    )
+
     var selectedYear by remember {
         mutableIntStateOf(
             when {
@@ -164,6 +179,7 @@ fun SusuLimitDatePickerBottomSheet(
                             initialMonth == criteriaMonth && initialDay > criteriaDay
                         )
                 -> criteriaDay
+
                 else -> initialDay
             },
         )
@@ -228,6 +244,9 @@ fun SusuLimitDatePickerBottomSheet(
                     selectedYear = item.dropLast(1).toIntOrNull() ?: criteriaYear
                     onItemSelected(selectedYear, selectedMonth, selectedDay)
                 },
+                onItemClicked = { item ->
+                    selectedYear = item.dropLast(1).toIntOrNull() ?: criteriaYear
+                },
             )
             if (monthRange.count() > 1) {
                 InfiniteColumn(
@@ -239,6 +258,9 @@ fun SusuLimitDatePickerBottomSheet(
                     onItemSelected = { _, item ->
                         selectedMonth = item.dropLast(1).toIntOrNull() ?: criteriaMonth
                         onItemSelected(selectedYear, selectedMonth, selectedDay)
+                    },
+                    onItemClicked = { item ->
+                        selectedMonth = item.dropLast(1).toIntOrNull() ?: criteriaMonth
                     },
                 )
             } else {
@@ -270,9 +292,13 @@ fun SusuLimitDatePickerBottomSheet(
                         selectedDay = item.dropLast(1).toIntOrNull() ?: 1
                         onItemSelected(selectedYear, selectedMonth, selectedDay)
                     },
+                    onItemClicked = { item ->
+                        selectedDay = item.dropLast(1).toIntOrNull() ?: 1
+                    },
                 )
             } else {
                 selectedDay = criteriaDay
+                onItemSelected(selectedYear, selectedMonth, selectedDay)
                 Box(
                     modifier = Modifier
                         .width(100.dp)
@@ -305,10 +331,12 @@ fun SusuYearPickerBottomSheet(
     cornerRadius: Dp = 24.dp,
     onDismissRequest: (Int) -> Unit = {},
     onItemSelected: (Int) -> Unit = {},
+    onItemClicked: (Int) -> Unit = {},
 ) {
     val currentYear = remember { LocalDate.now().year }
     var selectedYear by remember { mutableIntStateOf(initialYear ?: currentYear) }
-    val yearList = yearRange.map { stringResource(id = R.string.word_year_format, it) }.toImmutableList()
+    val yearList =
+        (yearRange.map { stringResource(id = R.string.word_year_format, it) } + listOf(stringResource(R.string.word_not_select))).toImmutableList()
     SusuBottomSheet(
         sheetState = sheetState,
         containerHeight = minOf(maximumContainerHeight, itemHeight * numberOfDisplayedItems + 32.dp),
@@ -324,9 +352,10 @@ fun SusuYearPickerBottomSheet(
             itemHeight = itemHeight,
             numberOfDisplayedItems = numberOfDisplayedItems,
             onItemSelected = { _, item ->
-                selectedYear = item.dropLast(1).toIntOrNull() ?: currentYear
+                selectedYear = item.dropLast(1).toIntOrNull() ?: 0
                 onItemSelected(selectedYear)
             },
+            onItemClicked = { onItemClicked(it.dropLast(1).toIntOrNull() ?: 0) },
         )
     }
 }
@@ -348,9 +377,9 @@ private fun getLastDayInMonth(year: Int, month: Int): Int {
 fun SusuLimitDatePickerBottomSheetPreview() {
     SusuTheme {
         SusuLimitDatePickerBottomSheet(
-            criteriaYear = 2024,
-            criteriaMonth = 2,
-            criteriaDay = 16,
+            initialCriteriaYear = 2024,
+            initialCriteriaMonth = 2,
+            initialCriteriaDay = 16,
             initialYear = 2024,
             initialMonth = 2,
             initialDay = 20,
@@ -358,5 +387,14 @@ fun SusuLimitDatePickerBottomSheetPreview() {
             maximumContainerHeight = 346.dp,
             onDismissRequest = { _, _, _ -> },
         )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Preview
+@Composable
+fun SusuYearPickerBottomSheetPreview() {
+    SusuTheme {
+        SusuYearPickerBottomSheet(maximumContainerHeight = 300.dp)
     }
 }

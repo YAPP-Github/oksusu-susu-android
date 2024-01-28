@@ -5,4 +5,5 @@
     <string name="bottom_navigation_item_label_statistics">통계</string>
     <string name="bottom_navigation_item_label_community">투표</string>
     <string name="bottom_navigation_item_label_my_page">마이페이지</string>
+    <string name="main_screen_network_error_snackbar">네트워크 오류가 발생했어요</string>
 </resources>

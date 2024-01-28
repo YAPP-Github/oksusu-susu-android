@@ -8,7 +8,7 @@ import kotlinx.serialization.Serializable
 @Stable
 @Serializable
 data class Ledger(
-    val id: Int = -1,
+    val id: Long = -1,
     val title: String = "",
     val description: String = "",
     val startAt: LocalDateTime = java.time.LocalDateTime.now().toKotlinLocalDateTime(),

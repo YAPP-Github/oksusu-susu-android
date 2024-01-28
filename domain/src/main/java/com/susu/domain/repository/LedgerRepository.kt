@@ -6,18 +6,24 @@ import java.time.LocalDateTime
 interface LedgerRepository {
     suspend fun getLedgerList(
         title: String?,
-        categoryId: Long?,
+        categoryIdList: List<Int>?,
         fromStartAt: LocalDateTime,
         toEndAt: LocalDateTime,
         page: Int?,
         sort: String?,
     ): List<Ledger>
 
+    suspend fun createLedger(
+        ledger: Ledger,
+    ): Ledger
+
     suspend fun editLedger(
         ledger: Ledger,
     ): Ledger
 
     suspend fun deleteLedger(
-        id: Int,
+        id: Long,
     )
+
+    suspend fun getCreateLedgerConfig(): List<Int>
 }

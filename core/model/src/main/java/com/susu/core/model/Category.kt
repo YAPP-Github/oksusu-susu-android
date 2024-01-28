@@ -10,4 +10,5 @@ data class Category(
     val seq: Int = 0,
     val name: String = "",
     val customCategory: String? = null,
+    val style: String = "",
 )

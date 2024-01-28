@@ -10,16 +10,25 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.model.Ledger
+import com.susu.feature.community.navigation.CommunityRoute
 import com.susu.feature.community.navigation.navigateCommunity
+import com.susu.feature.community.navigation.navigateVoteAdd
 import com.susu.feature.loginsignup.navigation.LoginSignupRoute
 import com.susu.feature.mypage.navigation.navigateMyPage
+import com.susu.feature.mypage.navigation.navigateMyPageInfo
+import com.susu.feature.mypage.navigation.navigateMyPagePrivacyPolicy
+import com.susu.feature.mypage.navigation.navigateMyPageSocial
 import com.susu.feature.received.navigation.ReceivedRoute
+import com.susu.feature.received.navigation.argument.FilterArgument
 import com.susu.feature.received.navigation.navigateLedgerAdd
 import com.susu.feature.received.navigation.navigateLedgerDetail
 import com.susu.feature.received.navigation.navigateLedgerEdit
 import com.susu.feature.received.navigation.navigateLedgerFilter
 import com.susu.feature.received.navigation.navigateLedgerSearch
 import com.susu.feature.received.navigation.navigateReceived
+import com.susu.feature.received.navigation.navigateReceivedEnvelopeAdd
+import com.susu.feature.received.navigation.navigateReceivedEnvelopeDetail
+import com.susu.feature.received.navigation.navigateReceivedEnvelopeEdit
 import com.susu.feature.sent.navigation.SentRoute
 import com.susu.feature.sent.navigation.navigateSent
 import com.susu.feature.sent.navigation.navigateSentEnvelope
@@ -46,10 +55,14 @@ internal class MainNavigator(
         get() = when (currentDestination?.route) {
             in listOf(
                 ReceivedRoute.ledgerSearchRoute,
-                ReceivedRoute.ledgerFilterRoute,
+                ReceivedRoute.ledgerFilterRoute("{${ReceivedRoute.FILTER_ARGUMENT_NAME}}"),
+                ReceivedRoute.envelopeDetailRoute,
+                ReceivedRoute.envelopeEditRoute,
                 SentRoute.sentEnvelopeRoute,
                 SentRoute.sentEnvelopeDetailRoute,
                 SentRoute.sentEnvelopeEditRoute,
+                CommunityRoute.route,
+                CommunityRoute.voteAddRoute,
             ),
             -> SusuTheme.colorScheme.background10
 
@@ -126,12 +139,40 @@ internal class MainNavigator(
         navController.navigateLedgerEdit(ledger)
     }
 
-    fun navigateLedgerFilter() {
-        navController.navigateLedgerFilter()
+    fun navigateLedgerFilter(filter: FilterArgument) {
+        navController.navigateLedgerFilter(filter)
     }
 
     fun navigateLedgerAdd() {
         navController.navigateLedgerAdd()
+    }
+
+    fun navigateMyPageInfo() {
+        navController.navigateMyPageInfo()
+    }
+
+    fun navigateMyPageSocial() {
+        navController.navigateMyPageSocial()
+    }
+
+    fun navigateReceivedEnvelopeAdd(categoryName: String, ledgerId: Long) {
+        navController.navigateReceivedEnvelopeAdd(categoryName, ledgerId)
+    }
+
+    fun navigateMyPagePrivacyPolicy() {
+        navController.navigateMyPagePrivacyPolicy()
+    }
+
+    fun navigateReceivedEnvelopeDetail() {
+        navController.navigateReceivedEnvelopeDetail()
+    }
+
+    fun navigateReceivedEnvelopeEdit() {
+        navController.navigateReceivedEnvelopeEdit()
+    }
+
+    fun navigateVoteAdd() {
+        navController.navigateVoteAdd()
     }
 
     fun popBackStackIfNotHome() {

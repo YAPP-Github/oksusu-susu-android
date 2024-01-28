@@ -28,6 +28,7 @@ import com.susu.core.ui.extension.susuClickable
 fun BasicButton(
     modifier: Modifier = Modifier,
     shape: Shape = RectangleShape,
+    textModifier: Modifier = Modifier,
     text: String? = null,
     textStyle: TextStyle = TextStyle.Default,
     contentColor: Color = Color.Unspecified,
@@ -40,6 +41,7 @@ fun BasicButton(
     rightIcon: (@Composable () -> Unit)? = null,
     iconSpacing: Dp = 0.dp,
     isClickable: Boolean = true,
+    rippleEnabled: Boolean = true,
     onClick: () -> Unit = {},
 ) {
     Box(
@@ -52,6 +54,7 @@ fun BasicButton(
                 shape = shape,
             )
             .susuClickable(
+                rippleEnabled = rippleEnabled,
                 rippleColor = rippleColor,
                 runIf = isClickable,
                 onClick = onClick,
@@ -70,6 +73,7 @@ fun BasicButton(
 
             text?.let {
                 Text(
+                    modifier = textModifier,
                     text = it,
                     style = textStyle,
                     color = contentColor,

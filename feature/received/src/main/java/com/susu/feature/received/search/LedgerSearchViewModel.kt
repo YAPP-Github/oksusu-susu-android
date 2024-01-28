@@ -41,6 +41,10 @@ class LedgerSearchViewModel @Inject constructor(
             .onFailure { }
     }
 
+    fun clearFocus() = postSideEffect(LedgerSearchSideEffect.FocusClear)
+
+    fun hideSearchResultEmpty() = intent { copy(showSearchResultEmpty = false) }
+
     fun updateSearch(search: String) = intent { copy(searchKeyword = search) }
 
     fun getLedgerList(search: String) = viewModelScope.launch {

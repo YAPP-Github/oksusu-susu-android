@@ -1,13 +1,21 @@
 package com.susu.feature.received.received
 
 import androidx.lifecycle.viewModelScope
+import com.susu.core.model.Category
 import com.susu.core.model.Ledger
 import com.susu.core.ui.base.BaseViewModel
 import com.susu.core.ui.extension.decodeFromUri
+import com.susu.core.ui.util.currentDate
+import com.susu.core.ui.util.isBetween
 import com.susu.domain.usecase.ledger.GetLedgerListUseCase
+import com.susu.feature.received.navigation.argument.FilterArgument
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
+import kotlinx.datetime.toJavaLocalDateTime
+import kotlinx.datetime.toKotlinLocalDateTime
 import kotlinx.serialization.json.Json
 import javax.inject.Inject
 
@@ -17,30 +25,102 @@ class ReceivedViewModel @Inject constructor(
 ) : BaseViewModel<ReceivedState, ReceivedEffect>(
     ReceivedState(),
 ) {
+    private val mutex = Mutex()
+
     private var page = 0
     private var isLast = false
+    private var filter: FilterArgument = FilterArgument()
+    private var filterUri: String? = null
+    private var isFirstVisit = true
 
-    fun getLedgerList() = viewModelScope.launch {
-        if (isLast) return@launch
+    fun initData() {
+        if (isFirstVisit.not()) return
+        getLedgerList()
+        isFirstVisit = false
+    }
 
-        getLedgerListUseCase(
-            GetLedgerListUseCase.Param(
-                page = page,
-            ),
-        ).onSuccess { ledgerList ->
-            isLast = ledgerList.isEmpty()
-            page++
-            val newLedgerList = currentState.ledgerList.plus(ledgerList).toPersistentList()
-            intent {
-                copy(
-                    ledgerList = newLedgerList,
-                    showEmptyLedger = newLedgerList.isEmpty(),
-                )
+    fun filterIfNeed(filterUri: String?) {
+        if (filterUri == null) return
+
+        if (this.filterUri == filterUri) return
+        this.filterUri = filterUri
+
+        val filterArgument = Json.decodeFromUri<FilterArgument>(filterUri)
+        if (filter == filterArgument) return
+
+        filter = filterArgument
+        intent {
+            copy(
+                selectedCategoryList = filter.selectedCategoryList.toPersistentList(),
+                startAt = filter.startAt?.toJavaLocalDateTime(),
+                endAt = filter.endAt?.toJavaLocalDateTime(),
+            )
+        }
+
+        getLedgerList(true)
+    }
+
+    fun removeCategory(category: Category) {
+        intent {
+            filter = filter.copy(
+                selectedCategoryList = selectedCategoryList.minus(category),
+            )
+            copy(
+                selectedCategoryList = selectedCategoryList.minus(category).toPersistentList(),
+            )
+        }
+
+        getLedgerList(true)
+    }
+
+    fun clearDate() {
+        intent {
+            copy(
+                startAt = null,
+                endAt = null,
+            )
+        }
+
+        getLedgerList(true)
+    }
+
+    fun getLedgerList(needClear: Boolean = false) = viewModelScope.launch {
+        mutex.withLock {
+            val currentList = if (needClear) {
+                page = 0
+                isLast = false
+                emptyList()
+            } else {
+                currentState.ledgerList
             }
+
+            if (isLast) return@launch
+
+            getLedgerListUseCase(
+                GetLedgerListUseCase.Param(
+                    page = page,
+                    categoryIdList = filter.selectedCategoryList.map { it.id },
+                    fromStartAt = currentState.startAt,
+                    toEndAt = currentState.endAt,
+                    sort = LedgerAlign.entries[currentState.selectedAlignPosition].query,
+                ),
+            ).onSuccess { ledgerList ->
+                isLast = ledgerList.isEmpty()
+                page++
+                val newLedgerList = currentList.plus(ledgerList).toPersistentList()
+                intent {
+                    copy(
+                        ledgerList = newLedgerList,
+                        showEmptyLedger = newLedgerList.isEmpty(),
+                    )
+                }
+            }
+
+            if (needClear) postSideEffect(ReceivedEffect.ScrollToTop)
         }
     }
 
-    fun updateLedgerIfNeed(ledger: String?, toDeleteLedgerId: Int) {
+    fun updateLedgerIfNeed(ledger: String?, toDeleteLedgerId: Long) {
         val toUpdateLedger = ledger?.let {
             Json.decodeFromUri<Ledger>(ledger)
         } ?: Ledger()
@@ -50,7 +130,41 @@ class ReceivedViewModel @Inject constructor(
             .map { if (it.id == toUpdateLedger.id) toUpdateLedger else it }
             .toPersistentList()
 
-        intent { copy(ledgerList = newList) }
+        intent {
+            copy(
+                ledgerList = newList,
+                showEmptyLedger = newList.isEmpty(),
+            )
+        }
+    }
+
+    fun addLedgerIfNeed(ledger: String?) {
+        val toAddLedger = ledger?.let {
+            Json.decodeFromUri<Ledger>(ledger)
+        } ?: return
+
+        if (toAddLedger in currentState.ledgerList) return
+
+        if (filter.selectedCategoryList.isNotEmpty() && toAddLedger.category !in filter.selectedCategoryList) return
+
+        if (
+            isBetween(
+                target = toAddLedger.startAt.toJavaLocalDateTime(),
+                start = filter.startAt?.toJavaLocalDateTime() ?: currentDate.minusYears(100),
+                end = filter.endAt?.toJavaLocalDateTime() ?: currentDate.plusYears(100),
+            ).not()
+        ) {
+            return
+        }
+
+        intent {
+            copy(
+                ledgerList = currentState
+                    .ledgerList
+                    .add(0, toAddLedger),
+                showEmptyLedger = false,
+            )
+        }
     }
 
     fun showAlignBottomSheet() = intent { copy(showAlignBottomSheet = true) }
@@ -58,5 +172,20 @@ class ReceivedViewModel @Inject constructor(
     fun navigateLedgerDetail(ledger: Ledger) = postSideEffect(ReceivedEffect.NavigateLedgerDetail(ledger))
     fun navigateLedgerAdd() = postSideEffect(ReceivedEffect.NavigateLedgerAdd)
     fun navigateLedgerSearch() = postSideEffect(ReceivedEffect.NavigateLedgerSearch)
-    fun navigateLedgerFilter() = postSideEffect(ReceivedEffect.NavigateLedgerFilter)
+    fun navigateLedgerFilter() = postSideEffect(
+        ReceivedEffect.NavigateLedgerFilter(
+            with(currentState) {
+                FilterArgument(
+                    selectedCategoryList = selectedCategoryList,
+                    startAt = startAt?.toKotlinLocalDateTime(),
+                    endAt = endAt?.toKotlinLocalDateTime(),
+                )
+            },
+        ),
+    )
+
+    fun updateSelectedAlignPosition(position: Int) {
+        intent { copy(selectedAlignPosition = position) }
+        getLedgerList(true)
+    }
 }

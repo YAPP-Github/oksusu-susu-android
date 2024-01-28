@@ -14,18 +14,22 @@ class LedgerRepositoryImpl @Inject constructor(
 ) : LedgerRepository {
     override suspend fun getLedgerList(
         title: String?,
-        categoryId: Long?,
+        categoryIdList: List<Int>?,
         fromStartAt: LocalDateTime,
         toEndAt: LocalDateTime,
         page: Int?,
         sort: String?,
     ): List<Ledger> = ledgerService.getLedgerList(
         title = title,
-        categoryId = categoryId,
+        categoryIdList = categoryIdList,
         fromStartAt = fromStartAt.toKotlinLocalDateTime(),
         toEndAt = toEndAt.toKotlinLocalDateTime(),
         page = page,
         sort = sort,
+    ).getOrThrow().toModel()
+
+    override suspend fun createLedger(ledger: Ledger): Ledger = ledgerService.createLedger(
+        ledgerRequest = ledger.toData(),
     ).getOrThrow().toModel()
 
     override suspend fun editLedger(ledger: Ledger): Ledger = ledgerService.editLedger(
@@ -33,7 +37,9 @@ class LedgerRepositoryImpl @Inject constructor(
         ledgerRequest = ledger.toData(),
     ).getOrThrow().toModel()
 
-    override suspend fun deleteLedger(id: Int) = ledgerService.deleteLedgerList(
+    override suspend fun deleteLedger(id: Long) = ledgerService.deleteLedgerList(
         listOf(id),
     ).getOrThrow()
+
+    override suspend fun getCreateLedgerConfig(): List<Int> = ledgerService.getCreateLedgerConfig().getOrThrow().onlyStartAtCategoryIds
 }

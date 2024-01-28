@@ -1,8 +1,10 @@
 package com.susu.core.designsystem.component.badge
 
+import android.util.Log
 import androidx.compose.ui.graphics.Color
 import com.susu.core.designsystem.theme.Gray10
 import com.susu.core.designsystem.theme.Gray70
+import java.lang.IllegalArgumentException
 
 enum class BadgeColor(
     val backgroundColor: Color,
@@ -36,4 +38,14 @@ enum class BadgeColor(
         backgroundColor = com.susu.core.designsystem.theme.Red60,
         textColor = Gray10,
     ),
+    ;
+
+    companion object {
+        fun safeValueOf(value: String) = try {
+            valueOf(value)
+        } catch (e: IllegalArgumentException) {
+            Log.e("SafeValueOfError", "Invalid value provided", e)
+            Gray40
+        }
+    }
 }
