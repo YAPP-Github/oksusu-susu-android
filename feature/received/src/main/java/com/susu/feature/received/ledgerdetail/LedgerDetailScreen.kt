@@ -14,6 +14,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -43,6 +46,7 @@ import com.susu.core.ui.DialogToken
 import com.susu.core.ui.R
 import com.susu.core.ui.SnackbarToken
 import com.susu.core.ui.alignList
+import com.susu.core.ui.extension.OnBottomReached
 import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.feature.received.ledgerdetail.component.LedgerDetailEnvelopeContainer
 import com.susu.feature.received.ledgerdetail.component.LedgerDetailOverviewColumn
@@ -61,6 +65,7 @@ fun LedgerDetailRoute(
     handleException: (Throwable, () -> Unit) -> Unit,
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
+    val listState = rememberLazyListState()
     val context = LocalContext.current
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
@@ -98,6 +103,10 @@ fun LedgerDetailRoute(
         viewModel.initData(ledger)
     }
 
+    listState.OnBottomReached(minItemsCount = 4) {
+        viewModel.getReceivedEnvelopeList()
+    }
+
     BackHandler(onBack = viewModel::popBackStackWithLedger)
 
     LedgerDetailScreen(
@@ -107,12 +116,14 @@ fun LedgerDetailRoute(
         onClickBack = viewModel::popBackStackWithLedger,
         onClickFloatingButton = viewModel::navigateEnvelopeAdd,
         onClickSeeMoreIcon = viewModel::navigateEnvelopeDetail,
+        onClickEnvelopeAddButton = viewModel::navigateEnvelopeAdd,
     )
 }
 
 @Composable
 fun LedgerDetailScreen(
     uiState: LedgerDetailState = LedgerDetailState(),
+    listState: LazyListState = rememberLazyListState(),
     onClickBack: () -> Unit = {},
     onClickEdit: () -> Unit = {},
     onClickDelete: () -> Unit = {},
@@ -148,6 +159,7 @@ fun LedgerDetailScreen(
                 contentPadding = PaddingValues(
                     vertical = SusuTheme.spacing.spacing_xl,
                 ),
+                state = listState,
             ) {
                 item {
                     with(uiState) {
@@ -207,8 +219,7 @@ fun LedgerDetailScreen(
                     }
                 }
 
-                var showEmptyScreen = false // TODO Refactor
-                if (showEmptyScreen) {
+                if (uiState.envelopeList.isEmpty()) {
                     item {
                         Column(
                             modifier = Modifier
@@ -231,8 +242,9 @@ fun LedgerDetailScreen(
                         }
                     }
                 } else {
-                    items(count = 100) {
+                    items(items = uiState.envelopeList, key = { it.envelope.id }) {
                         LedgerDetailEnvelopeContainer(
+                            envelope = it,
                             onClickSeeMoreIcon = onClickSeeMoreIcon,
                         )
                     }

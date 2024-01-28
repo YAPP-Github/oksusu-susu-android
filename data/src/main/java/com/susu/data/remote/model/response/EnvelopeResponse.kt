@@ -27,5 +27,5 @@ internal fun EnvelopeResponse.toModel() = Envelope(
     gift = gift,
     memo = memo,
     hasVisited = hasVisited,
-    handedOverAt = handedOverAt?.toJavaLocalDateTime(),
+    handedOverAt = handedOverAt,
 )
