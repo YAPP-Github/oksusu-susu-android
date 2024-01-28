@@ -13,7 +13,7 @@ class FriendRepositoryImpl @Inject constructor(
     override suspend fun createFriend(
         name: String,
         phoneNumber: String?,
-        relationshipId: Int,
+        relationshipId: Long,
         customRelation: String?,
     ): Long = friendService.createFriend(
         FriendRequest(

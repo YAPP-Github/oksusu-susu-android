@@ -6,7 +6,7 @@ interface FriendRepository {
     suspend fun createFriend(
         name: String,
         phoneNumber: String? = null,
-        relationshipId: Int,
+        relationshipId: Long,
         customRelation: String? = null,
     ): Long
 

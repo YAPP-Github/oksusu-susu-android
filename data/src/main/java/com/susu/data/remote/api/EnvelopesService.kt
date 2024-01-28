@@ -1,7 +1,7 @@
 package com.susu.data.remote.api
 
 import com.susu.data.remote.model.request.EnvelopeRequest
-import com.susu.data.remote.model.response.EnvelopeResponse
+import com.susu.data.remote.model.response.CreateEnvelopeResponse
 import com.susu.data.remote.model.response.EnvelopesListResponse
 import com.susu.data.remote.model.response.RelationShipListResponse
 import com.susu.data.remote.model.response.SearchEnvelopeResponse
@@ -28,7 +28,7 @@ interface EnvelopesService {
     @POST("envelopes")
     suspend fun createEnvelope(
         @Body envelopeRequest: EnvelopeRequest,
-    ): ApiResult<EnvelopeResponse>
+    ): ApiResult<CreateEnvelopeResponse>
 
     @GET("envelopes")
     suspend fun searchEnvelope(

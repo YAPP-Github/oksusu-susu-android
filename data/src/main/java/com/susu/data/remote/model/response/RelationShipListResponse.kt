@@ -10,7 +10,7 @@ data class RelationShipListResponse(
 
 @Serializable
 data class RelationConfigShipResponse(
-    val id: Int,
+    val id: Long,
     val relation: String,
 )
 

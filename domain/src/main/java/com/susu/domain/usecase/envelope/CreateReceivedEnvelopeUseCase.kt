@@ -36,7 +36,7 @@ class CreateReceivedEnvelopeUseCase @Inject constructor(
         val friendId: Long? = null,
         val friendName: String? = null,
         val phoneNumber: String? = null,
-        val relationshipId: Int? = null,
+        val relationshipId: Long? = null,
         val customRelation: String? = null,
         val ledgerId: Long,
         val amount: Long,
