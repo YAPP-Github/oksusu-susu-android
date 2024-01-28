@@ -34,7 +34,7 @@ data class Envelope(
 
 @Serializable
 data class RelationInfo(
-    val id: Int,
+    val id: Long,
     val relation: String,
 )
 

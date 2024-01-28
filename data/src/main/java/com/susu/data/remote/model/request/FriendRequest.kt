@@ -6,6 +6,6 @@ import kotlinx.serialization.Serializable
 data class FriendRequest(
     val name: String,
     val phoneNumber: String? = null,
-    val relationshipId: Int,
+    val relationshipId: Long,
     val customRelation: String? = null,
 )
