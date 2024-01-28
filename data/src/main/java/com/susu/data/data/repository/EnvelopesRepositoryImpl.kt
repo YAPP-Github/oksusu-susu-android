@@ -3,6 +3,7 @@ package com.susu.data.data.repository
 import com.susu.core.model.FriendStatistics
 import com.susu.data.remote.api.EnvelopesService
 import com.susu.core.model.Envelope
+import com.susu.core.model.EnvelopeSearch
 import com.susu.core.model.Relationship
 import com.susu.data.remote.model.request.CategoryRequest
 import com.susu.data.remote.model.request.EnvelopeRequest
@@ -64,5 +65,27 @@ class EnvelopesRepositoryImpl @Inject constructor(
                 null
             },
         ),
+    ).getOrThrow().toModel()
+
+    override suspend fun getEnvelopesHistoryList(
+        friendIds: List<Int>?,
+        ledgerId: Int?,
+        type: List<String>?,
+        include: List<String>?,
+        fromAmount: Int?,
+        toAmount: Int?,
+        page: Int?,
+        size: Int?,
+        sort: String?,
+    ): List<EnvelopeSearch> = envelopesService.getEnvelopesHistoryList(
+        friendIds = friendIds,
+        ledgerId = ledgerId,
+        types = type,
+        include = include,
+        fromAmount = fromAmount,
+        toAmount = toAmount,
+        page = page,
+        size = size,
+        sort = sort,
     ).getOrThrow().toModel()
 }

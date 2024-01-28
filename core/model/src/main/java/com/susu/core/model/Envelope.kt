@@ -6,7 +6,7 @@ data class Envelope(
     val id: Long,
     val uid: Long,
     val type: String,
-    val friend: Friend,
+    val friend: Friend? = null,
     val amount: Long,
     val gift: String? = null,
     val memo: String? = null,

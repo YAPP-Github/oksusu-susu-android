@@ -2,6 +2,7 @@ package com.susu.feature.sent
 
 import androidx.lifecycle.viewModelScope
 import com.susu.core.ui.base.BaseViewModel
+import com.susu.domain.usecase.envelope.GetEnvelopesHistoryListUseCase
 import com.susu.domain.usecase.envelope.GetEnvelopesListUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toPersistentList
@@ -11,6 +12,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SentViewModel @Inject constructor(
     private val getEnvelopesListUseCase: GetEnvelopesListUseCase,
+    private val getEnvelopesHistoryListUseCase: GetEnvelopesHistoryListUseCase,
 ) : BaseViewModel<SentState, SentEffect>(
     SentState(),
 ) {
@@ -28,6 +30,14 @@ class SentViewModel @Inject constructor(
                     showEmptyEnvelopes = newEnvelopesList.isEmpty(),
                 )
             }
+        }
+    }
+
+    fun getEnvelopesHistoryList() = viewModelScope.launch {
+        getEnvelopesHistoryListUseCase(
+            GetEnvelopesHistoryListUseCase.Param(),
+        ).onSuccess {
+            // TODO: EnvelopesHistoryList 불러오기
         }
     }
 

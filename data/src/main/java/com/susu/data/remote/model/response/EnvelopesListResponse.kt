@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class EnvelopesListResponse(
     @SerialName("data")
-    val envelopesList: List<EnvelopesResponse>,
+    val envelopesList: List<FriendStatisticsResponse>,
     val page: Int,
     val size: Int,
     val totalPage: Int,
@@ -18,7 +18,7 @@ data class EnvelopesListResponse(
 data class Sort(
     val empty: Boolean,
     val sorted: Boolean,
-    val unsorted: Boolean,
+    val unsorted: Boolean
 )
 
 internal fun EnvelopesListResponse.toModel() = this.envelopesList.map { envelopes ->

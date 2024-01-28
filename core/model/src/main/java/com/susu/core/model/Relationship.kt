@@ -7,4 +7,5 @@ data class Relationship(
     val id: Int = -1,
     val relation: String = "",
     val customRelation: String? = null,
+    val description: String? = null,
 )

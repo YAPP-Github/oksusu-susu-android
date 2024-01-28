@@ -4,6 +4,7 @@ import com.susu.data.remote.model.response.EnvelopesListResponse
 import com.susu.data.remote.retrofit.ApiResult
 import com.susu.data.remote.model.request.EnvelopeRequest
 import com.susu.data.remote.model.response.EnvelopeResponse
+import com.susu.data.remote.model.response.EnvelopesHistoryListResponse
 import com.susu.data.remote.model.response.RelationShipListResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -28,4 +29,17 @@ interface EnvelopesService {
     suspend fun createEnvelope(
         @Body envelopeRequest: EnvelopeRequest,
     ): ApiResult<EnvelopeResponse>
+
+    @GET("envelopes")
+    suspend fun getEnvelopesHistoryList(
+        @Query("friendIds") friendIds: List<Int>?,
+        @Query("ledgerId") ledgerId: Int?,
+        @Query("types") types: List<String>?,
+        @Query("include") include: List<String>?,
+        @Query("fromAmount") fromAmount: Int?,
+        @Query("toAmount") toAmount: Int?,
+        @Query("page") page: Int?,
+        @Query("size") size: Int?,
+        @Query("sort") sort: String?,
+    ): ApiResult<EnvelopesHistoryListResponse>
 }
