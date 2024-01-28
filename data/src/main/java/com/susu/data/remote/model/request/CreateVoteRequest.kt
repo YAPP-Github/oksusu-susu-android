@@ -8,8 +8,8 @@ data class CreateVoteRequest(
     val content: String,
     @SerialName("options")
     val optionList: List<VoteOption>,
-    @SerialName("postCategoryId")
-    val categoryId: Int,
+    @SerialName("boardId")
+    val boardId: Int,
 )
 
 @Serializable

@@ -8,7 +8,7 @@ import java.time.LocalDateTime
 @Serializable
 data class PopularVoteResponse(
     val id: Long,
-    val category: String,
+    val boardName: String,
     val content: String,
     val count: Int,
     val isModified: Boolean,
@@ -17,7 +17,7 @@ data class PopularVoteResponse(
 internal fun PopularVoteResponse.toModel() = Vote(
     id = id,
     uid = 0,
-    category = category,
+    boardName = boardName,
     content = content,
     isModified = isModified,
     count = count,

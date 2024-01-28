@@ -38,7 +38,7 @@ class CommunityViewModel @Inject constructor(
         if (toAddVote in currentState.voteList) return
 
         if (currentState.selectedCategory != null &&
-            currentState.selectedCategory?.id != currentState.categoryConfigList.find { it.name == toAddVote.category }?.id
+            currentState.selectedCategory?.id != currentState.categoryConfigList.find { it.name == toAddVote.boardName }?.id
         ) {
             return
         }

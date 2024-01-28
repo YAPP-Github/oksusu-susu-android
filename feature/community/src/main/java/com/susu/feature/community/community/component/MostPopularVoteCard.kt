@@ -43,7 +43,7 @@ fun MostPopularVoteCard(vote: Vote) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Text(text = vote.category, color = Gray60, style = SusuTheme.typography.title_xxxs)
+            Text(text = vote.boardName, color = Gray60, style = SusuTheme.typography.title_xxxs)
             Icon(
                 modifier = Modifier.size(20.dp),
                 painter = painterResource(id = com.susu.core.ui.R.drawable.ic_arrow_right),

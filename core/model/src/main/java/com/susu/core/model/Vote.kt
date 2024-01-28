@@ -10,7 +10,7 @@ import kotlinx.serialization.Serializable
 data class Vote(
     val id: Long = 0,
     val uid: Long = 0,
-    val category: String = "",
+    val boardName: String = "",
     val content: String = "",
     val count: Int = 0,
     val isModified: Boolean = false,
