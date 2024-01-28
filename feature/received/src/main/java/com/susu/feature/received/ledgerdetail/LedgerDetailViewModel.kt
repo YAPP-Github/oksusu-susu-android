@@ -33,7 +33,9 @@ class LedgerDetailViewModel @Inject constructor(
     private var page = 0
     private var isLast = false
 
-    fun initData(backStackEntryLedgerUri: String?) {
+    private var isFirstVisited: Boolean = true
+
+    fun updateLedgerInfoIfNeed(backStackEntryLedgerUri: String?) {
         if (backStackEntryLedgerUri == null) {
             updateLedgerInfo(Json.decodeFromUri<Ledger>(argument))
             return
@@ -48,9 +50,14 @@ class LedgerDetailViewModel @Inject constructor(
         updateLedgerInfo(backStackLedger)
     }
 
+    fun initReceivedEnvelopeList() {
+        if (isFirstVisited.not()) return
+        getReceivedEnvelopeList(true)
+        isFirstVisited = false
+    }
+
     private fun updateLedgerInfo(ledger: Ledger) = intent {
         this@LedgerDetailViewModel.ledger = ledger
-        getReceivedEnvelopeList(true)
         ledger.let { ledger ->
             val category = ledger.category
             copy(

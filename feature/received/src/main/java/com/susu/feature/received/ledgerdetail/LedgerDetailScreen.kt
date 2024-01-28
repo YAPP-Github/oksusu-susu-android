@@ -100,7 +100,8 @@ fun LedgerDetailRoute(
     }
 
     LaunchedEffect(key1 = Unit) {
-        viewModel.initData(ledger)
+        viewModel.updateLedgerInfoIfNeed(ledger)
+        viewModel.initReceivedEnvelopeList()
     }
 
     listState.OnBottomReached(minItemsCount = 4) {
