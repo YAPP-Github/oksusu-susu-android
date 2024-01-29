@@ -36,8 +36,17 @@ class EnvelopeAddViewModel @Inject constructor() : BaseViewModel<EnvelopeAddStat
             EnvelopeAddStep.RELATIONSHIP -> intent { copy(currentStep = EnvelopeAddStep.EVENT) }
             EnvelopeAddStep.EVENT -> intent { copy(currentStep = EnvelopeAddStep.DATE) }
             EnvelopeAddStep.DATE -> intent { copy(currentStep = EnvelopeAddStep.MORE) }
-            EnvelopeAddStep.MORE -> postSideEffect(EnvelopeAddEffect.CompleteEnvelopeAdd)
-            else -> intent { copy(currentStep = EnvelopeAddStep.MORE) }
+            else -> goNextMoreStep()
+        }
+    }
+
+    private fun goNextMoreStep() {
+        val moreStep = moreStep.filter { uiState.value.currentStep.ordinal < it.ordinal }.minOrNull()
+
+        if (moreStep == null) {
+            postSideEffect(EnvelopeAddEffect.CompleteEnvelopeAdd)
+        } else {
+            intent { copy(currentStep = moreStep) }
         }
     }
 
@@ -58,7 +67,17 @@ class EnvelopeAddViewModel @Inject constructor() : BaseViewModel<EnvelopeAddStat
 
             EnvelopeAddStep.DATE -> intent { copy(currentStep = EnvelopeAddStep.EVENT) }
             EnvelopeAddStep.MORE -> intent { copy(currentStep = EnvelopeAddStep.DATE) }
-            else -> intent { copy(currentStep = EnvelopeAddStep.MORE) }
+            else -> goPrevMoreStep()
+        }
+    }
+
+    private fun goPrevMoreStep() {
+        val moreStep = moreStep.filter { uiState.value.currentStep.ordinal > it.ordinal }.maxOrNull()
+
+        if (moreStep == null) {
+            intent { copy(currentStep = EnvelopeAddStep.MORE) }
+        } else {
+            intent { copy(currentStep = moreStep) }
         }
     }
 
