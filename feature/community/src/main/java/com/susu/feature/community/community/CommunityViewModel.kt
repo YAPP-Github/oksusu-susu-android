@@ -56,6 +56,24 @@ class CommunityViewModel @Inject constructor(
         }
     }
 
+    fun updateVoteIfNeed(vote: String?) {
+        val toUpdateVote = vote?.let {
+            Json.decodeFromUri<Vote>(vote)
+        } ?: return
+
+        intent {
+            copy(
+                voteList = currentState
+                    .voteList
+                    .map {
+                        if (it.id == toUpdateVote.id) toUpdateVote
+                        else it
+                    }
+                    .toPersistentList(),
+            )
+        }
+    }
+
     fun initData() {
         if (isFirstVisit.not()) return
         getVoteList()

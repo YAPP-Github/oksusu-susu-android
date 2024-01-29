@@ -2,19 +2,14 @@ package com.susu.feature.community.votedetail
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.susu.core.model.Category
 import com.susu.core.ui.base.BaseViewModel
 import com.susu.core.ui.extension.encodeToUri
-import com.susu.domain.usecase.vote.CreateVoteUseCase
-import com.susu.domain.usecase.vote.GetPostCategoryConfigUseCase
 import com.susu.domain.usecase.vote.GetVoteDetailUseCase
 import com.susu.domain.usecase.vote.VoteUseCase
 import com.susu.feature.community.navigation.CommunityRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -94,5 +89,5 @@ class VoteDetailViewModel @Inject constructor(
         )
     }
 
-    fun popBackStack() = postSideEffect(VoteDetailSideEffect.PopBackStack)
+    fun popBackStack() = postSideEffect(VoteDetailSideEffect.PopBackStackWithToUpdateVote(Json.encodeToUri(currentState.vote)))
 }

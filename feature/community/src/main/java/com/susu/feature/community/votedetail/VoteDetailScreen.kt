@@ -1,5 +1,6 @@
 package com.susu.feature.community.votedetail
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -36,7 +37,6 @@ import com.susu.core.designsystem.component.appbar.icon.BackIcon
 import com.susu.core.designsystem.component.appbar.icon.DeleteText
 import com.susu.core.designsystem.component.appbar.icon.EditText
 import com.susu.core.designsystem.component.badge.BadgeColor
-import com.susu.core.designsystem.component.badge.BadgePadding
 import com.susu.core.designsystem.component.badge.BadgeStyle
 import com.susu.core.designsystem.component.badge.SusuBadge
 import com.susu.core.designsystem.component.screen.LoadingScreen
@@ -57,14 +57,14 @@ import java.time.temporal.ChronoUnit
 @Composable
 fun VoteDetailRoute(
     viewModel: VoteDetailViewModel = hiltViewModel(),
-    popBackStack: () -> Unit,
+    popBackStackWithToUpdateVote: (String) -> Unit,
     handleException: (Throwable, () -> Unit) -> Unit,
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
             is VoteDetailSideEffect.HandleException -> handleException(sideEffect.throwable, sideEffect.retry)
-            VoteDetailSideEffect.PopBackStack -> popBackStack()
+            is VoteDetailSideEffect.PopBackStackWithToUpdateVote -> popBackStackWithToUpdateVote(sideEffect.vote)
             is VoteDetailSideEffect.PopBackStackWithVote -> TODO()
         }
     }
@@ -84,10 +84,14 @@ fun VoteDetailRoute(
         viewModel.getVoteDetail()
     }
 
+    BackHandler {
+        viewModel.popBackStack()
+    }
+
     VoteDetailScreen(
         uiState = uiState,
         currentTime = currentTime,
-        onClickBack = popBackStack,
+        onClickBack = viewModel::popBackStack,
         onClickOption = viewModel::vote,
     )
 }

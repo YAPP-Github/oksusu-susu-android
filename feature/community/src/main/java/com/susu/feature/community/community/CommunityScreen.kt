@@ -63,6 +63,7 @@ import java.time.LocalDateTime
 fun CommunityRoute(
     padding: PaddingValues,
     vote: String?,
+    toUpdateVote: String?,
     viewModel: CommunityViewModel = hiltViewModel(),
     navigateVoteAdd: () -> Unit,
     navigateVoteDetail: (Long) -> Unit,
@@ -95,6 +96,7 @@ fun CommunityRoute(
         viewModel.getCategoryConfig()
         viewModel.getPopularVoteList()
         viewModel.addVoteIfNeed(vote)
+        viewModel.updateVoteIfNeed(toUpdateVote)
     }
 
     voteListState.OnBottomReached(minItemsCount = 4) {
