@@ -47,6 +47,7 @@ import com.susu.core.designsystem.theme.Gray10
 import com.susu.core.designsystem.theme.Gray20
 import com.susu.core.designsystem.theme.Gray30
 import com.susu.core.designsystem.theme.Gray40
+import com.susu.core.designsystem.theme.Gray50
 import com.susu.core.designsystem.theme.Orange60
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.model.Category
@@ -153,7 +154,7 @@ fun CommunityScreen(
             )
 
             LazyColumn(
-                modifier = Modifier.weight(1f),
+                // modifier = Modifier.weight(1f),
                 state = voteListState,
                 contentPadding = PaddingValues(vertical = SusuTheme.spacing.spacing_m),
             ) {
@@ -290,6 +291,19 @@ fun CommunityScreen(
                         vote = vote,
                         currentTime = currentTime,
                         onClick = { onClickVote(vote.id) },
+                    )
+                }
+            }
+
+            if (uiState.voteList.isEmpty()) {
+                Box(
+                    modifier = Modifier.fillMaxWidth().weight(1f),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Text(
+                        text = stringResource(R.string.community_screen_empty_vote),
+                        style = SusuTheme.typography.text_s,
+                        color = Gray50,
                     )
                 }
             }
