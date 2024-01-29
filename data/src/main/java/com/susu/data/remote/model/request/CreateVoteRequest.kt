@@ -17,4 +17,5 @@ data class VoteOption(
     val id: Long? = null,
     val content: String,
     val seq: Int,
+    val count: Long? = null,
 )

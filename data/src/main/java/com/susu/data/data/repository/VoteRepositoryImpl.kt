@@ -50,4 +50,6 @@ class VoteRepositoryImpl @Inject constructor(
     override suspend fun getPopularVoteList(): List<Vote> = api.getPopularVoteList().getOrThrow().map { it.toModel() }
 
     override suspend fun getPostCategoryConfig(): List<Category> = api.getPostCategoryConfig().getOrThrow().map { it.toModel() }
+
+    override suspend fun getVoteDetail(id: Long): Vote = api.getVoteDetail(id).getOrThrow().toModel()
 }
