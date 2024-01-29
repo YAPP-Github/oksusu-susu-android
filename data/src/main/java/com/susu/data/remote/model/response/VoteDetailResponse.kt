@@ -33,12 +33,14 @@ internal fun VoteDetailResponse.toModel() = Vote(
     content = content,
     count = count,
     isModified = isModified,
+    isMine = isMine,
     createdAt = createdAt,
     optionList = options.map {
         com.susu.core.model.VoteOption(
             id = it.id!!,
             content = it.content,
             count = it.count!!,
+            isVoted = it.isVoted,
         )
     },
 )

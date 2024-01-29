@@ -58,7 +58,6 @@ import com.susu.feature.community.community.component.MostPopularVoteCard
 import com.susu.feature.community.community.component.VoteCard
 import kotlinx.coroutines.delay
 import java.time.LocalDateTime
-import java.util.concurrent.TimeUnit
 
 @Composable
 fun CommunityRoute(
@@ -66,12 +65,15 @@ fun CommunityRoute(
     vote: String?,
     viewModel: CommunityViewModel = hiltViewModel(),
     navigateVoteAdd: () -> Unit,
+    navigateVoteDetail: (Long) -> Unit,
     handleException: (Throwable, () -> Unit) -> Unit,
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
             is CommunitySideEffect.HandleException -> handleException(sideEffect.throwable, sideEffect.retry)
+            CommunitySideEffect.NavigateVoteAdd -> navigateVoteAdd()
+            is CommunitySideEffect.NavigateVoteDetail -> navigateVoteDetail(sideEffect.voteId)
         }
     }
 
@@ -104,10 +106,11 @@ fun CommunityRoute(
         uiState = uiState,
         currentTime = currentTime,
         voteListState = voteListState,
-        navigateVoteAdd = navigateVoteAdd,
+        onClickFloatingButton = viewModel::navigateVoteAdd,
         onClickCategory = viewModel::selectCategory,
         onClickShowMine = viewModel::toggleShowMyVote,
         onClickShowVotePopular = viewModel::toggleShowVotePopular,
+        onClickVote = viewModel::navigateVoteDetail,
     )
 }
 
@@ -119,7 +122,8 @@ fun CommunityScreen(
     currentTime: LocalDateTime = LocalDateTime.now(),
     voteListState: LazyListState = rememberLazyListState(),
     onClickSearchIcon: () -> Unit = {},
-    navigateVoteAdd: () -> Unit = {},
+    onClickFloatingButton: () -> Unit = {},
+    onClickVote: (Long) -> Unit = {},
     onClickCategory: (Category?) -> Unit = {},
     onClickShowVotePopular: () -> Unit = {},
     onClickShowMine: () -> Unit = {},
@@ -169,7 +173,7 @@ fun CommunityScreen(
                                 items = uiState.popularVoteList,
                                 key = { it.id },
                             ) { vote ->
-                                MostPopularVoteCard(vote)
+                                MostPopularVoteCard(vote, onClick = { onClickVote(vote.id) })
                             }
                         }
                     }
@@ -280,7 +284,11 @@ fun CommunityScreen(
                     items = uiState.voteList,
                     key = { it.id },
                 ) { vote ->
-                    VoteCard(vote, currentTime)
+                    VoteCard(
+                        vote = vote,
+                        currentTime = currentTime,
+                        onClick = { onClickVote(vote.id) },
+                    )
                 }
             }
         }
@@ -290,7 +298,7 @@ fun CommunityScreen(
                 .align(Alignment.BottomEnd)
                 .padding(SusuTheme.spacing.spacing_l),
             imageResId = R.drawable.ic_vote_add,
-            onClick = navigateVoteAdd,
+            onClick = onClickFloatingButton,
         )
     }
 }

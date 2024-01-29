@@ -15,6 +15,7 @@ data class Vote(
     val content: String = "",
     val count: Int = 0,
     val isModified: Boolean = false,
+    val isMine: Boolean = false,
     val createdAt: LocalDateTime = java.time.LocalDateTime.now().toKotlinLocalDateTime(),
     val optionList: List<VoteOption> = emptyList(),
 )
@@ -32,4 +33,5 @@ data class VoteOption(
     val id: Long,
     val content: String,
     val count: Long = 0,
+    val isVoted: Boolean = false,
 )

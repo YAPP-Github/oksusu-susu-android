@@ -28,16 +28,18 @@ import com.susu.core.designsystem.theme.Gray50
 import com.susu.core.designsystem.theme.Gray60
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.model.Vote
+import com.susu.core.ui.extension.susuClickable
 import com.susu.core.ui.extension.toMoneyFormat
 import com.susu.feature.community.R
 
 @Composable
-fun MostPopularVoteCard(vote: Vote) {
+fun MostPopularVoteCard(vote: Vote, onClick: () -> Unit = {}) {
     Column(
         modifier = Modifier
             .clip(RoundedCornerShape(8.dp))
             .background(Gray15)
             .width(296.dp)
+            .susuClickable(rippleEnabled = false, onClick = onClick)
             .padding(SusuTheme.spacing.spacing_m),
     ) {
         Row(

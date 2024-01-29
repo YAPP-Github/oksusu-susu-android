@@ -11,6 +11,8 @@
     <string name="word_people">%s명</string>
     <string name="popular_vote_card_count">%s명 참여 중</string>
     <string name="vote_card_count">%d명 참여</string>
-    <string name="word_before_hour">%1$s 시간전</string>
-    <string name="word_before_minute">%1$s 분전</string>
+    <string name="word_before_hour">%1$s시간 전</string>
+    <string name="word_before_minute">%1$s분 전</string>
+    <string name="word_anonymous_susu">익명 수수</string>
+    <string name="word_me">나</string>
 </resources>

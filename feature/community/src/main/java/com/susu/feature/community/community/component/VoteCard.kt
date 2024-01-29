@@ -29,6 +29,7 @@ import com.susu.core.designsystem.theme.Gray40
 import com.susu.core.designsystem.theme.Orange60
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.model.Vote
+import com.susu.core.ui.extension.susuClickable
 import com.susu.core.ui.util.to_yyyy_dot_MM_dot_dd
 import com.susu.feature.community.R
 import kotlinx.datetime.toJavaLocalDateTime
@@ -39,6 +40,7 @@ import java.time.temporal.ChronoUnit
 fun VoteCard(
     vote: Vote = Vote(),
     currentTime: LocalDateTime = LocalDateTime.now(),
+    onClick: () -> Unit = {},
 ) {
     Column(
         modifier = Modifier
@@ -48,6 +50,10 @@ fun VoteCard(
                 bottom = SusuTheme.spacing.spacing_xxs,
             )
             .fillMaxWidth()
+            .susuClickable(
+                rippleEnabled = false,
+                onClick = onClick,
+            )
             .clip(RoundedCornerShape(8.dp))
             .background(Gray15)
             .padding(SusuTheme.spacing.spacing_m),
@@ -70,7 +76,7 @@ fun VoteCard(
 
             val totalMinutes = ChronoUnit.MINUTES.between(vote.createdAt.toJavaLocalDateTime(), currentTime)
 
-            val writeTime = when  {
+            val writeTime = when {
                 totalMinutes / 60 > 24 -> vote.createdAt.toJavaLocalDateTime().to_yyyy_dot_MM_dot_dd()
                 totalMinutes / 60 > 0 -> stringResource(R.string.word_before_hour, totalMinutes / 60)
                 totalMinutes / 60 == 0L -> stringResource(R.string.word_before_minute, totalMinutes % 60 + 1)
