@@ -50,8 +50,8 @@ fun NameContentRoute(
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
             NameEffect.FocusClear -> focusManager.clearFocus()
-            is NameEffect.UpdateParentFriendId -> TODO()
-            is NameEffect.UpdateParentName -> TODO()
+            is NameEffect.UpdateParentFriendId -> updateParentFriendId(sideEffect.friendId)
+            is NameEffect.UpdateParentName -> updateParentName(sideEffect.name)
         }
     }
 
