@@ -21,6 +21,7 @@ import com.susu.core.designsystem.component.button.FilledButtonColor
 import com.susu.core.designsystem.component.button.MediumButtonStyle
 import com.susu.core.designsystem.component.button.SusuFilledButton
 import com.susu.core.designsystem.theme.SusuTheme
+import com.susu.core.model.Relationship
 import com.susu.core.ui.extension.susuDefaultAnimatedContentTransitionSpec
 import com.susu.feature.envelopeadd.content.DateContent
 import com.susu.feature.envelopeadd.content.EventContent
@@ -28,10 +29,10 @@ import com.susu.feature.envelopeadd.content.MemoContent
 import com.susu.feature.envelopeadd.content.MoreContent
 import com.susu.feature.envelopeadd.content.PhoneContent
 import com.susu.feature.envelopeadd.content.PresentContent
-import com.susu.feature.envelopeadd.content.RelationshipContent
 import com.susu.feature.envelopeadd.content.VisitedContent
 import com.susu.feature.envelopeadd.content.money.MoneyContentRoute
 import com.susu.feature.envelopeadd.content.name.NameContentRoute
+import com.susu.feature.envelopeadd.content.relationship.RelationshipContentRoute
 import com.susu.feature.sent.R
 
 @Composable
@@ -52,6 +53,7 @@ fun SentEnvelopeAddRoute(
         updateParentMoney = viewModel::updateMoney,
         updateParentName = viewModel::updateName,
         updateParentFriendId = viewModel::updateFriendId,
+        updateParentSelectedRelation = viewModel::updateSelectedRelationShip,
     )
 }
 
@@ -63,9 +65,8 @@ fun SentEnvelopeAddScreen(
     updateParentMoney: (Long) -> Unit = {},
     updateParentName: (String) -> Unit = {},
     updateParentFriendId: (Long?) -> Unit = {},
+    updateParentSelectedRelation: (Relationship?) -> Unit = {},
 ) {
-    // TODO: 수정 필요
-    val relationshipList = listOf("친구", "가족", "친척", "동료", "직접 입력")
     val eventList = listOf("결혼식", "돌잔치", "장례식", "생일 기념일", "직접 입력")
     val moreList = listOf("방문여부", "선물", "메모", "보낸 이의 연락처")
     val visitedList = listOf("예", "아니요")
@@ -100,7 +101,11 @@ fun SentEnvelopeAddScreen(
                     updateParentName = updateParentName,
                     updateParentFriendId = updateParentFriendId,
                 )
-                EnvelopeAddStep.RELATIONSHIP -> RelationshipContent(relationshipList = relationshipList)
+
+                EnvelopeAddStep.RELATIONSHIP -> RelationshipContentRoute(
+                    updateParentSelectedRelation = updateParentSelectedRelation,
+                )
+
                 EnvelopeAddStep.EVENT -> EventContent(eventList = eventList)
                 EnvelopeAddStep.DATE -> DateContent(name = "김철수")
                 EnvelopeAddStep.MORE -> MoreContent(moreList = moreList)
