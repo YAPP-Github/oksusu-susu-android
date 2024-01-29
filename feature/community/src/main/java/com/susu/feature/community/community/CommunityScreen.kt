@@ -23,6 +23,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -52,6 +56,9 @@ import com.susu.core.ui.extension.susuClickable
 import com.susu.feature.community.R
 import com.susu.feature.community.community.component.MostPopularVoteCard
 import com.susu.feature.community.community.component.VoteCard
+import kotlinx.coroutines.delay
+import java.time.LocalDateTime
+import java.util.concurrent.TimeUnit
 
 @Composable
 fun CommunityRoute(
@@ -65,6 +72,17 @@ fun CommunityRoute(
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
             is CommunitySideEffect.HandleException -> handleException(sideEffect.throwable, sideEffect.retry)
+        }
+    }
+
+    var currentTime by remember {
+        mutableStateOf(LocalDateTime.now())
+    }
+
+    LaunchedEffect(key1 = Unit) {
+        while (true) {
+            delay(60 * 1000L)
+            currentTime = currentTime.plusMinutes(1)
         }
     }
 
@@ -84,6 +102,7 @@ fun CommunityRoute(
     CommunityScreen(
         padding = padding,
         uiState = uiState,
+        currentTime = currentTime,
         voteListState = voteListState,
         navigateVoteAdd = navigateVoteAdd,
         onClickCategory = viewModel::selectCategory,
@@ -97,6 +116,7 @@ fun CommunityRoute(
 fun CommunityScreen(
     padding: PaddingValues,
     uiState: CommunityState = CommunityState(),
+    currentTime: LocalDateTime = LocalDateTime.now(),
     voteListState: LazyListState = rememberLazyListState(),
     onClickSearchIcon: () -> Unit = {},
     navigateVoteAdd: () -> Unit = {},
@@ -260,7 +280,7 @@ fun CommunityScreen(
                     items = uiState.voteList,
                     key = { it.id },
                 ) { vote ->
-                    VoteCard(vote)
+                    VoteCard(vote, currentTime)
                 }
             }
         }
