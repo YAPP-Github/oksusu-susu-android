@@ -64,7 +64,7 @@ internal class MainNavigator(
                 SentRoute.sentEnvelopeEditRoute,
                 CommunityRoute.route,
                 CommunityRoute.voteAddRoute,
-                CommunityRoute.voteDetailRoute("{${CommunityRoute.VOTE_ID_ARGUMENT_NAME}}")
+                CommunityRoute.voteDetailRoute("{${CommunityRoute.VOTE_ID_ARGUMENT_NAME}}"),
             ),
             -> SusuTheme.colorScheme.background10
 

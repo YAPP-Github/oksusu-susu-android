@@ -25,7 +25,7 @@ interface VoteRepository {
     suspend fun getPostCategoryConfig(): List<Category>
 
     suspend fun getVoteDetail(
-        id: Long
+        id: Long,
     ): Vote
 
     suspend fun vote(

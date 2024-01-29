@@ -58,7 +58,7 @@ class VoteRepositoryImpl @Inject constructor(
         id = id,
         voteRequest = VoteRequest(
             isCancel = isCancel,
-            optionId = optionId
-        )
+            optionId = optionId,
+        ),
     ).getOrThrow()
 }

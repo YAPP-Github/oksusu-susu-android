@@ -40,12 +40,12 @@ interface VoteService {
 
     @GET("votes/{id}")
     suspend fun getVoteDetail(
-        @Path("id") id: Long
+        @Path("id") id: Long,
     ): ApiResult<VoteDetailResponse>
 
     @POST("votes/{id}")
     suspend fun vote(
         @Path("id") id: Long,
-        @Body voteRequest: VoteRequest
+        @Body voteRequest: VoteRequest,
     ): ApiResult<Unit>
 }

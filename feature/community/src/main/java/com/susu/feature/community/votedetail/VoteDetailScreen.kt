@@ -104,7 +104,7 @@ fun VoteDetailScreen(
     onClickReport: () -> Unit = {},
     onClickEdit: () -> Unit = {},
     onClickDelete: () -> Unit = {},
-    onClickOption: (Long, Boolean) -> Unit = { _, _ -> }
+    onClickOption: (Long, Boolean) -> Unit = { _, _ -> },
 ) {
     Column(
         modifier = Modifier

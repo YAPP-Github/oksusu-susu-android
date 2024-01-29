@@ -1,6 +1,5 @@
 package com.susu.feature.community.community
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.susu.core.model.Category
 import com.susu.core.model.Vote
@@ -9,7 +8,6 @@ import com.susu.core.ui.extension.decodeFromUri
 import com.susu.domain.usecase.vote.GetPopularVoteListUseCase
 import com.susu.domain.usecase.vote.GetPostCategoryConfigUseCase
 import com.susu.domain.usecase.vote.GetVoteListUseCase
-import com.susu.feature.community.navigation.CommunityRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
@@ -66,8 +64,11 @@ class CommunityViewModel @Inject constructor(
                 voteList = currentState
                     .voteList
                     .map {
-                        if (it.id == toUpdateVote.id) toUpdateVote
-                        else it
+                        if (it.id == toUpdateVote.id) {
+                            toUpdateVote
+                        } else {
+                            it
+                        }
                     }
                     .toPersistentList(),
             )
