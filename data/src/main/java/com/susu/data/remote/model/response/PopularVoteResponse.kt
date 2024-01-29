@@ -10,7 +10,7 @@ data class PopularVoteResponse(
     val id: Long,
     val boardName: String,
     val content: String,
-    val count: Int,
+    val count: Long,
     val isModified: Boolean,
 )
 

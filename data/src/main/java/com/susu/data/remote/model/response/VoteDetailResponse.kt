@@ -12,7 +12,7 @@ data class VoteDetailResponse(
     val isMine: Boolean,
     val boardName: String,
     val content: String,
-    val count: Int,
+    val count: Long,
     val createdAt: LocalDateTime,
     val creatorProfile: UserProfile,
     val isModified: Boolean,

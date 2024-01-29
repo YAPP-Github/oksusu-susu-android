@@ -1,6 +1,7 @@
 package com.susu.data.remote.api
 
 import com.susu.data.remote.model.request.CreateVoteRequest
+import com.susu.data.remote.model.request.VoteRequest
 import com.susu.data.remote.model.response.PopularVoteResponse
 import com.susu.data.remote.model.response.PostCategoryConfig
 import com.susu.data.remote.model.response.VoteDetailResponse
@@ -41,4 +42,10 @@ interface VoteService {
     suspend fun getVoteDetail(
         @Path("id") id: Long
     ): ApiResult<VoteDetailResponse>
+
+    @POST("votes/{id}")
+    suspend fun vote(
+        @Path("id") id: Long,
+        @Body voteRequest: VoteRequest
+    ): ApiResult<Unit>
 }

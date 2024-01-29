@@ -13,7 +13,7 @@ data class Vote(
     val profile: Profile = Profile(),
     val boardName: String = "",
     val content: String = "",
-    val count: Int = 0,
+    val count: Long = 0,
     val isModified: Boolean = false,
     val isMine: Boolean = false,
     val createdAt: LocalDateTime = java.time.LocalDateTime.now().toKotlinLocalDateTime(),

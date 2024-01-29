@@ -5,6 +5,7 @@ import com.susu.core.model.Vote
 import com.susu.data.remote.api.VoteService
 import com.susu.data.remote.model.request.CreateVoteRequest
 import com.susu.data.remote.model.request.VoteOption
+import com.susu.data.remote.model.request.VoteRequest
 import com.susu.data.remote.model.response.toModel
 import com.susu.domain.repository.VoteRepository
 import javax.inject.Inject
@@ -52,4 +53,12 @@ class VoteRepositoryImpl @Inject constructor(
     override suspend fun getPostCategoryConfig(): List<Category> = api.getPostCategoryConfig().getOrThrow().map { it.toModel() }
 
     override suspend fun getVoteDetail(id: Long): Vote = api.getVoteDetail(id).getOrThrow().toModel()
+
+    override suspend fun vote(id: Long, isCancel: Boolean, optionId: Long) = api.vote(
+        id = id,
+        voteRequest = VoteRequest(
+            isCancel = isCancel,
+            optionId = optionId
+        )
+    ).getOrThrow()
 }

@@ -88,6 +88,7 @@ fun VoteDetailRoute(
         uiState = uiState,
         currentTime = currentTime,
         onClickBack = popBackStack,
+        onClickOption = viewModel::vote,
     )
 }
 
@@ -99,6 +100,7 @@ fun VoteDetailScreen(
     onClickReport: () -> Unit = {},
     onClickEdit: () -> Unit = {},
     onClickDelete: () -> Unit = {},
+    onClickOption: (Long, Boolean) -> Unit = { _, _ -> }
 ) {
     Column(
         modifier = Modifier
@@ -216,7 +218,14 @@ fun VoteDetailScreen(
                 verticalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxs),
             ) {
                 uiState.vote.optionList.forEach {
-                    VoteItem(title = it.content, isPick = it.isVoted, showResult = uiState.vote.optionList.any { it.isVoted })
+                    VoteItem(
+                        title = it.content,
+                        isPick = it.isVoted,
+                        voteCount = it.count,
+                        totalVoteCount = uiState.vote.count,
+                        showResult = uiState.vote.optionList.any { it.isVoted },
+                        onClick = { onClickOption(it.id, it.isVoted) },
+                    )
                 }
             }
         }

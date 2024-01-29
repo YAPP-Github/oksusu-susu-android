@@ -15,6 +15,7 @@ data class VoteResponse(
     val content: String,
     val isModified: Boolean,
     val createdAt: LocalDateTime = java.time.LocalDateTime.now().toKotlinLocalDateTime(),
+    val count: Long = 0,
     @SerialName("options")
     val optionList: List<VoteOption>,
 )
@@ -24,6 +25,7 @@ internal fun VoteResponse.toModel() = Vote(
     uid = uid,
     boardName = boardName,
     content = content,
+    count = count,
     isModified = isModified,
     createdAt = createdAt,
     optionList = optionList.sortedBy { it.seq }.map {

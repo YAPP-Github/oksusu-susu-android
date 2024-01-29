@@ -65,7 +65,7 @@ fun MostPopularVoteCard(vote: Vote, onClick: () -> Unit = {}) {
 
         SusuGhostButton(
             textModifier = Modifier.weight(1f),
-            text = stringResource(R.string.popular_vote_card_count, vote.count.toMoneyFormat()),
+            text = stringResource(R.string.popular_vote_card_count, vote.count.toInt().toMoneyFormat()),
             textAlign = TextAlign.Center,
             color = GhostButtonColor.Black,
             style = XSmallButtonStyle.height44,

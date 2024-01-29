@@ -27,4 +27,10 @@ interface VoteRepository {
     suspend fun getVoteDetail(
         id: Long
     ): Vote
+
+    suspend fun vote(
+        id: Long,
+        isCancel: Boolean,
+        optionId: Long,
+    )
 }
