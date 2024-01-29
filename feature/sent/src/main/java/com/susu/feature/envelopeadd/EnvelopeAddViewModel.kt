@@ -1,8 +1,9 @@
 package com.susu.feature.envelopeadd
 
-import com.susu.core.model.RelationShip
+import com.susu.core.model.Relationship
 import com.susu.core.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import java.time.LocalDateTime
 import javax.inject.Inject
 
 @HiltViewModel
@@ -10,9 +11,10 @@ class EnvelopeAddViewModel @Inject constructor() : BaseViewModel<EnvelopeAddStat
 
     private var money: Long = 0
     private var name: String = ""
-    private var relationShip: RelationShip? = null
-    private var categoryId: Int? = null
-    private var customCategory: String? = null
+    private var friendId: Long? = null
+    private var relationShip: Relationship? = null
+    private var date: LocalDateTime? = null
+    private var moreStep: List<EnvelopeAddStep> = emptyList()
     private var hasVisited: Boolean? = null
     private var present: String? = null
     private var phoneNumber: String? = null
@@ -68,5 +70,55 @@ class EnvelopeAddViewModel @Inject constructor() : BaseViewModel<EnvelopeAddStat
     fun updateName(name: String) = intent {
         this@EnvelopeAddViewModel.name = name
         copy(buttonEnabled = name.isNotEmpty())
+    }
+
+    fun updateFriendId(friendId: Long?) {
+        this.friendId = friendId
+    }
+
+    fun updateSelectedRelationShip(relationShip: Relationship?) = intent {
+        this@EnvelopeAddViewModel.relationShip = relationShip
+        copy(
+            buttonEnabled = relationShip != null,
+        )
+    }
+
+    fun updateMoreStep(moreStep: List<EnvelopeAddStep>) {
+        this@EnvelopeAddViewModel.moreStep = moreStep
+    }
+
+    fun updateHasVisited(hasVisited: Boolean?) = intent {
+        this@EnvelopeAddViewModel.hasVisited = hasVisited
+        copy(
+            buttonEnabled = hasVisited != null,
+        )
+    }
+
+    fun updatePresent(present: String?) = intent {
+        this@EnvelopeAddViewModel.present = present
+        copy(
+            buttonEnabled = !present.isNullOrEmpty(),
+        )
+    }
+
+    fun updatePhoneNumber(phoneNumber: String?) = intent {
+        this@EnvelopeAddViewModel.phoneNumber = phoneNumber
+        copy(
+            buttonEnabled = !phoneNumber.isNullOrEmpty(),
+        )
+    }
+
+    fun updateMemo(memo: String?) = intent {
+        this@EnvelopeAddViewModel.memo = memo
+        copy(
+            buttonEnabled = !memo.isNullOrEmpty(),
+        )
+    }
+
+    fun updateDate(date: LocalDateTime?) = intent {
+        this@EnvelopeAddViewModel.date = date
+        copy(
+            buttonEnabled = date != null,
+        )
     }
 }

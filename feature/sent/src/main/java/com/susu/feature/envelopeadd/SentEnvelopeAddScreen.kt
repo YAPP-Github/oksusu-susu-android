@@ -51,6 +51,7 @@ fun SentEnvelopeAddRoute(
         onClickNext = viewModel::goNextStep,
         updateParentMoney = viewModel::updateMoney,
         updateParentName = viewModel::updateName,
+        updateParentFriendId = viewModel::updateFriendId,
     )
 }
 
@@ -61,6 +62,7 @@ fun SentEnvelopeAddScreen(
     onClickNext: () -> Unit = {},
     updateParentMoney: (Long) -> Unit = {},
     updateParentName: (String) -> Unit = {},
+    updateParentFriendId: (Long?) -> Unit = {},
 ) {
     // TODO: 수정 필요
     val relationshipList = listOf("친구", "가족", "친척", "동료", "직접 입력")
@@ -94,7 +96,10 @@ fun SentEnvelopeAddScreen(
         ) { targetState ->
             when (targetState) {
                 EnvelopeAddStep.MONEY -> MoneyContentRoute(updateParentMoney = updateParentMoney)
-                EnvelopeAddStep.NAME -> NameContentRoute(updateParentName = updateParentName)
+                EnvelopeAddStep.NAME -> NameContentRoute(
+                    updateParentName = updateParentName,
+                    updateParentFriendId = updateParentFriendId,
+                )
                 EnvelopeAddStep.RELATIONSHIP -> RelationshipContent(relationshipList = relationshipList)
                 EnvelopeAddStep.EVENT -> EventContent(eventList = eventList)
                 EnvelopeAddStep.DATE -> DateContent(name = "김철수")

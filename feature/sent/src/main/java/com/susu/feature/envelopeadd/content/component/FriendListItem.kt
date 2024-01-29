@@ -1,7 +1,6 @@
 package com.susu.feature.envelopeadd.content.component
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -9,23 +8,27 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import com.susu.core.designsystem.theme.Gray100
 import com.susu.core.designsystem.theme.Gray40
 import com.susu.core.designsystem.theme.Gray60
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.ui.extension.susuClickable
+import com.susu.core.ui.util.to_yyyy_dot_MM_dot_dd
+import java.time.LocalDateTime
 
 @Composable
 fun FriendListItem(
-    friend: String,
-    onClick: (String) -> Unit, // TODO: 친구 id 반환
     modifier: Modifier = Modifier,
+    name: String,
+    relationship: String,
+    category: String?,
+    visitedAt: LocalDateTime?,
+    onClick: () -> Unit,
 ) {
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .susuClickable(onClick = { onClick(friend) })
+            .susuClickable(onClick = onClick)
             .padding(
                 vertical = SusuTheme.spacing.spacing_s,
             ),
@@ -33,38 +36,24 @@ fun FriendListItem(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
-            text = friend,
+            text = name,
             style = SusuTheme.typography.title_xs,
             color = Gray100,
         )
         Text(
-            text = "친구",
+            text = relationship,
             style = SusuTheme.typography.title_xs,
             color = Gray60,
         )
         Text(
-            text = "결혼식",
+            text = category ?: "",
             style = SusuTheme.typography.text_xs,
             color = Gray40,
         )
         Text(
-            text = "2022.01.11",
+            text = visitedAt?.to_yyyy_dot_MM_dot_dd() ?: "",
             style = SusuTheme.typography.text_xs,
             color = Gray40,
         )
-    }
-}
-
-@Preview(showBackground = true, backgroundColor = 0xFFF6F6F6)
-@Composable
-fun FriendListItemPreview() {
-    val friendList = listOf("김철수", "국영수", "가나다")
-
-    SusuTheme {
-        Column {
-            for (friend in friendList) {
-                FriendListItem(friend = friend, onClick = {})
-            }
-        }
     }
 }

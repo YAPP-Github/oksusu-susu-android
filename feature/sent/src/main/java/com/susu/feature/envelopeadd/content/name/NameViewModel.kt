@@ -1,35 +1,56 @@
 package com.susu.feature.envelopeadd.content.name
 
 import androidx.lifecycle.viewModelScope
+import com.susu.core.model.FriendSearch
 import com.susu.core.ui.base.BaseViewModel
+import com.susu.domain.usecase.friend.SearchFriendUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class NameViewModel @Inject constructor() : BaseViewModel<NameState, NameEffect>(NameState()) {
+class NameViewModel @Inject constructor(
+    private val searchFriendUseCase: SearchFriendUseCase,
+) : BaseViewModel<NameState, NameEffect>(NameState()) {
 
     fun updateName(name: String) = intent {
-        postSideEffect(NameEffect.UpdateParentName(name), NameEffect.SearchFriendByName)
-        copy(name = name)
+        postSideEffect(
+            NameEffect.UpdateParentName(name),
+            NameEffect.UpdateParentFriendId(null),
+        )
+        copy(
+            name = name,
+            friendList = if (name.isEmpty()) persistentListOf() else friendList,
+            isSelectedFriend = false,
+        )
     }
 
-    // 검색 결과로 나온 이름을 선택한 경우 - 검색 하지 않음
-    fun selectName(name: String) = intent {
-        postSideEffect(NameEffect.UpdateParentName(name))
-        copy(name = name)
+    fun selectFriend(friend: FriendSearch) = intent {
+        postSideEffect(
+            NameEffect.FocusClear,
+            NameEffect.UpdateParentName(friend.friend.name),
+            NameEffect.UpdateParentFriendId(friend.friend.id),
+        )
+        copy(
+            name = friend.friend.name,
+            isSelectedFriend = true,
+        )
     }
 
-    fun searchFriend() {
-        // TODO: 현재 입력된 String으로 친구 검색하여 표시
-    }
+    fun getFriendList(search: String) = viewModelScope.launch {
+        if (search.isEmpty()) return@launch
+        if (currentState.isSelectedFriend) return@launch
 
-    fun mockSearch() {
-        viewModelScope.launch {
-            intent { copy(isSearching = true) }
-            delay(2000L)
-            intent { copy(isSearching = false, searchedFriends = listOf("김철수")) }
-        }
+        searchFriendUseCase(name = search)
+            .onSuccess {
+                intent {
+                    copy(
+                        friendList = it.toPersistentList(),
+                    )
+                }
+            }
     }
 }
