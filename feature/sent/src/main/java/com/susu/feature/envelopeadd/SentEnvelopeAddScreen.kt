@@ -28,13 +28,13 @@ import com.susu.core.model.Category
 import com.susu.core.model.Relationship
 import com.susu.core.ui.extension.susuDefaultAnimatedContentTransitionSpec
 import com.susu.feature.envelopeadd.content.MemoContent
-import com.susu.feature.envelopeadd.content.MoreContent
 import com.susu.feature.envelopeadd.content.PhoneContent
 import com.susu.feature.envelopeadd.content.PresentContent
 import com.susu.feature.envelopeadd.content.VisitedContent
 import com.susu.feature.envelopeadd.content.category.CategoryContentRoute
 import com.susu.feature.envelopeadd.content.date.DateContentRoute
 import com.susu.feature.envelopeadd.content.money.MoneyContentRoute
+import com.susu.feature.envelopeadd.content.more.MoreContentRoute
 import com.susu.feature.envelopeadd.content.name.NameContentRoute
 import com.susu.feature.envelopeadd.content.relationship.RelationshipContentRoute
 import com.susu.feature.sent.R
@@ -69,6 +69,7 @@ fun SentEnvelopeAddRoute(
         updateParentSelectedRelation = viewModel::updateSelectedRelationShip,
         updateParentCategory = viewModel::updateSelectedCategory,
         updateParentDate = viewModel::updateDate,
+        updateParentMoreStep = viewModel::updateMoreStep,
     )
 }
 
@@ -84,9 +85,8 @@ fun SentEnvelopeAddScreen(
     updateParentSelectedRelation: (Relationship?) -> Unit = {},
     updateParentCategory: (Category?) -> Unit = {},
     updateParentDate: (LocalDateTime?) -> Unit = {},
+    updateParentMoreStep: (List<EnvelopeAddStep>) -> Unit = {},
 ) {
-    val eventList = listOf("결혼식", "돌잔치", "장례식", "생일 기념일", "직접 입력")
-    val moreList = listOf("방문여부", "선물", "메모", "보낸 이의 연락처")
     val visitedList = listOf("예", "아니요")
 
     Column(
@@ -127,11 +127,16 @@ fun SentEnvelopeAddScreen(
                 EnvelopeAddStep.EVENT -> CategoryContentRoute(
                     updateParentCategory = updateParentCategory,
                 )
+
                 EnvelopeAddStep.DATE -> DateContentRoute(
                     friendName = friendName,
                     updateParentDate = updateParentDate,
                 )
-                EnvelopeAddStep.MORE -> MoreContent(moreList = moreList)
+
+                EnvelopeAddStep.MORE -> MoreContentRoute(
+                    updateParentMoreStep = updateParentMoreStep,
+                )
+
                 EnvelopeAddStep.VISITED -> VisitedContent(
                     event = "결혼식",
                     visitedList = visitedList,
