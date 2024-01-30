@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.susu.core.designsystem.R
@@ -50,6 +51,8 @@ fun SusuRecentSearchContainer(
             modifier = Modifier.weight(1f),
             text = text,
             style = SusuTheme.typography.title_s,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
         )
 
         if (typeIconId == null) {
@@ -70,7 +73,7 @@ fun SusuRecentSearchContainer(
 fun SusuRecentSearchContainerPreview() {
     SusuTheme {
         SusuRecentSearchContainer(
-            text = "나의 결혼식",
+            text = "나의 결혼식나의 결혼식나의 결혼식나의 결혼식나의 결혼식나의 결혼식",
             typeIconId = R.drawable.ic_clear,
             typeIconContentDescription = "",
         )
