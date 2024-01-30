@@ -1,7 +1,9 @@
 package com.susu.core.model
 
 import kotlinx.datetime.LocalDateTime
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class Envelope(
     val id: Long = 0,
     val uid: Long = 0,

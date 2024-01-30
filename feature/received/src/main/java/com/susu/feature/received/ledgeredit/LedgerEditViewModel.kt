@@ -45,8 +45,8 @@ class LedgerEditViewModel @Inject constructor(
 
     fun editLedger() = viewModelScope.launch {
         editLedgerUseCase(toEditLedger)
-            .onSuccess { ledger ->
-                postSideEffect(LedgerEditSideEffect.PopBackStackWithLedger(Json.encodeToUri(ledger)))
+            .onSuccess {
+                popBackStack()
             }
             .onFailure {
             }

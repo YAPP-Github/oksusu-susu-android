@@ -54,7 +54,7 @@ import com.susu.feature.received.ledgerdetail.component.LedgerDetailOverviewColu
 @Composable
 fun LedgerDetailRoute(
     viewModel: LedgerDetailViewModel = hiltViewModel(),
-    ledger: String?,
+    envelope: String?,
     navigateLedgerEdit: (Ledger) -> Unit,
     navigateEnvelopAdd: (String, Long) -> Unit,
     navigateEnvelopeDetail: () -> Unit,
@@ -100,8 +100,9 @@ fun LedgerDetailRoute(
     }
 
     LaunchedEffect(key1 = Unit) {
-        viewModel.updateLedgerInfoIfNeed(ledger)
+        viewModel.getLedger()
         viewModel.initReceivedEnvelopeList()
+        viewModel.addEnvelopeIfNeed(envelope)
     }
 
     listState.OnBottomReached(minItemsCount = 4) {

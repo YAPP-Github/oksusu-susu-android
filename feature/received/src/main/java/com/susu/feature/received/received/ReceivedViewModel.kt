@@ -143,7 +143,7 @@ class ReceivedViewModel @Inject constructor(
             Json.decodeFromUri<Ledger>(ledger)
         } ?: return
 
-        if (toAddLedger in currentState.ledgerList) return
+        if (toAddLedger.id in currentState.ledgerList.map { it.id }) return
 
         if (filter.selectedCategoryList.isNotEmpty() && toAddLedger.category !in filter.selectedCategoryList) return
 

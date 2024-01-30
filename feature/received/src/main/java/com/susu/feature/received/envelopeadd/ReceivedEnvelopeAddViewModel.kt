@@ -3,12 +3,16 @@ package com.susu.feature.received.envelopeadd
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.susu.core.model.Relationship
+import com.susu.core.model.exception.AlreadyRegisteredFriendPhoneNumberException
 import com.susu.core.ui.base.BaseViewModel
+import com.susu.core.ui.extension.encodeToUri
 import com.susu.domain.usecase.envelope.CreateReceivedEnvelopeUseCase
+import com.susu.feature.received.ledgeradd.LedgerAddSideEffect
 import com.susu.feature.received.navigation.ReceivedRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import kotlinx.datetime.toKotlinLocalDateTime
+import kotlinx.serialization.json.Json
 import java.time.LocalDateTime
 import javax.inject.Inject
 
@@ -52,10 +56,12 @@ class ReceivedEnvelopeAddViewModel @Inject constructor(
                 hasVisited = hasVisited,
             ),
         ).onSuccess {
-            // TODO PopBackStackWithEnvelope로 변경 필요, 또한 Envelope에 friendName 추가 필요
-            postSideEffect(ReceivedEnvelopeAddSideEffect.PopBackStack)
-        }.onFailure {
-            postSideEffect(ReceivedEnvelopeAddSideEffect.HandleException(it, ::createEnvelope))
+            postSideEffect(ReceivedEnvelopeAddSideEffect.PopBackStackWithEnvelope(Json.encodeToUri(it)))
+        }.onFailure { throwable ->
+            when (throwable) {
+                is AlreadyRegisteredFriendPhoneNumberException -> postSideEffect(ReceivedEnvelopeAddSideEffect.ShowSnackbar(throwable.message))
+                else -> postSideEffect(ReceivedEnvelopeAddSideEffect.HandleException(throwable, ::createEnvelope))
+            }
         }
     }
 
