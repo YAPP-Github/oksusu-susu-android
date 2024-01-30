@@ -26,6 +26,7 @@ import com.susu.core.designsystem.component.button.SusuFilledButton
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.model.Category
 import com.susu.core.model.Relationship
+import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.core.ui.extension.susuDefaultAnimatedContentTransitionSpec
 import com.susu.feature.envelopeadd.content.category.CategoryContentRoute
 import com.susu.feature.envelopeadd.content.date.DateContentRoute
@@ -37,15 +38,22 @@ import com.susu.feature.envelopeadd.content.phone.PhoneContentRoute
 import com.susu.feature.envelopeadd.content.present.PresentContentRoute
 import com.susu.feature.envelopeadd.content.relationship.RelationshipContentRoute
 import com.susu.feature.envelopeadd.content.visited.VisitedContentRoute
-import com.susu.feature.sent.R
 import java.time.LocalDateTime
 
 @Composable
 fun SentEnvelopeAddRoute(
     viewModel: EnvelopeAddViewModel = hiltViewModel(),
     popBackStack: () -> Unit,
+    handleException: (Throwable, () -> Unit) -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    viewModel.sideEffect.collectWithLifecycle { sideEffect ->
+        when (sideEffect) {
+            is EnvelopeAddEffect.HandleException -> handleException(sideEffect.throwable, sideEffect.retry)
+            EnvelopeAddEffect.PopBackStack -> popBackStack()
+        }
+    }
 
     var friendName by remember {
         mutableStateOf("")
@@ -115,7 +123,7 @@ fun SentEnvelopeAddScreen(
                     onClick = onClickBack,
                 )
             },
-            currentStep = uiState.currentStep.ordinal + 1,
+            currentStep = uiState.progress,
             entireStep = EnvelopeAddStep.entries.size,
         )
         AnimatedContent(
@@ -175,8 +183,10 @@ fun SentEnvelopeAddScreen(
             color = FilledButtonColor.Black,
             style = MediumButtonStyle.height60,
             shape = RectangleShape,
-            text = stringResource(R.string.sent_envelope_add_next),
+            text = stringResource(id = uiState.buttonResId),
             onClick = onClickNext,
+            isClickable = uiState.buttonEnabled,
+            isActive = uiState.buttonEnabled,
             modifier = Modifier
                 .fillMaxWidth()
                 .imePadding(),

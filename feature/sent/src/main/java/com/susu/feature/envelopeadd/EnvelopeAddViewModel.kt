@@ -1,14 +1,20 @@
 package com.susu.feature.envelopeadd
 
+import androidx.lifecycle.viewModelScope
 import com.susu.core.model.Category
 import com.susu.core.model.Relationship
 import com.susu.core.ui.base.BaseViewModel
+import com.susu.domain.usecase.envelope.CreateSentEnvelopeUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
+import kotlinx.datetime.toKotlinLocalDateTime
 import java.time.LocalDateTime
 import javax.inject.Inject
 
 @HiltViewModel
-class EnvelopeAddViewModel @Inject constructor() : BaseViewModel<EnvelopeAddState, EnvelopeAddEffect>(EnvelopeAddState()) {
+class EnvelopeAddViewModel @Inject constructor(
+    private val createSentEnvelopeUseCase: CreateSentEnvelopeUseCase,
+) : BaseViewModel<EnvelopeAddState, EnvelopeAddEffect>(EnvelopeAddState()) {
 
     private var money: Long = 0
     private var name: String = ""
@@ -21,6 +27,30 @@ class EnvelopeAddViewModel @Inject constructor() : BaseViewModel<EnvelopeAddStat
     private var present: String? = null
     private var phoneNumber: String? = null
     private var memo: String? = null
+
+    private fun createEnvelope() {
+        viewModelScope.launch {
+            createSentEnvelopeUseCase(
+                param = CreateSentEnvelopeUseCase.Param(
+                    friendId = friendId,
+                    friendName = name,
+                    phoneNumber = phoneNumber,
+                    relationshipId = relationShip?.id,
+                    customRelation = relationShip?.customRelation,
+                    amount = money,
+                    gift = present,
+                    memo = memo,
+                    handedOverAt = date!!.toKotlinLocalDateTime(),
+                    hasVisited = hasVisited,
+                    category = category!!
+                )
+            ).onSuccess {
+                postSideEffect(EnvelopeAddEffect.PopBackStack)
+            }.onFailure {
+                postSideEffect(EnvelopeAddEffect.HandleException(it, ::createEnvelope))
+            }
+        }
+    }
 
     fun goNextStep() {
         when (uiState.value.currentStep) {
@@ -46,7 +76,7 @@ class EnvelopeAddViewModel @Inject constructor() : BaseViewModel<EnvelopeAddStat
         val moreStep = moreStep.filter { uiState.value.currentStep.ordinal < it.ordinal }.minOrNull()
 
         if (moreStep == null) {
-            postSideEffect(EnvelopeAddEffect.CompleteEnvelopeAdd)
+            createEnvelope()
         } else {
             intent { copy(currentStep = moreStep) }
         }

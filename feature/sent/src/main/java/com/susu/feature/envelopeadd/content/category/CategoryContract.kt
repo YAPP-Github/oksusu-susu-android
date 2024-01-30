@@ -9,7 +9,7 @@ import kotlinx.collections.immutable.persistentListOf
 data class CategoryState(
     val selectedCategory: Category? = null,
     val categoryConfig: PersistentList<Category> = persistentListOf(),
-    val customCategory: Category = Category(),
+    val customCategory: Category = Category(id = 5),
     val showTextFieldButton: Boolean = false,
     val isSavedCustomCategory: Boolean = false,
 ) : UiState {
