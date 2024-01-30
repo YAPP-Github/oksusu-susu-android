@@ -9,6 +9,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.stringResource
@@ -24,18 +27,18 @@ import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.model.Category
 import com.susu.core.model.Relationship
 import com.susu.core.ui.extension.susuDefaultAnimatedContentTransitionSpec
-import com.susu.feature.envelopeadd.content.DateContent
-import com.susu.feature.envelopeadd.content.category.CategoryContent
 import com.susu.feature.envelopeadd.content.MemoContent
 import com.susu.feature.envelopeadd.content.MoreContent
 import com.susu.feature.envelopeadd.content.PhoneContent
 import com.susu.feature.envelopeadd.content.PresentContent
 import com.susu.feature.envelopeadd.content.VisitedContent
 import com.susu.feature.envelopeadd.content.category.CategoryContentRoute
+import com.susu.feature.envelopeadd.content.date.DateContentRoute
 import com.susu.feature.envelopeadd.content.money.MoneyContentRoute
 import com.susu.feature.envelopeadd.content.name.NameContentRoute
 import com.susu.feature.envelopeadd.content.relationship.RelationshipContentRoute
 import com.susu.feature.sent.R
+import java.time.LocalDateTime
 
 @Composable
 fun SentEnvelopeAddRoute(
@@ -44,25 +47,35 @@ fun SentEnvelopeAddRoute(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
+    var friendName by remember {
+        mutableStateOf("")
+    }
+
     BackHandler {
         viewModel.goPrevStep()
     }
 
     SentEnvelopeAddScreen(
         uiState = uiState,
+        friendName = friendName,
         onClickBack = viewModel::goPrevStep,
         onClickNext = viewModel::goNextStep,
         updateParentMoney = viewModel::updateMoney,
-        updateParentName = viewModel::updateName,
+        updateParentName = { name ->
+            viewModel.updateName(name)
+            friendName = name
+        },
         updateParentFriendId = viewModel::updateFriendId,
         updateParentSelectedRelation = viewModel::updateSelectedRelationShip,
         updateParentCategory = viewModel::updateSelectedCategory,
+        updateParentDate = viewModel::updateDate,
     )
 }
 
 @Composable
 fun SentEnvelopeAddScreen(
     uiState: EnvelopeAddState = EnvelopeAddState(),
+    friendName: String = "",
     onClickBack: () -> Unit = {},
     onClickNext: () -> Unit = {},
     updateParentMoney: (Long) -> Unit = {},
@@ -70,6 +83,7 @@ fun SentEnvelopeAddScreen(
     updateParentFriendId: (Long?) -> Unit = {},
     updateParentSelectedRelation: (Relationship?) -> Unit = {},
     updateParentCategory: (Category?) -> Unit = {},
+    updateParentDate: (LocalDateTime?) -> Unit = {},
 ) {
     val eventList = listOf("결혼식", "돌잔치", "장례식", "생일 기념일", "직접 입력")
     val moreList = listOf("방문여부", "선물", "메모", "보낸 이의 연락처")
@@ -113,7 +127,10 @@ fun SentEnvelopeAddScreen(
                 EnvelopeAddStep.EVENT -> CategoryContentRoute(
                     updateParentCategory = updateParentCategory,
                 )
-                EnvelopeAddStep.DATE -> DateContent(name = "김철수")
+                EnvelopeAddStep.DATE -> DateContentRoute(
+                    friendName = friendName,
+                    updateParentDate = updateParentDate,
+                )
                 EnvelopeAddStep.MORE -> MoreContent(moreList = moreList)
                 EnvelopeAddStep.VISITED -> VisitedContent(
                     event = "결혼식",
