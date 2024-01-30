@@ -47,4 +47,6 @@
     <string name="word_free">자유</string>
     <string name="content_description_report_button">신고 버튼</string>
     <string name="word_all">전체</string>
+    <string name="word_visited">방문</string>
+    <string name="word_not_visited">미방문</string>
 </resources>

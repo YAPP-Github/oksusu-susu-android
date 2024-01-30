@@ -26,12 +26,14 @@ import com.susu.core.designsystem.component.badge.SusuBadge
 import com.susu.core.designsystem.theme.Gray10
 import com.susu.core.designsystem.theme.Gray50
 import com.susu.core.designsystem.theme.SusuTheme
+import com.susu.core.model.SearchEnvelope
 import com.susu.core.ui.R
 import com.susu.core.ui.extension.susuClickable
+import com.susu.core.ui.extension.toMoneyFormat
 
 @Composable
 fun LedgerDetailEnvelopeContainer(
-    /* TODO 파라미터는 서버 작업하면서 추가 예정 */
+    envelope: SearchEnvelope = SearchEnvelope(),
     onClickSeeMoreIcon: () -> Unit,
 ) {
     Column(
@@ -57,31 +59,37 @@ fun LedgerDetailEnvelopeContainer(
         ) {
             SusuBadge(
                 color = BadgeColor.Orange60,
-                text = "가족",
+                text = envelope.relation.customRelation ?: envelope.relation.relation,
                 padding = BadgeStyle.smallBadge,
             )
-            SusuBadge(
-                color = BadgeColor.Blue60,
-                text = "미방문",
-                padding = BadgeStyle.smallBadge,
-            )
-            SusuBadge(
-                color = BadgeColor.Gray90,
-                text = "선물",
-                padding = BadgeStyle.smallBadge,
-            )
+
+            envelope.envelope.hasVisited?.let {
+                SusuBadge(
+                    color = BadgeColor.Blue60,
+                    text = if (it) stringResource(R.string.word_visited) else stringResource(R.string.word_not_visited),
+                    padding = BadgeStyle.smallBadge,
+                )
+            }
+
+            envelope.envelope.gift?.let {
+                SusuBadge(
+                    color = BadgeColor.Gray90,
+                    text = it,
+                    padding = BadgeStyle.smallBadge,
+                )
+            }
         }
 
         Row(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
-                text = "김철수",
+                text = envelope.friend.name,
                 style = SusuTheme.typography.title_xs,
             )
             Spacer(modifier = Modifier.weight(1f))
             Text(
-                text = "50,000원",
+                text = stringResource(id = R.string.money_unit_format, envelope.envelope.amount.toInt().toMoneyFormat()),
                 style = SusuTheme.typography.title_m,
             )
             Icon(

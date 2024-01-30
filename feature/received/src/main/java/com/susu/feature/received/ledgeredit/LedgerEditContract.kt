@@ -32,6 +32,5 @@ data class LedgerEditState(
 
 sealed interface LedgerEditSideEffect : SideEffect {
     data object PopBackStack : LedgerEditSideEffect
-    data class PopBackStackWithLedger(val ledger: String) : LedgerEditSideEffect
     data object FocusCustomCategory : LedgerEditSideEffect
 }

@@ -26,7 +26,7 @@ data class Friend(
 
 @Serializable
 data class Relationship(
-    val id: Int,
+    val id: Long,
     val relation: String,
     val customRelation: String? = null,
 )
