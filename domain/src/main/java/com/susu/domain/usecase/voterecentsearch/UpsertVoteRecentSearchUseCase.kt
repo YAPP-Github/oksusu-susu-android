@@ -1,15 +1,16 @@
-package com.susu.domain.usecase.ledgerrecentsearch
+package com.susu.domain.usecase.voterecentsearch
 
 import com.susu.core.common.runCatchingIgnoreCancelled
 import com.susu.domain.RECENT_SEARCH_MAX_COUNT
 import com.susu.domain.repository.LedgerRecentSearchRepository
+import com.susu.domain.repository.VoteRecentSearchRepository
 import javax.inject.Inject
 
-class UpsertLedgerRecentSearchUseCase @Inject constructor(
-    private val ledgerRecentSearchRepository: LedgerRecentSearchRepository,
+class UpsertVoteRecentSearchUseCase @Inject constructor(
+    private val voteRecentSearchRepository: VoteRecentSearchRepository,
 ) {
     suspend operator fun invoke(searchKeyword: String) = runCatchingIgnoreCancelled {
-        with(ledgerRecentSearchRepository) {
+        with(voteRecentSearchRepository) {
             upsert(searchKeyword)
             val searchListCount = getSearchListCount()
             if (searchListCount > RECENT_SEARCH_MAX_COUNT) {
