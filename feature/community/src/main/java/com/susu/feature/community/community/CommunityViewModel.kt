@@ -165,4 +165,5 @@ class CommunityViewModel @Inject constructor(
     fun navigateVoteAdd() = postSideEffect(CommunitySideEffect.NavigateVoteAdd)
 
     fun navigateVoteDetail(id: Long) = postSideEffect(CommunitySideEffect.NavigateVoteDetail(id))
+    fun navigateVoteSearch() = postSideEffect(CommunitySideEffect.NavigateVoteSearch)
 }

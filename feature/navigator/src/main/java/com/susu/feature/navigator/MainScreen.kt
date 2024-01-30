@@ -147,6 +147,7 @@ internal fun MainScreen(
                 communityNavGraph(
                     padding = innerPadding,
                     navigateVoteAdd = navigator::navigateVoteAdd,
+                    navigateVoteSearch = navigator::navigateVoteSearch,
                     navigateVoteDetail = navigator::navigateVoteDetail,
                     popBackStack = navigator::popBackStackIfNotHome,
                     popBackStackWithVote = { vote ->

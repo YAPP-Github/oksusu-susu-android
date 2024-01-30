@@ -8,6 +8,7 @@ import com.susu.domain.usecase.voterecentsearch.DeleteVoteRecentSearchUseCase
 import com.susu.domain.usecase.voterecentsearch.GetVoteRecentSearchListUseCase
 import com.susu.domain.usecase.voterecentsearch.UpsertVoteRecentSearchUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -21,7 +22,7 @@ class VoteSearchViewModel @Inject constructor(
 ) : BaseViewModel<VoteSearchState, VoteSearchSideEffect>(
     VoteSearchState(),
 ) {
-    fun navigateVoteDetail(vote: Vote) = postSideEffect(VoteSearchSideEffect.NavigateVoteDetail(vote))
+    fun navigateVoteDetail(vote: Vote) = postSideEffect(VoteSearchSideEffect.NavigateVoteDetail(vote.id))
 
     fun getVoteRecentSearchList() = viewModelScope.launch {
         getVoteRecentSearchListUseCase()
@@ -45,9 +46,16 @@ class VoteSearchViewModel @Inject constructor(
 
     fun hideSearchResultEmpty() = intent { copy(showSearchResultEmpty = false) }
 
-    fun updateSearch(search: String) = intent { copy(searchKeyword = search) }
+    fun updateSearch(search: String) = intent {
+        copy(
+            searchKeyword = search,
+            voteList = if (search.isBlank()) persistentListOf() else voteList,
+        )
+    }
 
     fun getVoteList(search: String) = viewModelScope.launch {
+        if (search.isBlank()) return@launch
+
         getVoteListUseCase(GetVoteListUseCase.Param(content = search))
             .onSuccess {
                 intent {

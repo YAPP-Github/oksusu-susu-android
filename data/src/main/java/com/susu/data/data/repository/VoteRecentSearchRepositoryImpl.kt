@@ -5,6 +5,7 @@ import com.susu.core.android.SusuDispatchers
 import com.susu.data.local.dao.LedgerRecentSearchDao
 import com.susu.data.local.dao.VoteRecentSearchDao
 import com.susu.data.local.model.LedgerRecentSearchEntity
+import com.susu.data.local.model.VoteRecentSearchEntity
 import com.susu.domain.repository.LedgerRecentSearchRepository
 import com.susu.domain.repository.VoteRecentSearchRepository
 import kotlinx.coroutines.CoroutineDispatcher
@@ -28,7 +29,7 @@ class VoteRecentSearchRepositoryImpl @Inject constructor(
     }
 
     override suspend fun upsert(searchKeyword: String) = withContext(ioDispatcher) {
-        val recentSearch = LedgerRecentSearchEntity(
+        val recentSearch = VoteRecentSearchEntity(
             searchKeyword = searchKeyword,
             saveTime = System.currentTimeMillis(),
         )

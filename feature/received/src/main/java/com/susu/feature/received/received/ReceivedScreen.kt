@@ -159,7 +159,6 @@ fun ReceiveScreen(
                 actions = {
                     Row {
                         SearchIcon(onClickSearchIcon)
-                        NotificationIcon(onClickNotificationIcon)
                     }
                 },
             )

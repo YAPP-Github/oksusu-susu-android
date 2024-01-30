@@ -42,7 +42,7 @@ import kotlinx.coroutines.flow.debounce
 fun VoteSearchRoute(
     viewModel: VoteSearchViewModel = hiltViewModel(),
     popBackStack: () -> Unit,
-    navigateVoteDetail: (Vote) -> Unit,
+    navigateVoteDetail: (Long) -> Unit,
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
     val focusRequester = remember { FocusRequester() }
@@ -50,7 +50,7 @@ fun VoteSearchRoute(
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
             VoteSearchSideEffect.PopBackStack -> popBackStack()
-            is VoteSearchSideEffect.NavigateVoteDetail -> navigateVoteDetail(sideEffect.vote)
+            is VoteSearchSideEffect.NavigateVoteDetail -> navigateVoteDetail(sideEffect.voteId)
             VoteSearchSideEffect.FocusClear -> focusManager.clearFocus()
         }
     }
@@ -120,7 +120,7 @@ fun VoteSearchScreen(
                     value = uiState.searchKeyword,
                     onValueChange = onValueChangeSearchBar,
                     onClickClearIcon = onClickSearchClearIcon,
-                    placeholder = "찾고 싶은 투표를 검색해보세요",
+                    placeholder = stringResource(R.string.vote_search_screen_placeholder),
                 )
 
                 if (uiState.searchKeyword.isEmpty()) {
@@ -158,7 +158,7 @@ private fun ResultEmptyColumn(
             color = Gray80,
         )
         Text(
-            text = "궁금하신 것들의 키워드를\n검색해볼 수 있어요",
+            text = stringResource(R.string.vote_search_screen_empty_result_description),
             style = SusuTheme.typography.text_xxs,
             textAlign = TextAlign.Center,
             color = Gray80,
@@ -174,7 +174,7 @@ private fun RecentSearchColumn(
 ) {
     if (recentSearchList.isEmpty()) {
         ResultEmptyColumn(
-            title = "어떤 투표를 찾아드릴까요?",
+            title = stringResource(R.string.vote_search_screen_recent_search_empty_title),
         )
     } else {
         Column(
@@ -205,7 +205,7 @@ private fun SearchResultColumn(
 ) {
     if (showSearchResultEmpty) {
         ResultEmptyColumn(
-            title = "원하는 검색 결과가 없나요?",
+            title = stringResource(R.string.vote_search_screen_search_result_empty_title),
         )
     } else {
         Column(

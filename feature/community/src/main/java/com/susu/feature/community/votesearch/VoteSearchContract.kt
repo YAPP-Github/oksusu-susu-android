@@ -16,6 +16,6 @@ data class VoteSearchState(
 
 sealed interface VoteSearchSideEffect : SideEffect {
     data object PopBackStack : VoteSearchSideEffect
-    data class NavigateVoteDetail(val vote: Vote) : VoteSearchSideEffect
+    data class NavigateVoteDetail(val voteId: Long) : VoteSearchSideEffect
     data object FocusClear : VoteSearchSideEffect
 }

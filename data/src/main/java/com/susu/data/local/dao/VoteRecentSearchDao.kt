@@ -20,7 +20,7 @@ interface VoteRecentSearchDao {
     fun deleteBySearch(search: String)
 
     @Insert(onConflict = REPLACE)
-    fun upsert(recentSearchEntity: LedgerRecentSearchEntity)
+    fun upsert(recentSearchEntity: VoteRecentSearchEntity)
 
     @Query(
         "DELETE FROM ${EntityTable.VOTE_RECENT_SEARCH} WHERE saveTime IN" +
