@@ -52,7 +52,6 @@ import kotlinx.coroutines.launch
 fun LedgerEditRoute(
     viewModel: LedgerEditViewModel = hiltViewModel(),
     popBackStack: () -> Unit,
-    popBackStackWithLedger: (String) -> Unit,
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
 
@@ -62,7 +61,6 @@ fun LedgerEditRoute(
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
             LedgerEditSideEffect.PopBackStack -> popBackStack()
-            is LedgerEditSideEffect.PopBackStackWithLedger -> popBackStackWithLedger(sideEffect.ledger)
             LedgerEditSideEffect.FocusCustomCategory -> scope.launch {
                 awaitFrame()
                 focusRequester.requestFocus()

@@ -5,6 +5,8 @@ import com.susu.core.model.Category
 import com.susu.core.model.Ledger
 import com.susu.core.ui.base.BaseViewModel
 import com.susu.core.ui.extension.decodeFromUri
+import com.susu.core.ui.util.currentDate
+import com.susu.core.ui.util.isBetween
 import com.susu.domain.usecase.ledger.GetLedgerListUseCase
 import com.susu.feature.received.navigation.argument.FilterArgument
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -118,7 +120,7 @@ class ReceivedViewModel @Inject constructor(
         }
     }
 
-    fun updateLedgerIfNeed(ledger: String?, toDeleteLedgerId: Int) {
+    fun updateLedgerIfNeed(ledger: String?, toDeleteLedgerId: Long) {
         val toUpdateLedger = ledger?.let {
             Json.decodeFromUri<Ledger>(ledger)
         } ?: Ledger()
@@ -128,7 +130,12 @@ class ReceivedViewModel @Inject constructor(
             .map { if (it.id == toUpdateLedger.id) toUpdateLedger else it }
             .toPersistentList()
 
-        intent { copy(ledgerList = newList) }
+        intent {
+            copy(
+                ledgerList = newList,
+                showEmptyLedger = newList.isEmpty(),
+            )
+        }
     }
 
     fun addLedgerIfNeed(ledger: String?) {
@@ -136,13 +143,26 @@ class ReceivedViewModel @Inject constructor(
             Json.decodeFromUri<Ledger>(ledger)
         } ?: return
 
-        if (toAddLedger in currentState.ledgerList) return
+        if (toAddLedger.id in currentState.ledgerList.map { it.id }) return
+
+        if (filter.selectedCategoryList.isNotEmpty() && toAddLedger.category !in filter.selectedCategoryList) return
+
+        if (
+            isBetween(
+                target = toAddLedger.startAt.toJavaLocalDateTime(),
+                start = filter.startAt?.toJavaLocalDateTime() ?: currentDate.minusYears(100),
+                end = filter.endAt?.toJavaLocalDateTime() ?: currentDate.plusYears(100),
+            ).not()
+        ) {
+            return
+        }
 
         intent {
             copy(
                 ledgerList = currentState
                     .ledgerList
                     .add(0, toAddLedger),
+                showEmptyLedger = false,
             )
         }
     }

@@ -10,10 +10,14 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.model.Ledger
+import com.susu.feature.community.navigation.CommunityRoute
 import com.susu.feature.community.navigation.navigateCommunity
+import com.susu.feature.community.navigation.navigateVoteAdd
+import com.susu.feature.community.navigation.navigateVoteDetail
 import com.susu.feature.loginsignup.navigation.LoginSignupRoute
 import com.susu.feature.mypage.navigation.navigateMyPage
 import com.susu.feature.mypage.navigation.navigateMyPageInfo
+import com.susu.feature.mypage.navigation.navigateMyPagePrivacyPolicy
 import com.susu.feature.mypage.navigation.navigateMyPageSocial
 import com.susu.feature.received.navigation.ReceivedRoute
 import com.susu.feature.received.navigation.argument.FilterArgument
@@ -58,6 +62,9 @@ internal class MainNavigator(
                 SentRoute.sentEnvelopeRoute,
                 SentRoute.sentEnvelopeDetailRoute,
                 SentRoute.sentEnvelopeEditRoute,
+                CommunityRoute.route,
+                CommunityRoute.voteAddRoute,
+                CommunityRoute.voteDetailRoute("{${CommunityRoute.VOTE_ID_ARGUMENT_NAME}}"),
             ),
             -> SusuTheme.colorScheme.background10
 
@@ -150,8 +157,12 @@ internal class MainNavigator(
         navController.navigateMyPageSocial()
     }
 
-    fun navigateReceivedEnvelopeAdd() {
-        navController.navigateReceivedEnvelopeAdd()
+    fun navigateReceivedEnvelopeAdd(categoryName: String, ledgerId: Long) {
+        navController.navigateReceivedEnvelopeAdd(categoryName, ledgerId)
+    }
+
+    fun navigateMyPagePrivacyPolicy() {
+        navController.navigateMyPagePrivacyPolicy()
     }
 
     fun navigateReceivedEnvelopeDetail() {
@@ -160,6 +171,14 @@ internal class MainNavigator(
 
     fun navigateReceivedEnvelopeEdit() {
         navController.navigateReceivedEnvelopeEdit()
+    }
+
+    fun navigateVoteAdd() {
+        navController.navigateVoteAdd()
+    }
+
+    fun navigateVoteDetail(voteId: Long) {
+        navController.navigateVoteDetail(voteId)
     }
 
     fun popBackStackIfNotHome() {

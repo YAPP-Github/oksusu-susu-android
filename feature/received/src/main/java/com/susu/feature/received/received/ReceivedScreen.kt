@@ -70,7 +70,7 @@ import me.onebone.toolbar.rememberCollapsingToolbarScaffoldState
 fun ReceivedRoute(
     viewModel: ReceivedViewModel = hiltViewModel(),
     ledger: String?,
-    toDeleteLedgerId: Int,
+    toDeleteLedgerId: Long,
     filter: String?,
     padding: PaddingValues,
     navigateLedgerDetail: (Ledger) -> Unit,
@@ -257,6 +257,7 @@ fun ReceiveScreen(
                                     title = ledger.title,
                                     money = ledger.totalAmounts,
                                     count = ledger.totalCounts,
+                                    style = ledger.category.style,
                                     onClick = { onClickLedgerCard(ledger) },
                                 )
                             }
@@ -271,6 +272,7 @@ fun ReceiveScreen(
                                 title = ledger.title,
                                 money = ledger.totalAmounts,
                                 count = ledger.totalCounts,
+                                style = ledger.category.style,
                                 onClick = { onClickLedgerCard(ledger) },
                             )
                         }

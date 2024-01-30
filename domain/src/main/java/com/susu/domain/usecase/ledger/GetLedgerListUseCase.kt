@@ -13,8 +13,8 @@ class GetLedgerListUseCase @Inject constructor(
             ledgerRepository.getLedgerList(
                 title = title,
                 categoryIdList = categoryIdList,
-                fromStartAt = fromStartAt ?: LocalDateTime.now().minusYears(10),
-                toEndAt = toEndAt ?: LocalDateTime.now().plusYears(10),
+                fromStartAt = fromStartAt ?: LocalDateTime.now().minusYears(100),
+                toEndAt = toEndAt ?: LocalDateTime.now().plusYears(100),
                 page = page,
                 sort = sort,
             )

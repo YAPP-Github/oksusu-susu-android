@@ -6,7 +6,6 @@ import com.susu.core.model.Category
 import com.susu.core.model.Ledger
 import com.susu.core.ui.base.BaseViewModel
 import com.susu.core.ui.extension.decodeFromUri
-import com.susu.core.ui.extension.encodeToUri
 import com.susu.domain.usecase.categoryconfig.GetCategoryConfigUseCase
 import com.susu.domain.usecase.ledger.EditLedgerUseCase
 import com.susu.feature.received.navigation.ReceivedRoute
@@ -28,7 +27,7 @@ class LedgerEditViewModel @Inject constructor(
     LedgerEditState(),
 ) {
     private val argument = savedStateHandle.get<String>(ReceivedRoute.LEDGER_ARGUMENT_NAME)!!
-    private var ledgerId = 0
+    private var ledgerId = 0L
     private val toEditLedger
         get() = with(currentState) {
             Ledger(
@@ -45,8 +44,8 @@ class LedgerEditViewModel @Inject constructor(
 
     fun editLedger() = viewModelScope.launch {
         editLedgerUseCase(toEditLedger)
-            .onSuccess { ledger ->
-                postSideEffect(LedgerEditSideEffect.PopBackStackWithLedger(Json.encodeToUri(ledger)))
+            .onSuccess {
+                popBackStack()
             }
             .onFailure {
             }

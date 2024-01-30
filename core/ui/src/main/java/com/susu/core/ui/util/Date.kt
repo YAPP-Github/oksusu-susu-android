@@ -20,3 +20,7 @@ fun getSafeLocalDateTime(year: Int, month: Int, day: Int): LocalDateTime = try {
     Log.e("DateTimeError", "Invalid date provided: $year-$month-$day", e)
     LocalDateTime.of(year, month, 1, 0, 0)
 }
+
+fun isBetween(target: LocalDateTime, start: LocalDateTime, end: LocalDateTime): Boolean {
+    return !target.isBefore(start) && !target.isAfter(end)
+}

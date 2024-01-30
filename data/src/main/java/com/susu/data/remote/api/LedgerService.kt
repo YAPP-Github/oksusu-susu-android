@@ -1,6 +1,7 @@
 package com.susu.data.remote.api
 
 import com.susu.data.remote.model.request.LedgerRequest
+import com.susu.data.remote.model.response.CreateLedgerConfigResponse
 import com.susu.data.remote.model.response.LedgerListResponse
 import com.susu.data.remote.model.response.LedgerResponse
 import com.susu.data.remote.retrofit.ApiResult
@@ -26,7 +27,7 @@ interface LedgerService {
 
     @PATCH("ledgers/{id}")
     suspend fun editLedger(
-        @Path("id") id: Int,
+        @Path("id") id: Long,
         @Body ledgerRequest: LedgerRequest,
     ): ApiResult<LedgerResponse>
 
@@ -35,6 +36,14 @@ interface LedgerService {
         @Body ledgerRequest: LedgerRequest,
     ): ApiResult<LedgerResponse>
 
+    @GET("ledgers/{id}")
+    suspend fun getLedger(
+        @Path("id") id: Long,
+    ): ApiResult<LedgerResponse>
+
     @DELETE("ledgers")
-    suspend fun deleteLedgerList(@Query("ids") idList: List<Int>): ApiResult<Unit>
+    suspend fun deleteLedgerList(@Query("ids") idList: List<Long>): ApiResult<Unit>
+
+    @GET("ledgers/configs/create-ledger")
+    suspend fun getCreateLedgerConfig(): ApiResult<CreateLedgerConfigResponse>
 }

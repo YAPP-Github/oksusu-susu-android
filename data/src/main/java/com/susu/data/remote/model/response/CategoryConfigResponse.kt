@@ -8,10 +8,12 @@ data class CategoryConfigResponse(
     val id: Int,
     val seq: Int,
     val name: String,
+    val style: String,
 )
 
 internal fun CategoryConfigResponse.toModel() = Category(
     id = id,
     seq = seq,
     name = name,
+    style = style,
 )

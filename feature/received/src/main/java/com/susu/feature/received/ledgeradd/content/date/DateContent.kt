@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -15,8 +16,12 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.susu.core.designsystem.component.bottomsheet.datepicker.SusuLimitDatePickerBottomSheet
+import com.susu.core.designsystem.component.button.GhostButtonColor
+import com.susu.core.designsystem.component.button.SmallButtonStyle
+import com.susu.core.designsystem.component.button.SusuGhostButton
 import com.susu.core.designsystem.theme.Gray60
 import com.susu.core.designsystem.theme.SusuTheme
+import com.susu.core.model.Category
 import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.core.ui.util.AnnotatedText
 import com.susu.core.ui.util.currentDate
@@ -29,7 +34,7 @@ import java.time.LocalDateTime
 fun DateContentRoute(
     viewModel: DateViewModel = hiltViewModel(),
     name: String,
-    categoryName: String,
+    category: Category?,
     updateParentDate: (LocalDateTime?, LocalDateTime?) -> Unit,
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
@@ -44,17 +49,25 @@ fun DateContentRoute(
     }
 
     LaunchedEffect(key1 = Unit) {
-        viewModel.updateNameAndCategory(name, categoryName)
+        viewModel.setScreenType(category ?: Category())
+        viewModel.updateNameAndCategory(name, category?.customCategory ?: category?.name ?: "")
     }
 
     DateContent(
         uiState = uiState,
         onStartDateItemSelected = viewModel::updateStartDate,
         onClickStartDateText = viewModel::showStartDateBottomSheet,
-        onDismissStartDateBottomSheet = viewModel::hideStartDateBottomSheet,
+        onDismissStartDateBottomSheet = { year, month, day ->
+            viewModel.updateStartDate(year, month, day)
+            viewModel.hideStartDateBottomSheet()
+        },
         onEndDateItemSelected = viewModel::updateEndDate,
         onClickEndDateText = viewModel::showEndDateBottomSheet,
-        onDismissEndDateBottomSheet = viewModel::hideEndDateBottomSheet,
+        onDismissEndDateBottomSheet = { year, month, day ->
+            viewModel.updateEndDate(year, month, day)
+            viewModel.hideEndDateBottomSheet()
+        },
+        onClickSetDateButton = viewModel::toggleShowOnlyStartAt,
     )
 }
 
@@ -64,10 +77,11 @@ fun DateContent(
     uiState: DateState = DateState(),
     onStartDateItemSelected: (Int, Int, Int) -> Unit = { _, _, _ -> },
     onClickStartDateText: () -> Unit = {},
-    onDismissStartDateBottomSheet: () -> Unit = {},
+    onDismissStartDateBottomSheet: (Int, Int, Int) -> Unit = { _, _, _ -> },
     onEndDateItemSelected: (Int, Int, Int) -> Unit = { _, _, _ -> },
     onClickEndDateText: () -> Unit = {},
-    onDismissEndDateBottomSheet: () -> Unit = {},
+    onDismissEndDateBottomSheet: (Int, Int, Int) -> Unit = { _, _, _ -> },
+    onClickSetDateButton: () -> Unit = {},
 ) {
     Column(
         modifier = Modifier
@@ -93,19 +107,39 @@ fun DateContent(
             year = uiState.startAt?.year,
             month = uiState.startAt?.monthValue,
             day = uiState.startAt?.dayOfMonth,
-            suffix = stringResource(R.string.ledger_add_screen_from),
+            suffix = if (uiState.showOnlyStartAt.not()) stringResource(R.string.ledger_add_screen_from) else "",
             onClick = onClickStartDateText,
         )
 
-        Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_xxs))
+        if (uiState.showOnlyStartAt.not()) {
+            Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_xxs))
 
-        SelectDateRow(
-            year = uiState.endAt?.year,
-            month = uiState.endAt?.monthValue,
-            day = uiState.endAt?.dayOfMonth,
-            suffix = stringResource(R.string.ledger_add_screen_until),
-            onClick = onClickEndDateText,
+            SelectDateRow(
+                year = uiState.endAt?.year,
+                month = uiState.endAt?.monthValue,
+                day = uiState.endAt?.dayOfMonth,
+                suffix = stringResource(R.string.ledger_add_screen_until),
+                onClick = onClickEndDateText,
+            )
+        }
+
+        Spacer(modifier = Modifier.weight(1f))
+
+        SusuGhostButton(
+            modifier = Modifier.align(Alignment.CenterHorizontally),
+            color = GhostButtonColor.Orange,
+            style = SmallButtonStyle.height40,
+            text = if (uiState.showOnlyStartAt) {
+                stringResource(R.string.date_content_show_endat)
+            } else {
+                stringResource(
+                    R.string.date_content_set_only_startat,
+                )
+            },
+            onClick = onClickSetDateButton,
         )
+
+        Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_xxl))
     }
 
     if (uiState.showStartDateBottomSheet) {
@@ -118,7 +152,7 @@ fun DateContent(
             initialCriteriaDay = uiState.endAt?.dayOfMonth,
             afterDate = false,
             maximumContainerHeight = 346.dp,
-            onDismissRequest = { _, _, _ -> onDismissStartDateBottomSheet() },
+            onDismissRequest = onDismissStartDateBottomSheet,
             onItemSelected = onStartDateItemSelected,
         )
     }
@@ -133,7 +167,7 @@ fun DateContent(
             initialCriteriaDay = uiState.startAt?.dayOfMonth ?: minDate.dayOfMonth,
             afterDate = true,
             maximumContainerHeight = 346.dp,
-            onDismissRequest = { _, _, _ -> onDismissEndDateBottomSheet() },
+            onDismissRequest = onDismissEndDateBottomSheet,
             onItemSelected = onEndDateItemSelected,
         )
     }

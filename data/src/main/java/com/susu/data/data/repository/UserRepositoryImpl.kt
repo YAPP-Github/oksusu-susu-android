@@ -46,7 +46,11 @@ class UserRepositoryImpl @Inject constructor(
         }.firstOrNull() ?: throw UserNotFoundException()
 
         val uid = json.decodeFromString<UserResponse>(localUserInfo).id
-        return userService.patchUserInfo(uid = uid, UserPatchRequest(name, gender, birth)).getOrThrow().toModel()
+        val patchedUserInfo = userService.patchUserInfo(uid = uid, UserPatchRequest(name, gender, birth)).getOrThrow()
+        dataStore.edit { preferences ->
+            preferences[userKey] = json.encodeToString(patchedUserInfo)
+        }
+        return patchedUserInfo.toModel()
     }
 
     override suspend fun logout() {

@@ -1,5 +1,6 @@
 package com.susu.feature.received.envelopeadd
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -15,74 +16,97 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.susu.core.designsystem.component.appbar.SusuProgressAppBar
 import com.susu.core.designsystem.component.appbar.icon.BackIcon
 import com.susu.core.designsystem.component.button.FilledButtonColor
 import com.susu.core.designsystem.component.button.MediumButtonStyle
 import com.susu.core.designsystem.component.button.SusuFilledButton
 import com.susu.core.designsystem.theme.SusuTheme
+import com.susu.core.model.Relationship
+import com.susu.core.ui.SnackbarToken
+import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.core.ui.extension.susuDefaultAnimatedContentTransitionSpec
-import com.susu.feature.received.R
-import com.susu.feature.received.envelopeadd.content.MemoContent
-import com.susu.feature.received.envelopeadd.content.MoneyContent
-import com.susu.feature.received.envelopeadd.content.MoreContent
-import com.susu.feature.received.envelopeadd.content.NameContent
-import com.susu.feature.received.envelopeadd.content.PhoneContent
-import com.susu.feature.received.envelopeadd.content.PresentContent
-import com.susu.feature.received.envelopeadd.content.RelationshipContent
-import com.susu.feature.received.envelopeadd.content.VisitedContent
-
-enum class EnvelopeAddStep {
-    MONEY,
-    NAME,
-    RELATIONSHIP,
-    MORE,
-    VISITED,
-    PRESENT,
-    PHONE,
-    MEMO,
-}
+import com.susu.feature.received.envelopeadd.content.date.DateContentRoute
+import com.susu.feature.received.envelopeadd.content.memo.MemoContentRoute
+import com.susu.feature.received.envelopeadd.content.money.MoneyContentRoute
+import com.susu.feature.received.envelopeadd.content.more.MoreContentRoute
+import com.susu.feature.received.envelopeadd.content.name.NameContentRoute
+import com.susu.feature.received.envelopeadd.content.phone.PhoneContentRoute
+import com.susu.feature.received.envelopeadd.content.present.PresentContentRoute
+import com.susu.feature.received.envelopeadd.content.relationship.RelationShipContentRoute
+import com.susu.feature.received.envelopeadd.content.visited.VisitedContentRoute
+import java.time.LocalDateTime
 
 @Composable
 fun ReceivedEnvelopeAddRoute(
+    viewModel: ReceivedEnvelopeAddViewModel = hiltViewModel(),
     popBackStack: () -> Unit,
+    popBackStackWithEnvelope: (String) -> Unit,
+    onShowSnackbar: (SnackbarToken) -> Unit,
+    handleException: (Throwable, () -> Unit) -> Unit,
 ) {
-    var currentStep by remember { mutableStateOf(EnvelopeAddStep.MONEY) }
+    val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
+    viewModel.sideEffect.collectWithLifecycle { sideEffect ->
+        when (sideEffect) {
+            is ReceivedEnvelopeAddSideEffect.HandleException -> handleException(sideEffect.throwable, sideEffect.retry)
+            ReceivedEnvelopeAddSideEffect.PopBackStack -> popBackStack()
+            is ReceivedEnvelopeAddSideEffect.ShowSnackbar -> onShowSnackbar(SnackbarToken(message = sideEffect.message))
+            is ReceivedEnvelopeAddSideEffect.PopBackStackWithEnvelope -> popBackStackWithEnvelope(sideEffect.envelope)
+        }
+    }
+
+    var friendName by remember {
+        mutableStateOf("")
+    }
+
+    BackHandler {
+        viewModel.goToPrevStep()
+    }
 
     ReceivedEnvelopeAddScreen(
-        currentStep = currentStep,
-        onClickBack = popBackStack,
-        onClickNext = {
-            // TODO: 수정 필요 (MORE 이후 분리 필요)
-            currentStep = when (currentStep) {
-                EnvelopeAddStep.MONEY -> EnvelopeAddStep.NAME
-                EnvelopeAddStep.NAME -> EnvelopeAddStep.RELATIONSHIP
-                EnvelopeAddStep.RELATIONSHIP -> EnvelopeAddStep.MORE
-                EnvelopeAddStep.MORE -> EnvelopeAddStep.VISITED
-                EnvelopeAddStep.VISITED -> EnvelopeAddStep.PRESENT
-                EnvelopeAddStep.PRESENT -> EnvelopeAddStep.PHONE
-                EnvelopeAddStep.PHONE -> EnvelopeAddStep.MEMO
-                else -> EnvelopeAddStep.MEMO
-            }
+        uiState = uiState,
+        onClickBack = viewModel::goToPrevStep,
+        onClickNext = viewModel::goToNextStep,
+        updateParentMoney = viewModel::updateMoney,
+        updateParentName = { name ->
+            viewModel.updateName(name)
+            friendName = name
         },
+        updateParentFriendId = viewModel::updateFriendId,
+        updateParentSelectedRelationShip = viewModel::updateSelectedRelationShip,
+        updateParentMoreStep = viewModel::updateMoreStep,
+        updateParentDate = viewModel::updateDate,
+        categoryName = viewModel.categoryName,
+        updateParentVisited = viewModel::updateHasVisited,
+        updateParentPresent = viewModel::updatePresent,
+        friendName = friendName,
+        updateParentPhoneNumber = viewModel::updatePhoneNumber,
+        updateParentMemo = viewModel::updateMemo,
     )
 }
 
 @Composable
 fun ReceivedEnvelopeAddScreen(
-    modifier: Modifier = Modifier,
-    currentStep: EnvelopeAddStep = EnvelopeAddStep.MONEY,
+    uiState: ReceivedEnvelopeAddState = ReceivedEnvelopeAddState(),
     onClickBack: () -> Unit = {},
     onClickNext: () -> Unit = {},
+    updateParentMoney: (Long) -> Unit = {},
+    updateParentName: (String) -> Unit = {},
+    updateParentFriendId: (Long?) -> Unit = {},
+    updateParentSelectedRelationShip: (Relationship?) -> Unit = {},
+    updateParentDate: (LocalDateTime?) -> Unit = {},
+    updateParentMoreStep: (List<EnvelopeAddStep>) -> Unit = {},
+    categoryName: String = "",
+    updateParentVisited: (Boolean?) -> Unit = {},
+    updateParentPresent: (String?) -> Unit = {},
+    friendName: String = "",
+    updateParentPhoneNumber: (String?) -> Unit = {},
+    updateParentMemo: (String?) -> Unit = {},
 ) {
-    // TODO: 수정 필요
-    val relationshipList = listOf("친구", "가족", "친척", "동료", "직접 입력")
-    val friendList = listOf("김철수", "국영수", "신짱구", "홍길동")
-    val moreList = listOf("방문여부", "선물", "메모", "보낸 이의 연락처")
-    val visitedList = listOf("예", "아니요")
-
     Column(
-        modifier = modifier
+        modifier = Modifier
             .background(SusuTheme.colorScheme.background15)
             .fillMaxSize(),
     ) {
@@ -92,13 +116,13 @@ fun ReceivedEnvelopeAddScreen(
                     onClick = onClickBack,
                 )
             },
-            currentStep = currentStep.ordinal + 1,
+            currentStep = uiState.progress,
             entireStep = EnvelopeAddStep.entries.size,
         )
         AnimatedContent(
-            modifier = modifier.weight(1f),
-            targetState = currentStep,
-            label = "SentEnvelopeAddScreen",
+            modifier = Modifier.weight(1f),
+            targetState = uiState.currentStep,
+            label = "ReceivedEnvelopeAddScreen",
             transitionSpec = {
                 susuDefaultAnimatedContentTransitionSpec(
                     leftDirectionCondition = targetState.ordinal > initialState.ordinal,
@@ -106,26 +130,50 @@ fun ReceivedEnvelopeAddScreen(
             },
         ) { targetState ->
             when (targetState) {
-                EnvelopeAddStep.MONEY -> MoneyContent()
-                EnvelopeAddStep.NAME -> NameContent(friendList = friendList)
-                EnvelopeAddStep.RELATIONSHIP -> RelationshipContent(relationshipList = relationshipList)
-                EnvelopeAddStep.MORE -> MoreContent(moreList = moreList)
-                EnvelopeAddStep.VISITED -> VisitedContent(
-                    event = "결혼식",
-                    visitedList = visitedList,
+                EnvelopeAddStep.MONEY -> MoneyContentRoute(
+                    updateParentMoney = updateParentMoney,
                 )
-                EnvelopeAddStep.PRESENT -> PresentContent()
-                EnvelopeAddStep.PHONE -> PhoneContent(name = "김철수")
-                EnvelopeAddStep.MEMO -> MemoContent()
+
+                EnvelopeAddStep.NAME -> NameContentRoute(
+                    updateParentName = updateParentName,
+                    updateParentFriendId = updateParentFriendId,
+                )
+                EnvelopeAddStep.RELATIONSHIP -> RelationShipContentRoute(
+                    updateParentSelectedRelation = updateParentSelectedRelationShip,
+                )
+                EnvelopeAddStep.DATE -> DateContentRoute(
+                    friendName = friendName,
+                    updateParentDate = updateParentDate,
+                )
+                EnvelopeAddStep.MORE -> MoreContentRoute(
+                    updateParentMoreStep = updateParentMoreStep,
+                )
+                EnvelopeAddStep.VISITED -> VisitedContentRoute(
+                    categoryName = categoryName,
+                    updateParentVisited = updateParentVisited,
+                )
+
+                EnvelopeAddStep.PRESENT -> PresentContentRoute(
+                    updateParentPresent = updateParentPresent,
+                )
+                EnvelopeAddStep.PHONE -> PhoneContentRoute(
+                    friendName = friendName,
+                    updateParentPhone = updateParentPhoneNumber,
+                )
+                EnvelopeAddStep.MEMO -> MemoContentRoute(
+                    updateParentMemo = updateParentMemo,
+                )
             }
         }
         SusuFilledButton(
             color = FilledButtonColor.Black,
             style = MediumButtonStyle.height60,
             shape = RectangleShape,
-            text = stringResource(id = com.susu.core.ui.R.string.word_next),
+            text = stringResource(id = uiState.buttonResId),
             onClick = onClickNext,
-            modifier = modifier
+            isClickable = uiState.buttonEnabled,
+            isActive = uiState.buttonEnabled,
+            modifier = Modifier
                 .fillMaxWidth()
                 .imePadding(),
         )

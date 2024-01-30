@@ -12,6 +12,7 @@ data class DateState(
     val endAt: LocalDateTime? = null,
     val showStartDateBottomSheet: Boolean = false,
     val showEndDateBottomSheet: Boolean = false,
+    val showOnlyStartAt: Boolean = false,
 ) : UiState
 
 sealed interface DateSideEffect : SideEffect {

@@ -14,15 +14,22 @@ import com.susu.core.designsystem.theme.Gray100
 import com.susu.core.designsystem.theme.Gray40
 import com.susu.core.designsystem.theme.Gray60
 import com.susu.core.designsystem.theme.SusuTheme
+import com.susu.core.ui.extension.susuClickable
+import com.susu.core.ui.util.to_yyyy_dot_MM_dot_dd
+import java.time.LocalDateTime
 
 @Composable
 fun FriendListItem(
-    friend: String,
-    modifier: Modifier = Modifier,
+    name: String,
+    relationship: String,
+    category: String?,
+    visitedAt: LocalDateTime?,
+    onClick: () -> Unit,
 ) {
     Row(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxWidth()
+            .susuClickable(onClick = onClick)
             .padding(
                 vertical = SusuTheme.spacing.spacing_s,
             ),
@@ -30,22 +37,22 @@ fun FriendListItem(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
-            text = friend,
+            text = name,
             style = SusuTheme.typography.title_xs,
             color = Gray100,
         )
         Text(
-            text = "친구",
+            text = relationship,
             style = SusuTheme.typography.title_xs,
             color = Gray60,
         )
         Text(
-            text = "결혼식",
+            text = category ?: "",
             style = SusuTheme.typography.text_xs,
             color = Gray40,
         )
         Text(
-            text = "2022.01.11",
+            text = visitedAt?.to_yyyy_dot_MM_dot_dd() ?: "",
             style = SusuTheme.typography.text_xs,
             color = Gray40,
         )
@@ -55,13 +62,15 @@ fun FriendListItem(
 @Preview(showBackground = true, backgroundColor = 0xFFF6F6F6)
 @Composable
 fun FriendListItemPreview() {
-    val friendList = listOf("김철수", "국영수", "가나다")
-
     SusuTheme {
         Column {
-            for (friend in friendList) {
-                FriendListItem(friend = friend)
-            }
+            FriendListItem(
+                name = "",
+                relationship = "",
+                category = null,
+                visitedAt = null,
+                onClick = {},
+            )
         }
     }
 }
