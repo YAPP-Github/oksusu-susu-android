@@ -142,6 +142,7 @@ fun RelationshipContent(
                         onClick = {
                             onClickRelationShipButton(relationship)
                         },
+                        rippleEnabled = false,
                         modifier = modifier.fillMaxWidth(),
                     )
                 }

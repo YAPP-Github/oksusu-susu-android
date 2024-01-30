@@ -108,6 +108,7 @@ fun MoreContent(
                             onClickStepButton(step)
                         },
                         modifier = modifier.fillMaxWidth(),
+                        rippleEnabled = false,
                     )
                 }
             }

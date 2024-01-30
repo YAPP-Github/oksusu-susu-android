@@ -140,6 +140,7 @@ fun CategoryContent(
                         onClick = {
                             onClickCategoryButton(category)
                         },
+                        rippleEnabled = false,
                         modifier = modifier.fillMaxWidth(),
                     )
                 }

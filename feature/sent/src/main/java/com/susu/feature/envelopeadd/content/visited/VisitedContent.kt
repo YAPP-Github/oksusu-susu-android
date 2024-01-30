@@ -97,6 +97,7 @@ fun VisitedContent(
                     text = stringResource(id = R.string.sent_envelope_edit_category_visited_yes),
                     onClick = onClickVisitedButton,
                     modifier = modifier.fillMaxWidth(),
+                    rippleEnabled = false,
                 )
             }
 
@@ -115,6 +116,7 @@ fun VisitedContent(
                     text = stringResource(id = R.string.sent_envelope_edit_category_visited_no),
                     onClick = onClickNotVisitedButton,
                     modifier = modifier.fillMaxWidth(),
+                    rippleEnabled = false,
                 )
             }
         }
