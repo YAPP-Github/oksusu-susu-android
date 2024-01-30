@@ -25,5 +25,9 @@ interface LedgerRepository {
         id: Long,
     )
 
+    suspend fun getLedger(
+        id: Long,
+    ): Ledger
+
     suspend fun getCreateLedgerConfig(): List<Int>
 }

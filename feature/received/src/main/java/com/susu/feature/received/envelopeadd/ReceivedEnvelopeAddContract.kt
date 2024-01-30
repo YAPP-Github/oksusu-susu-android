@@ -35,6 +35,8 @@ enum class EnvelopeAddStep(
 }
 
 sealed interface ReceivedEnvelopeAddSideEffect : SideEffect {
+    data class ShowSnackbar(val message: String) : ReceivedEnvelopeAddSideEffect
     data object PopBackStack : ReceivedEnvelopeAddSideEffect
+    data class PopBackStackWithEnvelope(val envelope: String) : ReceivedEnvelopeAddSideEffect
     data class HandleException(val throwable: Throwable, val retry: () -> Unit) : ReceivedEnvelopeAddSideEffect
 }

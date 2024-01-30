@@ -29,12 +29,19 @@ import com.susu.core.designsystem.theme.Gray40
 import com.susu.core.designsystem.theme.Orange60
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.model.Vote
+import com.susu.core.ui.extension.susuClickable
 import com.susu.core.ui.util.to_yyyy_dot_MM_dot_dd
 import com.susu.feature.community.R
 import kotlinx.datetime.toJavaLocalDateTime
+import java.time.LocalDateTime
+import java.time.temporal.ChronoUnit
 
 @Composable
-fun VoteCard(vote: Vote = Vote()) {
+fun VoteCard(
+    vote: Vote = Vote(),
+    currentTime: LocalDateTime = LocalDateTime.now(),
+    onClick: () -> Unit = {},
+) {
     Column(
         modifier = Modifier
             .padding(
@@ -43,6 +50,10 @@ fun VoteCard(vote: Vote = Vote()) {
                 bottom = SusuTheme.spacing.spacing_xxs,
             )
             .fillMaxWidth()
+            .susuClickable(
+                rippleEnabled = false,
+                onClick = onClick,
+            )
             .clip(RoundedCornerShape(8.dp))
             .background(Gray15)
             .padding(SusuTheme.spacing.spacing_m),
@@ -54,7 +65,7 @@ fun VoteCard(vote: Vote = Vote()) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                Text(text = vote.category, color = Orange60, style = SusuTheme.typography.title_xxxs)
+                Text(text = vote.boardName, color = Orange60, style = SusuTheme.typography.title_xxxs)
                 Icon(
                     modifier = Modifier.size(20.dp),
                     painter = painterResource(id = com.susu.core.ui.R.drawable.ic_arrow_right),
@@ -63,8 +74,17 @@ fun VoteCard(vote: Vote = Vote()) {
                 )
             }
 
+            val totalMinutes = ChronoUnit.MINUTES.between(vote.createdAt.toJavaLocalDateTime(), currentTime)
+
+            val writeTime = when {
+                totalMinutes / 60 > 24 -> vote.createdAt.toJavaLocalDateTime().to_yyyy_dot_MM_dot_dd()
+                totalMinutes / 60 > 0 -> stringResource(R.string.word_before_hour, totalMinutes / 60)
+                totalMinutes / 60 == 0L -> stringResource(R.string.word_before_minute, totalMinutes % 60 + 1)
+                else -> vote.createdAt.toJavaLocalDateTime().to_yyyy_dot_MM_dot_dd()
+            }
+
             Text(
-                text = vote.createdAt.toJavaLocalDateTime().to_yyyy_dot_MM_dot_dd(), // TODO 1분 전, 1시간 전
+                text = writeTime,
                 style = SusuTheme.typography.text_xxxs,
                 color = Gray40,
             )

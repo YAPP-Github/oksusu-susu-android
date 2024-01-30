@@ -59,7 +59,7 @@ fun LedgerDetailEnvelopeContainer(
         ) {
             SusuBadge(
                 color = BadgeColor.Orange60,
-                text = envelope.category.customCategory ?: envelope.category.name,
+                text = envelope.relation.customRelation ?: envelope.relation.relation,
                 padding = BadgeStyle.smallBadge,
             )
 

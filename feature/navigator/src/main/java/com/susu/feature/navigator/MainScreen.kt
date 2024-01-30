@@ -110,6 +110,13 @@ internal fun MainScreen(
                         )
                         navigator.popBackStackIfNotHome()
                     },
+                    popBackStackWithEnvelope = { envelope ->
+                        navigator.navController.previousBackStackEntry?.savedStateHandle?.set(
+                            ReceivedRoute.ENVELOPE_ARGUMENT_NAME,
+                            envelope,
+                        )
+                        navigator.popBackStackIfNotHome()
+                    },
                     navigateLedgerSearch = navigator::navigateLedgerSearch,
                     navigateLedgerDetail = navigator::navigateLedgerDetail,
                     navigateLedgerEdit = navigator::navigateLedgerEdit,
@@ -132,10 +139,18 @@ internal fun MainScreen(
                 communityNavGraph(
                     padding = innerPadding,
                     navigateVoteAdd = navigator::navigateVoteAdd,
+                    navigateVoteDetail = navigator::navigateVoteDetail,
                     popBackStack = navigator::popBackStackIfNotHome,
                     popBackStackWithVote = { vote ->
                         navigator.navController.previousBackStackEntry?.savedStateHandle?.set(
                             CommunityRoute.VOTE_ARGUMENT_NAME,
+                            vote,
+                        )
+                        navigator.popBackStackIfNotHome()
+                    },
+                    popBackStackWithToUpdateVote = { vote ->
+                        navigator.navController.previousBackStackEntry?.savedStateHandle?.set(
+                            CommunityRoute.TO_UPDATE_VOTE_ARGUMENT_NAME,
                             vote,
                         )
                         navigator.popBackStackIfNotHome()

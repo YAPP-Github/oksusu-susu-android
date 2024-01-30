@@ -38,7 +38,7 @@ class CommunityViewModel @Inject constructor(
         if (toAddVote in currentState.voteList) return
 
         if (currentState.selectedCategory != null &&
-            currentState.selectedCategory?.id != currentState.categoryConfigList.find { it.name == toAddVote.category }?.id
+            currentState.selectedCategory?.id != currentState.categoryConfigList.find { it.name == toAddVote.boardName }?.id
         ) {
             return
         }
@@ -50,6 +50,27 @@ class CommunityViewModel @Inject constructor(
                 voteList = currentState
                     .voteList
                     .add(0, toAddVote),
+            )
+        }
+    }
+
+    fun updateVoteIfNeed(vote: String?) {
+        val toUpdateVote = vote?.let {
+            Json.decodeFromUri<Vote>(vote)
+        } ?: return
+
+        intent {
+            copy(
+                voteList = currentState
+                    .voteList
+                    .map {
+                        if (it.id == toUpdateVote.id) {
+                            toUpdateVote
+                        } else {
+                            it
+                        }
+                    }
+                    .toPersistentList(),
             )
         }
     }
@@ -108,8 +129,6 @@ class CommunityViewModel @Inject constructor(
     }
 
     fun getPopularVoteList() = viewModelScope.launch {
-        if (currentState.popularVoteList.isNotEmpty()) return@launch
-
         getPopularVoteListUseCase()
             .onSuccess {
                 intent { copy(popularVoteList = it.toPersistentList()) }
@@ -142,4 +161,8 @@ class CommunityViewModel @Inject constructor(
 
         getVoteList(true)
     }
+
+    fun navigateVoteAdd() = postSideEffect(CommunitySideEffect.NavigateVoteAdd)
+
+    fun navigateVoteDetail(id: Long) = postSideEffect(CommunitySideEffect.NavigateVoteDetail(id))
 }

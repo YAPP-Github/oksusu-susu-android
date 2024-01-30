@@ -39,12 +39,12 @@ private fun Int.safeDiv(parent: Int): Float {
 fun VoteItem(
     showResult: Boolean = true,
     isPick: Boolean = false,
-    voteCount: Int = 3,
-    totalVoteCount: Int = 13,
+    voteCount: Long = 3,
+    totalVoteCount: Long = 13,
     title: String = "",
     onClick: () -> Unit = {},
 ) {
-    val percent = voteCount.safeDiv(totalVoteCount)
+    val percent = voteCount.toInt().safeDiv(totalVoteCount.toInt())
 
     Box(
         modifier = Modifier
@@ -93,7 +93,7 @@ fun VoteItem(
                 )
                 Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_xxs))
                 Text(
-                    text = "${percent.roundToInt()}%",
+                    text = "${(percent * 100).roundToInt()}%",
                     style = SusuTheme.typography.title_xxs,
                 )
             }

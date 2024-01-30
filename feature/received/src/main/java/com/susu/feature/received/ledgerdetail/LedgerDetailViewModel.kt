@@ -2,7 +2,9 @@ package com.susu.feature.received.ledgerdetail
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.susu.core.model.Envelope
 import com.susu.core.model.Ledger
+import com.susu.core.model.SearchEnvelope
 import com.susu.core.model.exception.NotFoundLedgerException
 import com.susu.core.ui.base.BaseViewModel
 import com.susu.core.ui.extension.decodeFromUri
@@ -10,19 +12,20 @@ import com.susu.core.ui.extension.encodeToUri
 import com.susu.core.ui.util.to_yyyy_dot_MM_dot_dd
 import com.susu.domain.usecase.envelope.SearchReceivedEnvelopeListUseCase
 import com.susu.domain.usecase.ledger.DeleteLedgerUseCase
+import com.susu.domain.usecase.ledger.GetLedgerUseCase
 import com.susu.feature.received.navigation.ReceivedRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
 import kotlinx.datetime.toJavaLocalDateTime
 import kotlinx.serialization.json.Json
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class LedgerDetailViewModel @Inject constructor(
     private val searchReceivedEnvelopeListUseCase: SearchReceivedEnvelopeListUseCase,
     private val deleteLedgerUseCase: DeleteLedgerUseCase,
+    private val getLedgerUseCase: GetLedgerUseCase,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<LedgerDetailState, LedgerDetailSideEffect>(
     LedgerDetailState(),
@@ -33,35 +36,51 @@ class LedgerDetailViewModel @Inject constructor(
     private var page = 0
     private var isLast = false
 
-    fun initData(backStackEntryLedgerUri: String?) {
-        if (backStackEntryLedgerUri == null) {
-            updateLedgerInfo(Json.decodeFromUri<Ledger>(argument))
-            return
-        }
+    private var isFirstVisited: Boolean = true
 
-        val backStackLedger = Json.decodeFromUri<Ledger>(backStackEntryLedgerUri)
-        if (backStackLedger == Ledger()) {
-            updateLedgerInfo(Json.decodeFromUri<Ledger>(argument))
-            return
-        }
+    fun addEnvelopeIfNeed(envelopeUri: String?) = intent {
+        val envelope = envelopeUri?.let {
+            Json.decodeFromUri<Envelope>(it)
+        } ?: return@intent this
 
-        updateLedgerInfo(backStackLedger)
+        if (envelope.id in envelopeList.map { it.envelope.id }) return@intent this
+
+        val searchEnvelope = SearchEnvelope(
+            envelope = envelope,
+            friend = envelope.friend,
+            relation = envelope.relationship,
+        )
+
+        copy(
+            envelopeList = envelopeList.add(0, searchEnvelope),
+        )
     }
 
-    private fun updateLedgerInfo(ledger: Ledger) = intent {
-        this@LedgerDetailViewModel.ledger = ledger
+    fun getLedger() = viewModelScope.launch {
+        ledger = Json.decodeFromUri<Ledger>(argument)
+        getLedgerUseCase(id = ledger.id)
+            .onSuccess { ledger ->
+                this@LedgerDetailViewModel.ledger = ledger
+                intent {
+                    with(ledger) {
+                        val category = ledger.category
+                        copy(
+                            name = ledger.title,
+                            money = ledger.totalAmounts,
+                            count = ledger.totalCounts,
+                            category = if (category.customCategory.isNullOrEmpty()) category.name else category.customCategory!!,
+                            startDate = ledger.startAt.toJavaLocalDateTime().to_yyyy_dot_MM_dot_dd(),
+                            endDate = ledger.endAt.toJavaLocalDateTime().to_yyyy_dot_MM_dot_dd(),
+                        )
+                    }
+                }
+            }
+    }
+
+    fun initReceivedEnvelopeList() {
+        if (isFirstVisited.not()) return
         getReceivedEnvelopeList(true)
-        ledger.let { ledger ->
-            val category = ledger.category
-            copy(
-                name = ledger.title,
-                money = ledger.totalAmounts,
-                count = ledger.totalCounts,
-                category = if (category.customCategory.isNullOrEmpty()) category.name else category.customCategory!!,
-                startDate = ledger.startAt.toJavaLocalDateTime().to_yyyy_dot_MM_dot_dd(),
-                endDate = ledger.endAt.toJavaLocalDateTime().to_yyyy_dot_MM_dot_dd(),
-            )
-        }
+        isFirstVisited = false
     }
 
     fun getReceivedEnvelopeList(needClear: Boolean = false) = viewModelScope.launch {
@@ -73,7 +92,6 @@ class LedgerDetailViewModel @Inject constructor(
             currentState.envelopeList
         }
 
-
         searchReceivedEnvelopeListUseCase(
             param = SearchReceivedEnvelopeListUseCase.Param(
                 friendIds = null,
@@ -81,8 +99,8 @@ class LedgerDetailViewModel @Inject constructor(
                 fromAmount = null,
                 toAmount = null,
                 page = page,
-                sort = null
-            )
+                sort = null,
+            ),
         ).onSuccess { envelopeList ->
             isLast = envelopeList.isEmpty()
             page++
@@ -93,7 +111,7 @@ class LedgerDetailViewModel @Inject constructor(
                 )
             }
         }.onFailure {
-            Timber.e(it)
+            postSideEffect(LedgerDetailSideEffect.HandleException(it, ::getReceivedEnvelopeList))
         }
     }
 
