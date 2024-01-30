@@ -109,6 +109,10 @@ fun LedgerDetailRoute(
         viewModel.getReceivedEnvelopeList()
     }
 
+    listState.OnBottomReached(minItemsCount = 4) {
+        viewModel.getReceivedEnvelopeList()
+    }
+
     BackHandler(onBack = viewModel::popBackStackWithLedger)
 
     LedgerDetailScreen(

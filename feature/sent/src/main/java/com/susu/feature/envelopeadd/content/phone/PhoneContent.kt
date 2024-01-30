@@ -1,4 +1,4 @@
-package com.susu.feature.envelopeadd.content
+package com.susu.feature.envelopeadd.content.phone
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -8,25 +8,45 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.susu.core.designsystem.component.textfield.SusuBasicTextField
-import com.susu.core.designsystem.theme.Gray100
 import com.susu.core.designsystem.theme.Gray40
 import com.susu.core.designsystem.theme.Gray60
 import com.susu.core.designsystem.theme.SusuTheme
+import com.susu.core.ui.extension.collectWithLifecycle
+import com.susu.core.ui.util.AnnotatedText
 import com.susu.feature.sent.R
+
+@Composable
+fun PhoneContentRoute(
+    viewModel: PhoneViewModel = hiltViewModel(),
+    friendName: String,
+    updateParentPhone: (String?) -> Unit,
+) {
+    val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
+    viewModel.sideEffect.collectWithLifecycle { sideEffect ->
+        when (sideEffect) {
+            is PhoneSideEffect.UpdateParentPhone -> updateParentPhone(sideEffect.phone)
+        }
+    }
+
+    LaunchedEffect(key1 = Unit) {
+        viewModel.updateName(friendName)
+        viewModel.updatePhone(uiState.phone)
+    }
+
+    PhoneContent(
+        uiState = uiState,
+        onTextChangePhone = viewModel::updatePhone,
+    )
+}
 
 @Composable
 fun PhoneContent(
@@ -35,36 +55,27 @@ fun PhoneContent(
         horizontal = SusuTheme.spacing.spacing_m,
         vertical = SusuTheme.spacing.spacing_xl,
     ),
-    name: String,
+    uiState: PhoneState = PhoneState(),
+    onTextChangePhone: (String) -> Unit = {},
 ) {
-    var phoneNumber by remember { mutableStateOf("") }
-
-    val title = buildAnnotatedString {
-        withStyle(style = SpanStyle(color = Gray60)) {
-            append(name + stringResource(R.string.sent_envelope_add_phone_to))
-        }
-        withStyle(style = SpanStyle(color = Gray100)) {
-            append(stringResource(id = R.string.sent_envelope_add_phone_title))
-        }
-    }
-
     Column(
         modifier = modifier
             .fillMaxSize()
             .padding(padding),
     ) {
-        Text(
-            text = title,
-            style = SusuTheme.typography.title_m,
-            color = Gray100,
+        AnnotatedText(
+            originalText = stringResource(R.string.sent_envelope_add_phone_title, uiState.name),
+            originalTextStyle = SusuTheme.typography.title_m,
+            targetTextList = listOf(stringResource(R.string.sent_envelope_add_phone_title_highlight, uiState.name)),
+            spanStyle = SusuTheme.typography.title_m.copy(Gray60).toSpanStyle(),
         )
         Spacer(
             modifier = modifier
                 .size(SusuTheme.spacing.spacing_m),
         )
         SusuBasicTextField(
-            text = phoneNumber,
-            onTextChange = { phoneNumber = it },
+            text = uiState.phone,
+            onTextChange = onTextChangePhone,
             placeholder = stringResource(id = R.string.sent_envelope_add_phone_placeholder),
             placeholderColor = Gray40,
             modifier = modifier.fillMaxWidth(),
@@ -78,6 +89,6 @@ fun PhoneContent(
 @Composable
 fun PhoneContentPreview() {
     SusuTheme {
-        PhoneContent(name = "김철수")
+        PhoneContent()
     }
 }
