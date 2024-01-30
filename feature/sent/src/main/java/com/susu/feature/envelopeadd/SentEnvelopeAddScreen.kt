@@ -27,11 +27,11 @@ import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.model.Category
 import com.susu.core.model.Relationship
 import com.susu.core.ui.extension.susuDefaultAnimatedContentTransitionSpec
-import com.susu.feature.envelopeadd.content.MemoContent
 import com.susu.feature.envelopeadd.content.PhoneContent
 import com.susu.feature.envelopeadd.content.PresentContent
 import com.susu.feature.envelopeadd.content.category.CategoryContentRoute
 import com.susu.feature.envelopeadd.content.date.DateContentRoute
+import com.susu.feature.envelopeadd.content.memo.MemoContentRoute
 import com.susu.feature.envelopeadd.content.money.MoneyContentRoute
 import com.susu.feature.envelopeadd.content.more.MoreContentRoute
 import com.susu.feature.envelopeadd.content.name.NameContentRoute
@@ -79,6 +79,8 @@ fun SentEnvelopeAddRoute(
         updateParentDate = viewModel::updateDate,
         updateParentMoreStep = viewModel::updateMoreStep,
         updateParentVisited = viewModel::updateHasVisited,
+        updateParentMemo = viewModel::updateMemo,
+
     )
 }
 
@@ -97,6 +99,7 @@ fun SentEnvelopeAddScreen(
     updateParentMoreStep: (List<EnvelopeAddStep>) -> Unit = {},
     categoryName: String = "",
     updateParentVisited: (Boolean?) -> Unit = {},
+    updateParentMemo: (String?) -> Unit = {},
 ) {
     Column(
         modifier = Modifier
@@ -153,7 +156,9 @@ fun SentEnvelopeAddScreen(
 
                 EnvelopeAddStep.PRESENT -> PresentContent()
                 EnvelopeAddStep.PHONE -> PhoneContent(name = "김철수")
-                EnvelopeAddStep.MEMO -> MemoContent()
+                EnvelopeAddStep.MEMO -> MemoContentRoute(
+                    updateParentMemo = updateParentMemo,
+                )
             }
         }
         SusuFilledButton(
