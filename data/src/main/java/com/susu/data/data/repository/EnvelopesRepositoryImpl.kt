@@ -86,4 +86,8 @@ class EnvelopesRepositoryImpl @Inject constructor(
         size = size,
         sort = sort,
     ).getOrThrow().toModel()
+
+    override suspend fun getEnvelope(id: Long): Envelope = envelopesService.getEnvelope(id).getOrThrow().toModel()
+
+    override suspend fun deleteEnvelope(id: Long) = envelopesService.deleteEnvelope(id).getOrThrow()
 }
