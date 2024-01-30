@@ -28,22 +28,24 @@ import com.susu.core.designsystem.theme.Gray50
 import com.susu.core.designsystem.theme.Gray60
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.model.Vote
+import com.susu.core.ui.extension.susuClickable
 import com.susu.core.ui.extension.toMoneyFormat
 import com.susu.feature.community.R
 
 @Composable
-fun MostPopularVoteCard(vote: Vote) {
+fun MostPopularVoteCard(vote: Vote, onClick: () -> Unit = {}) {
     Column(
         modifier = Modifier
             .clip(RoundedCornerShape(8.dp))
             .background(Gray15)
             .width(296.dp)
+            .susuClickable(rippleEnabled = false, onClick = onClick)
             .padding(SusuTheme.spacing.spacing_m),
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Text(text = vote.category, color = Gray60, style = SusuTheme.typography.title_xxxs)
+            Text(text = vote.boardName, color = Gray60, style = SusuTheme.typography.title_xxxs)
             Icon(
                 modifier = Modifier.size(20.dp),
                 painter = painterResource(id = com.susu.core.ui.R.drawable.ic_arrow_right),
@@ -63,7 +65,7 @@ fun MostPopularVoteCard(vote: Vote) {
 
         SusuGhostButton(
             textModifier = Modifier.weight(1f),
-            text = stringResource(R.string.popular_vote_card_count, vote.count.toMoneyFormat()),
+            text = stringResource(R.string.popular_vote_card_count, vote.count.toInt().toMoneyFormat()),
             textAlign = TextAlign.Center,
             color = GhostButtonColor.Black,
             style = XSmallButtonStyle.height44,

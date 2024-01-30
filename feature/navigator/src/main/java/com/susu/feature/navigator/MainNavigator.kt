@@ -13,6 +13,7 @@ import com.susu.core.model.Ledger
 import com.susu.feature.community.navigation.CommunityRoute
 import com.susu.feature.community.navigation.navigateCommunity
 import com.susu.feature.community.navigation.navigateVoteAdd
+import com.susu.feature.community.navigation.navigateVoteDetail
 import com.susu.feature.loginsignup.navigation.LoginSignupRoute
 import com.susu.feature.mypage.navigation.navigateMyPage
 import com.susu.feature.mypage.navigation.navigateMyPageInfo
@@ -63,6 +64,7 @@ internal class MainNavigator(
                 SentRoute.sentEnvelopeEditRoute,
                 CommunityRoute.route,
                 CommunityRoute.voteAddRoute,
+                CommunityRoute.voteDetailRoute("{${CommunityRoute.VOTE_ID_ARGUMENT_NAME}}"),
             ),
             -> SusuTheme.colorScheme.background10
 
@@ -173,6 +175,10 @@ internal class MainNavigator(
 
     fun navigateVoteAdd() {
         navController.navigateVoteAdd()
+    }
+
+    fun navigateVoteDetail(voteId: Long) {
+        navController.navigateVoteDetail(voteId)
     }
 
     fun popBackStackIfNotHome() {

@@ -23,4 +23,14 @@ interface VoteRepository {
     suspend fun getPopularVoteList(): List<Vote>
 
     suspend fun getPostCategoryConfig(): List<Category>
+
+    suspend fun getVoteDetail(
+        id: Long,
+    ): Vote
+
+    suspend fun vote(
+        id: Long,
+        isCancel: Boolean,
+        optionId: Long,
+    )
 }

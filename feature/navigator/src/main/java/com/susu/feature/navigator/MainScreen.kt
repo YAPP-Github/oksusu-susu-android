@@ -131,10 +131,18 @@ internal fun MainScreen(
                 communityNavGraph(
                     padding = innerPadding,
                     navigateVoteAdd = navigator::navigateVoteAdd,
+                    navigateVoteDetail = navigator::navigateVoteDetail,
                     popBackStack = navigator::popBackStackIfNotHome,
                     popBackStackWithVote = { vote ->
                         navigator.navController.previousBackStackEntry?.savedStateHandle?.set(
                             CommunityRoute.VOTE_ARGUMENT_NAME,
+                            vote,
+                        )
+                        navigator.popBackStackIfNotHome()
+                    },
+                    popBackStackWithToUpdateVote = { vote ->
+                        navigator.navController.previousBackStackEntry?.savedStateHandle?.set(
+                            CommunityRoute.TO_UPDATE_VOTE_ARGUMENT_NAME,
                             vote,
                         )
                         navigator.popBackStackIfNotHome()

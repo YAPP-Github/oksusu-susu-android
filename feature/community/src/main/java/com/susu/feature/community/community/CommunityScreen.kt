@@ -23,6 +23,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -43,6 +47,7 @@ import com.susu.core.designsystem.theme.Gray10
 import com.susu.core.designsystem.theme.Gray20
 import com.susu.core.designsystem.theme.Gray30
 import com.susu.core.designsystem.theme.Gray40
+import com.susu.core.designsystem.theme.Gray50
 import com.susu.core.designsystem.theme.Orange60
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.model.Category
@@ -52,19 +57,36 @@ import com.susu.core.ui.extension.susuClickable
 import com.susu.feature.community.R
 import com.susu.feature.community.community.component.MostPopularVoteCard
 import com.susu.feature.community.community.component.VoteCard
+import kotlinx.coroutines.delay
+import java.time.LocalDateTime
 
 @Composable
 fun CommunityRoute(
     padding: PaddingValues,
     vote: String?,
+    toUpdateVote: String?,
     viewModel: CommunityViewModel = hiltViewModel(),
     navigateVoteAdd: () -> Unit,
+    navigateVoteDetail: (Long) -> Unit,
     handleException: (Throwable, () -> Unit) -> Unit,
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
             is CommunitySideEffect.HandleException -> handleException(sideEffect.throwable, sideEffect.retry)
+            CommunitySideEffect.NavigateVoteAdd -> navigateVoteAdd()
+            is CommunitySideEffect.NavigateVoteDetail -> navigateVoteDetail(sideEffect.voteId)
+        }
+    }
+
+    var currentTime by remember {
+        mutableStateOf(LocalDateTime.now())
+    }
+
+    LaunchedEffect(key1 = Unit) {
+        while (true) {
+            delay(60 * 1000L)
+            currentTime = currentTime.plusMinutes(1)
         }
     }
 
@@ -75,6 +97,7 @@ fun CommunityRoute(
         viewModel.getCategoryConfig()
         viewModel.getPopularVoteList()
         viewModel.addVoteIfNeed(vote)
+        viewModel.updateVoteIfNeed(toUpdateVote)
     }
 
     voteListState.OnBottomReached(minItemsCount = 4) {
@@ -84,11 +107,13 @@ fun CommunityRoute(
     CommunityScreen(
         padding = padding,
         uiState = uiState,
+        currentTime = currentTime,
         voteListState = voteListState,
-        navigateVoteAdd = navigateVoteAdd,
+        onClickFloatingButton = viewModel::navigateVoteAdd,
         onClickCategory = viewModel::selectCategory,
         onClickShowMine = viewModel::toggleShowMyVote,
         onClickShowVotePopular = viewModel::toggleShowVotePopular,
+        onClickVote = viewModel::navigateVoteDetail,
     )
 }
 
@@ -97,9 +122,11 @@ fun CommunityRoute(
 fun CommunityScreen(
     padding: PaddingValues,
     uiState: CommunityState = CommunityState(),
+    currentTime: LocalDateTime = LocalDateTime.now(),
     voteListState: LazyListState = rememberLazyListState(),
     onClickSearchIcon: () -> Unit = {},
-    navigateVoteAdd: () -> Unit = {},
+    onClickFloatingButton: () -> Unit = {},
+    onClickVote: (Long) -> Unit = {},
     onClickCategory: (Category?) -> Unit = {},
     onClickShowVotePopular: () -> Unit = {},
     onClickShowMine: () -> Unit = {},
@@ -127,7 +154,7 @@ fun CommunityScreen(
             )
 
             LazyColumn(
-                modifier = Modifier.weight(1f),
+                // modifier = Modifier.weight(1f),
                 state = voteListState,
                 contentPadding = PaddingValues(vertical = SusuTheme.spacing.spacing_m),
             ) {
@@ -149,7 +176,7 @@ fun CommunityScreen(
                                 items = uiState.popularVoteList,
                                 key = { it.id },
                             ) { vote ->
-                                MostPopularVoteCard(vote)
+                                MostPopularVoteCard(vote, onClick = { onClickVote(vote.id) })
                             }
                         }
                     }
@@ -260,7 +287,24 @@ fun CommunityScreen(
                     items = uiState.voteList,
                     key = { it.id },
                 ) { vote ->
-                    VoteCard(vote)
+                    VoteCard(
+                        vote = vote,
+                        currentTime = currentTime,
+                        onClick = { onClickVote(vote.id) },
+                    )
+                }
+            }
+
+            if (uiState.voteList.isEmpty()) {
+                Box(
+                    modifier = Modifier.fillMaxWidth().weight(1f),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Text(
+                        text = stringResource(R.string.community_screen_empty_vote),
+                        style = SusuTheme.typography.text_s,
+                        color = Gray50,
+                    )
                 }
             }
         }
@@ -270,7 +314,7 @@ fun CommunityScreen(
                 .align(Alignment.BottomEnd)
                 .padding(SusuTheme.spacing.spacing_l),
             imageResId = R.drawable.ic_vote_add,
-            onClick = navigateVoteAdd,
+            onClick = onClickFloatingButton,
         )
     }
 }
