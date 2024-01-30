@@ -2,7 +2,6 @@ package com.susu.domain.usecase.voterecentsearch
 
 import com.susu.core.common.runCatchingIgnoreCancelled
 import com.susu.domain.RECENT_SEARCH_MAX_COUNT
-import com.susu.domain.repository.LedgerRecentSearchRepository
 import com.susu.domain.repository.VoteRecentSearchRepository
 import javax.inject.Inject
 

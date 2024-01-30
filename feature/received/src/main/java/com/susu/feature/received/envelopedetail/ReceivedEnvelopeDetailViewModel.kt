@@ -1,4 +1,4 @@
-package com.susu.feature.received.ReceivedEnvelopedetail
+package com.susu.feature.received.envelopedetail
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
@@ -7,8 +7,6 @@ import com.susu.core.ui.base.BaseViewModel
 import com.susu.core.ui.extension.decodeFromUri
 import com.susu.core.ui.extension.encodeToUri
 import com.susu.domain.usecase.envelope.DeleteEnvelopeUseCase
-import com.susu.feature.received.envelopedetail.ReceivedEnvelopeDetailSideEffect
-import com.susu.feature.received.envelopedetail.ReceivedEnvelopeDetailState
 import com.susu.feature.received.navigation.ReceivedRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -17,7 +15,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
-class ReceivedReceivedEnvelopeDetailViewModel @Inject constructor(
+class ReceivedEnvelopeDetailViewModel @Inject constructor(
     private val deleteEnvelopeUseCase: DeleteEnvelopeUseCase,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<ReceivedEnvelopeDetailState, ReceivedEnvelopeDetailSideEffect>(

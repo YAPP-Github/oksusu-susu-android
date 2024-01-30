@@ -5,7 +5,6 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy.Companion.REPLACE
 import androidx.room.Query
 import com.susu.data.local.model.EntityTable
-import com.susu.data.local.model.LedgerRecentSearchEntity
 import com.susu.data.local.model.VoteRecentSearchEntity
 
 @Dao

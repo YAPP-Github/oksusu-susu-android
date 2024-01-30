@@ -14,7 +14,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -28,12 +27,11 @@ import com.susu.core.ui.DialogToken
 import com.susu.core.ui.SnackbarToken
 import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.feature.received.R
-import com.susu.feature.received.ReceivedEnvelopedetail.ReceivedReceivedEnvelopeDetailViewModel
 import com.susu.feature.received.envelopedetail.component.DetailItem
 
 @Composable
 fun ReceivedEnvelopeDetailRoute(
-    viewModel: ReceivedReceivedEnvelopeDetailViewModel = hiltViewModel(),
+    viewModel: ReceivedEnvelopeDetailViewModel = hiltViewModel(),
     popBackStackWithDeleteReceivedEnvelopeId: (Long) -> Unit,
     navigateReceivedEnvelopeEdit: () -> Unit,
     handleException: (Throwable, () -> Unit) -> Unit,
@@ -46,7 +44,9 @@ fun ReceivedEnvelopeDetailRoute(
         when (sideEffect) {
             is ReceivedEnvelopeDetailSideEffect.HandleException -> handleException(sideEffect.throwable, sideEffect.retry)
             is ReceivedEnvelopeDetailSideEffect.NavigateReceivedEnvelopeEdit -> TODO()
-            is ReceivedEnvelopeDetailSideEffect.PopBackStackWithDeleteReceivedEnvelopeId -> popBackStackWithDeleteReceivedEnvelopeId(sideEffect.envelopeId)
+            is ReceivedEnvelopeDetailSideEffect.PopBackStackWithDeleteReceivedEnvelopeId -> popBackStackWithDeleteReceivedEnvelopeId(
+                sideEffect.envelopeId,
+            )
             is ReceivedEnvelopeDetailSideEffect.PopBackStackWithReceivedEnvelope -> TODO()
             is ReceivedEnvelopeDetailSideEffect.ShowDeleteDialog -> onShowDialog(
                 DialogToken(
@@ -57,7 +57,9 @@ fun ReceivedEnvelopeDetailRoute(
                     onConfirmRequest = sideEffect.onConfirmRequest,
                 ),
             )
-            ReceivedEnvelopeDetailSideEffect.ShowDeleteSuccessSnackbar -> onShowSnackbar(SnackbarToken(message = context.getString(R.string.toast_delete_envelope_success)))
+            ReceivedEnvelopeDetailSideEffect.ShowDeleteSuccessSnackbar -> onShowSnackbar(
+                SnackbarToken(message = context.getString(R.string.toast_delete_envelope_success)),
+            )
             is ReceivedEnvelopeDetailSideEffect.ShowSnackbar -> TODO()
         }
     }
@@ -75,6 +77,7 @@ fun ReceivedEnvelopeDetailRoute(
 
 @Composable
 fun ReceivedEnvelopeDetailScreen(
+    @Suppress("detekt:UnusedParameter")
     uiState: ReceivedEnvelopeDetailState = ReceivedEnvelopeDetailState(),
     onClickBackIcon: () -> Unit = {},
     onClickEdit: () -> Unit = {},
