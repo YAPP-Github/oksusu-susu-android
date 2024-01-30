@@ -9,6 +9,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.susu.core.designsystem.theme.SusuTheme
+import com.susu.core.model.Envelope
 import com.susu.core.model.Ledger
 import com.susu.feature.community.navigation.CommunityRoute
 import com.susu.feature.community.navigation.navigateCommunity
@@ -57,7 +58,7 @@ internal class MainNavigator(
             in listOf(
                 ReceivedRoute.ledgerSearchRoute,
                 ReceivedRoute.ledgerFilterRoute("{${ReceivedRoute.FILTER_ARGUMENT_NAME}}"),
-                ReceivedRoute.envelopeDetailRoute,
+                ReceivedRoute.envelopeDetailRoute("{${ReceivedRoute.ENVELOPE_ARGUMENT_NAME}}"),
                 ReceivedRoute.envelopeEditRoute,
                 SentRoute.sentEnvelopeRoute,
                 SentRoute.sentEnvelopeDetailRoute,
@@ -165,8 +166,8 @@ internal class MainNavigator(
         navController.navigateMyPagePrivacyPolicy()
     }
 
-    fun navigateReceivedEnvelopeDetail() {
-        navController.navigateReceivedEnvelopeDetail()
+    fun navigateReceivedEnvelopeDetail(envelope: Envelope) {
+        navController.navigateReceivedEnvelopeDetail(envelope)
     }
 
     fun navigateReceivedEnvelopeEdit() {

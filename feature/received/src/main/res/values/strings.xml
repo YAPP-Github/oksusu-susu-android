@@ -61,4 +61,7 @@
     <string name="envelope_date_content_title_highlight">%s님에게</string>
     <string name="date_content_show_endat">종료일 추가</string>
     <string name="date_content_set_only_startat">시작일만 지정</string>
+    <string name="dialog_delete_envelope_title">봉투를 삭제할까요?</string>
+    <string name="dialog_delete_envelope_text">삭제한 봉투는 다시 복구할 수 없어요</string>
+    <string name="toast_delete_envelope_success">봉투가 삭제됐어요</string>
 </resources>

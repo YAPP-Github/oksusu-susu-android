@@ -7,6 +7,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.susu.core.model.Envelope
 import com.susu.core.model.Ledger
 import com.susu.core.ui.DialogToken
 import com.susu.core.ui.SnackbarToken
@@ -51,8 +52,8 @@ fun NavController.navigateReceivedEnvelopeAdd(categoryName: String, ledgerId: Lo
     navigate(ReceivedRoute.envelopeAddRoute(categoryName, ledgerId.toString()))
 }
 
-fun NavController.navigateReceivedEnvelopeDetail() {
-    navigate(ReceivedRoute.envelopeDetailRoute)
+fun NavController.navigateReceivedEnvelopeDetail(envelope: Envelope) {
+    navigate(ReceivedRoute.envelopeDetailRoute(Json.encodeToUri(envelope)))
 }
 
 fun NavController.navigateReceivedEnvelopeEdit() {
@@ -72,9 +73,10 @@ fun NavGraphBuilder.receivedNavGraph(
     navigateLedgerFilter: (FilterArgument) -> Unit,
     navigateLedgerAdd: () -> Unit,
     navigateEnvelopAdd: (String, Long) -> Unit,
-    navigateEnvelopeDetail: () -> Unit,
+    navigateEnvelopeDetail: (Envelope) -> Unit,
     navigateEnvelopeEdit: () -> Unit,
     popBackStackWithEnvelope: (String) -> Unit,
+    popBackStackWithDeleteReceivedEnvelopeId: (Long) -> Unit,
     onShowSnackbar: (SnackbarToken) -> Unit,
     onShowDialog: (DialogToken) -> Unit,
     handleException: (Throwable, () -> Unit) -> Unit,
@@ -105,8 +107,10 @@ fun NavGraphBuilder.receivedNavGraph(
         ),
     ) { navBackStackEntry ->
         val envelope = navBackStackEntry.savedStateHandle.get<String>(ReceivedRoute.ENVELOPE_ARGUMENT_NAME)
+        val toDeleteEnvelopeId = navBackStackEntry.savedStateHandle.get<Long>(ReceivedRoute.ENVELOPE_ID_ARGUMENT_NAME)
         LedgerDetailRoute(
             envelope = envelope,
+            toDeleteEnvelopeId = toDeleteEnvelopeId,
             navigateLedgerEdit = navigateLedgerEdit,
             navigateEnvelopAdd = navigateEnvelopAdd,
             navigateEnvelopeDetail = navigateEnvelopeDetail,
@@ -172,11 +176,14 @@ fun NavGraphBuilder.receivedNavGraph(
     }
 
     composable(
-        route = ReceivedRoute.envelopeDetailRoute,
+        route = ReceivedRoute.envelopeDetailRoute("{${ReceivedRoute.ENVELOPE_ARGUMENT_NAME}}"),
     ) {
         ReceivedEnvelopeDetailRoute(
-            popBackStack = popBackStack,
+            popBackStackWithDeleteReceivedEnvelopeId = popBackStackWithDeleteReceivedEnvelopeId,
             navigateReceivedEnvelopeEdit = navigateEnvelopeEdit,
+            onShowSnackbar = onShowSnackbar,
+            onShowDialog = onShowDialog,
+            handleException = handleException,
         )
     }
 
@@ -193,6 +200,7 @@ object ReceivedRoute {
     const val LEDGER_ID_ARGUMENT_NAME = "ledger-id"
     const val CATEGORY_ARGUMENT_NAME = "category-name"
     const val ENVELOPE_ARGUMENT_NAME = "envelope"
+    const val ENVELOPE_ID_ARGUMENT_NAME = "envelope-id"
 
     const val FILTER_ARGUMENT_NAME = "filter"
     fun ledgerDetailRoute(ledger: String) = "ledger-detail/$ledger"
@@ -200,9 +208,9 @@ object ReceivedRoute {
     fun ledgerFilterRoute(filter: String) = "ledger-filter/$filter"
     const val ledgerSearchRoute = "ledger-search"
 
-    const val ledgerAddRoute = "ledger-add" // TODO 파라미터 넘기는 방식으로 수정해야함.
+    const val ledgerAddRoute = "ledger-add"
 
     fun envelopeAddRoute(categoryName: String, ledgerId: String) = "envelope-add/$categoryName/$ledgerId"
-    const val envelopeDetailRoute = "envelope-detail" // TODO 파라미터 넘기는 방식으로 수정해야함.
+    fun envelopeDetailRoute(envelope: String) = "envelope-detail/$envelope"
     const val envelopeEditRoute = "envelope-edit" // TODO 파라미터 넘기는 방식으로 수정해야함.
 }

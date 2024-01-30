@@ -52,6 +52,11 @@ internal fun SearchEnvelopeResponse.toModel() = data.map {
             uid = it.envelope.uid,
             type = it.envelope.type,
             friend = it.friend.toModel(),
+            relationship = Relationship(
+                id = it.relationship.id,
+                relation = it.relationship.relation,
+                customRelation = it.friendRelationship.customRelation,
+            ),
             amount = it.envelope.amount,
             gift = it.envelope.gift,
             memo = it.envelope.memo,
