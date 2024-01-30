@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.NavHost
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.susu.core.designsystem.component.dialog.SusuCheckedDialog
 import com.susu.core.designsystem.component.dialog.SusuDialog
 import com.susu.core.designsystem.component.navigation.SusuNavigationBar
 import com.susu.core.designsystem.component.navigation.SusuNavigationItem
@@ -187,22 +188,46 @@ internal fun MainScreen(
 
             if (uiState.dialogVisible) {
                 with(uiState.dialogToken) {
-                    SusuDialog(
-                        title = title,
-                        text = text,
-                        confirmText = confirmText,
-                        dismissText = dismissText,
-                        isDimmed = isDimmed,
-                        textAlign = textAlign,
-                        onConfirmRequest = {
-                            onConfirmRequest()
-                            viewModel.dismissDialog()
-                        },
-                        onDismissRequest = {
-                            onDismissRequest()
-                            viewModel.dismissDialog()
-                        },
-                    )
+                    if (checkboxText == null) {
+                        SusuDialog(
+                            title = title,
+                            text = text,
+                            confirmText = confirmText,
+                            dismissText = dismissText,
+                            isDimmed = isDimmed,
+                            textAlign = textAlign,
+                            onConfirmRequest = {
+                                onConfirmRequest()
+                                viewModel.dismissDialog()
+                            },
+                            onDismissRequest = {
+                                onDismissRequest()
+                                viewModel.dismissDialog()
+                            },
+                        )
+                    } else {
+                        SusuCheckedDialog(
+                            title = title,
+                            text = text,
+                            confirmText = confirmText,
+                            dismissText = dismissText,
+                            checkboxText = checkboxText!!,
+                            isDimmed = isDimmed,
+                            defaultChecked = defaultChecked,
+                            textAlign = textAlign,
+                            onConfirmRequest = { checked ->
+                                if (checked) {
+                                    onCheckedAction()
+                                }
+                                onConfirmRequest()
+                                viewModel.dismissDialog()
+                            },
+                            onDismissRequest = {
+                                onDismissRequest()
+                                viewModel.dismissDialog()
+                            },
+                        )
+                    }
                 }
             }
         },
