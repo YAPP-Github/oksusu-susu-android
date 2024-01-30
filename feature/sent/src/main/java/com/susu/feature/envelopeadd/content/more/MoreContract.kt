@@ -1,6 +1,5 @@
 package com.susu.feature.envelopeadd.content.more
 
-import androidx.annotation.StringRes
 import com.susu.core.ui.base.SideEffect
 import com.susu.core.ui.base.UiState
 import com.susu.feature.envelopeadd.EnvelopeAddStep
@@ -23,4 +22,3 @@ val moreStep = persistentMapOf(
 sealed interface MoreSideEffect : SideEffect {
     data class UpdateParentMoreStep(val moreStep: List<EnvelopeAddStep>) : MoreSideEffect
 }
-

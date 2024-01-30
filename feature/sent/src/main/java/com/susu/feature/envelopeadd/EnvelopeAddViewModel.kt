@@ -42,8 +42,8 @@ class EnvelopeAddViewModel @Inject constructor(
                     memo = memo,
                     handedOverAt = date!!.toKotlinLocalDateTime(),
                     hasVisited = hasVisited,
-                    category = category!!
-                )
+                    category = category!!,
+                ),
             ).onSuccess {
                 postSideEffect(EnvelopeAddEffect.PopBackStack)
             }.onFailure {

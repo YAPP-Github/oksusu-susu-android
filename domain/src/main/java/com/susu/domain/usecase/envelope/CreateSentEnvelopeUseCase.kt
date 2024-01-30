@@ -29,7 +29,7 @@ class CreateSentEnvelopeUseCase @Inject constructor(
                 hasVisited = hasVisited,
                 handedOverAt = handedOverAt,
                 categoryId = category.id.toLong(),
-                customCategory = category.customCategory
+                customCategory = category.customCategory,
             )
         }
     }
