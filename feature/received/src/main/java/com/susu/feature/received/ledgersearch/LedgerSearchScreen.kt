@@ -1,4 +1,4 @@
-package com.susu.feature.received.search
+package com.susu.feature.received.ledgersearch
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement

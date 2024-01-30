@@ -1,4 +1,4 @@
-package com.susu.feature.received.search
+package com.susu.feature.received.ledgersearch
 
 import androidx.lifecycle.viewModelScope
 import com.susu.core.model.Ledger

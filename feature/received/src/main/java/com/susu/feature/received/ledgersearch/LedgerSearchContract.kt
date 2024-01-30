@@ -1,4 +1,4 @@
-package com.susu.feature.received.search
+package com.susu.feature.received.ledgersearch
 
 import com.susu.core.model.Ledger
 import com.susu.core.ui.base.SideEffect
