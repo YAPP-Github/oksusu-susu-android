@@ -34,9 +34,7 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.susu.core.designsystem.component.badge.BadgeColor
 import com.susu.core.designsystem.component.badge.BadgeStyle
 import com.susu.core.designsystem.component.badge.SusuBadge
@@ -45,13 +43,11 @@ import com.susu.core.designsystem.theme.Gray60
 import com.susu.core.designsystem.theme.Gray90
 import com.susu.core.designsystem.theme.Orange20
 import com.susu.core.designsystem.theme.SusuTheme
-import com.susu.core.model.EnvelopeSearch
 import com.susu.core.model.Friend
 import com.susu.core.ui.extension.susuClickable
 import com.susu.core.ui.extension.toMoneyFormat
 import com.susu.feature.sent.R
 import com.susu.feature.sent.SentState
-import com.susu.feature.sent.SentViewModel
 
 @Composable
 fun SentCard(
@@ -94,7 +90,7 @@ fun SentCard(
                 Spacer(modifier = modifier.size(SusuTheme.spacing.spacing_s))
                 SusuBadge(
                     color = BadgeColor.Gray20,
-                    text = "전체 ${totalAmounts.toMoneyFormat()}",
+                    text = stringResource(R.string.sent_envelope_card_monee_total) + totalAmounts.toMoneyFormat(),
                     padding = BadgeStyle.smallBadge,
                 )
                 Spacer(modifier = modifier.weight(1f))
@@ -147,12 +143,12 @@ fun SentCard(
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 Text(
-                    text = "${sentAmounts.toMoneyFormat()}원",
+                    text = sentAmounts.toMoneyFormat() + stringResource(R.string.sent_envelope_card_money_won),
                     style = SusuTheme.typography.title_xxxs,
                     color = Gray90,
                 )
                 Text(
-                    text = "${receivedAmounts.toMoneyFormat()}원",
+                    text = receivedAmounts.toMoneyFormat() + stringResource(R.string.sent_envelope_card_money_won),
                     style = SusuTheme.typography.title_xxxs,
                     color = Gray60,
                 )
