@@ -1,7 +1,6 @@
 package com.susu.feature.loginsignup.signup.content
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -10,16 +9,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -28,10 +22,7 @@ import com.susu.core.designsystem.component.badge.BadgeColor
 import com.susu.core.designsystem.component.badge.BadgeStyle
 import com.susu.core.designsystem.component.badge.SusuBadge
 import com.susu.core.designsystem.component.util.CheckCircle
-import com.susu.core.designsystem.theme.Gray100
-import com.susu.core.designsystem.theme.Gray15
 import com.susu.core.designsystem.theme.Gray30
-import com.susu.core.designsystem.theme.Gray40
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.model.Term
 import com.susu.core.ui.R
@@ -121,8 +112,6 @@ fun TermListItem(
         }
     }
 }
-
-
 
 @Preview(showSystemUi = true)
 @Composable
