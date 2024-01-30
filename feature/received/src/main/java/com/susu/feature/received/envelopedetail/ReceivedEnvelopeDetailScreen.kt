@@ -13,6 +13,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -22,26 +24,40 @@ import com.susu.core.designsystem.component.appbar.icon.DeleteText
 import com.susu.core.designsystem.component.appbar.icon.EditText
 import com.susu.core.designsystem.theme.Gray100
 import com.susu.core.designsystem.theme.SusuTheme
+import com.susu.core.ui.DialogToken
+import com.susu.core.ui.SnackbarToken
 import com.susu.core.ui.extension.collectWithLifecycle
+import com.susu.feature.received.R
 import com.susu.feature.received.ReceivedEnvelopedetail.ReceivedReceivedEnvelopeDetailViewModel
 import com.susu.feature.received.envelopedetail.component.DetailItem
 
 @Composable
 fun ReceivedEnvelopeDetailRoute(
     viewModel: ReceivedReceivedEnvelopeDetailViewModel = hiltViewModel(),
-    popBackStack: () -> Unit,
+    popBackStackWithDeleteReceivedEnvelopeId: (Long) -> Unit,
     navigateReceivedEnvelopeEdit: () -> Unit,
     handleException: (Throwable, () -> Unit) -> Unit,
+    onShowSnackbar: (SnackbarToken) -> Unit,
+    onShowDialog: (DialogToken) -> Unit,
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
+    val context = LocalContext.current
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
             is ReceivedEnvelopeDetailSideEffect.HandleException -> handleException(sideEffect.throwable, sideEffect.retry)
             is ReceivedEnvelopeDetailSideEffect.NavigateReceivedEnvelopeEdit -> TODO()
-            is ReceivedEnvelopeDetailSideEffect.PopBackStackWithDeleteReceivedEnvelopeId -> TODO()
+            is ReceivedEnvelopeDetailSideEffect.PopBackStackWithDeleteReceivedEnvelopeId -> popBackStackWithDeleteReceivedEnvelopeId(sideEffect.envelopeId)
             is ReceivedEnvelopeDetailSideEffect.PopBackStackWithReceivedEnvelope -> TODO()
-            is ReceivedEnvelopeDetailSideEffect.ShowDeleteDialog -> TODO()
-            ReceivedEnvelopeDetailSideEffect.ShowDeleteSuccessSnackbar -> TODO()
+            is ReceivedEnvelopeDetailSideEffect.ShowDeleteDialog -> onShowDialog(
+                DialogToken(
+                    title = context.getString(R.string.dialog_delete_envelope_title),
+                    text = context.getString(R.string.dialog_delete_envelope_text),
+                    confirmText = context.getString(com.susu.core.ui.R.string.word_delete),
+                    dismissText = context.getString(com.susu.core.ui.R.string.word_cancel),
+                    onConfirmRequest = sideEffect.onConfirmRequest,
+                ),
+            )
+            ReceivedEnvelopeDetailSideEffect.ShowDeleteSuccessSnackbar -> onShowSnackbar(SnackbarToken(message = context.getString(R.string.toast_delete_envelope_success)))
             is ReceivedEnvelopeDetailSideEffect.ShowSnackbar -> TODO()
         }
     }
@@ -53,6 +69,7 @@ fun ReceivedEnvelopeDetailRoute(
     ReceivedEnvelopeDetailScreen(
         uiState = uiState,
         onClickEdit = navigateReceivedEnvelopeEdit,
+        onClickDelete = viewModel::showDeleteDialog,
     )
 }
 

@@ -56,6 +56,7 @@ import com.susu.feature.received.ledgerdetail.component.LedgerDetailOverviewColu
 fun LedgerDetailRoute(
     viewModel: LedgerDetailViewModel = hiltViewModel(),
     envelope: String?,
+    toDeleteEnvelopeId: Long?,
     navigateLedgerEdit: (Ledger) -> Unit,
     navigateEnvelopAdd: (String, Long) -> Unit,
     navigateEnvelopeDetail: (Envelope) -> Unit,
@@ -104,6 +105,7 @@ fun LedgerDetailRoute(
         viewModel.getLedger()
         viewModel.initReceivedEnvelopeList()
         viewModel.addEnvelopeIfNeed(envelope)
+        viewModel.deleteEnvelopeIfNeed(toDeleteEnvelopeId)
     }
 
     listState.OnBottomReached(minItemsCount = 4) {

@@ -116,6 +116,13 @@ internal fun MainScreen(
                         )
                         navigator.popBackStackIfNotHome()
                     },
+                    popBackStackWithDeleteReceivedEnvelopeId = { id ->
+                        navigator.navController.previousBackStackEntry?.savedStateHandle?.set(
+                            ReceivedRoute.ENVELOPE_ID_ARGUMENT_NAME,
+                            id,
+                        )
+                        navigator.popBackStackIfNotHome()
+                    },
                     navigateLedgerSearch = navigator::navigateLedgerSearch,
                     navigateLedgerDetail = navigator::navigateLedgerDetail,
                     navigateLedgerEdit = navigator::navigateLedgerEdit,
