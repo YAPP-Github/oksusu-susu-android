@@ -30,13 +30,13 @@ import com.susu.core.ui.extension.susuDefaultAnimatedContentTransitionSpec
 import com.susu.feature.envelopeadd.content.MemoContent
 import com.susu.feature.envelopeadd.content.PhoneContent
 import com.susu.feature.envelopeadd.content.PresentContent
-import com.susu.feature.envelopeadd.content.VisitedContent
 import com.susu.feature.envelopeadd.content.category.CategoryContentRoute
 import com.susu.feature.envelopeadd.content.date.DateContentRoute
 import com.susu.feature.envelopeadd.content.money.MoneyContentRoute
 import com.susu.feature.envelopeadd.content.more.MoreContentRoute
 import com.susu.feature.envelopeadd.content.name.NameContentRoute
 import com.susu.feature.envelopeadd.content.relationship.RelationshipContentRoute
+import com.susu.feature.envelopeadd.content.visited.VisitedContentRoute
 import com.susu.feature.sent.R
 import java.time.LocalDateTime
 
@@ -51,6 +51,10 @@ fun SentEnvelopeAddRoute(
         mutableStateOf("")
     }
 
+    var categoryName by remember {
+        mutableStateOf("")
+    }
+
     BackHandler {
         viewModel.goPrevStep()
     }
@@ -58,6 +62,7 @@ fun SentEnvelopeAddRoute(
     SentEnvelopeAddScreen(
         uiState = uiState,
         friendName = friendName,
+        categoryName = categoryName,
         onClickBack = viewModel::goPrevStep,
         onClickNext = viewModel::goNextStep,
         updateParentMoney = viewModel::updateMoney,
@@ -67,9 +72,13 @@ fun SentEnvelopeAddRoute(
         },
         updateParentFriendId = viewModel::updateFriendId,
         updateParentSelectedRelation = viewModel::updateSelectedRelationShip,
-        updateParentCategory = viewModel::updateSelectedCategory,
+        updateParentCategory = { category ->
+            viewModel.updateSelectedCategory(category)
+            categoryName = category?.name ?: ""
+        },
         updateParentDate = viewModel::updateDate,
         updateParentMoreStep = viewModel::updateMoreStep,
+        updateParentVisited = viewModel::updateHasVisited,
     )
 }
 
@@ -86,9 +95,9 @@ fun SentEnvelopeAddScreen(
     updateParentCategory: (Category?) -> Unit = {},
     updateParentDate: (LocalDateTime?) -> Unit = {},
     updateParentMoreStep: (List<EnvelopeAddStep>) -> Unit = {},
+    categoryName: String = "",
+    updateParentVisited: (Boolean?) -> Unit = {},
 ) {
-    val visitedList = listOf("예", "아니요")
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -137,9 +146,9 @@ fun SentEnvelopeAddScreen(
                     updateParentMoreStep = updateParentMoreStep,
                 )
 
-                EnvelopeAddStep.VISITED -> VisitedContent(
-                    event = "결혼식",
-                    visitedList = visitedList,
+                EnvelopeAddStep.VISITED -> VisitedContentRoute(
+                    categoryName = categoryName,
+                    updateParentVisited = updateParentVisited,
                 )
 
                 EnvelopeAddStep.PRESENT -> PresentContent()
