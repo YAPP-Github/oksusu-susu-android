@@ -27,19 +27,16 @@ class VoteSearchViewModel @Inject constructor(
     fun getVoteRecentSearchList() = viewModelScope.launch {
         getVoteRecentSearchListUseCase()
             .onSuccess(::updateRecentSearchList)
-            .onFailure { }
     }
 
     fun deleteVoteRecentSearch(search: String) = viewModelScope.launch {
         deleteVoteRecentSearchUseCase(search)
             .onSuccess(::updateRecentSearchList)
-            .onFailure { }
     }
 
     fun upsertVoteRecentSearch(search: String) = viewModelScope.launch {
         upsertVoteRecentSearchUseCase(search)
             .onSuccess(::updateRecentSearchList)
-            .onFailure { }
     }
 
     fun clearFocus() = postSideEffect(VoteSearchSideEffect.FocusClear)

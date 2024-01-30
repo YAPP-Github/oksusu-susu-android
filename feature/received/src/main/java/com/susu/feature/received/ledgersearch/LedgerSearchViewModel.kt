@@ -27,19 +27,16 @@ class LedgerSearchViewModel @Inject constructor(
     fun getLedgerRecentSearchList() = viewModelScope.launch {
         getLedgerRecentSearchListUseCase()
             .onSuccess(::updateRecentSearchList)
-            .onFailure { }
     }
 
     fun deleteLedgerRecentSearch(search: String) = viewModelScope.launch {
         deleteLedgerRecentSearchUseCase(search)
             .onSuccess(::updateRecentSearchList)
-            .onFailure { }
     }
 
     fun upsertLedgerRecentSearch(search: String) = viewModelScope.launch {
         upsertLedgerRecentSearchUseCase(search)
             .onSuccess(::updateRecentSearchList)
-            .onFailure { }
     }
 
     fun clearFocus() = postSideEffect(LedgerSearchSideEffect.FocusClear)
