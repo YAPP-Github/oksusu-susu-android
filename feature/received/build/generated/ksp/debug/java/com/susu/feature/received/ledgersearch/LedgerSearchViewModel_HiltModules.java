@@ -31,7 +31,7 @@ public final class LedgerSearchViewModel_HiltModules {
 
     @Binds
     @IntoMap
-    @StringKey("com.susu.feature.received.search.LedgerSearchViewModel")
+    @StringKey("com.susu.feature.received.ledgersearch.LedgerSearchViewModel")
     @HiltViewModelMap
     public abstract ViewModel binds(LedgerSearchViewModel vm);
   }
@@ -46,7 +46,7 @@ public final class LedgerSearchViewModel_HiltModules {
     @IntoSet
     @HiltViewModelMap.KeySet
     public static String provide() {
-      return "com.susu.feature.received.search.LedgerSearchViewModel";
+      return "com.susu.feature.received.ledgersearch.LedgerSearchViewModel";
     }
   }
 }

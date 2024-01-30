@@ -14,7 +14,11 @@ object DaoModule {
 
     @Singleton
     @Provides
-    fun provideRecentSearchDao(db: RoomDataBase) = db.ledgerRecentSearchDao()
+    fun provideLedgerRecentSearchDao(db: RoomDataBase) = db.ledgerRecentSearchDao()
+
+    @Singleton
+    @Provides
+    fun provideVoteRecentSearchDao(db: RoomDataBase) = db.voteRecentSearchDao()
 
     @Singleton
     @Provides
