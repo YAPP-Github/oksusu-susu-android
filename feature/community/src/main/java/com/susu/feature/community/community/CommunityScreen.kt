@@ -67,6 +67,7 @@ fun CommunityRoute(
     toUpdateVote: String?,
     viewModel: CommunityViewModel = hiltViewModel(),
     navigateVoteAdd: () -> Unit,
+    navigateVoteSearch: () -> Unit,
     navigateVoteDetail: (Long) -> Unit,
     handleException: (Throwable, () -> Unit) -> Unit,
 ) {
@@ -76,6 +77,7 @@ fun CommunityRoute(
             is CommunitySideEffect.HandleException -> handleException(sideEffect.throwable, sideEffect.retry)
             CommunitySideEffect.NavigateVoteAdd -> navigateVoteAdd()
             is CommunitySideEffect.NavigateVoteDetail -> navigateVoteDetail(sideEffect.voteId)
+            CommunitySideEffect.NavigateVoteSearch -> navigateVoteSearch()
         }
     }
 
@@ -114,6 +116,7 @@ fun CommunityRoute(
         onClickShowMine = viewModel::toggleShowMyVote,
         onClickShowVotePopular = viewModel::toggleShowVotePopular,
         onClickVote = viewModel::navigateVoteDetail,
+        onClickSearchIcon = viewModel::navigateVoteSearch,
     )
 }
 
@@ -154,7 +157,6 @@ fun CommunityScreen(
             )
 
             LazyColumn(
-                // modifier = Modifier.weight(1f),
                 state = voteListState,
                 contentPadding = PaddingValues(vertical = SusuTheme.spacing.spacing_m),
             ) {

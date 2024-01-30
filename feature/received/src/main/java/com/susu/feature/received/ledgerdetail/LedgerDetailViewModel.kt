@@ -56,6 +56,18 @@ class LedgerDetailViewModel @Inject constructor(
         )
     }
 
+    fun deleteEnvelopeIfNeed(toDeleteEnvelopeId: Long?) {
+        if (toDeleteEnvelopeId == null) return
+
+        intent {
+            copy(
+                envelopeList = envelopeList
+                    .filter { it.envelope.id != toDeleteEnvelopeId }
+                    .toPersistentList(),
+            )
+        }
+    }
+
     fun getLedger() = viewModelScope.launch {
         ledger = Json.decodeFromUri<Ledger>(argument)
         getLedgerUseCase(id = ledger.id)
@@ -143,5 +155,5 @@ class LedgerDetailViewModel @Inject constructor(
     fun navigateEnvelopeAdd() = postSideEffect(
         LedgerDetailSideEffect.NavigateEnvelopeAdd(ledger.category.customCategory ?: ledger.category.name, ledger.id),
     )
-    fun navigateEnvelopeDetail() = postSideEffect(LedgerDetailSideEffect.NavigateEnvelopeDetail)
+    fun navigateEnvelopeDetail(envelope: Envelope) = postSideEffect(LedgerDetailSideEffect.NavigateEnvelopeDetail(envelope))
 }

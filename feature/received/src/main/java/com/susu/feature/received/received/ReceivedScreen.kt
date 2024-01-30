@@ -37,7 +37,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.susu.core.designsystem.component.appbar.SusuDefaultAppBar
 import com.susu.core.designsystem.component.appbar.icon.LogoIcon
-import com.susu.core.designsystem.component.appbar.icon.NotificationIcon
 import com.susu.core.designsystem.component.appbar.icon.SearchIcon
 import com.susu.core.designsystem.component.bottomsheet.SusuSelectionBottomSheet
 import com.susu.core.designsystem.component.button.FilledButtonColor
@@ -132,7 +131,6 @@ fun ReceiveScreen(
     ledgerListState: LazyGridState = rememberLazyGridState(),
     padding: PaddingValues,
     onClickSearchIcon: () -> Unit = {},
-    onClickNotificationIcon: () -> Unit = {},
     onClickAlignButton: () -> Unit = {},
     onClickAlignBottomSheetItem: (Int) -> Unit = {},
     onClickFilterButton: () -> Unit = {},
@@ -159,7 +157,6 @@ fun ReceiveScreen(
                 actions = {
                     Row {
                         SearchIcon(onClickSearchIcon)
-                        NotificationIcon(onClickNotificationIcon)
                     }
                 },
             )

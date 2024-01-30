@@ -41,4 +41,12 @@ interface EnvelopesRepository {
         size: Int? = null,
         sort: String? = null,
     ): List<SearchEnvelope>
+
+    suspend fun getEnvelope(
+        id: Long,
+    ): Envelope
+
+    suspend fun deleteEnvelope(
+        id: Long,
+    )
 }

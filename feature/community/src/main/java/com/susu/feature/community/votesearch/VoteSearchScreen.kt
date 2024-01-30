@@ -1,4 +1,4 @@
-package com.susu.feature.received.search
+package com.susu.feature.community.votesearch
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -30,42 +30,42 @@ import com.susu.core.designsystem.component.searchbar.SusuSearchBar
 import com.susu.core.designsystem.theme.Gray60
 import com.susu.core.designsystem.theme.Gray80
 import com.susu.core.designsystem.theme.SusuTheme
-import com.susu.core.model.Ledger
+import com.susu.core.model.Vote
 import com.susu.core.ui.extension.collectWithLifecycle
-import com.susu.feature.received.R
+import com.susu.feature.community.R
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.debounce
 
 @OptIn(FlowPreview::class)
 @Composable
-fun LedgerSearchRoute(
-    viewModel: LedgerSearchViewModel = hiltViewModel(),
+fun VoteSearchRoute(
+    viewModel: VoteSearchViewModel = hiltViewModel(),
     popBackStack: () -> Unit,
-    navigateLedgerDetail: (Ledger) -> Unit,
+    navigateVoteDetail: (Long) -> Unit,
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
     val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
-            LedgerSearchSideEffect.PopBackStack -> popBackStack()
-            is LedgerSearchSideEffect.NavigateLedgerDetail -> navigateLedgerDetail(sideEffect.ledger)
-            LedgerSearchSideEffect.FocusClear -> focusManager.clearFocus()
+            VoteSearchSideEffect.PopBackStack -> popBackStack()
+            is VoteSearchSideEffect.NavigateVoteDetail -> navigateVoteDetail(sideEffect.voteId)
+            VoteSearchSideEffect.FocusClear -> focusManager.clearFocus()
         }
     }
 
     LaunchedEffect(key1 = Unit) {
-        viewModel.getLedgerRecentSearchList()
+        viewModel.getVoteRecentSearchList()
     }
 
     LaunchedEffect(key1 = uiState.searchKeyword) {
         snapshotFlow { uiState.searchKeyword }
             .debounce(100L)
-            .collect(viewModel::getLedgerList)
+            .collect(viewModel::getVoteList)
     }
 
-    LedgerSearchScreen(
+    VoteSearchScreen(
         uiState = uiState,
         focusRequester = focusRequester,
         onClickBackIcon = viewModel::popBackStack,
@@ -75,26 +75,26 @@ fun LedgerSearchRoute(
             viewModel.clearFocus()
             viewModel.hideSearchResultEmpty()
             viewModel.updateSearch(search)
-            viewModel.upsertLedgerRecentSearch(search)
+            viewModel.upsertVoteRecentSearch(search)
         },
-        onClickRecentSearchContainerCloseIcon = viewModel::deleteLedgerRecentSearch,
-        onClickSearchResultContainer = { ledger ->
-            viewModel.upsertLedgerRecentSearch(ledger.title)
-            viewModel.navigateLedgerDetail(ledger)
+        onClickRecentSearchContainerCloseIcon = viewModel::deleteVoteRecentSearch,
+        onClickSearchResultContainer = { vote ->
+            viewModel.upsertVoteRecentSearch(vote.content)
+            viewModel.navigateVoteDetail(vote)
         },
     )
 }
 
 @Composable
-fun LedgerSearchScreen(
-    uiState: LedgerSearchState = LedgerSearchState(),
+fun VoteSearchScreen(
+    uiState: VoteSearchState = VoteSearchState(),
     focusRequester: FocusRequester = remember { FocusRequester() },
     onClickBackIcon: () -> Unit = {},
     onClickSearchClearIcon: () -> Unit = {},
     onValueChangeSearchBar: (String) -> Unit = {},
     onClickRecentSearchContainer: (String) -> Unit = {},
     onClickRecentSearchContainerCloseIcon: (String) -> Unit = {},
-    onClickSearchResultContainer: (Ledger) -> Unit = {},
+    onClickSearchResultContainer: (Vote) -> Unit = {},
 ) {
     Box(
         modifier = Modifier
@@ -120,7 +120,7 @@ fun LedgerSearchScreen(
                     value = uiState.searchKeyword,
                     onValueChange = onValueChangeSearchBar,
                     onClickClearIcon = onClickSearchClearIcon,
-                    placeholder = stringResource(R.string.ledger_search_screen_search_placeholder),
+                    placeholder = stringResource(R.string.vote_search_screen_placeholder),
                 )
 
                 if (uiState.searchKeyword.isEmpty()) {
@@ -132,7 +132,7 @@ fun LedgerSearchScreen(
                 } else {
                     SearchResultColumn(
                         showSearchResultEmpty = uiState.showSearchResultEmpty,
-                        ledgerList = uiState.ledgerList,
+                        voteList = uiState.voteList,
                         onClickItem = onClickSearchResultContainer,
                     )
                 }
@@ -158,7 +158,7 @@ private fun ResultEmptyColumn(
             color = Gray80,
         )
         Text(
-            text = stringResource(R.string.ledger_search_screen_empty_search_description),
+            text = stringResource(R.string.vote_search_screen_empty_result_description),
             style = SusuTheme.typography.text_xxs,
             textAlign = TextAlign.Center,
             color = Gray80,
@@ -174,7 +174,7 @@ private fun RecentSearchColumn(
 ) {
     if (recentSearchList.isEmpty()) {
         ResultEmptyColumn(
-            title = stringResource(R.string.ledger_search_screen_empty_recent_search_title),
+            title = stringResource(R.string.vote_search_screen_recent_search_empty_title),
         )
     } else {
         Column(
@@ -200,12 +200,12 @@ private fun RecentSearchColumn(
 @Composable
 private fun SearchResultColumn(
     showSearchResultEmpty: Boolean,
-    ledgerList: PersistentList<Ledger>,
-    onClickItem: (Ledger) -> Unit,
+    voteList: PersistentList<Vote>,
+    onClickItem: (Vote) -> Unit,
 ) {
     if (showSearchResultEmpty) {
         ResultEmptyColumn(
-            title = stringResource(R.string.ledger_search_screen_empty_search_result_title),
+            title = stringResource(R.string.vote_search_screen_search_result_empty_title),
         )
     } else {
         Column(
@@ -217,11 +217,11 @@ private fun SearchResultColumn(
                 style = SusuTheme.typography.title_xxs,
                 color = Gray60,
             )
-            ledgerList.forEach { ledger ->
+            voteList.forEach { vote ->
                 SusuRecentSearchContainer(
-                    typeIconId = R.drawable.ic_ledger,
-                    text = ledger.title,
-                    onClick = { onClickItem(ledger) },
+                    typeIconId = R.drawable.ic_vote,
+                    text = vote.content,
+                    onClick = { onClickItem(vote) },
                 )
             }
         }
@@ -230,8 +230,8 @@ private fun SearchResultColumn(
 
 @Preview
 @Composable
-fun LedgerSearchScreenPreview() {
+fun VoteSearchScreenPreview() {
     SusuTheme {
-        LedgerSearchScreen()
+        VoteSearchScreen()
     }
 }

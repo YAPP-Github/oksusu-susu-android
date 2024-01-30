@@ -1,4 +1,4 @@
-package com.susu.feature.received.search
+package com.susu.feature.received.ledgersearch
 
 import androidx.lifecycle.viewModelScope
 import com.susu.core.model.Ledger
@@ -8,6 +8,7 @@ import com.susu.domain.usecase.ledgerrecentsearch.DeleteLedgerRecentSearchUseCas
 import com.susu.domain.usecase.ledgerrecentsearch.GetLedgerRecentSearchListUseCase
 import com.susu.domain.usecase.ledgerrecentsearch.UpsertLedgerRecentSearchUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -26,28 +27,32 @@ class LedgerSearchViewModel @Inject constructor(
     fun getLedgerRecentSearchList() = viewModelScope.launch {
         getLedgerRecentSearchListUseCase()
             .onSuccess(::updateRecentSearchList)
-            .onFailure { }
     }
 
     fun deleteLedgerRecentSearch(search: String) = viewModelScope.launch {
         deleteLedgerRecentSearchUseCase(search)
             .onSuccess(::updateRecentSearchList)
-            .onFailure { }
     }
 
     fun upsertLedgerRecentSearch(search: String) = viewModelScope.launch {
         upsertLedgerRecentSearchUseCase(search)
             .onSuccess(::updateRecentSearchList)
-            .onFailure { }
     }
 
     fun clearFocus() = postSideEffect(LedgerSearchSideEffect.FocusClear)
 
     fun hideSearchResultEmpty() = intent { copy(showSearchResultEmpty = false) }
 
-    fun updateSearch(search: String) = intent { copy(searchKeyword = search) }
+    fun updateSearch(search: String) = intent {
+        copy(
+            searchKeyword = search,
+            ledgerList = if (search.isBlank()) persistentListOf() else ledgerList,
+        )
+    }
 
     fun getLedgerList(search: String) = viewModelScope.launch {
+        if (search.isBlank()) return@launch
+
         getLedgerListUseCase(GetLedgerListUseCase.Param(title = search))
             .onSuccess {
                 intent {

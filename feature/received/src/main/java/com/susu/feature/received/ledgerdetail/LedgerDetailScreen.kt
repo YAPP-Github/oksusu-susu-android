@@ -41,6 +41,7 @@ import com.susu.core.designsystem.component.button.SusuGhostButton
 import com.susu.core.designsystem.theme.Gray25
 import com.susu.core.designsystem.theme.Gray50
 import com.susu.core.designsystem.theme.SusuTheme
+import com.susu.core.model.Envelope
 import com.susu.core.model.Ledger
 import com.susu.core.ui.DialogToken
 import com.susu.core.ui.R
@@ -55,9 +56,10 @@ import com.susu.feature.received.ledgerdetail.component.LedgerDetailOverviewColu
 fun LedgerDetailRoute(
     viewModel: LedgerDetailViewModel = hiltViewModel(),
     envelope: String?,
+    toDeleteEnvelopeId: Long?,
     navigateLedgerEdit: (Ledger) -> Unit,
     navigateEnvelopAdd: (String, Long) -> Unit,
-    navigateEnvelopeDetail: () -> Unit,
+    navigateEnvelopeDetail: (Envelope) -> Unit,
     popBackStackWithLedger: (String) -> Unit,
     popBackStackWithDeleteLedgerId: (Long) -> Unit,
     onShowSnackbar: (SnackbarToken) -> Unit,
@@ -95,7 +97,7 @@ fun LedgerDetailRoute(
             is LedgerDetailSideEffect.HandleException -> handleException(sideEffect.throwable, sideEffect.retry)
             is LedgerDetailSideEffect.ShowSnackbar -> onShowSnackbar(SnackbarToken(message = sideEffect.msg))
             is LedgerDetailSideEffect.NavigateEnvelopeAdd -> navigateEnvelopAdd(sideEffect.categoryName, sideEffect.ledgerId)
-            LedgerDetailSideEffect.NavigateEnvelopeDetail -> navigateEnvelopeDetail()
+            is LedgerDetailSideEffect.NavigateEnvelopeDetail -> navigateEnvelopeDetail(sideEffect.envelope)
         }
     }
 
@@ -103,6 +105,7 @@ fun LedgerDetailRoute(
         viewModel.getLedger()
         viewModel.initReceivedEnvelopeList()
         viewModel.addEnvelopeIfNeed(envelope)
+        viewModel.deleteEnvelopeIfNeed(toDeleteEnvelopeId)
     }
 
     listState.OnBottomReached(minItemsCount = 4) {
@@ -137,7 +140,7 @@ fun LedgerDetailScreen(
     onClickAlignButton: () -> Unit = {},
     onClickEnvelopeAddButton: () -> Unit = {},
     onClickFloatingButton: () -> Unit = {},
-    onClickSeeMoreIcon: () -> Unit = {},
+    onClickSeeMoreIcon: (Envelope) -> Unit = {},
 ) {
     Box(
         modifier = Modifier
@@ -251,7 +254,7 @@ fun LedgerDetailScreen(
                     items(items = uiState.envelopeList, key = { it.envelope.id }) {
                         LedgerDetailEnvelopeContainer(
                             envelope = it,
-                            onClickSeeMoreIcon = onClickSeeMoreIcon,
+                            onClickSeeMoreIcon = { onClickSeeMoreIcon(it.envelope) },
                         )
                     }
                 }

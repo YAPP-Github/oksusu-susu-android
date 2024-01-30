@@ -6,15 +6,15 @@ import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class CreateEnvelopeResponse(
-    val envelope: EnvelopeResponse,
+data class EnvelopeResponse(
+    val envelope: EnvelopeInfo,
     val friend: FriendInfo,
     val friendRelationship: FriendRelationShipInfo,
     val relationship: RelationshipInfo,
 )
 
 @Serializable
-data class EnvelopeResponse(
+data class EnvelopeInfo(
     val id: Long,
     val uid: Long,
     val type: String,
@@ -39,7 +39,7 @@ data class RelationshipInfo(
     val relation: String,
 )
 
-internal fun CreateEnvelopeResponse.toModel() = Envelope(
+internal fun EnvelopeResponse.toModel() = Envelope(
     id = envelope.id,
     uid = envelope.uid,
     type = envelope.type,

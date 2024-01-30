@@ -12,9 +12,14 @@ import com.susu.core.ui.SnackbarToken
 import com.susu.feature.community.community.CommunityRoute
 import com.susu.feature.community.voteadd.VoteAddRoute
 import com.susu.feature.community.votedetail.VoteDetailRoute
+import com.susu.feature.community.votesearch.VoteSearchRoute
 
 fun NavController.navigateVoteAdd() {
     navigate(CommunityRoute.voteAddRoute)
+}
+
+fun NavController.navigateVoteSearch() {
+    navigate(CommunityRoute.voteSearchRoute)
 }
 
 fun NavController.navigateCommunity(navOptions: NavOptions) {
@@ -28,6 +33,7 @@ fun NavController.navigateVoteDetail(voteId: Long) {
 fun NavGraphBuilder.communityNavGraph(
     padding: PaddingValues,
     navigateVoteAdd: () -> Unit,
+    navigateVoteSearch: () -> Unit,
     navigateVoteDetail: (Long) -> Unit,
     popBackStack: () -> Unit,
     popBackStackWithVote: (String) -> Unit,
@@ -47,6 +53,7 @@ fun NavGraphBuilder.communityNavGraph(
             vote = vote,
             toUpdateVote = toUpdateVote,
             navigateVoteAdd = navigateVoteAdd,
+            navigateVoteSearch = navigateVoteSearch,
             navigateVoteDetail = navigateVoteDetail,
             handleException = handleException,
         )
@@ -75,11 +82,18 @@ fun NavGraphBuilder.communityNavGraph(
             handleException = handleException,
         )
     }
+
+    composable(
+        route = CommunityRoute.voteSearchRoute,
+    ) {
+        VoteSearchRoute(popBackStack = popBackStack, navigateVoteDetail = navigateVoteDetail)
+    }
 }
 
 object CommunityRoute {
     const val route = "community"
     const val voteAddRoute = "vote-add"
+    const val voteSearchRoute = "vote-search"
 
     const val VOTE_ARGUMENT_NAME = "vote"
     const val VOTE_ID_ARGUMENT_NAME = "vote-id"

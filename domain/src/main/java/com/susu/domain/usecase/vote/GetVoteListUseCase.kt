@@ -22,12 +22,12 @@ class GetVoteListUseCase @Inject constructor(
     }
 
     data class Param(
-        val content: String?,
-        val mine: Boolean?,
-        val sortType: String?,
-        val categoryId: Int?,
-        val page: Int?,
+        val content: String? = null,
+        val mine: Boolean? = null,
+        val sortType: String? = null,
+        val categoryId: Int? = null,
+        val page: Int? = null,
         val size: Int? = null,
-        val sort: String?,
+        val sort: String? = null,
     )
 }

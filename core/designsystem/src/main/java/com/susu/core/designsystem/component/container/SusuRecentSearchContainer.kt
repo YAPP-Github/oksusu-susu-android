@@ -8,16 +8,20 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.susu.core.designsystem.R
+import com.susu.core.designsystem.theme.Orange60
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.ui.extension.susuClickable
 
@@ -25,6 +29,7 @@ import com.susu.core.ui.extension.susuClickable
 fun SusuRecentSearchContainer(
     modifier: Modifier = Modifier,
     @DrawableRes typeIconId: Int? = null,
+    tint: Color = Orange60,
     typeIconContentDescription: String? = null,
     text: String = "",
     onClickCloseIcon: () -> Unit = {},
@@ -39,10 +44,11 @@ fun SusuRecentSearchContainer(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         if (typeIconId != null) {
-            Image(
+            Icon(
                 modifier = Modifier.size(24.dp),
                 painter = painterResource(id = typeIconId),
                 contentDescription = typeIconContentDescription,
+                tint = tint,
             )
         }
 
@@ -50,6 +56,8 @@ fun SusuRecentSearchContainer(
             modifier = Modifier.weight(1f),
             text = text,
             style = SusuTheme.typography.title_s,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
         )
 
         if (typeIconId == null) {
@@ -70,7 +78,7 @@ fun SusuRecentSearchContainer(
 fun SusuRecentSearchContainerPreview() {
     SusuTheme {
         SusuRecentSearchContainer(
-            text = "나의 결혼식",
+            text = "나의 결혼식나의 결혼식나의 결혼식나의 결혼식나의 결혼식나의 결혼식",
             typeIconId = R.drawable.ic_clear,
             typeIconContentDescription = "",
         )
