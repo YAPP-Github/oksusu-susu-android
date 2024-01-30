@@ -1,5 +1,6 @@
 package com.susu.feature.received.ledgerdetail
 
+import com.susu.core.model.Envelope
 import com.susu.core.model.Ledger
 import com.susu.core.model.SearchEnvelope
 import com.susu.core.ui.base.SideEffect
@@ -19,7 +20,7 @@ data class LedgerDetailState(
 
 sealed interface LedgerDetailSideEffect : SideEffect {
     data class NavigateEnvelopeAdd(val categoryName: String, val ledgerId: Long) : LedgerDetailSideEffect
-    data object NavigateEnvelopeDetail : LedgerDetailSideEffect
+    data class NavigateEnvelopeDetail(val envelope: Envelope) : LedgerDetailSideEffect
     data class NavigateLedgerEdit(val ledger: Ledger) : LedgerDetailSideEffect
     data class PopBackStackWithLedger(val ledger: String) : LedgerDetailSideEffect
     data class PopBackStackWithDeleteLedgerId(val ledgerId: Long) : LedgerDetailSideEffect

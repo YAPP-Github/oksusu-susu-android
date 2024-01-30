@@ -7,6 +7,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.susu.core.model.Envelope
 import com.susu.core.model.Ledger
 import com.susu.core.ui.DialogToken
 import com.susu.core.ui.SnackbarToken
@@ -51,8 +52,8 @@ fun NavController.navigateReceivedEnvelopeAdd(categoryName: String, ledgerId: Lo
     navigate(ReceivedRoute.envelopeAddRoute(categoryName, ledgerId.toString()))
 }
 
-fun NavController.navigateReceivedEnvelopeDetail() {
-    navigate(ReceivedRoute.envelopeDetailRoute)
+fun NavController.navigateReceivedEnvelopeDetail(envelope: Envelope) {
+    navigate(ReceivedRoute.envelopeDetailRoute(Json.encodeToUri(envelope)))
 }
 
 fun NavController.navigateReceivedEnvelopeEdit() {
@@ -72,7 +73,7 @@ fun NavGraphBuilder.receivedNavGraph(
     navigateLedgerFilter: (FilterArgument) -> Unit,
     navigateLedgerAdd: () -> Unit,
     navigateEnvelopAdd: (String, Long) -> Unit,
-    navigateEnvelopeDetail: () -> Unit,
+    navigateEnvelopeDetail: (Envelope) -> Unit,
     navigateEnvelopeEdit: () -> Unit,
     popBackStackWithEnvelope: (String) -> Unit,
     onShowSnackbar: (SnackbarToken) -> Unit,
@@ -172,11 +173,12 @@ fun NavGraphBuilder.receivedNavGraph(
     }
 
     composable(
-        route = ReceivedRoute.envelopeDetailRoute,
+        route = ReceivedRoute.envelopeDetailRoute("{${ReceivedRoute.ENVELOPE_ARGUMENT_NAME}}"),
     ) {
         ReceivedEnvelopeDetailRoute(
             popBackStack = popBackStack,
             navigateReceivedEnvelopeEdit = navigateEnvelopeEdit,
+            handleException = handleException,
         )
     }
 
@@ -203,6 +205,6 @@ object ReceivedRoute {
     const val ledgerAddRoute = "ledger-add" // TODO 파라미터 넘기는 방식으로 수정해야함.
 
     fun envelopeAddRoute(categoryName: String, ledgerId: String) = "envelope-add/$categoryName/$ledgerId"
-    const val envelopeDetailRoute = "envelope-detail" // TODO 파라미터 넘기는 방식으로 수정해야함.
+    fun envelopeDetailRoute(envelope: String) = "envelope-detail/$envelope"
     const val envelopeEditRoute = "envelope-edit" // TODO 파라미터 넘기는 방식으로 수정해야함.
 }
