@@ -40,7 +40,7 @@ fun SusuCheckedDialog(
     modifier: Modifier = Modifier,
     title: String? = null,
     text: String? = null,
-    defaultChecked: Boolean = false, // dialog 노출 시 기본 체크 상태
+    defaultChecked: Boolean = false,
     checkboxText: String = "",
     confirmText: String = "",
     dismissText: String? = null,
