@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import com.susu.core.designsystem.component.badge.BadgeColor
 import com.susu.core.designsystem.component.badge.BadgeStyle
 import com.susu.core.designsystem.component.badge.SusuBadge
+import com.susu.core.designsystem.component.util.CheckCircle
 import com.susu.core.designsystem.theme.Gray100
 import com.susu.core.designsystem.theme.Gray15
 import com.susu.core.designsystem.theme.Gray30
@@ -93,7 +94,7 @@ fun TermListItem(
         modifier = modifier.padding(vertical = SusuTheme.spacing.spacing_m),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        TermCheckCircle(isChecked = checked, onCheckedChange = onCheckClick)
+        CheckCircle(isChecked = checked, onCheckedChange = onCheckClick)
         Spacer(modifier = Modifier.width(SusuTheme.spacing.spacing_m))
         if (isEssential) {
             SusuBadge(
@@ -121,44 +122,7 @@ fun TermListItem(
     }
 }
 
-@Composable
-fun TermCheckCircle(
-    modifier: Modifier = Modifier,
-    isChecked: Boolean,
-    onCheckedChange: (Boolean) -> Unit = {},
-) {
-    Box(
-        modifier = modifier
-            .size(20.dp)
-            .drawBehind {
-                if (isChecked) {
-                    drawCircle(
-                        color = Gray100,
-                        radius = 8.dp.toPx(),
-                    )
-                } else {
-                    drawCircle(
-                        color = Gray40,
-                        radius = 8.dp.toPx(),
-                        style = Stroke(width = 1.dp.toPx()),
-                    )
-                }
-            }
-            .susuClickable(
-                rippleEnabled = false,
-                onClick = { onCheckedChange(isChecked.not()) },
-            ),
-    ) {
-        if (isChecked) {
-            Icon(
-                modifier = Modifier.padding(2.dp),
-                imageVector = Icons.Rounded.Check,
-                contentDescription = null,
-                tint = Gray15,
-            )
-        }
-    }
-}
+
 
 @Preview(showSystemUi = true)
 @Composable
@@ -176,6 +140,6 @@ fun TermsContentPreview() {
 @Composable
 fun TermCheckCirclePreview() {
     SusuTheme {
-        TermCheckCircle(isChecked = true)
+        CheckCircle(isChecked = true)
     }
 }
