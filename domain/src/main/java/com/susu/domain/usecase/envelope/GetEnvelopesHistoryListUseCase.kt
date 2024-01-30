@@ -24,7 +24,7 @@ class GetEnvelopesHistoryListUseCase @Inject constructor(
     }
 
     data class Param(
-        val friendIds: List<Int>? = emptyList(),
+        val friendIds: List<Long>? = emptyList(),
         val ledgerId: Int? = null,
         val type: List<String>? = emptyList(),
         val include: List<String>? = emptyList(),

@@ -66,6 +66,9 @@ fun SentRoute(
         uiState = uiState,
         envelopesListState = envelopesListState,
         padding = padding,
+        onClickHistory = { friendId ->
+            viewModel.getEnvelopesHistoryList(friendId)
+        },
         onClickHistoryShowAll = viewModel::navigateSentEnvelope,
         onClickAddEnvelope = viewModel::navigateSentAdd,
     )
@@ -79,6 +82,7 @@ fun SentScreen(
     modifier: Modifier = Modifier,
     onClickSearchIcon: () -> Unit = {},
     onClickNotificationIcon: () -> Unit = {},
+    onClickHistory: (Long) -> Unit = {},
     onClickHistoryShowAll: () -> Unit = {},
     onClickAddEnvelope: () -> Unit = {},
 ) {
@@ -119,13 +123,14 @@ fun SentScreen(
                     items = uiState.envelopesList,
                     key = { it.friend.id },
                 ) {
-                    // 전체 보기 버튼
                     SentCard(
+                        uiState = uiState,
                         friend = it.friend,
                         totalAmounts = it.totalAmounts,
                         sentAmounts = it.sentAmounts,
                         receivedAmounts = it.receivedAmounts,
-                        onClick = onClickHistoryShowAll,
+                        onClickHistory = onClickHistory,
+                        onClickHistoryShowAll = onClickHistoryShowAll,
                     )
                 }
             }

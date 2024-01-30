@@ -32,7 +32,7 @@ interface EnvelopesService {
 
     @GET("envelopes")
     suspend fun getEnvelopesHistoryList(
-        @Query("friendIds") friendIds: List<Int>?,
+        @Query("friendIds") friendIds: List<Long>?,
         @Query("ledgerId") ledgerId: Int?,
         @Query("types") types: List<String>?,
         @Query("include") include: List<String>?,

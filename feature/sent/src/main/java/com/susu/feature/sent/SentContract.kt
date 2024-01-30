@@ -1,5 +1,6 @@
 package com.susu.feature.sent
 
+import com.susu.core.model.EnvelopeSearch
 import com.susu.core.model.FriendStatistics
 import com.susu.core.ui.base.SideEffect
 import com.susu.core.ui.base.UiState
@@ -9,6 +10,7 @@ import kotlinx.collections.immutable.persistentListOf
 data class SentState(
     val isLoading: Boolean = false,
     val envelopesList: PersistentList<FriendStatistics> = persistentListOf(),
+    val envelopesHistoryList: PersistentList<EnvelopeSearch> = persistentListOf(),
     val showEmptyEnvelopes: Boolean = false,
 ) : UiState
 

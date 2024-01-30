@@ -34,7 +34,7 @@ fun SentHistoryItem(
     type: String = "",
     event: String = "",
     date: LocalDateTime = LocalDateTime.now(),
-    money: Int = 0,
+    money: Long = 0,
 ) {
     Row(
         modifier = modifier.fillMaxWidth(),
@@ -67,7 +67,7 @@ fun SentHistoryItem(
         )
         Spacer(modifier = modifier.weight(1f))
         Text(
-            text = "${money.toMoneyFormat()}원",
+            text = "${money.toInt().toMoneyFormat()}원",
             style = SusuTheme.typography.title_xxs,
             color = if (type == EnvelopeType.SENT.name) Gray100 else Gray50,
         )

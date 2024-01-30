@@ -36,6 +36,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.susu.core.designsystem.component.badge.BadgeColor
 import com.susu.core.designsystem.component.badge.BadgeStyle
 import com.susu.core.designsystem.component.badge.SusuBadge
@@ -44,21 +45,25 @@ import com.susu.core.designsystem.theme.Gray60
 import com.susu.core.designsystem.theme.Gray90
 import com.susu.core.designsystem.theme.Orange20
 import com.susu.core.designsystem.theme.SusuTheme
+import com.susu.core.model.EnvelopeSearch
 import com.susu.core.model.Friend
 import com.susu.core.ui.extension.susuClickable
 import com.susu.core.ui.extension.toMoneyFormat
 import com.susu.feature.sent.R
+import com.susu.feature.sent.SentState
+import com.susu.feature.sent.SentViewModel
 
 @Composable
 fun SentCard(
+    uiState: SentState = SentState(),
     modifier: Modifier = Modifier,
-    friend: Friend = Friend(),
-    totalAmounts: Int,
-    sentAmounts: Int,
-    receivedAmounts: Int,
-    onClick: () -> Unit = {},
+    friend: Friend,
+    totalAmounts: Int = 0,
+    sentAmounts: Int = 0,
+    receivedAmounts: Int = 0,
+    onClickHistory: (Long) -> Unit = {},
+    onClickHistoryShowAll: () -> Unit = {},
 ) {
-    // TODO: 수정 필요
     var expanded by remember { mutableStateOf(false) }
     val degrees by animateFloatAsState(if (expanded) 180f else 0f, label = "")
 
@@ -99,9 +104,12 @@ fun SentCard(
                     tint = Gray100,
                     modifier = modifier
                         .clip(CircleShape)
-                        .susuClickable {
-                            expanded = !expanded
-                        }
+                        .susuClickable(
+                            onClick = {
+                                expanded = !expanded
+                                onClickHistory(friend.id)
+                            }
+                        )
                         .rotate(degrees = degrees),
                 )
             }
@@ -157,19 +165,8 @@ fun SentCard(
         exit = fadeOut() + shrinkVertically(),
     ) {
         SentHistoryCard(
-            onClick = onClick,
-        )
-    }
-}
-
-@Preview
-@Composable
-fun SentCardPreview() {
-    SusuTheme {
-        SentCard(
-            totalAmounts = 100000,
-            sentAmounts = 70000,
-            receivedAmounts = 30000,
+            envelopeHistoryList = uiState.envelopesHistoryList,
+            onClickHistoryShowAll = onClickHistoryShowAll,
         )
     }
 }

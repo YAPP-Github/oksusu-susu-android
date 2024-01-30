@@ -20,13 +20,15 @@ import com.susu.core.designsystem.component.button.XSmallButtonStyle
 import com.susu.core.designsystem.theme.Gray10
 import com.susu.core.designsystem.theme.Gray20
 import com.susu.core.designsystem.theme.SusuTheme
+import com.susu.core.model.EnvelopeSearch
 import com.susu.feature.sent.R
+import kotlinx.collections.immutable.PersistentList
 
 @Composable
 fun SentHistoryCard(
     modifier: Modifier = Modifier,
-    historyCount: Int = 3,
-    onClick: () -> Unit = {},
+    envelopeHistoryList: PersistentList<EnvelopeSearch>,
+    onClickHistoryShowAll: () -> Unit = {},
 ) {
     Card(
         modifier = modifier
@@ -50,10 +52,16 @@ fun SentHistoryCard(
                     end = SusuTheme.spacing.spacing_m,
                 ),
         ) {
-            repeat(historyCount) {
-                SentHistoryItem() // TODO: id에 해당하는 envelopeInfo 넣어주기
+            envelopeHistoryList.forEach {
+                SentHistoryItem(
+                    type = it.envelope.type,
+                    event = it.category!!.category,
+                    date = it.envelope.handedOverAt!!,
+                    money = it.envelope.amount,
+                )
                 Spacer(modifier = modifier.size(SusuTheme.spacing.spacing_xxs))
             }
+
             Spacer(modifier = modifier.size(SusuTheme.spacing.spacing_xxs))
             SusuFilledButton(
                 color = FilledButtonColor.Black,
@@ -61,16 +69,8 @@ fun SentHistoryCard(
                 text = stringResource(R.string.sent_screen_envelope_history_show_all),
                 modifier = modifier
                     .fillMaxWidth(),
-                onClick = onClick,
+                onClick = onClickHistoryShowAll,
             )
         }
-    }
-}
-
-@Preview
-@Composable
-fun SentHistoryCardPreview() {
-    SusuTheme {
-        SentHistoryCard()
     }
 }

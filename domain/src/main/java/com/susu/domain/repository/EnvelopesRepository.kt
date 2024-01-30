@@ -1,8 +1,10 @@
 package com.susu.domain.repository
 
+import com.susu.core.model.Category
 import com.susu.core.model.FriendStatistics
 import com.susu.core.model.Envelope
 import com.susu.core.model.EnvelopeSearch
+import com.susu.core.model.Friend
 import com.susu.core.model.Relationship
 import kotlinx.datetime.LocalDateTime
 
@@ -32,7 +34,7 @@ interface EnvelopesRepository {
     ): Envelope
 
     suspend fun getEnvelopesHistoryList(
-        friendIds: List<Int>?,
+        friendIds: List<Long>?,
         ledgerId: Int?,
         type: List<String>?,
         include: List<String>?,

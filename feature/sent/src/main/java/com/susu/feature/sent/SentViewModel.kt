@@ -33,11 +33,20 @@ class SentViewModel @Inject constructor(
         }
     }
 
-    fun getEnvelopesHistoryList() = viewModelScope.launch {
+    fun getEnvelopesHistoryList(id: Long) = viewModelScope.launch {
+        val friendsList: List<Long> = listOf(id)
+        val includeList = listOf("CATEGORY", "FRIEND")
+
         getEnvelopesHistoryListUseCase(
-            GetEnvelopesHistoryListUseCase.Param(),
-        ).onSuccess {
-            // TODO: EnvelopesHistoryList 불러오기
+            GetEnvelopesHistoryListUseCase.Param(friendIds = friendsList, include = includeList),
+        ).onSuccess { history ->
+            val envelopesHistorySubList = if (history.size < 3) history else history.take(3)
+            val newEnvelopesHistoryList = envelopesHistorySubList.toPersistentList()
+            intent {
+                copy(
+                    envelopesHistoryList = newEnvelopesHistoryList,
+                )
+            }
         }
     }
 
