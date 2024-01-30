@@ -36,6 +36,11 @@ interface LedgerService {
         @Body ledgerRequest: LedgerRequest,
     ): ApiResult<LedgerResponse>
 
+    @GET("ledgers/{id}")
+    suspend fun getLedger(
+        @Path("id") id: Long,
+    ): ApiResult<LedgerResponse>
+
     @DELETE("ledgers")
     suspend fun deleteLedgerList(@Query("ids") idList: List<Long>): ApiResult<Unit>
 

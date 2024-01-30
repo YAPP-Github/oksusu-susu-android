@@ -35,7 +35,7 @@ interface EnvelopesService {
         @Query("friendIds") friendIds: List<Int>?,
         @Query("ledgerId") ledgerId: Long?,
         @Query("type") types: String?,
-        @Query("include") include: String = "CATEGORY,FRIEND,RELATION",
+        @Query("include") include: String = "CATEGORY,FRIEND,RELATIONSHIP,FRIEND_RELATIONSHIP",
         @Query("fromAmount") fromAmount: Long?,
         @Query("toAmount") toAmount: Long?,
         @Query("page") page: Int?,
