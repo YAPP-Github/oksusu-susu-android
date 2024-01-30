@@ -2,11 +2,8 @@ package com.susu.feature.received.ledgerdetail
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.susu.core.model.Category
 import com.susu.core.model.Envelope
-import com.susu.core.model.Friend
 import com.susu.core.model.Ledger
-import com.susu.core.model.Relationship
 import com.susu.core.model.SearchEnvelope
 import com.susu.core.model.exception.NotFoundLedgerException
 import com.susu.core.ui.base.BaseViewModel
@@ -22,7 +19,6 @@ import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
 import kotlinx.datetime.toJavaLocalDateTime
 import kotlinx.serialization.json.Json
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -52,11 +48,11 @@ class LedgerDetailViewModel @Inject constructor(
         val searchEnvelope = SearchEnvelope(
             envelope = envelope,
             friend = envelope.friend,
-            relation = envelope.relationship
+            relation = envelope.relationship,
         )
 
         copy(
-            envelopeList = envelopeList.add(0, searchEnvelope)
+            envelopeList = envelopeList.add(0, searchEnvelope),
         )
     }
 
@@ -96,7 +92,6 @@ class LedgerDetailViewModel @Inject constructor(
             currentState.envelopeList
         }
 
-
         searchReceivedEnvelopeListUseCase(
             param = SearchReceivedEnvelopeListUseCase.Param(
                 friendIds = null,
@@ -104,8 +99,8 @@ class LedgerDetailViewModel @Inject constructor(
                 fromAmount = null,
                 toAmount = null,
                 page = page,
-                sort = null
-            )
+                sort = null,
+            ),
         ).onSuccess { envelopeList ->
             isLast = envelopeList.isEmpty()
             page++
@@ -116,7 +111,7 @@ class LedgerDetailViewModel @Inject constructor(
                 )
             }
         }.onFailure {
-            Timber.e(it)
+            postSideEffect(LedgerDetailSideEffect.HandleException(it, ::getReceivedEnvelopeList))
         }
     }
 

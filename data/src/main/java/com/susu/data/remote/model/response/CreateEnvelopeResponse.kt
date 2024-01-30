@@ -53,5 +53,5 @@ internal fun CreateEnvelopeResponse.toModel() = Envelope(
         id = relationship.id,
         relation = relationship.relation,
         customRelation = friendRelationship.customRelation,
-    )
+    ),
 )

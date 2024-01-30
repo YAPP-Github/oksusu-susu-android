@@ -6,7 +6,6 @@ import com.susu.core.model.Category
 import com.susu.core.model.Ledger
 import com.susu.core.ui.base.BaseViewModel
 import com.susu.core.ui.extension.decodeFromUri
-import com.susu.core.ui.extension.encodeToUri
 import com.susu.domain.usecase.categoryconfig.GetCategoryConfigUseCase
 import com.susu.domain.usecase.ledger.EditLedgerUseCase
 import com.susu.feature.received.navigation.ReceivedRoute

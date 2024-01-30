@@ -4,5 +4,5 @@ data class SearchEnvelope(
     val envelope: Envelope = Envelope(),
     val category: Category = Category(),
     val friend: Friend = Friend(),
-    val relation: Relationship = Relationship()
+    val relation: Relationship = Relationship(),
 )
