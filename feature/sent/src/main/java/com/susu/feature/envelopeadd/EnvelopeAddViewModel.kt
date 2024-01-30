@@ -1,5 +1,6 @@
 package com.susu.feature.envelopeadd
 
+import com.susu.core.model.Category
 import com.susu.core.model.Relationship
 import com.susu.core.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -13,6 +14,7 @@ class EnvelopeAddViewModel @Inject constructor() : BaseViewModel<EnvelopeAddStat
     private var name: String = ""
     private var friendId: Long? = null
     private var relationShip: Relationship? = null
+    private var category: Category? = null
     private var date: LocalDateTime? = null
     private var moreStep: List<EnvelopeAddStep> = emptyList()
     private var hasVisited: Boolean? = null
@@ -25,7 +27,7 @@ class EnvelopeAddViewModel @Inject constructor() : BaseViewModel<EnvelopeAddStat
             EnvelopeAddStep.MONEY -> intent { copy(currentStep = EnvelopeAddStep.NAME) }
             EnvelopeAddStep.NAME -> {
                 intent {
-                    if (relationShip == null) {
+                    if (friendId == null) {
                         copy(currentStep = EnvelopeAddStep.RELATIONSHIP)
                     } else {
                         copy(currentStep = EnvelopeAddStep.EVENT)
@@ -57,7 +59,7 @@ class EnvelopeAddViewModel @Inject constructor() : BaseViewModel<EnvelopeAddStat
             EnvelopeAddStep.RELATIONSHIP -> intent { copy(currentStep = EnvelopeAddStep.NAME) }
             EnvelopeAddStep.EVENT -> {
                 intent {
-                    if (relationShip == null) {
+                    if (friendId == null) {
                         copy(currentStep = EnvelopeAddStep.RELATIONSHIP)
                     } else {
                         copy(currentStep = EnvelopeAddStep.NAME)
@@ -99,6 +101,13 @@ class EnvelopeAddViewModel @Inject constructor() : BaseViewModel<EnvelopeAddStat
         this@EnvelopeAddViewModel.relationShip = relationShip
         copy(
             buttonEnabled = relationShip != null,
+        )
+    }
+
+    fun updateSelectedCategory(category: Category?) = intent {
+        this@EnvelopeAddViewModel.category = category
+        copy(
+            buttonEnabled = category != null,
         )
     }
 
