@@ -9,6 +9,7 @@ import com.susu.feature.envelope.SentEnvelopeRoute
 import com.susu.feature.envelopeadd.SentEnvelopeAddRoute
 import com.susu.feature.envelopedetail.SentEnvelopeDetailRoute
 import com.susu.feature.envelopeedit.SentEnvelopeEditRoute
+import com.susu.feature.envelopesearch.SentEnvelopeSearchRoute
 import com.susu.feature.sent.SentRoute
 
 fun NavController.navigateSent(navOptions: NavOptions) {
@@ -31,6 +32,10 @@ fun NavController.navigateSentEnvelopeAdd() {
     navigate(SentRoute.sentEnvelopeAddRoute)
 }
 
+fun NavController.navigateSentEnvelopeSearch() {
+    navigate(SentRoute.sentEnvelopeSearchRoute)
+}
+
 fun NavGraphBuilder.sentNavGraph(
     padding: PaddingValues,
     popBackStack: () -> Unit,
@@ -38,6 +43,7 @@ fun NavGraphBuilder.sentNavGraph(
     navigateSentEnvelopeDetail: () -> Unit,
     navigateSentEnvelopeEdit: () -> Unit,
     navigateSentEnvelopeAdd: () -> Unit,
+    navigateSentEnvelopeSearch: () -> Unit,
     handleException: (Throwable, () -> Unit) -> Unit,
 ) {
     composable(route = SentRoute.route) {
@@ -45,6 +51,7 @@ fun NavGraphBuilder.sentNavGraph(
             padding = padding,
             navigateSentEnvelope = navigateSentEnvelope,
             navigateSentEnvelopeAdd = navigateSentEnvelopeAdd,
+            navigateSentEnvelopeSearch = navigateSentEnvelopeSearch,
         )
     }
 
@@ -75,6 +82,12 @@ fun NavGraphBuilder.sentNavGraph(
             handleException = handleException,
         )
     }
+
+    composable(route = SentRoute.sentEnvelopeSearchRoute) {
+        SentEnvelopeSearchRoute(
+            popBackStack = popBackStack,
+        )
+    }
 }
 
 object SentRoute {
@@ -83,4 +96,5 @@ object SentRoute {
     const val sentEnvelopeDetailRoute = "sent-envelope-detail"
     const val sentEnvelopeEditRoute = "sent-envelope-edit"
     const val sentEnvelopeAddRoute = "sent-envelope-add"
+    const val sentEnvelopeSearchRoute = "sent-envelope-search"
 }

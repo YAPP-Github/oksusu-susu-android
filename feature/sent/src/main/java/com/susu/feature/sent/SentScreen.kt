@@ -43,11 +43,13 @@ fun SentRoute(
     padding: PaddingValues,
     navigateSentEnvelope: () -> Unit,
     navigateSentEnvelopeAdd: () -> Unit,
+    navigateSentEnvelopeSearch: () -> Unit,
 ) {
     SentScreen(
         padding = padding,
         onClickHistoryShowAll = navigateSentEnvelope,
         onClickAddEnvelope = navigateSentEnvelopeAdd,
+        onClickSearchIcon = navigateSentEnvelopeSearch,
     )
 }
 

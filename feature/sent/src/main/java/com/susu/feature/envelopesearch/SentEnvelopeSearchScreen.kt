@@ -9,12 +9,16 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.susu.core.designsystem.component.appbar.SusuDefaultAppBar
 import com.susu.core.designsystem.component.appbar.icon.BackIcon
 import com.susu.core.designsystem.component.container.SusuRecentSearchContainer
@@ -23,30 +27,68 @@ import com.susu.core.designsystem.theme.Gray60
 import com.susu.core.designsystem.theme.Gray80
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.model.Envelope
-import com.susu.core.model.Friend
+import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.feature.sent.R
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.debounce
 
+@OptIn(FlowPreview::class)
 @Composable
-fun SentEnvelopeSearchRoute() {
+fun SentEnvelopeSearchRoute(
+    viewModel: EnvelopeSearchViewModel = hiltViewModel(),
+    popBackStack: () -> Unit,
+) {
+    val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
+
+    viewModel.sideEffect.collectWithLifecycle { sideEffect ->
+        when (sideEffect) {
+            EnvelopeSearchEffect.FocusClear -> {}
+            is EnvelopeSearchEffect.NavigateEnvelopDetail -> {}
+            EnvelopeSearchEffect.PopBackStack -> popBackStack()
+        }
+    }
+
+    LaunchedEffect(key1 = Unit) {
+        viewModel.getEnvelopeRecentSearchList()
+    }
+
+    LaunchedEffect(key1 = uiState.searchKeyword) {
+        snapshotFlow { uiState.searchKeyword }
+            .debounce(100L)
+            .collect(viewModel::getEnvelopeList)
+    }
+
+    SentEnvelopeSearchScreen(
+        uiState = uiState,
+        onSearchKeywordUpdated = viewModel::updateSearchKeyword,
+        onClickClearIcon = { viewModel.updateSearchKeyword("") },
+        onSelectRecentSearch = {
+            viewModel.upsertEnvelopeRecentSearch(it)
+            viewModel.updateSearchKeyword(it)
+        },
+        onDeleteRecentSearch = viewModel::deleteEnvelopeRecentSearch,
+        popBackStack = popBackStack,
+    )
 }
 
 @Composable
 fun SentEnvelopeSearchScreen(
-    searchText: String = "",
-    recentSearch: PersistentList<String> = persistentListOf(),
-    searchResult: PersistentList<Envelope> = persistentListOf(),
-    onSelectRecentSearch: (Int) -> Unit = {},
-    onDeleteRecentSearch: (Int) -> Unit = {},
+    uiState: EnvelopeSearchState = EnvelopeSearchState(),
+    onSearchKeywordUpdated: (String) -> Unit = {},
+    onClickClearIcon: () -> Unit = {},
+    onSelectRecentSearch: (String) -> Unit = {},
+    onDeleteRecentSearch: (String) -> Unit = {},
     onClickEnvelope: (Envelope) -> Unit = {},
+    popBackStack: () -> Unit = {},
 ) {
     Column(
         modifier = Modifier.fillMaxSize(),
     ) {
         SusuDefaultAppBar(
             leftIcon = {
-                BackIcon()
+                BackIcon(onClick = popBackStack)
             },
         )
         Spacer(modifier = Modifier.height(SusuTheme.spacing.spacing_xxs))
@@ -55,11 +97,13 @@ fun SentEnvelopeSearchScreen(
                 horizontal = SusuTheme.spacing.spacing_m,
                 vertical = SusuTheme.spacing.spacing_xxs,
             ),
-            value = searchText,
+            value = uiState.searchKeyword,
             placeholder = stringResource(R.string.sent_envelope_search_search_title),
+            onValueChange = onSearchKeywordUpdated,
+            onClickClearIcon = onClickClearIcon,
         )
-        if (searchText.isEmpty()) {
-            if (recentSearch.isEmpty()) {
+        if (uiState.searchKeyword.isEmpty()) {
+            if (uiState.recentSearchKeywordList.isEmpty()) {
                 EmptyRecentSearch(modifier = Modifier.fillMaxWidth())
             } else {
                 Spacer(modifier = Modifier.height(SusuTheme.spacing.spacing_xxl))
@@ -71,8 +115,10 @@ fun SentEnvelopeSearchScreen(
                 )
                 Spacer(modifier = Modifier.height(SusuTheme.spacing.spacing_m))
                 RecentSearchColumn(
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = SusuTheme.spacing.spacing_m),
-                    recentSearchList = recentSearch,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = SusuTheme.spacing.spacing_m),
+                    recentSearchList = uiState.recentSearchKeywordList,
                     onClickItem = onSelectRecentSearch,
                     onClickClearIcon = onDeleteRecentSearch,
                 )
@@ -85,13 +131,15 @@ fun SentEnvelopeSearchScreen(
                 style = SusuTheme.typography.title_xxs,
                 color = Gray60,
             )
-            if (searchResult.isEmpty()) {
+            if (uiState.envelopeList.isEmpty()) {
                 EmptySearchEnvelope(modifier = Modifier.fillMaxWidth())
             } else {
                 Spacer(modifier = Modifier.height(SusuTheme.spacing.spacing_m))
                 SearchEnvelopeColumn(
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = SusuTheme.spacing.spacing_m),
-                    searchResult = searchResult,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = SusuTheme.spacing.spacing_m),
+                    searchResult = uiState.envelopeList,
                     onClickItem = onClickEnvelope,
                 )
             }
@@ -128,18 +176,18 @@ fun EmptyRecentSearch(
 fun RecentSearchColumn(
     modifier: Modifier = Modifier,
     recentSearchList: PersistentList<String> = persistentListOf(),
-    onClickItem: (Int) -> Unit = {},
-    onClickClearIcon: (Int) -> Unit = {},
+    onClickItem: (String) -> Unit = {},
+    onClickClearIcon: (String) -> Unit = {},
 ) {
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_m),
     ) {
-        recentSearchList.forEachIndexed { index, keyword ->
+        recentSearchList.forEach { keyword ->
             SusuRecentSearchContainer(
                 text = keyword,
-                onClick = { onClickItem(index) },
-                onClickCloseIcon = { onClickClearIcon(index) },
+                onClick = { onClickItem(keyword) },
+                onClickCloseIcon = { onClickClearIcon(keyword) },
             )
         }
     }
@@ -194,9 +242,6 @@ fun SearchEnvelopeColumn(
 @Composable
 fun SentEnvelopeSearchScreenPreview() {
     SusuTheme {
-        SentEnvelopeSearchScreen(
-            searchText = "d",
-            searchResult = persistentListOf(Envelope(friend = Friend(name = "김수수"))),
-        )
+        SentEnvelopeSearchScreen()
     }
 }
