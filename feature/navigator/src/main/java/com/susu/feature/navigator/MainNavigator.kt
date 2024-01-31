@@ -59,8 +59,8 @@ internal class MainNavigator(
             in listOf(
                 ReceivedRoute.ledgerSearchRoute,
                 ReceivedRoute.ledgerFilterRoute("{${ReceivedRoute.FILTER_ARGUMENT_NAME}}"),
-                ReceivedRoute.envelopeDetailRoute("{${ReceivedRoute.ENVELOPE_ARGUMENT_NAME}}"),
-                ReceivedRoute.envelopeEditRoute,
+                ReceivedRoute.envelopeDetailRoute("{${ReceivedRoute.ENVELOPE_ARGUMENT_NAME}}", "{${ReceivedRoute.LEDGER_ID_ARGUMENT_NAME}}"),
+                ReceivedRoute.envelopeEditRoute("{${ReceivedRoute.ENVELOPE_ARGUMENT_NAME}}", "{${ReceivedRoute.LEDGER_ID_ARGUMENT_NAME}}"),
                 SentRoute.sentEnvelopeRoute,
                 SentRoute.sentEnvelopeDetailRoute,
                 SentRoute.sentEnvelopeEditRoute,
@@ -168,12 +168,12 @@ internal class MainNavigator(
         navController.navigateMyPagePrivacyPolicy()
     }
 
-    fun navigateReceivedEnvelopeDetail(envelope: Envelope) {
-        navController.navigateReceivedEnvelopeDetail(envelope)
+    fun navigateReceivedEnvelopeDetail(envelope: Envelope, ledgerId: Long) {
+        navController.navigateReceivedEnvelopeDetail(envelope, ledgerId)
     }
 
-    fun navigateReceivedEnvelopeEdit() {
-        navController.navigateReceivedEnvelopeEdit()
+    fun navigateReceivedEnvelopeEdit(envelope: Envelope, ledgerId: Long) {
+        navController.navigateReceivedEnvelopeEdit(envelope, ledgerId)
     }
 
     fun navigateVoteAdd() {

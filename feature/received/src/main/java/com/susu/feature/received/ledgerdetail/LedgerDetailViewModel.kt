@@ -56,6 +56,28 @@ class LedgerDetailViewModel @Inject constructor(
         )
     }
 
+    fun updateEnvelopeIfNeed(envelopeUri: String?) = intent {
+        val envelope = envelopeUri?.let {
+            Json.decodeFromUri<Envelope>(it)
+        } ?: return@intent this
+
+        val searchEnvelope = SearchEnvelope(
+            envelope = envelope,
+            friend = envelope.friend,
+            relation = envelope.relationship,
+        )
+
+        copy(
+            envelopeList = envelopeList.map {
+                if (it.envelope.id == searchEnvelope.envelope.id) {
+                    searchEnvelope
+                } else {
+                    it
+                }
+            }.toPersistentList(),
+        )
+    }
+
     fun deleteEnvelopeIfNeed(toDeleteEnvelopeId: Long?) {
         if (toDeleteEnvelopeId == null) return
 
@@ -155,5 +177,6 @@ class LedgerDetailViewModel @Inject constructor(
     fun navigateEnvelopeAdd() = postSideEffect(
         LedgerDetailSideEffect.NavigateEnvelopeAdd(ledger.category.customCategory ?: ledger.category.name, ledger.id),
     )
-    fun navigateEnvelopeDetail(envelope: Envelope) = postSideEffect(LedgerDetailSideEffect.NavigateEnvelopeDetail(envelope))
+
+    fun navigateEnvelopeDetail(envelope: Envelope) = postSideEffect(LedgerDetailSideEffect.NavigateEnvelopeDetail(envelope, ledger.id))
 }

@@ -20,7 +20,7 @@ data class LedgerDetailState(
 
 sealed interface LedgerDetailSideEffect : SideEffect {
     data class NavigateEnvelopeAdd(val categoryName: String, val ledgerId: Long) : LedgerDetailSideEffect
-    data class NavigateEnvelopeDetail(val envelope: Envelope) : LedgerDetailSideEffect
+    data class NavigateEnvelopeDetail(val envelope: Envelope, val ledgerId: Long) : LedgerDetailSideEffect
     data class NavigateLedgerEdit(val ledger: Ledger) : LedgerDetailSideEffect
     data class PopBackStackWithLedger(val ledger: String) : LedgerDetailSideEffect
     data class PopBackStackWithDeleteLedgerId(val ledgerId: Long) : LedgerDetailSideEffect

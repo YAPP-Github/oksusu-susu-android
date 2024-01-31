@@ -14,6 +14,15 @@ fun LocalDateTime.to_yyyy_dot_MM_dot_dd(): String {
     return this.format(formatter)
 }
 
+/**
+ * 2023년 11월 25일
+ */
+@Suppress("detekt:FunctionNaming")
+fun LocalDateTime.to_yyyy_korYear_M_korMonth_d_korDay(): String {
+    val formatter = DateTimeFormatter.ofPattern("yyyy년 M월 d일")
+    return this.format(formatter)
+}
+
 fun getSafeLocalDateTime(year: Int, month: Int, day: Int): LocalDateTime = try {
     LocalDateTime.of(year, month, day, 0, 0)
 } catch (e: DateTimeException) {

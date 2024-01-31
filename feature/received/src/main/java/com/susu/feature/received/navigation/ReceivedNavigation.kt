@@ -52,12 +52,12 @@ fun NavController.navigateReceivedEnvelopeAdd(categoryName: String, ledgerId: Lo
     navigate(ReceivedRoute.envelopeAddRoute(categoryName, ledgerId.toString()))
 }
 
-fun NavController.navigateReceivedEnvelopeDetail(envelope: Envelope) {
-    navigate(ReceivedRoute.envelopeDetailRoute(Json.encodeToUri(envelope)))
+fun NavController.navigateReceivedEnvelopeDetail(envelope: Envelope, ledgerId: Long) {
+    navigate(ReceivedRoute.envelopeDetailRoute(Json.encodeToUri(envelope), ledgerId.toString()))
 }
 
-fun NavController.navigateReceivedEnvelopeEdit() {
-    navigate(ReceivedRoute.envelopeEditRoute)
+fun NavController.navigateReceivedEnvelopeEdit(envelope: Envelope, ledgerId: Long) {
+    navigate(ReceivedRoute.envelopeEditRoute(Json.encodeToUri(envelope), ledgerId.toString()))
 }
 
 @Suppress("detekt:LongMethod")
@@ -73,8 +73,8 @@ fun NavGraphBuilder.receivedNavGraph(
     navigateLedgerFilter: (FilterArgument) -> Unit,
     navigateLedgerAdd: () -> Unit,
     navigateEnvelopAdd: (String, Long) -> Unit,
-    navigateEnvelopeDetail: (Envelope) -> Unit,
-    navigateEnvelopeEdit: () -> Unit,
+    navigateEnvelopeDetail: (Envelope, Long) -> Unit,
+    navigateEnvelopeEdit: (Envelope, Long) -> Unit,
     popBackStackWithEnvelope: (String) -> Unit,
     popBackStackWithDeleteReceivedEnvelopeId: (Long) -> Unit,
     onShowSnackbar: (SnackbarToken) -> Unit,
@@ -176,10 +176,14 @@ fun NavGraphBuilder.receivedNavGraph(
     }
 
     composable(
-        route = ReceivedRoute.envelopeDetailRoute("{${ReceivedRoute.ENVELOPE_ARGUMENT_NAME}}"),
+        route = ReceivedRoute.envelopeDetailRoute(
+            envelope = "{${ReceivedRoute.ENVELOPE_ARGUMENT_NAME}}",
+            ledgerId = "{${ReceivedRoute.LEDGER_ID_ARGUMENT_NAME}}",
+        ),
     ) {
         ReceivedEnvelopeDetailRoute(
             popBackStackWithDeleteReceivedEnvelopeId = popBackStackWithDeleteReceivedEnvelopeId,
+            popBackStackWithReceivedEnvelope = popBackStackWithEnvelope,
             navigateReceivedEnvelopeEdit = navigateEnvelopeEdit,
             onShowSnackbar = onShowSnackbar,
             onShowDialog = onShowDialog,
@@ -188,9 +192,15 @@ fun NavGraphBuilder.receivedNavGraph(
     }
 
     composable(
-        route = ReceivedRoute.envelopeEditRoute,
+        route = ReceivedRoute.envelopeEditRoute(
+            envelope = "{${ReceivedRoute.ENVELOPE_ARGUMENT_NAME}}",
+            ledgerId = "{${ReceivedRoute.LEDGER_ID_ARGUMENT_NAME}}",
+        ),
     ) {
-        ReceivedEnvelopeEditRoute(popBackStack = popBackStack)
+        ReceivedEnvelopeEditRoute(
+            popBackStack = popBackStack,
+            handleException = handleException,
+        )
     }
 }
 
@@ -211,6 +221,6 @@ object ReceivedRoute {
     const val ledgerAddRoute = "ledger-add"
 
     fun envelopeAddRoute(categoryName: String, ledgerId: String) = "envelope-add/$categoryName/$ledgerId"
-    fun envelopeDetailRoute(envelope: String) = "envelope-detail/$envelope"
-    const val envelopeEditRoute = "envelope-edit" // TODO 파라미터 넘기는 방식으로 수정해야함.
+    fun envelopeDetailRoute(envelope: String, ledgerId: String) = "envelope-detail/$envelope/$ledgerId"
+    fun envelopeEditRoute(envelope: String, ledgerId: String) = "envelope-edit/$envelope/$ledgerId"
 }

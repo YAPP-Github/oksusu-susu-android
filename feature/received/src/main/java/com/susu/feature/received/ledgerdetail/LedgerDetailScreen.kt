@@ -59,7 +59,7 @@ fun LedgerDetailRoute(
     toDeleteEnvelopeId: Long?,
     navigateLedgerEdit: (Ledger) -> Unit,
     navigateEnvelopAdd: (String, Long) -> Unit,
-    navigateEnvelopeDetail: (Envelope) -> Unit,
+    navigateEnvelopeDetail: (Envelope, Long) -> Unit,
     popBackStackWithLedger: (String) -> Unit,
     popBackStackWithDeleteLedgerId: (Long) -> Unit,
     onShowSnackbar: (SnackbarToken) -> Unit,
@@ -97,7 +97,7 @@ fun LedgerDetailRoute(
             is LedgerDetailSideEffect.HandleException -> handleException(sideEffect.throwable, sideEffect.retry)
             is LedgerDetailSideEffect.ShowSnackbar -> onShowSnackbar(SnackbarToken(message = sideEffect.msg))
             is LedgerDetailSideEffect.NavigateEnvelopeAdd -> navigateEnvelopAdd(sideEffect.categoryName, sideEffect.ledgerId)
-            is LedgerDetailSideEffect.NavigateEnvelopeDetail -> navigateEnvelopeDetail(sideEffect.envelope)
+            is LedgerDetailSideEffect.NavigateEnvelopeDetail -> navigateEnvelopeDetail(sideEffect.envelope, sideEffect.ledgerId)
         }
     }
 
@@ -106,6 +106,7 @@ fun LedgerDetailRoute(
         viewModel.initReceivedEnvelopeList()
         viewModel.addEnvelopeIfNeed(envelope)
         viewModel.deleteEnvelopeIfNeed(toDeleteEnvelopeId)
+        viewModel.updateEnvelopeIfNeed(envelope)
     }
 
     listState.OnBottomReached(minItemsCount = 4) {

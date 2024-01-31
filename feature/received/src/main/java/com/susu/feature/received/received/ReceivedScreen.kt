@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -57,7 +56,6 @@ import com.susu.feature.received.R
 import com.susu.feature.received.navigation.argument.FilterArgument
 import com.susu.feature.received.received.component.LedgerAddCard
 import com.susu.feature.received.received.component.LedgerCard
-import com.susu.feature.received.received.component.LedgerCategoryCard
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.android.awaitFrame
 import kotlinx.coroutines.launch
@@ -236,49 +234,24 @@ fun ReceiveScreen(
                     verticalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxs),
                     horizontalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxs),
                 ) {
-                    if (uiState.isFiltered) {
-                        uiState.ledgerList.groupBy { it.category }.forEach { (category, ledgerList) ->
-                            item(
-                                span = { GridItemSpan(2) },
-                                contentType = "LedgerCategoryCard",
-                            ) {
-                                LedgerCategoryCard(name = category.name)
-                            }
+                    items(
+                        items = uiState.ledgerList,
+                        key = { it.id },
+                    ) { ledger ->
+                        LedgerCard(
+                            ledgerType = ledger.category.name,
+                            title = ledger.title,
+                            money = ledger.totalAmounts,
+                            count = ledger.totalCounts,
+                            style = ledger.category.style,
+                            onClick = { onClickLedgerCard(ledger) },
+                        )
+                    }
 
-                            items(
-                                items = ledgerList,
-                                key = { it.id },
-                            ) { ledger ->
-                                LedgerCard(
-                                    ledgerType = ledger.category.name,
-                                    title = ledger.title,
-                                    money = ledger.totalAmounts,
-                                    count = ledger.totalCounts,
-                                    style = ledger.category.style,
-                                    onClick = { onClickLedgerCard(ledger) },
-                                )
-                            }
-                        }
-                    } else {
-                        items(
-                            items = uiState.ledgerList,
-                            key = { it.id },
-                        ) { ledger ->
-                            LedgerCard(
-                                ledgerType = ledger.category.name,
-                                title = ledger.title,
-                                money = ledger.totalAmounts,
-                                count = ledger.totalCounts,
-                                style = ledger.category.style,
-                                onClick = { onClickLedgerCard(ledger) },
-                            )
-                        }
-
-                        item {
-                            LedgerAddCard(
-                                onClick = onClickLedgerAddCard,
-                            )
-                        }
+                    item {
+                        LedgerAddCard(
+                            onClick = onClickLedgerAddCard,
+                        )
                     }
                 }
             }
