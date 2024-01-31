@@ -30,7 +30,6 @@ import com.susu.core.ui.DialogToken
 import com.susu.core.ui.SnackbarToken
 import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.core.ui.extension.toMoneyFormat
-import com.susu.core.ui.util.to_yyyy_dot_MM_dot_dd
 import com.susu.core.ui.util.to_yyyy_korYear_M_korMonth_d_korDay
 import com.susu.feature.received.R
 import com.susu.feature.received.envelopedetail.component.DetailItem
@@ -157,9 +156,13 @@ fun ReceivedEnvelopeDetailScreen(
                     )
                     DetailItem(
                         categoryText = stringResource(com.susu.core.ui.R.string.word_is_visited),
-                        contentText = if (uiState.envelope.hasVisited == true) stringResource(id = com.susu.core.ui.R.string.word_yes) else stringResource(
-                            id = com.susu.core.ui.R.string.word_no,
-                        ),
+                        contentText = if (uiState.envelope.hasVisited == true) {
+                            stringResource(id = com.susu.core.ui.R.string.word_yes)
+                        } else {
+                            stringResource(
+                                id = com.susu.core.ui.R.string.word_no,
+                            )
+                        },
                         isEmptyContent = uiState.envelope.hasVisited == null,
                     )
                     DetailItem(

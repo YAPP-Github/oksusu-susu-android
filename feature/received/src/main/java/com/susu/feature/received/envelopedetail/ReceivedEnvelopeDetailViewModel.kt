@@ -12,7 +12,6 @@ import com.susu.feature.received.navigation.ReceivedRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -35,7 +34,7 @@ class ReceivedEnvelopeDetailViewModel @Inject constructor(
                 this@ReceivedEnvelopeDetailViewModel.envelope = envelope
                 intent {
                     copy(
-                        envelope = envelope
+                        envelope = envelope,
                     )
                 }
             }

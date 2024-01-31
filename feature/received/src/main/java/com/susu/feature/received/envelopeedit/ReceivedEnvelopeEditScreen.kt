@@ -83,7 +83,6 @@ fun ReceivedEnvelopeEditRoute(
         viewModel.initData()
     }
 
-
     ReceivedEnvelopeEditScreen(
         uiState = uiState,
         focusRequester = focusRequester,

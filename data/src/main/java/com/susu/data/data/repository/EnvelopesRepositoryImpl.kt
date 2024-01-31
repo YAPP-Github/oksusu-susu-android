@@ -123,6 +123,6 @@ class EnvelopesRepositoryImpl @Inject constructor(
             } else {
                 null
             },
-        )
+        ),
     ).getOrThrow().toModel()
 }

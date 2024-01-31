@@ -69,8 +69,11 @@ class LedgerDetailViewModel @Inject constructor(
 
         copy(
             envelopeList = envelopeList.map {
-                if (it.envelope.id == searchEnvelope.envelope.id) searchEnvelope
-                else it
+                if (it.envelope.id == searchEnvelope.envelope.id) {
+                    searchEnvelope
+                } else {
+                    it
+                }
             }.toPersistentList(),
         )
     }

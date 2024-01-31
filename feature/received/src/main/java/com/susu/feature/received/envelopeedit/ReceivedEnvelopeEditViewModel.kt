@@ -3,15 +3,10 @@ package com.susu.feature.received.envelopeedit
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.susu.core.model.Envelope
-import com.susu.core.model.Friend
 import com.susu.core.model.Relationship
 import com.susu.core.ui.base.BaseViewModel
-import com.susu.core.ui.base.SideEffect
 import com.susu.core.ui.extension.decodeFromUri
-import com.susu.core.ui.extension.encodeToUri
-import com.susu.domain.usecase.envelope.DeleteEnvelopeUseCase
 import com.susu.domain.usecase.envelope.EditReceivedEnvelopeUseCase
-import com.susu.domain.usecase.envelope.GetEnvelopeUseCase
 import com.susu.domain.usecase.envelope.GetRelationShipConfigListUseCase
 import com.susu.feature.received.navigation.ReceivedRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,7 +14,6 @@ import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
 import kotlinx.datetime.toKotlinLocalDateTime
 import kotlinx.serialization.json.Json
-import timber.log.Timber
 import java.time.LocalDateTime
 import javax.inject.Inject
 
@@ -48,8 +42,11 @@ class ReceivedEnvelopeEditViewModel @Inject constructor(
                     copy(
                         envelope = envelope,
                         relationshipConfig = it.map {
-                            if (it.id == envelope.relationship.id) it.copy(customRelation = envelope.relationship.customRelation)
-                            else it
+                            if (it.id == envelope.relationship.id) {
+                                it.copy(customRelation = envelope.relationship.customRelation)
+                            } else {
+                                it
+                            }
                         }.toPersistentList(),
                         showCustomRelationButton = it.last().id == envelope.relationship.id,
                         isRelationSaved = it.last().id == envelope.relationship.id,
@@ -60,7 +57,7 @@ class ReceivedEnvelopeEditViewModel @Inject constructor(
 
     fun editReceivedEnvelope() = viewModelScope.launch {
         editReceivedEnvelopeUseCase(
-            param = with(currentState)  {
+            param = with(currentState) {
                 EditReceivedEnvelopeUseCase.Param(
                     envelopeId = envelope.id,
                     friendId = envelope.friend.id,
@@ -75,14 +72,13 @@ class ReceivedEnvelopeEditViewModel @Inject constructor(
                     handedOverAt = envelope.handedOverAt,
                     hasVisited = envelope.hasVisited,
                 )
-            }
+            },
         ).onSuccess {
             popBackStack()
         }.onFailure {
             postSideEffect(ReceivedEnvelopeEditSideEffect.HandleException(it, ::editReceivedEnvelope))
         }
     }
-
 
     fun popBackStack() = postSideEffect(ReceivedEnvelopeEditSideEffect.PopBackStack)
 
@@ -110,7 +106,9 @@ class ReceivedEnvelopeEditViewModel @Inject constructor(
             relationshipConfig = relationshipConfig.map {
                 if (it.id == envelope.relationship.id) {
                     it.copy(customRelation = customRelation)
-                } else it
+                } else {
+                    it
+                }
             }.toPersistentList(),
         )
     }

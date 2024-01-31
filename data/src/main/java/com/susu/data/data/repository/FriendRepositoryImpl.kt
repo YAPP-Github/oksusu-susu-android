@@ -41,6 +41,6 @@ class FriendRepositoryImpl @Inject constructor(
             phoneNumber = phoneNumber,
             relationshipId = relationshipId,
             customRelation = customRelation,
-        )
+        ),
     ).getOrThrow()
 }
