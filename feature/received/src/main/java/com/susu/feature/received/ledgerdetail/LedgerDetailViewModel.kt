@@ -69,10 +69,18 @@ class LedgerDetailViewModel @Inject constructor(
 
         copy(
             envelopeList = envelopeList.map {
-                if (it.envelope.id == searchEnvelope.envelope.id) {
-                    searchEnvelope
-                } else {
-                    it
+                run {
+                    if (it.envelope.id == searchEnvelope.envelope.id) {
+                        searchEnvelope
+                    } else {
+                        it
+                    }
+                }.run {
+                    if (friend.id == searchEnvelope.friend.id) copy(
+                        friend = searchEnvelope.friend,
+                        relation = searchEnvelope.relation,
+                    )
+                    else this
                 }
             }.toPersistentList(),
         )
