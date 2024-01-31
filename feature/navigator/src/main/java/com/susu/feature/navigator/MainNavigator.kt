@@ -60,7 +60,7 @@ internal class MainNavigator(
                 ReceivedRoute.ledgerSearchRoute,
                 ReceivedRoute.ledgerFilterRoute("{${ReceivedRoute.FILTER_ARGUMENT_NAME}}"),
                 ReceivedRoute.envelopeDetailRoute("{${ReceivedRoute.ENVELOPE_ARGUMENT_NAME}}"),
-                ReceivedRoute.envelopeEditRoute,
+                ReceivedRoute.envelopeEditRoute("{${ReceivedRoute.ENVELOPE_ARGUMENT_NAME}}"),
                 SentRoute.sentEnvelopeRoute,
                 SentRoute.sentEnvelopeDetailRoute,
                 SentRoute.sentEnvelopeEditRoute,
@@ -172,8 +172,8 @@ internal class MainNavigator(
         navController.navigateReceivedEnvelopeDetail(envelope)
     }
 
-    fun navigateReceivedEnvelopeEdit() {
-        navController.navigateReceivedEnvelopeEdit()
+    fun navigateReceivedEnvelopeEdit(envelope: Envelope) {
+        navController.navigateReceivedEnvelopeEdit(envelope)
     }
 
     fun navigateVoteAdd() {

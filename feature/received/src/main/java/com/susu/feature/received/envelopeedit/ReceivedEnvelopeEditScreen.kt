@@ -12,20 +12,29 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.susu.core.designsystem.component.appbar.SusuDefaultAppBar
 import com.susu.core.designsystem.component.appbar.icon.BackIcon
+import com.susu.core.designsystem.component.bottomsheet.datepicker.SusuDatePickerBottomSheet
+import com.susu.core.designsystem.component.bottomsheet.datepicker.SusuLimitDatePickerBottomSheet
 import com.susu.core.designsystem.component.button.AddConditionButton
 import com.susu.core.designsystem.component.button.FilledButtonColor
 import com.susu.core.designsystem.component.button.MediumButtonStyle
@@ -33,36 +42,79 @@ import com.susu.core.designsystem.component.button.SmallButtonStyle
 import com.susu.core.designsystem.component.button.SusuFilledButton
 import com.susu.core.designsystem.component.textfield.SusuBasicTextField
 import com.susu.core.designsystem.component.textfield.SusuPriceTextField
+import com.susu.core.designsystem.component.textfieldbutton.SusuTextFieldWrapContentButton
+import com.susu.core.designsystem.component.textfieldbutton.TextFieldButtonColor
+import com.susu.core.designsystem.component.textfieldbutton.style.SmallTextFieldButtonStyle
 import com.susu.core.designsystem.theme.Gray30
 import com.susu.core.designsystem.theme.Gray40
 import com.susu.core.designsystem.theme.Gray70
+import com.susu.core.designsystem.theme.Gray80
 import com.susu.core.designsystem.theme.SusuTheme
+import com.susu.core.model.Relationship
+import com.susu.core.ui.extension.collectWithLifecycle
+import com.susu.core.ui.extension.susuClickable
+import com.susu.core.ui.util.AnnotatedText
 import com.susu.feature.received.R
 import com.susu.feature.received.envelopeedit.component.EditDetailItem
 
 @Composable
 fun ReceivedEnvelopeEditRoute(
-    @Suppress("detekt:UnusedParameter")
+    viewModel: ReceivedEnvelopeEditViewModel = hiltViewModel(),
     popBackStack: () -> Unit,
+    handleException: (Throwable, () -> Unit) -> Unit,
 ) {
-    ReceivedEnvelopeEditScreen()
+    val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
+
+    val focusRequester = remember { FocusRequester() }
+    val scope = rememberCoroutineScope()
+
+    viewModel.sideEffect.collectWithLifecycle { sideEffect ->
+        when (sideEffect) {
+            is ReceivedEnvelopeEditSideEffect.HandleException -> handleException(
+                sideEffect.throwable,
+                sideEffect.retry,
+            )
+
+            ReceivedEnvelopeEditSideEffect.PopBackStack -> popBackStack()
+        }
+    }
+
+    LaunchedEffect(key1 = Unit) {
+        viewModel.initData()
+    }
+
+
+    ReceivedEnvelopeEditScreen(
+        uiState = uiState,
+        focusRequester = focusRequester,
+        onClickBackIcon = viewModel::popBackStack,
+    )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ReceivedEnvelopeEditScreen(
-    modifier: Modifier = Modifier,
+    uiState: ReceivedEnvelopeEditState = ReceivedEnvelopeEditState(),
+    focusRequester: FocusRequester = remember { FocusRequester() },
     onClickBackIcon: () -> Unit = {},
     onClickSave: () -> Unit = {},
+    onTextChangeMoney: (String) -> Unit = {},
+    onTextChangeName: (String) -> Unit = {},
+    onClickRelation: (Relationship) -> Unit = {},
+    onClickCustomRelationClear: () -> Unit = {},
+    onClickCustomRelationClose: () -> Unit = {},
+    onClickRelationInnerButton: () -> Unit = {},
+    onClickAddConditionButton: () -> Unit = {},
+    onClickDate: () -> Unit = {},
+    onClickHasVisited: (Boolean) -> Unit = {},
+    onTextChangeGift: (String) -> Unit = {},
+    onTextChangePhoneNumber: (String) -> Unit = {},
+    onTextChangeMemo: (String) -> Unit = {},
+    onDismissDateBottomSheet: (Int, Int, Int) -> Unit = { _, _, _ -> },
+    onItemSelectedDateBottomSheet: (Int, Int, Int) -> Unit = { _, _, _ -> },
 ) {
-    // TODO: 수정 필요
-    var money by remember { mutableStateOf(150000) }
-    var name by remember { mutableStateOf("김철수") }
-    var present by remember { mutableStateOf("") }
-    var phone by remember { mutableStateOf("") }
-    var memo by remember { mutableStateOf("") }
-
     Box(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxSize()
             .background(SusuTheme.colorScheme.background10),
     ) {
@@ -75,7 +127,7 @@ fun ReceivedEnvelopeEditScreen(
                 },
             )
             Column(
-                modifier = modifier
+                modifier = Modifier
                     .verticalScroll(rememberScrollState())
                     .weight(1f)
                     .padding(
@@ -85,59 +137,67 @@ fun ReceivedEnvelopeEditScreen(
                     ),
             ) {
                 SusuPriceTextField(
-                    text = money.toString(),
-                    onTextChange = { money = it.toInt() },
+                    text = uiState.envelope.amount.toString(),
+                    onTextChange = onTextChangeMoney,
                     textStyle = SusuTheme.typography.title_xxl,
-                    modifier = modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth(),
                 )
-                Spacer(modifier = modifier.size(SusuTheme.spacing.spacing_m))
+                Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_m))
                 EditDetailItem(
                     categoryText = stringResource(R.string.received_envelope_edit_screen_name),
                     categoryTextAlign = Alignment.CenterVertically,
                 ) {
                     SusuBasicTextField(
-                        text = name,
-                        onTextChange = { name = it },
+                        text = uiState.envelope.friend.name,
+                        onTextChange = onTextChangeName,
                         placeholder = stringResource(R.string.received_envelope_edit_screen_name_placeholder),
                         placeholderColor = Gray30,
                         textStyle = SusuTheme.typography.title_s,
-                        modifier = modifier.fillMaxWidth(),
+                        modifier = Modifier.fillMaxWidth(),
                     )
                 }
                 EditDetailItem(
                     categoryText = stringResource(R.string.received_envelope_edit_screen_relationship),
                     categoryTextAlign = Alignment.Top,
                 ) {
-                    SusuFilledButton(
-                        color = FilledButtonColor.Orange,
-                        style = SmallButtonStyle.height32,
-                        text = "친구",
-                        isActive = true,
-                        onClick = {},
-                    )
-                    SusuFilledButton(
-                        color = FilledButtonColor.Orange,
-                        style = SmallButtonStyle.height32,
-                        text = "가족",
-                        isActive = false,
-                        onClick = {},
-                    )
-                    SusuFilledButton(
-                        color = FilledButtonColor.Orange,
-                        style = SmallButtonStyle.height32,
-                        text = "친척",
-                        isActive = false,
-                        onClick = {},
-                    )
-                    SusuFilledButton(
-                        color = FilledButtonColor.Orange,
-                        style = SmallButtonStyle.height32,
-                        text = "동료",
-                        isActive = false,
-                        onClick = {},
-                    )
-                    AddConditionButton(
-                        onClick = {},
+                    uiState.relationshipConfig.dropLast(1).forEach {
+                        SusuFilledButton(
+                            color = FilledButtonColor.Orange,
+                            style = SmallButtonStyle.height32,
+                            text = it.relation,
+                            isActive = it == uiState.envelope.relationship,
+                            onClick = { onClickRelation(it) },
+                        )
+                    }
+
+                    if (uiState.showCustomRelationButton) {
+                        SusuTextFieldWrapContentButton(
+                            focusRequester = focusRequester,
+                            onTextChange = {},
+                            color = TextFieldButtonColor.Orange,
+                            style = SmallTextFieldButtonStyle.height32,
+                            text = uiState.envelope.relationship.customRelation ?: "",
+                            isFocused = uiState.relationshipConfig.last().id == uiState.envelope.relationship.id,
+                            isSaved = uiState.isRelationSaved,
+                            onClickClearIcon = onClickCustomRelationClear,
+                            onClickCloseIcon = onClickCustomRelationClose,
+                            onClickFilledButton = onClickRelationInnerButton,
+                            onClickButton = { onClickRelation(uiState.relationshipConfig.last()) },
+                        )
+                    } else {
+                        AddConditionButton(onClick = onClickAddConditionButton)
+                    }
+                }
+                EditDetailItem(categoryText = stringResource(id = com.susu.core.ui.R.string.word_date), categoryTextAlign = Alignment.Top) {
+                    Text(
+                        modifier = Modifier.susuClickable(rippleEnabled = false, onClick = onClickDate),
+                        text = stringResource(
+                            R.string.ledger_add_screen_date,
+                            uiState.envelope.handedOverAt.year,
+                            uiState.envelope.handedOverAt.month.value,
+                            uiState.envelope.handedOverAt.dayOfMonth,
+                        ),
+                        style = SusuTheme.typography.title_m,
                     )
                 }
                 EditDetailItem(
@@ -148,68 +208,78 @@ fun ReceivedEnvelopeEditScreen(
                         color = FilledButtonColor.Orange,
                         style = SmallButtonStyle.height32,
                         text = stringResource(com.susu.core.ui.R.string.word_yes),
-                        isActive = true,
-                        onClick = {},
-                        modifier = modifier.weight(1f),
+                        isActive = uiState.envelope.hasVisited == true,
+                        onClick = { onClickHasVisited(true) },
+                        modifier = Modifier.weight(1f),
                     )
                     SusuFilledButton(
                         color = FilledButtonColor.Orange,
                         style = SmallButtonStyle.height32,
                         text = stringResource(com.susu.core.ui.R.string.word_no),
-                        isActive = false,
-                        onClick = {},
-                        modifier = modifier.weight(1f),
+                        isActive = uiState.envelope.hasVisited == false,
+                        onClick = { onClickHasVisited(false) },
+                        modifier = Modifier.weight(1f),
                     )
                 }
                 EditDetailItem(
                     categoryText = stringResource(R.string.received_envelope_edit_screen_present),
-                    categoryTextColor = if (present.isNotEmpty()) Gray70 else Gray40,
+                    categoryTextColor = if (!uiState.envelope.gift.isNullOrEmpty()) Gray70 else Gray40,
                     categoryTextAlign = Alignment.CenterVertically,
                 ) {
                     SusuBasicTextField(
-                        text = present,
-                        onTextChange = { present = it },
+                        text = uiState.envelope.gift ?: "",
+                        onTextChange = onTextChangeGift,
                         placeholder = stringResource(R.string.received_envelope_edit_screen_present_placeholder),
                         placeholderColor = Gray30,
                         textStyle = SusuTheme.typography.title_s,
-                        modifier = modifier.fillMaxWidth(),
+                        modifier = Modifier.fillMaxWidth(),
                     )
                 }
                 EditDetailItem(
                     categoryText = stringResource(com.susu.core.ui.R.string.word_phone_number),
-                    categoryTextColor = if (phone.isNotEmpty()) Gray70 else Gray40,
+                    categoryTextColor = if (uiState.envelope.friend.phoneNumber.isNotEmpty()) Gray70 else Gray40,
                     categoryTextAlign = Alignment.CenterVertically,
                 ) {
                     SusuBasicTextField(
-                        text = phone,
-                        onTextChange = { phone = it },
+                        text = uiState.envelope.friend.phoneNumber,
+                        onTextChange = onTextChangePhoneNumber,
                         placeholder = stringResource(R.string.received_envelope_edit_screen_phone_number_placeholder),
                         placeholderColor = Gray30,
                         textStyle = SusuTheme.typography.title_s,
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                        modifier = modifier.fillMaxWidth(),
+                        modifier = Modifier.fillMaxWidth(),
                     )
                 }
                 EditDetailItem(
                     categoryText = stringResource(com.susu.core.ui.R.string.word_memo),
-                    categoryTextColor = if (memo.isNotEmpty()) Gray70 else Gray40,
+                    categoryTextColor = if (!uiState.envelope.memo.isNullOrEmpty()) Gray70 else Gray40,
                     categoryTextAlign = Alignment.Top,
                 ) {
                     SusuBasicTextField(
-                        text = memo,
-                        onTextChange = { memo = it },
+                        text = uiState.envelope.memo ?: "",
+                        onTextChange = onTextChangeMemo,
                         placeholder = stringResource(R.string.received_envelope_edit_screen_memo_placeholder),
                         placeholderColor = Gray30,
                         textStyle = SusuTheme.typography.title_s,
-                        maxLines = 2,
-                        modifier = modifier.fillMaxWidth(),
+                        modifier = Modifier.fillMaxWidth(),
                     )
                 }
-                Spacer(modifier = modifier.size(240.dp))
+                Spacer(modifier = Modifier.size(240.dp))
+            }
+
+            if (uiState.showDateBottomSheet) {
+                SusuDatePickerBottomSheet(
+                    initialYear = uiState.envelope.handedOverAt.year,
+                    initialMonth = uiState.envelope.handedOverAt.month.value,
+                    initialDay = uiState.envelope.handedOverAt.dayOfMonth,
+                    maximumContainerHeight = 346.dp,
+                    onDismissRequest = onDismissDateBottomSheet,
+                    onItemSelected = onItemSelectedDateBottomSheet,
+                )
             }
 
             SusuFilledButton(
-                modifier = modifier
+                modifier = Modifier
                     .fillMaxWidth()
                     .imePadding(),
                 color = FilledButtonColor.Black,

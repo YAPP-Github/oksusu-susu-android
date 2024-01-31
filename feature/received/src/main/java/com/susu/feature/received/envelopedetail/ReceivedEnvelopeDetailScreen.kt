@@ -25,12 +25,13 @@ import com.susu.core.designsystem.component.appbar.icon.DeleteText
 import com.susu.core.designsystem.component.appbar.icon.EditText
 import com.susu.core.designsystem.theme.Gray100
 import com.susu.core.designsystem.theme.SusuTheme
+import com.susu.core.model.Envelope
 import com.susu.core.ui.DialogToken
 import com.susu.core.ui.SnackbarToken
 import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.core.ui.extension.toMoneyFormat
 import com.susu.core.ui.util.to_yyyy_dot_MM_dot_dd
-import com.susu.core.ui.util.to_yyyy_korYear_MM_korMonth_dd_korDay
+import com.susu.core.ui.util.to_yyyy_korYear_M_korMonth_d_korDay
 import com.susu.feature.received.R
 import com.susu.feature.received.envelopedetail.component.DetailItem
 import kotlinx.datetime.toJavaLocalDateTime
@@ -40,7 +41,7 @@ fun ReceivedEnvelopeDetailRoute(
     viewModel: ReceivedEnvelopeDetailViewModel = hiltViewModel(),
     popBackStackWithDeleteReceivedEnvelopeId: (Long) -> Unit,
     popBackStackWithReceivedEnvelope: (String) -> Unit,
-    navigateReceivedEnvelopeEdit: () -> Unit,
+    navigateReceivedEnvelopeEdit: (Envelope) -> Unit,
     handleException: (Throwable, () -> Unit) -> Unit,
     onShowSnackbar: (SnackbarToken) -> Unit,
     onShowDialog: (DialogToken) -> Unit,
@@ -50,7 +51,7 @@ fun ReceivedEnvelopeDetailRoute(
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
             is ReceivedEnvelopeDetailSideEffect.HandleException -> handleException(sideEffect.throwable, sideEffect.retry)
-            is ReceivedEnvelopeDetailSideEffect.NavigateReceivedEnvelopeEdit -> TODO()
+            is ReceivedEnvelopeDetailSideEffect.NavigateReceivedEnvelopeEdit -> navigateReceivedEnvelopeEdit(sideEffect.envelope)
             is ReceivedEnvelopeDetailSideEffect.PopBackStackWithDeleteReceivedEnvelopeId -> popBackStackWithDeleteReceivedEnvelopeId(
                 sideEffect.envelopeId,
             )
@@ -84,7 +85,7 @@ fun ReceivedEnvelopeDetailRoute(
 
     ReceivedEnvelopeDetailScreen(
         uiState = uiState,
-        onClickEdit = navigateReceivedEnvelopeEdit,
+        onClickEdit = viewModel::navigateEnvelopeEdit,
         onClickDelete = viewModel::showDeleteDialog,
         onClickBackIcon = viewModel::popBackStackWithEnvelope,
     )
@@ -151,7 +152,7 @@ fun ReceivedEnvelopeDetailScreen(
                     )
                     DetailItem(
                         categoryText = stringResource(com.susu.core.ui.R.string.word_date),
-                        contentText = uiState.envelope.handedOverAt.toJavaLocalDateTime().to_yyyy_korYear_MM_korMonth_dd_korDay(),
+                        contentText = uiState.envelope.handedOverAt.toJavaLocalDateTime().to_yyyy_korYear_M_korMonth_d_korDay(),
                         isEmptyContent = false,
                     )
                     DetailItem(

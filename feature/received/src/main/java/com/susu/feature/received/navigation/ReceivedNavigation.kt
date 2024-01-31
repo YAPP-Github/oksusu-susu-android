@@ -56,8 +56,8 @@ fun NavController.navigateReceivedEnvelopeDetail(envelope: Envelope) {
     navigate(ReceivedRoute.envelopeDetailRoute(Json.encodeToUri(envelope)))
 }
 
-fun NavController.navigateReceivedEnvelopeEdit() {
-    navigate(ReceivedRoute.envelopeEditRoute)
+fun NavController.navigateReceivedEnvelopeEdit(envelope: Envelope) {
+    navigate(ReceivedRoute.envelopeEditRoute(Json.encodeToUri(envelope)))
 }
 
 @Suppress("detekt:LongMethod")
@@ -74,7 +74,7 @@ fun NavGraphBuilder.receivedNavGraph(
     navigateLedgerAdd: () -> Unit,
     navigateEnvelopAdd: (String, Long) -> Unit,
     navigateEnvelopeDetail: (Envelope) -> Unit,
-    navigateEnvelopeEdit: () -> Unit,
+    navigateEnvelopeEdit: (Envelope) -> Unit,
     popBackStackWithEnvelope: (String) -> Unit,
     popBackStackWithDeleteReceivedEnvelopeId: (Long) -> Unit,
     onShowSnackbar: (SnackbarToken) -> Unit,
@@ -189,9 +189,12 @@ fun NavGraphBuilder.receivedNavGraph(
     }
 
     composable(
-        route = ReceivedRoute.envelopeEditRoute,
+        route = ReceivedRoute.envelopeEditRoute("{${ReceivedRoute.ENVELOPE_ARGUMENT_NAME}}"),
     ) {
-        ReceivedEnvelopeEditRoute(popBackStack = popBackStack)
+        ReceivedEnvelopeEditRoute(
+            popBackStack = popBackStack,
+            handleException = handleException,
+        )
     }
 }
 
@@ -213,5 +216,5 @@ object ReceivedRoute {
 
     fun envelopeAddRoute(categoryName: String, ledgerId: String) = "envelope-add/$categoryName/$ledgerId"
     fun envelopeDetailRoute(envelope: String) = "envelope-detail/$envelope"
-    const val envelopeEditRoute = "envelope-edit" // TODO 파라미터 넘기는 방식으로 수정해야함.
+    fun envelopeEditRoute(envelope: String) = "envelope-edit/$envelope"
 }

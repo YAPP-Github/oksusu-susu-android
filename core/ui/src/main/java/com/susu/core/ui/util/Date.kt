@@ -18,8 +18,8 @@ fun LocalDateTime.to_yyyy_dot_MM_dot_dd(): String {
  * 2023년 11월 25일
  */
 @Suppress("detekt:FunctionNaming")
-fun LocalDateTime.to_yyyy_korYear_MM_korMonth_dd_korDay(): String {
-    val formatter = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일")
+fun LocalDateTime.to_yyyy_korYear_M_korMonth_d_korDay(): String {
+    val formatter = DateTimeFormatter.ofPattern("yyyy년 M월 d일")
     return this.format(formatter)
 }
 
