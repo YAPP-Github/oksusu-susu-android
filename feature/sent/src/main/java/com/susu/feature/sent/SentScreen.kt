@@ -76,10 +76,10 @@ fun SentRoute(
 
 @Composable
 fun SentScreen(
+    modifier: Modifier = Modifier,
     uiState: SentState = SentState(),
     envelopesListState: LazyListState = rememberLazyListState(),
     padding: PaddingValues,
-    modifier: Modifier = Modifier,
     onClickSearchIcon: () -> Unit = {},
     onClickNotificationIcon: () -> Unit = {},
     onClickHistory: (Long) -> Unit = {},
@@ -124,7 +124,7 @@ fun SentScreen(
                     key = { it.friend.id },
                 ) {
                     SentCard(
-                        uiState = uiState,
+                        uiState = it,
                         friend = it.friend,
                         totalAmounts = it.totalAmounts,
                         sentAmounts = it.sentAmounts,

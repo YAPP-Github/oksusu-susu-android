@@ -49,14 +49,15 @@ import com.susu.core.model.EnvelopeSearch
 import com.susu.core.model.Friend
 import com.susu.core.ui.extension.susuClickable
 import com.susu.core.ui.extension.toMoneyFormat
+import com.susu.feature.sent.FriendStatisticsState
 import com.susu.feature.sent.R
 import com.susu.feature.sent.SentState
 import com.susu.feature.sent.SentViewModel
 
 @Composable
 fun SentCard(
-    uiState: SentState = SentState(),
     modifier: Modifier = Modifier,
+    uiState: FriendStatisticsState = FriendStatisticsState(),
     friend: Friend,
     totalAmounts: Int = 0,
     sentAmounts: Int = 0,
@@ -64,8 +65,7 @@ fun SentCard(
     onClickHistory: (Long) -> Unit = {},
     onClickHistoryShowAll: () -> Unit = {},
 ) {
-    var expanded by remember { mutableStateOf(false) }
-    val degrees by animateFloatAsState(if (expanded) 180f else 0f, label = "")
+    val degrees by animateFloatAsState(if (uiState.expand) 180f else 0f, label = "")
 
     Box(
         modifier = modifier
@@ -106,7 +106,6 @@ fun SentCard(
                         .clip(CircleShape)
                         .susuClickable(
                             onClick = {
-                                expanded = !expanded
                                 onClickHistory(friend.id)
                             }
                         )
@@ -160,7 +159,7 @@ fun SentCard(
         }
     }
     AnimatedVisibility(
-        visible = expanded,
+        visible = uiState.expand,
         enter = fadeIn() + expandVertically(),
         exit = fadeOut() + shrinkVertically(),
     ) {
