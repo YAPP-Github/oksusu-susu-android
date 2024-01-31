@@ -63,7 +63,7 @@ fun SentCard(
             .background(SusuTheme.colorScheme.background10),
     ) {
         Image(
-            painter = painterResource(id = R.drawable.ic_envelope),
+            painter = painterResource(id = R.drawable.img_envelope),
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = modifier.fillMaxWidth(),
