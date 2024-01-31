@@ -8,6 +8,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.system.exitProcess
 
 @HiltViewModel
 class SentViewModel @Inject constructor(
@@ -23,7 +24,7 @@ class SentViewModel @Inject constructor(
             GetEnvelopesListUseCase.Param(page = page),
         ).onSuccess { envelopesList ->
             page++
-            val newEnvelopesList = currentState.envelopesList.plus(envelopesList).toPersistentList()
+            val newEnvelopesList = currentState.envelopesList.plus(envelopesList.map { it.toState() }).toPersistentList()
             intent {
                 copy(
                     envelopesList = newEnvelopesList,
@@ -44,7 +45,12 @@ class SentViewModel @Inject constructor(
             val newEnvelopesHistoryList = envelopesHistorySubList.toPersistentList()
             intent {
                 copy(
-                    envelopesHistoryList = newEnvelopesHistoryList,
+                    envelopesList = envelopesList.map {
+                        if (it.friend.id == id) it.copy(
+                            envelopesHistoryList = newEnvelopesHistoryList,
+                            expand = !it.expand
+                        ) else it
+                    }.toPersistentList(),
                 )
             }
         }
