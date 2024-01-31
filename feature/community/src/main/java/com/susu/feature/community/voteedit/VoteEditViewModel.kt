@@ -6,8 +6,8 @@ import com.susu.core.model.Category
 import com.susu.core.model.Vote
 import com.susu.core.ui.base.BaseViewModel
 import com.susu.core.ui.extension.decodeFromUri
-import com.susu.core.ui.extension.encodeToUri
 import com.susu.domain.usecase.vote.CreateVoteUseCase
+import com.susu.domain.usecase.vote.EditVoteUseCase
 import com.susu.domain.usecase.vote.GetPostCategoryConfigUseCase
 import com.susu.feature.community.navigation.CommunityRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,23 +19,25 @@ import javax.inject.Inject
 @HiltViewModel
 class VoteEditViewModel @Inject constructor(
     private val getPostCategoryConfigUseCase: GetPostCategoryConfigUseCase,
-    private val createVoteUseCase: CreateVoteUseCase,
+    private val editVoteUseCase: EditVoteUseCase,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<VoteEditState, VoteEditSideEffect>(
     VoteEditState(),
 ) {
     private val argument = savedStateHandle.get<String>(CommunityRoute.VOTE_ARGUMENT_NAME)!!
+    private var voteId: Long = 0
     private var isFirstVisit = true
 
     fun initData() {
         if (isFirstVisit.not()) return
 
         Json.decodeFromUri<Vote>(argument).let { vote ->
+            voteId = vote.id
             intent {
                 copy(
                     voteOptionStateList = vote.optionList.map { it.content }.toPersistentList(),
                     content = vote.content,
-                    selectedCategory = Category() // TODO
+                    selectedBoardId = vote.boardId,
                 )
             }
         }
@@ -45,11 +47,11 @@ class VoteEditViewModel @Inject constructor(
 
     fun editVote() = viewModelScope.launch {
         intent { copy(isLoading = true) }
-        createVoteUseCase(
-            param = CreateVoteUseCase.Param(
+        editVoteUseCase(
+            param = EditVoteUseCase.Param(
                 content = currentState.content,
-                optionList = currentState.voteOptionStateList,
-                categoryId = currentState.selectedCategory.id,
+                boardId = currentState.selectedBoardId,
+                id = voteId,
             ),
         ).onSuccess {
             postSideEffect(VoteEditSideEffect.PopBackStack)
@@ -67,7 +69,6 @@ class VoteEditViewModel @Inject constructor(
                 intent {
                     copy(
                         categoryConfigList = categoryConfig.toPersistentList(),
-                        selectedCategory = categoryConfig.first(),
                     )
                 }
             }
@@ -76,10 +77,12 @@ class VoteEditViewModel @Inject constructor(
     fun popBackStack() = postSideEffect(VoteEditSideEffect.PopBackStack)
 
     fun selectCategory(category: Category) = intent {
-        copy(selectedCategory = category)
+        copy(selectedBoardId = category.id.toLong())
     }
 
     fun updateContent(content: String) = intent {
         copy(content = content)
     }
+
+    fun showCannotChangeOptionSnackbar() = postSideEffect(VoteEditSideEffect.ShowCanNotChangeOptionSnackbar)
 }

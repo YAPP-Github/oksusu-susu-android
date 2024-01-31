@@ -23,4 +23,5 @@
     <string name="delete_vote_dialog_title">투표를 삭제할까요?</string>
     <string name="delete_vote_dialog_body">삭제한 투표는 다시 복구할 수 없어요</string>
     <string name="delete_vote_success_toast">투표가 삭제되었어요</string>
+    <string name="snackbar_can_not_change_option">시작된 투표는 보기를 편집할 수 없어요</string>
 </resources>

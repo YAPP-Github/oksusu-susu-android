@@ -8,7 +8,7 @@ import kotlinx.collections.immutable.persistentListOf
 
 data class VoteEditState(
     val categoryConfigList: PersistentList<Category> = persistentListOf(),
-    val selectedCategory: Category = Category(),
+    val selectedBoardId: Long = 0,
     val voteOptionStateList: PersistentList<String> = persistentListOf(),
     val content: String = "",
     val isLoading: Boolean = false,
@@ -18,6 +18,7 @@ data class VoteEditState(
 }
 
 sealed interface VoteEditSideEffect : SideEffect {
+    data object ShowCanNotChangeOptionSnackbar : VoteEditSideEffect
     data object PopBackStack : VoteEditSideEffect
     data class HandleException(val throwable: Throwable, val retry: () -> Unit) : VoteEditSideEffect
 }

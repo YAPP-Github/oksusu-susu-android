@@ -10,15 +10,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -31,33 +27,32 @@ import com.susu.core.designsystem.component.button.SusuFilledButton
 import com.susu.core.designsystem.component.button.XSmallButtonStyle
 import com.susu.core.designsystem.component.screen.LoadingScreen
 import com.susu.core.designsystem.component.textfield.SusuBasicTextField
-import com.susu.core.designsystem.component.textfieldbutton.SusuTextFieldFillMaxButton
-import com.susu.core.designsystem.component.textfieldbutton.TextFieldButtonColor
-import com.susu.core.designsystem.component.textfieldbutton.style.MediumTextFieldButtonStyle
-import com.susu.core.designsystem.theme.Gray10
 import com.susu.core.designsystem.theme.Gray100
 import com.susu.core.designsystem.theme.Gray40
-import com.susu.core.designsystem.theme.Orange60
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.model.Category
-import com.susu.core.model.Vote
+import com.susu.core.ui.SnackbarToken
 import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.core.ui.extension.susuClickable
 import com.susu.feature.community.R
-import com.susu.feature.community.community.component.VoteCard
 import com.susu.feature.community.votedetail.component.VoteItem
 
 @Composable
 fun VoteEditRoute(
     viewModel: VoteEditViewModel = hiltViewModel(),
     popBackStack: () -> Unit,
+    onShowSnackbar: (SnackbarToken) -> Unit,
     handleException: (Throwable, () -> Unit) -> Unit,
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
+    val context = LocalContext.current
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
             is VoteEditSideEffect.HandleException -> handleException(sideEffect.throwable, sideEffect.retry)
             VoteEditSideEffect.PopBackStack -> popBackStack()
+            VoteEditSideEffect.ShowCanNotChangeOptionSnackbar -> onShowSnackbar(
+                SnackbarToken(message = context.getString(R.string.snackbar_can_not_change_option))
+            )
         }
     }
 
@@ -71,6 +66,8 @@ fun VoteEditRoute(
         onClickBack = viewModel::popBackStack,
         onClickRegister = viewModel::editVote,
         onClickCategoryButton = viewModel::selectCategory,
+        onTextChangeContent = viewModel::updateContent,
+        onClickOption = viewModel::showCannotChangeOptionSnackbar
     )
 }
 
@@ -81,6 +78,7 @@ fun VoteEditScreen(
     onClickRegister: () -> Unit = {},
     onClickCategoryButton: (Category) -> Unit = {},
     onTextChangeContent: (String) -> Unit = {},
+    onClickOption: () -> Unit = {},
 ) {
     Column(
         modifier = Modifier
@@ -122,7 +120,7 @@ fun VoteEditScreen(
                         color = FilledButtonColor.Black,
                         style = XSmallButtonStyle.height28,
                         text = it.name,
-                        isActive = it == uiState.selectedCategory,
+                        isActive = it.id == uiState.selectedBoardId.toInt(),
                         onClick = { onClickCategoryButton(it) },
                     )
                 }
@@ -145,7 +143,7 @@ fun VoteEditScreen(
                 verticalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxs),
             ) {
                 uiState.voteOptionStateList.forEach { option ->
-                    VoteItem(title = option, showResult = false)
+                    VoteItem(title = option, showResult = false, onClick = onClickOption)
                 }
             }
         }

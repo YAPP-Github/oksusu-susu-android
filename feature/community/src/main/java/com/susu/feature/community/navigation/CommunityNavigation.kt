@@ -111,6 +111,7 @@ fun NavGraphBuilder.communityNavGraph(
     ) {
         VoteEditRoute(
             popBackStack = popBackStack,
+            onShowSnackbar = onShowSnackbar,
             handleException = handleException,
         )
     }
