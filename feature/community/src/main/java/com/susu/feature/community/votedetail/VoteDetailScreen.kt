@@ -5,6 +5,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -40,6 +41,7 @@ import com.susu.core.designsystem.component.badge.BadgeColor
 import com.susu.core.designsystem.component.badge.BadgeStyle
 import com.susu.core.designsystem.component.badge.SusuBadge
 import com.susu.core.designsystem.component.screen.LoadingScreen
+import com.susu.core.designsystem.theme.Gray100
 import com.susu.core.designsystem.theme.Gray15
 import com.susu.core.designsystem.theme.Gray50
 import com.susu.core.designsystem.theme.Orange60
@@ -153,14 +155,23 @@ fun VoteDetailScreen(
                 horizontalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxs),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                Image(
-                    modifier = Modifier
-                        .clip(CircleShape)
+                // border를 사용하지 않은 이유 see -> https://stackoverflow.com/questions/75964726/jetpack-compose-circle-shape-border-not-being-applied-as-expected
+                Box {
+                    Box(modifier = Modifier
                         .size(20.dp)
-                        .border(width = 1.dp, color = Gray15, shape = CircleShape),
-                    painter = painterResource(id = com.susu.core.ui.R.drawable.img_default_profile),
-                    contentDescription = null,
-                )
+                        .clip(CircleShape)
+                        .background(Gray15)
+                    )
+                    Image(
+                        modifier = Modifier
+                            .size(18.dp)
+                            .clip(CircleShape)
+                            .align(Alignment.Center),
+                        painter = painterResource(id = com.susu.core.ui.R.drawable.img_default_profile),
+                        contentDescription = null,
+                    )
+                }
+
 
                 Text(text = stringResource(R.string.word_anonymous_susu), style = SusuTheme.typography.title_xxxs)
 
