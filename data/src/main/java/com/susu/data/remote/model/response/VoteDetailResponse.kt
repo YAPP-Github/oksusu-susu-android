@@ -10,7 +10,7 @@ import kotlinx.serialization.Serializable
 data class VoteDetailResponse(
     val id: Long,
     val isMine: Boolean,
-    val boardName: String,
+    val board: BoardResponse,
     val content: String,
     val count: Long,
     val createdAt: LocalDateTime,
@@ -29,7 +29,8 @@ internal fun VoteDetailResponse.toModel() = Vote(
     id = id,
     uid = creatorProfile.id,
     profile = creatorProfile.toModel(),
-    boardName = boardName,
+    boardId = board.id,
+    boardName = board.name,
     content = content,
     count = count,
     isModified = isModified,
