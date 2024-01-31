@@ -5,7 +5,7 @@ import com.susu.core.ui.base.SideEffect
 import com.susu.core.ui.base.UiState
 
 data class ReceivedEnvelopeDetailState(
-    val money: Long = 0,
+    val envelope: Envelope = Envelope(),
 ) : UiState
 
 sealed interface ReceivedEnvelopeDetailSideEffect : SideEffect {

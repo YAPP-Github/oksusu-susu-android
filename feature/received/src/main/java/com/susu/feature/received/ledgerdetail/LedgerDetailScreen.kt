@@ -106,6 +106,7 @@ fun LedgerDetailRoute(
         viewModel.initReceivedEnvelopeList()
         viewModel.addEnvelopeIfNeed(envelope)
         viewModel.deleteEnvelopeIfNeed(toDeleteEnvelopeId)
+        viewModel.updateEnvelopeIfNeed(envelope)
     }
 
     listState.OnBottomReached(minItemsCount = 4) {

@@ -180,6 +180,7 @@ fun NavGraphBuilder.receivedNavGraph(
     ) {
         ReceivedEnvelopeDetailRoute(
             popBackStackWithDeleteReceivedEnvelopeId = popBackStackWithDeleteReceivedEnvelopeId,
+            popBackStackWithReceivedEnvelope = popBackStackWithEnvelope,
             navigateReceivedEnvelopeEdit = navigateEnvelopeEdit,
             onShowSnackbar = onShowSnackbar,
             onShowDialog = onShowDialog,
