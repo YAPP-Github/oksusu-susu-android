@@ -16,11 +16,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -34,7 +31,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.susu.core.designsystem.component.appbar.SusuDefaultAppBar
 import com.susu.core.designsystem.component.appbar.icon.BackIcon
 import com.susu.core.designsystem.component.bottomsheet.datepicker.SusuDatePickerBottomSheet
-import com.susu.core.designsystem.component.bottomsheet.datepicker.SusuLimitDatePickerBottomSheet
 import com.susu.core.designsystem.component.button.AddConditionButton
 import com.susu.core.designsystem.component.button.FilledButtonColor
 import com.susu.core.designsystem.component.button.MediumButtonStyle
@@ -48,14 +44,14 @@ import com.susu.core.designsystem.component.textfieldbutton.style.SmallTextField
 import com.susu.core.designsystem.theme.Gray30
 import com.susu.core.designsystem.theme.Gray40
 import com.susu.core.designsystem.theme.Gray70
-import com.susu.core.designsystem.theme.Gray80
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.model.Relationship
 import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.core.ui.extension.susuClickable
-import com.susu.core.ui.util.AnnotatedText
 import com.susu.feature.received.R
 import com.susu.feature.received.envelopeedit.component.EditDetailItem
+import kotlinx.coroutines.android.awaitFrame
+import kotlinx.coroutines.launch
 
 @Composable
 fun ReceivedEnvelopeEditRoute(
@@ -76,6 +72,10 @@ fun ReceivedEnvelopeEditRoute(
             )
 
             ReceivedEnvelopeEditSideEffect.PopBackStack -> popBackStack()
+            ReceivedEnvelopeEditSideEffect.FocusCustomRelation -> scope.launch {
+                awaitFrame()
+                focusRequester.requestFocus()
+            }
         }
     }
 
@@ -88,6 +88,22 @@ fun ReceivedEnvelopeEditRoute(
         uiState = uiState,
         focusRequester = focusRequester,
         onClickBackIcon = viewModel::popBackStack,
+        onClickSave = {},
+        onTextChangeMoney = viewModel::updateMoney,
+        onTextChangeName = viewModel::updateName,
+        onTextChangeRelation = viewModel::updateCustomRelation,
+        onClickRelation = viewModel::updateRelation,
+        onClickCustomRelationClear = { viewModel.updateCustomRelation("") },
+        onClickCustomRelationClose = viewModel::closeCustomRelation,
+        onClickRelationInnerButton = viewModel::toggleRelationSaved,
+        onClickAddConditionButton = viewModel::showCustomRelation,
+        onClickDate = viewModel::showDateBottomSheet,
+        onClickHasVisited = viewModel::updateHasVisited,
+        onTextChangeGift = viewModel::updateGift,
+        onTextChangePhoneNumber = viewModel::updatePhoneNumber,
+        onTextChangeMemo = viewModel::updateMemo,
+        onDismissDateBottomSheet = viewModel::hideDateBottomSheet,
+        onItemSelectedDateBottomSheet = viewModel::updateDate,
     )
 }
 
@@ -100,6 +116,7 @@ fun ReceivedEnvelopeEditScreen(
     onClickSave: () -> Unit = {},
     onTextChangeMoney: (String) -> Unit = {},
     onTextChangeName: (String) -> Unit = {},
+    onTextChangeRelation: (String) -> Unit = {},
     onClickRelation: (Relationship) -> Unit = {},
     onClickCustomRelationClear: () -> Unit = {},
     onClickCustomRelationClose: () -> Unit = {},
@@ -173,10 +190,10 @@ fun ReceivedEnvelopeEditScreen(
                     if (uiState.showCustomRelationButton) {
                         SusuTextFieldWrapContentButton(
                             focusRequester = focusRequester,
-                            onTextChange = {},
+                            onTextChange = onTextChangeRelation,
                             color = TextFieldButtonColor.Orange,
                             style = SmallTextFieldButtonStyle.height32,
-                            text = uiState.envelope.relationship.customRelation ?: "",
+                            text = uiState.relationshipConfig.last().customRelation ?: "",
                             isFocused = uiState.relationshipConfig.last().id == uiState.envelope.relationship.id,
                             isSaved = uiState.isRelationSaved,
                             onClickClearIcon = onClickCustomRelationClear,
@@ -285,6 +302,8 @@ fun ReceivedEnvelopeEditScreen(
                 color = FilledButtonColor.Black,
                 style = MediumButtonStyle.height60,
                 shape = RectangleShape,
+                isActive = uiState.buttonEnabled,
+                isClickable = uiState.buttonEnabled,
                 text = stringResource(com.susu.core.ui.R.string.word_save),
                 onClick = onClickSave,
             )

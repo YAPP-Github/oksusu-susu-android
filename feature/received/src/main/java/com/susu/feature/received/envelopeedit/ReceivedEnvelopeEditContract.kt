@@ -4,7 +4,6 @@ import com.susu.core.model.Envelope
 import com.susu.core.model.Relationship
 import com.susu.core.ui.base.SideEffect
 import com.susu.core.ui.base.UiState
-import com.susu.feature.received.envelopeadd.content.relationship.RelationShipSideEffect
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
 
@@ -15,9 +14,15 @@ data class ReceivedEnvelopeEditState(
     val showDateBottomSheet: Boolean = false,
     val isRelationSaved: Boolean = false,
 ) : UiState {
+    val buttonEnabled = when {
+        envelope.friend.name.isEmpty() -> false
+        envelope.relationship.id == relationshipConfig.last().id && isRelationSaved.not() -> false
+        else -> true
+    }
 }
 
 sealed interface ReceivedEnvelopeEditSideEffect : SideEffect {
+    data object FocusCustomRelation : ReceivedEnvelopeEditSideEffect
     data object PopBackStack : ReceivedEnvelopeEditSideEffect
     data class HandleException(val throwable: Throwable, val retry: () -> Unit) : ReceivedEnvelopeEditSideEffect
 }
