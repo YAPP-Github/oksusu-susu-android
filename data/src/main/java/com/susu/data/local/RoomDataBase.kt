@@ -2,6 +2,7 @@ package com.susu.data.local
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import com.susu.data.local.dao.EnvelopeRecentSearchDao
 import com.susu.data.local.dao.LedgerRecentSearchDao
 import com.susu.data.local.dao.VoteRecentSearchDao
 import com.susu.data.local.model.EnvelopeRecentSearchEntity
@@ -18,6 +19,6 @@ import com.susu.data.local.model.VoteRecentSearchEntity
 )
 abstract class RoomDataBase : RoomDatabase() {
     abstract fun ledgerRecentSearchDao(): LedgerRecentSearchDao
-
+    abstract fun envelopeRecentSearchDao(): EnvelopeRecentSearchDao
     abstract fun voteRecentSearchDao(): VoteRecentSearchDao
 }
