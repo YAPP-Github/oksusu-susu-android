@@ -49,4 +49,18 @@ interface EnvelopesRepository {
     suspend fun deleteEnvelope(
         id: Long,
     )
+
+    suspend fun editEnvelope(
+        id: Long,
+        type: String,
+        friendId: Long,
+        ledgerId: Long? = null,
+        amount: Long,
+        gift: String? = null,
+        memo: String? = null,
+        hasVisited: Boolean? = null,
+        handedOverAt: LocalDateTime,
+        categoryId: Long? = null,
+        customCategory: String? = null,
+    ): Envelope
 }

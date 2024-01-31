@@ -9,6 +9,7 @@ import com.susu.data.remote.model.request.CategoryRequest
 import com.susu.data.remote.model.request.EnvelopeRequest
 import com.susu.data.remote.model.response.toModel
 import com.susu.domain.repository.EnvelopesRepository
+import kotlinx.datetime.LocalDateTime
 import javax.inject.Inject
 
 class EnvelopesRepositoryImpl @Inject constructor(
@@ -90,4 +91,38 @@ class EnvelopesRepositoryImpl @Inject constructor(
     override suspend fun getEnvelope(id: Long): Envelope = envelopesService.getEnvelope(id).getOrThrow().toModel()
 
     override suspend fun deleteEnvelope(id: Long) = envelopesService.deleteEnvelope(id).getOrThrow()
+
+    override suspend fun editEnvelope(
+        id: Long,
+        type: String,
+        friendId: Long,
+        ledgerId: Long?,
+        amount: Long,
+        gift: String?,
+        memo: String?,
+        hasVisited: Boolean?,
+        handedOverAt: LocalDateTime,
+        categoryId: Long?,
+        customCategory: String?,
+    ): Envelope = envelopesService.editEnvelope(
+        id = id,
+        envelopeRequest = EnvelopeRequest(
+            type = type,
+            friendId = friendId,
+            ledgerId = ledgerId,
+            amount = amount,
+            gift = gift,
+            memo = memo,
+            hasVisited = hasVisited,
+            handedOverAt = handedOverAt,
+            category = if (categoryId != null) {
+                CategoryRequest(
+                    id = categoryId,
+                    customCategory = customCategory,
+                )
+            } else {
+                null
+            },
+        )
+    ).getOrThrow().toModel()
 }

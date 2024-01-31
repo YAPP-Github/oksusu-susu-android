@@ -27,4 +27,20 @@ class FriendRepositoryImpl @Inject constructor(
     override suspend fun searchFriend(name: String): List<FriendSearch> = friendService.searchFriend(
         name = name,
     ).getOrThrow().data.map { it.toModel() }
+
+    override suspend fun editFriend(
+        id: Long,
+        name: String,
+        phoneNumber: String?,
+        relationshipId: Long,
+        customRelation: String?,
+    ) = friendService.editFriend(
+        id = id,
+        friendRequest = FriendRequest(
+            name = name,
+            phoneNumber = phoneNumber,
+            relationshipId = relationshipId,
+            customRelation = customRelation,
+        )
+    ).getOrThrow()
 }
