@@ -10,6 +10,9 @@ data class VoteDetailState(
 ) : UiState
 
 sealed interface VoteDetailSideEffect : SideEffect {
+    data class PopBackStackWithDeleteVoteId(val voteId: Long) : VoteDetailSideEffect
+    data class ShowDeleteDialog(val onConfirmRequest: () -> Unit) : VoteDetailSideEffect
+    data object ShowDeleteSuccessSnackbar : VoteDetailSideEffect
     data class PopBackStackWithToUpdateVote(val vote: String) : VoteDetailSideEffect
     data class NavigateVoteEdit(val vote: Vote) : VoteDetailSideEffect
     data class HandleException(val throwable: Throwable, val retry: () -> Unit) : VoteDetailSideEffect

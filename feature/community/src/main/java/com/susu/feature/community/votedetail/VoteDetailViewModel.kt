@@ -3,8 +3,10 @@ package com.susu.feature.community.votedetail
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.susu.core.model.Vote
+import com.susu.core.model.exception.NotFoundLedgerException
 import com.susu.core.ui.base.BaseViewModel
 import com.susu.core.ui.extension.encodeToUri
+import com.susu.domain.usecase.vote.DeleteVoteUseCase
 import com.susu.domain.usecase.vote.GetVoteDetailUseCase
 import com.susu.domain.usecase.vote.VoteUseCase
 import com.susu.feature.community.navigation.CommunityRoute
@@ -15,6 +17,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class VoteDetailViewModel @Inject constructor(
+    private val deleteVoteUseCase: DeleteVoteUseCase,
     private val getVoteDetailUseCase: GetVoteDetailUseCase,
     private val voteUseCase: VoteUseCase,
     savedStateHandle: SavedStateHandle,
@@ -90,6 +93,25 @@ class VoteDetailViewModel @Inject constructor(
                 },
             ),
         )
+    }
+
+    fun showDeleteDialog() = postSideEffect(
+        VoteDetailSideEffect.ShowDeleteDialog(
+            onConfirmRequest = ::deleteVote,
+        ),
+    )
+
+    private fun deleteVote() = viewModelScope.launch {
+        deleteVoteUseCase(voteId)
+            .onSuccess {
+                postSideEffect(
+                    VoteDetailSideEffect.ShowDeleteSuccessSnackbar,
+                    VoteDetailSideEffect.PopBackStackWithDeleteVoteId(voteId),
+                )
+            }
+            .onFailure { throwable ->
+                postSideEffect(VoteDetailSideEffect.HandleException(throwable, ::deleteVote))
+            }
     }
 
     fun navigateVoteEdit() = postSideEffect(VoteDetailSideEffect.NavigateVoteEdit(vote))

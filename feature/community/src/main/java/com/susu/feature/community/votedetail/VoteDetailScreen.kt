@@ -27,6 +27,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -47,6 +48,8 @@ import com.susu.core.designsystem.theme.Gray50
 import com.susu.core.designsystem.theme.Orange60
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.model.Vote
+import com.susu.core.ui.DialogToken
+import com.susu.core.ui.SnackbarToken
 import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.core.ui.extension.susuClickable
 import com.susu.core.ui.util.to_yyyy_dot_MM_dot_dd
@@ -60,16 +63,39 @@ import java.time.temporal.ChronoUnit
 @Composable
 fun VoteDetailRoute(
     viewModel: VoteDetailViewModel = hiltViewModel(),
+    popBackStackWithDeleteVoteId: (Long) -> Unit,
     popBackStackWithToUpdateVote: (String) -> Unit,
     navigateVoteEdit: (Vote) -> Unit,
+    onShowSnackbar: (SnackbarToken) -> Unit,
+    onShowDialog: (DialogToken) -> Unit,
     handleException: (Throwable, () -> Unit) -> Unit,
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
+    val context = LocalContext.current
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
             is VoteDetailSideEffect.HandleException -> handleException(sideEffect.throwable, sideEffect.retry)
             is VoteDetailSideEffect.PopBackStackWithToUpdateVote -> popBackStackWithToUpdateVote(sideEffect.vote)
             is VoteDetailSideEffect.NavigateVoteEdit -> navigateVoteEdit(sideEffect.vote)
+            is VoteDetailSideEffect.PopBackStackWithDeleteVoteId -> popBackStackWithDeleteVoteId(sideEffect.voteId)
+            is VoteDetailSideEffect.ShowDeleteDialog -> {
+                onShowDialog(
+                    DialogToken(
+                        title = context.getString(R.string.delete_vote_dialog_title),
+                        text = context.getString(R.string.delete_vote_dialog_body),
+                        confirmText = context.getString(com.susu.core.ui.R.string.word_delete),
+                        dismissText = context.getString(com.susu.core.ui.R.string.word_cancel),
+                        onConfirmRequest = sideEffect.onConfirmRequest,
+                    ),
+                )
+            }
+            VoteDetailSideEffect.ShowDeleteSuccessSnackbar -> {
+                onShowSnackbar(
+                    SnackbarToken(
+                        message = context.getString(R.string.delete_vote_success_toast),
+                    ),
+                )
+            }
         }
     }
 
@@ -97,6 +123,7 @@ fun VoteDetailRoute(
         currentTime = currentTime,
         onClickBack = viewModel::popBackStack,
         onClickEdit = viewModel::navigateVoteEdit,
+        onClickDelete = viewModel::showDeleteDialog,
         onClickOption = viewModel::vote,
     )
 }

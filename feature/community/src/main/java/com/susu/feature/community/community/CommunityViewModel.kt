@@ -75,6 +75,21 @@ class CommunityViewModel @Inject constructor(
         }
     }
 
+    fun deleteVoteIfNeed(toDeleteVoteId: Long?) {
+        if (toDeleteVoteId == null) return
+
+        intent {
+            copy(
+                voteList = voteList
+                    .filter { it.id != toDeleteVoteId }
+                    .toPersistentList(),
+                popularVoteList = popularVoteList
+                    .filter { it.id != toDeleteVoteId }
+                    .toPersistentList()
+            )
+        }
+    }
+
     fun initData() {
         if (isFirstVisit.not()) return
         getVoteList()

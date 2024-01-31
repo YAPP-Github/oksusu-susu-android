@@ -165,6 +165,13 @@ internal fun MainScreen(
                         )
                         navigator.popBackStackIfNotHome()
                     },
+                    popBackStackWithDeleteVoteId = { voteId ->
+                        navigator.navController.previousBackStackEntry?.savedStateHandle?.set(
+                            CommunityRoute.VOTE_ID_ARGUMENT_NAME,
+                            voteId,
+                        )
+                        navigator.popBackStackIfNotHome()
+                    },
                     onShowSnackbar = viewModel::onShowSnackbar,
                     onShowDialog = viewModel::onShowDialog,
                     handleException = viewModel::handleException,

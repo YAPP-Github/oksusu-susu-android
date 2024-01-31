@@ -20,4 +20,7 @@
     <string name="vote_search_screen_empty_result_description">궁금하신 것들의 키워드를\n검색해볼 수 있어요</string>
     <string name="vote_search_screen_recent_search_empty_title">어떤 투표를 찾아드릴까요?</string>
     <string name="vote_search_screen_search_result_empty_title">원하는 검색 결과가 없나요?</string>
+    <string name="delete_vote_dialog_title">투표를 삭제할까요?</string>
+    <string name="delete_vote_dialog_body">삭제한 투표는 다시 복구할 수 없어요</string>
+    <string name="delete_vote_success_toast">투표가 삭제되었어요</string>
 </resources>

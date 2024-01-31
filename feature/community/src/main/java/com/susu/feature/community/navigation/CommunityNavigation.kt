@@ -47,19 +47,20 @@ fun NavGraphBuilder.communityNavGraph(
     popBackStack: () -> Unit,
     popBackStackWithVote: (String) -> Unit,
     popBackStackWithToUpdateVote: (String) -> Unit,
-    @Suppress("detekt:UnusedParameter")
+    popBackStackWithDeleteVoteId: (Long) -> Unit,
     onShowSnackbar: (SnackbarToken) -> Unit,
-    @Suppress("detekt:UnusedParameter")
     onShowDialog: (DialogToken) -> Unit,
     handleException: (Throwable, () -> Unit) -> Unit,
 ) {
     composable(route = CommunityRoute.route) { navBackStackEntry ->
         val vote = navBackStackEntry.savedStateHandle.get<String>(CommunityRoute.VOTE_ARGUMENT_NAME)
         val toUpdateVote = navBackStackEntry.savedStateHandle.get<String>(CommunityRoute.TO_UPDATE_VOTE_ARGUMENT_NAME)
+        val toDeleteVoteId = navBackStackEntry.savedStateHandle.get<Long>(CommunityRoute.VOTE_ID_ARGUMENT_NAME)
 
         CommunityRoute(
             padding = padding,
             vote = vote,
+            toDeleteVoteId = toDeleteVoteId,
             toUpdateVote = toUpdateVote,
             navigateVoteAdd = navigateVoteAdd,
             navigateVoteSearch = navigateVoteSearch,
@@ -88,7 +89,10 @@ fun NavGraphBuilder.communityNavGraph(
     ) {
         VoteDetailRoute(
             popBackStackWithToUpdateVote = popBackStackWithToUpdateVote,
+            popBackStackWithDeleteVoteId = popBackStackWithDeleteVoteId,
             navigateVoteEdit = navigateVoteEdit,
+            onShowDialog = onShowDialog,
+            onShowSnackbar = onShowSnackbar,
             handleException = handleException,
         )
     }
