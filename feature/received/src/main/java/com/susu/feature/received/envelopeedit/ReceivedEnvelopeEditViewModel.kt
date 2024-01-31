@@ -10,6 +10,7 @@ import com.susu.core.ui.base.SideEffect
 import com.susu.core.ui.extension.decodeFromUri
 import com.susu.core.ui.extension.encodeToUri
 import com.susu.domain.usecase.envelope.DeleteEnvelopeUseCase
+import com.susu.domain.usecase.envelope.EditReceivedEnvelopeUseCase
 import com.susu.domain.usecase.envelope.GetEnvelopeUseCase
 import com.susu.domain.usecase.envelope.GetRelationShipConfigListUseCase
 import com.susu.feature.received.navigation.ReceivedRoute
@@ -25,11 +26,13 @@ import javax.inject.Inject
 @HiltViewModel
 class ReceivedEnvelopeEditViewModel @Inject constructor(
     private val getRelationShipConfigListUseCase: GetRelationShipConfigListUseCase,
+    private val editReceivedEnvelopeUseCase: EditReceivedEnvelopeUseCase,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<ReceivedEnvelopeEditState, ReceivedEnvelopeEditSideEffect>(
     ReceivedEnvelopeEditState(),
 ) {
     private val argument = savedStateHandle.get<String>(ReceivedRoute.ENVELOPE_ARGUMENT_NAME)!!
+    private val ledgerId = savedStateHandle.get<String>(ReceivedRoute.LEDGER_ID_ARGUMENT_NAME)!!.toLong()
 
     private var isFirstVisited: Boolean = true
 
@@ -55,6 +58,31 @@ class ReceivedEnvelopeEditViewModel @Inject constructor(
             }
     }
 
+    fun editReceivedEnvelope() = viewModelScope.launch {
+        editReceivedEnvelopeUseCase(
+            param = with(currentState)  {
+                EditReceivedEnvelopeUseCase.Param(
+                    envelopeId = envelope.id,
+                    friendId = envelope.friend.id,
+                    friendName = envelope.friend.name,
+                    phoneNumber = envelope.friend.phoneNumber.ifEmpty { null },
+                    relationshipId = envelope.relationship.id,
+                    customRelation = envelope.relationship.customRelation,
+                    ledgerId = ledgerId,
+                    amount = envelope.amount,
+                    gift = envelope.gift,
+                    memo = envelope.memo,
+                    handedOverAt = envelope.handedOverAt,
+                    hasVisited = envelope.hasVisited,
+                )
+            }
+        ).onSuccess {
+            popBackStack()
+        }.onFailure {
+            postSideEffect(ReceivedEnvelopeEditSideEffect.HandleException(it, ::editReceivedEnvelope))
+        }
+    }
+
 
     fun popBackStack() = postSideEffect(ReceivedEnvelopeEditSideEffect.PopBackStack)
 
@@ -66,7 +94,7 @@ class ReceivedEnvelopeEditViewModel @Inject constructor(
 
     fun updateName(name: String) = intent {
         copy(
-            envelope = envelope.copy(friend = Friend(name = name)),
+            envelope = envelope.copy(friend = envelope.friend.copy(name = name)),
         )
     }
 

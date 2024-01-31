@@ -9,7 +9,7 @@ data class ReceivedEnvelopeDetailState(
 ) : UiState
 
 sealed interface ReceivedEnvelopeDetailSideEffect : SideEffect {
-    data class NavigateReceivedEnvelopeEdit(val envelope: Envelope) : ReceivedEnvelopeDetailSideEffect
+    data class NavigateReceivedEnvelopeEdit(val envelope: Envelope, val ledgerId: Long) : ReceivedEnvelopeDetailSideEffect
     data class PopBackStackWithReceivedEnvelope(val envelope: String) : ReceivedEnvelopeDetailSideEffect
     data class PopBackStackWithDeleteReceivedEnvelopeId(val envelopeId: Long) : ReceivedEnvelopeDetailSideEffect
     data class ShowDeleteDialog(val onConfirmRequest: () -> Unit) : ReceivedEnvelopeDetailSideEffect

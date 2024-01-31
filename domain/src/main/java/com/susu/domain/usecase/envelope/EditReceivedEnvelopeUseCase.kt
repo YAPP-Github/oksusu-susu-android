@@ -20,7 +20,8 @@ class EditReceivedEnvelopeUseCase @Inject constructor(
                 customRelation = customRelation,
             )
 
-            envelopesRepository.createEnvelope(
+            envelopesRepository.editEnvelope(
+                id = envelopeId,
                 type = "RECEIVED",
                 friendId = friendId,
                 ledgerId = ledgerId,
@@ -34,6 +35,7 @@ class EditReceivedEnvelopeUseCase @Inject constructor(
     }
 
     data class Param(
+        val envelopeId: Long,
         val friendId: Long,
         val friendName: String,
         val phoneNumber: String? = null,

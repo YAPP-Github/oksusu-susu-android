@@ -24,6 +24,8 @@ class ReceivedEnvelopeDetailViewModel @Inject constructor(
     ReceivedEnvelopeDetailState(),
 ) {
     private val argument = savedStateHandle.get<String>(ReceivedRoute.ENVELOPE_ARGUMENT_NAME)!!
+    private val ledgerId = savedStateHandle.get<String>(ReceivedRoute.LEDGER_ID_ARGUMENT_NAME)!!.toLong()
+
     private var envelope = Envelope()
 
     fun getEnvelope() = viewModelScope.launch {
@@ -39,7 +41,7 @@ class ReceivedEnvelopeDetailViewModel @Inject constructor(
             }
     }
 
-    fun navigateEnvelopeEdit() = postSideEffect(ReceivedEnvelopeDetailSideEffect.NavigateReceivedEnvelopeEdit(envelope))
+    fun navigateEnvelopeEdit() = postSideEffect(ReceivedEnvelopeDetailSideEffect.NavigateReceivedEnvelopeEdit(envelope, ledgerId))
     fun popBackStackWithEnvelope() = postSideEffect(ReceivedEnvelopeDetailSideEffect.PopBackStackWithReceivedEnvelope(Json.encodeToUri(envelope)))
     fun showDeleteDialog() = postSideEffect(
         ReceivedEnvelopeDetailSideEffect.ShowDeleteDialog(

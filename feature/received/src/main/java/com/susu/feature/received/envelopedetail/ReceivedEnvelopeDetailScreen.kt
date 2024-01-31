@@ -41,7 +41,7 @@ fun ReceivedEnvelopeDetailRoute(
     viewModel: ReceivedEnvelopeDetailViewModel = hiltViewModel(),
     popBackStackWithDeleteReceivedEnvelopeId: (Long) -> Unit,
     popBackStackWithReceivedEnvelope: (String) -> Unit,
-    navigateReceivedEnvelopeEdit: (Envelope) -> Unit,
+    navigateReceivedEnvelopeEdit: (Envelope, Long) -> Unit,
     handleException: (Throwable, () -> Unit) -> Unit,
     onShowSnackbar: (SnackbarToken) -> Unit,
     onShowDialog: (DialogToken) -> Unit,
@@ -51,7 +51,7 @@ fun ReceivedEnvelopeDetailRoute(
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
             is ReceivedEnvelopeDetailSideEffect.HandleException -> handleException(sideEffect.throwable, sideEffect.retry)
-            is ReceivedEnvelopeDetailSideEffect.NavigateReceivedEnvelopeEdit -> navigateReceivedEnvelopeEdit(sideEffect.envelope)
+            is ReceivedEnvelopeDetailSideEffect.NavigateReceivedEnvelopeEdit -> navigateReceivedEnvelopeEdit(sideEffect.envelope, sideEffect.ledgerId)
             is ReceivedEnvelopeDetailSideEffect.PopBackStackWithDeleteReceivedEnvelopeId -> popBackStackWithDeleteReceivedEnvelopeId(
                 sideEffect.envelopeId,
             )

@@ -88,7 +88,7 @@ fun ReceivedEnvelopeEditRoute(
         uiState = uiState,
         focusRequester = focusRequester,
         onClickBackIcon = viewModel::popBackStack,
-        onClickSave = {},
+        onClickSave = viewModel::editReceivedEnvelope,
         onTextChangeMoney = viewModel::updateMoney,
         onTextChangeName = viewModel::updateName,
         onTextChangeRelation = viewModel::updateCustomRelation,
