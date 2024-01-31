@@ -22,7 +22,7 @@ data class EnvelopeInfo(
     val gift: String? = null,
     val memo: String? = null,
     val hasVisited: Boolean? = null,
-    val handedOverAt: LocalDateTime? = null,
+    val handedOverAt: LocalDateTime,
 )
 
 @Serializable

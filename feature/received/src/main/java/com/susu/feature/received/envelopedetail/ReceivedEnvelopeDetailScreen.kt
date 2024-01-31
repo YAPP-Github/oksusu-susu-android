@@ -29,8 +29,11 @@ import com.susu.core.ui.DialogToken
 import com.susu.core.ui.SnackbarToken
 import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.core.ui.extension.toMoneyFormat
+import com.susu.core.ui.util.to_yyyy_dot_MM_dot_dd
+import com.susu.core.ui.util.to_yyyy_korYear_MM_korMonth_dd_korDay
 import com.susu.feature.received.R
 import com.susu.feature.received.envelopedetail.component.DetailItem
+import kotlinx.datetime.toJavaLocalDateTime
 
 @Composable
 fun ReceivedEnvelopeDetailRoute(
@@ -144,6 +147,11 @@ fun ReceivedEnvelopeDetailScreen(
                     DetailItem(
                         categoryText = stringResource(com.susu.core.ui.R.string.word_relationship),
                         contentText = uiState.envelope.relationship.customRelation ?: uiState.envelope.relationship.relation,
+                        isEmptyContent = false,
+                    )
+                    DetailItem(
+                        categoryText = stringResource(com.susu.core.ui.R.string.word_date),
+                        contentText = uiState.envelope.handedOverAt.toJavaLocalDateTime().to_yyyy_korYear_MM_korMonth_dd_korDay(),
                         isEmptyContent = false,
                     )
                     DetailItem(
