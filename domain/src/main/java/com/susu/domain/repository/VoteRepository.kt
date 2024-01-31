@@ -33,4 +33,14 @@ interface VoteRepository {
         isCancel: Boolean,
         optionId: Long,
     )
+
+    suspend fun editVote(
+        id: Long,
+        boardId: Long,
+        content: String,
+    ): Vote
+
+    suspend fun deleteVote(
+        id: Long,
+    )
 }
