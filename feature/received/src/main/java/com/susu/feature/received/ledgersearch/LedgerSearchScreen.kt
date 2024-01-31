@@ -203,27 +203,28 @@ private fun SearchResultColumn(
     ledgerList: PersistentList<Ledger>,
     onClickItem: (Ledger) -> Unit,
 ) {
-    if (showSearchResultEmpty) {
-        ResultEmptyColumn(
-            title = stringResource(R.string.ledger_search_screen_empty_search_result_title),
+    Column(
+        modifier = Modifier.padding(top = SusuTheme.spacing.spacing_xxl),
+        verticalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_m),
+    ) {
+        Text(
+            text = stringResource(com.susu.core.ui.R.string.word_search_result),
+            style = SusuTheme.typography.title_xxs,
+            color = Gray60,
         )
-    } else {
-        Column(
-            modifier = Modifier.padding(top = SusuTheme.spacing.spacing_xxl),
-            verticalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_m),
-        ) {
-            Text(
-                text = stringResource(com.susu.core.ui.R.string.word_search_result),
-                style = SusuTheme.typography.title_xxs,
-                color = Gray60,
+
+        if (showSearchResultEmpty) {
+            ResultEmptyColumn(
+                title = stringResource(R.string.ledger_search_screen_empty_search_result_title),
             )
-            ledgerList.forEach { ledger ->
-                SusuRecentSearchContainer(
-                    typeIconId = R.drawable.ic_ledger,
-                    text = ledger.title,
-                    onClick = { onClickItem(ledger) },
-                )
-            }
+        }
+
+        ledgerList.forEach { ledger ->
+            SusuRecentSearchContainer(
+                typeIconId = R.drawable.ic_ledger,
+                text = ledger.title,
+                onClick = { onClickItem(ledger) },
+            )
         }
     }
 }
