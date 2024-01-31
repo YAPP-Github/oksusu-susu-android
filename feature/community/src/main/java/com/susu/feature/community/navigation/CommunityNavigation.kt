@@ -7,12 +7,16 @@ import androidx.navigation.NavOptions
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.susu.core.model.Vote
 import com.susu.core.ui.DialogToken
 import com.susu.core.ui.SnackbarToken
+import com.susu.core.ui.extension.encodeToUri
 import com.susu.feature.community.community.CommunityRoute
 import com.susu.feature.community.voteadd.VoteAddRoute
 import com.susu.feature.community.votedetail.VoteDetailRoute
+import com.susu.feature.community.voteedit.VoteEditRoute
 import com.susu.feature.community.votesearch.VoteSearchRoute
+import kotlinx.serialization.json.Json
 
 fun NavController.navigateVoteAdd() {
     navigate(CommunityRoute.voteAddRoute)
@@ -30,11 +34,16 @@ fun NavController.navigateVoteDetail(voteId: Long) {
     navigate(CommunityRoute.voteDetailRoute(voteId.toString()))
 }
 
+fun NavController.navigateVoteEdit(vote: Vote) {
+    navigate(CommunityRoute.voteEditRoute(Json.encodeToUri(vote)))
+}
+
 fun NavGraphBuilder.communityNavGraph(
     padding: PaddingValues,
     navigateVoteAdd: () -> Unit,
     navigateVoteSearch: () -> Unit,
     navigateVoteDetail: (Long) -> Unit,
+    navigateVoteEdit: (Vote) -> Unit,
     popBackStack: () -> Unit,
     popBackStackWithVote: (String) -> Unit,
     popBackStackWithToUpdateVote: (String) -> Unit,
@@ -79,6 +88,7 @@ fun NavGraphBuilder.communityNavGraph(
     ) {
         VoteDetailRoute(
             popBackStackWithToUpdateVote = popBackStackWithToUpdateVote,
+            navigateVoteEdit = navigateVoteEdit,
             handleException = handleException,
         )
     }
@@ -86,7 +96,19 @@ fun NavGraphBuilder.communityNavGraph(
     composable(
         route = CommunityRoute.voteSearchRoute,
     ) {
-        VoteSearchRoute(popBackStack = popBackStack, navigateVoteDetail = navigateVoteDetail)
+        VoteSearchRoute(
+            popBackStack = popBackStack,
+            navigateVoteDetail = navigateVoteDetail,
+        )
+    }
+
+    composable(
+        route = CommunityRoute.voteEditRoute("{${CommunityRoute.VOTE_ARGUMENT_NAME}}")
+    ) {
+        VoteEditRoute(
+            popBackStack = popBackStack,
+            handleException = handleException,
+        )
     }
 }
 
@@ -100,4 +122,5 @@ object CommunityRoute {
     const val TO_UPDATE_VOTE_ARGUMENT_NAME = "to-update-vote"
 
     fun voteDetailRoute(voteId: String) = "vote-detail/$voteId"
+    fun voteEditRoute(vote: String) = "vote-edit/$vote"
 }

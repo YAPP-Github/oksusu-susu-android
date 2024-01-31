@@ -11,10 +11,12 @@ import androidx.navigation.navOptions
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.model.Envelope
 import com.susu.core.model.Ledger
+import com.susu.core.model.Vote
 import com.susu.feature.community.navigation.CommunityRoute
 import com.susu.feature.community.navigation.navigateCommunity
 import com.susu.feature.community.navigation.navigateVoteAdd
 import com.susu.feature.community.navigation.navigateVoteDetail
+import com.susu.feature.community.navigation.navigateVoteEdit
 import com.susu.feature.community.navigation.navigateVoteSearch
 import com.susu.feature.loginsignup.navigation.LoginSignupRoute
 import com.susu.feature.mypage.navigation.navigateMyPage
@@ -68,6 +70,7 @@ internal class MainNavigator(
                 CommunityRoute.voteAddRoute,
                 CommunityRoute.voteSearchRoute,
                 CommunityRoute.voteDetailRoute("{${CommunityRoute.VOTE_ID_ARGUMENT_NAME}}"),
+                CommunityRoute.voteEditRoute("{${CommunityRoute.VOTE_ARGUMENT_NAME}}"),
             ),
             -> SusuTheme.colorScheme.background10
 
@@ -186,6 +189,10 @@ internal class MainNavigator(
 
     fun navigateVoteDetail(voteId: Long) {
         navController.navigateVoteDetail(voteId)
+    }
+
+    fun navigateVoteEdit(vote: Vote) {
+        navController.navigateVoteEdit(vote)
     }
 
     fun popBackStackIfNotHome() {

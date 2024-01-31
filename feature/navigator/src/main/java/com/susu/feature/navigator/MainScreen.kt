@@ -149,6 +149,7 @@ internal fun MainScreen(
                     navigateVoteAdd = navigator::navigateVoteAdd,
                     navigateVoteSearch = navigator::navigateVoteSearch,
                     navigateVoteDetail = navigator::navigateVoteDetail,
+                    navigateVoteEdit = navigator::navigateVoteEdit,
                     popBackStack = navigator::popBackStackIfNotHome,
                     popBackStackWithVote = { vote ->
                         navigator.navController.previousBackStackEntry?.savedStateHandle?.set(

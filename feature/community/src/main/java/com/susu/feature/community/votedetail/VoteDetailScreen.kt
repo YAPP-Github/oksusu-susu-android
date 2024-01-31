@@ -44,6 +44,7 @@ import com.susu.core.designsystem.theme.Gray15
 import com.susu.core.designsystem.theme.Gray50
 import com.susu.core.designsystem.theme.Orange60
 import com.susu.core.designsystem.theme.SusuTheme
+import com.susu.core.model.Vote
 import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.core.ui.extension.susuClickable
 import com.susu.core.ui.util.to_yyyy_dot_MM_dot_dd
@@ -58,6 +59,7 @@ import java.time.temporal.ChronoUnit
 fun VoteDetailRoute(
     viewModel: VoteDetailViewModel = hiltViewModel(),
     popBackStackWithToUpdateVote: (String) -> Unit,
+    navigateVoteEdit: (Vote) -> Unit,
     handleException: (Throwable, () -> Unit) -> Unit,
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
@@ -65,7 +67,7 @@ fun VoteDetailRoute(
         when (sideEffect) {
             is VoteDetailSideEffect.HandleException -> handleException(sideEffect.throwable, sideEffect.retry)
             is VoteDetailSideEffect.PopBackStackWithToUpdateVote -> popBackStackWithToUpdateVote(sideEffect.vote)
-            is VoteDetailSideEffect.PopBackStackWithVote -> TODO()
+            is VoteDetailSideEffect.NavigateVoteEdit -> navigateVoteEdit(sideEffect.vote)
         }
     }
 
@@ -92,6 +94,7 @@ fun VoteDetailRoute(
         uiState = uiState,
         currentTime = currentTime,
         onClickBack = viewModel::popBackStack,
+        onClickEdit = viewModel::navigateVoteEdit,
         onClickOption = viewModel::vote,
     )
 }

@@ -2,6 +2,7 @@ package com.susu.feature.community.votedetail
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.susu.core.model.Vote
 import com.susu.core.ui.base.BaseViewModel
 import com.susu.core.ui.extension.encodeToUri
 import com.susu.domain.usecase.vote.GetVoteDetailUseCase
@@ -21,6 +22,7 @@ class VoteDetailViewModel @Inject constructor(
     VoteDetailState(),
 ) {
     private val voteId = savedStateHandle.get<String>(CommunityRoute.VOTE_ID_ARGUMENT_NAME)!!.toLong()
+    private var vote: Vote = Vote()
     private var initCount: Long = 0
     private var initIsVoted: Boolean = false
 
@@ -31,6 +33,7 @@ class VoteDetailViewModel @Inject constructor(
         ).onSuccess {
             initCount = it.count
             initIsVoted = it.optionList.any { it.isVoted }
+            this@VoteDetailViewModel.vote = it
             intent { copy(vote = it) }
         }.onFailure {
             postSideEffect(VoteDetailSideEffect.HandleException(it, ::getVoteDetail))
@@ -88,6 +91,8 @@ class VoteDetailViewModel @Inject constructor(
             ),
         )
     }
+
+    fun navigateVoteEdit() = postSideEffect(VoteDetailSideEffect.NavigateVoteEdit(vote))
 
     fun popBackStack() = postSideEffect(VoteDetailSideEffect.PopBackStackWithToUpdateVote(Json.encodeToUri(currentState.vote)))
 }
