@@ -86,13 +86,11 @@ fun CommunityRoute(
             CommunitySideEffect.NavigateVoteSearch -> navigateVoteSearch()
             is CommunitySideEffect.ShowDeleteDialog -> onShowDialog(
                 DialogToken(
-                    title = "해당 글을 신고할까요?",
-                    text = "신고된 글은 수수에서 확인한 후에 모두에게 제재돼요\n" +
-                        "이 작성자의 글을 보고 싶지 않다면 작성자를 차단해주세요",
-                    confirmText = "신고하기",
-                    dismissText = "닫기",
-                    checkboxText = "작성자도 바로 차단하기",
-                    defaultChecked = false,
+                    title = context.getString(R.string.dialog_report_title),
+                    text = context.getString(R.string.dialog_report_body),
+                    confirmText = context.getString(R.string.dialog_report_confirm_text),
+                    dismissText = context.getString(R.string.dialog_report_dismiss_text),
+                    checkboxText = context.getString(R.string.dialog_report_checkbox_text),
                     onConfirmRequest = sideEffect.onConfirmRequest,
                     onCheckedAction = sideEffect.onCheckedAction,
                 ),
