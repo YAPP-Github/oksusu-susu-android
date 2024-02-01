@@ -11,20 +11,16 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.susu.core.designsystem.component.appbar.SusuDefaultAppBar
 import com.susu.core.designsystem.component.appbar.icon.BackIcon
-import com.susu.core.designsystem.component.bottomsheet.datepicker.SusuLimitDatePickerBottomSheet
 import com.susu.core.designsystem.component.button.FilledButtonColor
 import com.susu.core.designsystem.component.button.LinedButtonColor
 import com.susu.core.designsystem.component.button.RefreshButton
@@ -34,10 +30,9 @@ import com.susu.core.designsystem.component.button.SusuFilledButton
 import com.susu.core.designsystem.component.button.SusuLinedButton
 import com.susu.core.designsystem.component.button.XSmallButtonStyle
 import com.susu.core.designsystem.theme.SusuTheme
-import com.susu.core.model.Category
 import com.susu.core.ui.extension.collectWithLifecycle
-import com.susu.core.ui.util.currentDate
-import com.susu.core.ui.util.minDate
+import com.susu.feature.envelopefilter.component.MoneySlider
+import com.susu.feature.sent.R
 
 @Composable
 fun EnvelopeFilterRoute(
@@ -66,21 +61,13 @@ fun EnvelopeFilterRoute(
     )
 }
 
-@OptIn(ExperimentalLayoutApi::class, ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun EnvelopeFilterScreen(
+    @Suppress("detekt:UnusedParameter")
     uiState: EnvelopeFilterState = EnvelopeFilterState(),
     onClickBackIcon: () -> Unit = {},
     onClickApplyFilterButton: () -> Unit = {},
-    onStartDateItemSelected: (Int, Int, Int) -> Unit = { _, _, _ -> },
-    onClickStartDateText: () -> Unit = {},
-    onDismissStartDateBottomSheet: () -> Unit = {},
-    onEndDateItemSelected: (Int, Int, Int) -> Unit = { _, _, _ -> },
-    onClickEndDateText: () -> Unit = {},
-    onDismissEndDateBottomSheet: () -> Unit = {},
-    onClickCategory: (Category) -> Unit = {},
-    onClickCategoryClose: (Category) -> Unit = {},
-    onClickDateClose: () -> Unit = {},
     onClickRefreshButton: () -> Unit = {},
 ) {
     Column(
@@ -103,50 +90,52 @@ fun EnvelopeFilterScreen(
                 bottom = SusuTheme.spacing.spacing_xxs,
             ),
         ) {
-            Text(text = "보낸 사람", style = SusuTheme.typography.title_xs)
+            Text(text = stringResource(R.string.envelope_filter_screen_friend), style = SusuTheme.typography.title_xs)
             Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_m))
-            Row(
+            FlowRow(
                 horizontalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxs),
+                verticalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxs),
             ) {
-                uiState.categoryConfig.forEach { category ->
-//                    SusuLinedButton(
-//                        color = LinedButtonColor.Black,
-//                        style = XSmallButtonStyle.height28,
-//                        isActive = category in uiState.selectedCategoryList,
-//                        text = category.name,
-//                        onClick = { onClickCategory(category) },
-//                    )
+                listOf("이진욱", "김철수", "홍길동", "박예은", "박미영", "서한누리", "서한누리").forEach { category ->
+                    SusuLinedButton(
+                        color = LinedButtonColor.Black,
+                        style = XSmallButtonStyle.height28,
+                        isActive = true,
+                        text = category,
+                        onClick = { },
+                    )
                 }
             }
 
             Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_xxxxxxl))
             Text(
-                text = "받은 봉투 금액",
+                text = stringResource(R.string.envelope_filter_screen_money),
                 style = SusuTheme.typography.title_xs,
             )
             Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_m))
 
+            Text(text = "20,000원~100,000원", style = SusuTheme.typography.title_m)
+
+            Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_xxs))
+
+            MoneySlider(value = 20_000f..100_000f, onValueChange = {}, valueRange = 0f..100_000f)
+
             Spacer(modifier = Modifier.weight(1f))
 
             Column(
-                verticalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxs),
+                verticalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_m),
             ) {
                 FlowRow(
                     verticalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxs),
                     horizontalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxs),
                 ) {
-//                    uiState.selectedCategoryList.forEach { category ->
-//                        SelectedFilterButton(
-//                            name = category.name,
-//                        ) { onClickCategoryClose(category) }
-//                    }
-//
-//                    if (uiState.startAt != null || uiState.endAt != null) {
-//                        SelectedFilterButton(
-//                            name = "${uiState.startAt?.to_yyyy_dot_MM_dot_dd() ?: ""}~${uiState.endAt?.to_yyyy_dot_MM_dot_dd() ?: ""}",
-//                            onClickCloseIcon = onClickDateClose,
-//                        )
-//                    }
+                    SelectedFilterButton(
+                        name = "이진욱",
+                    )
+
+                    SelectedFilterButton(
+                        name = "20,000~10,000",
+                    )
                 }
 
                 Row(

@@ -7,6 +7,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class EnvelopeFilterViewModel @Inject constructor(
+    @Suppress("detekt:UnusedPrivateProperty")
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<EnvelopeFilterState, EnvelopeFilterSideEffect>(
     EnvelopeFilterState(),

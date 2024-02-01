@@ -53,4 +53,6 @@
     <string name="sent_envelope_add_visited_highlight">"%s을 "</string>
     <string name="sent_envelope_add_date_title">%s님에게 언제 보냈나요</string>
     <string name="sent_envelope_add_date_title_highlight">%s님에게 </string>
+    <string name="envelope_filter_screen_friend">보낸 사람</string>
+    <string name="envelope_filter_screen_money">받은 봉투 금액</string>
 </resources>

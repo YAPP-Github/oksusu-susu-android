@@ -1,13 +1,10 @@
 package com.susu.feature.envelopefilter
 
-import com.susu.core.model.Category
 import com.susu.core.ui.base.SideEffect
 import com.susu.core.ui.base.UiState
-import kotlinx.collections.immutable.PersistentList
-import kotlinx.collections.immutable.persistentListOf
 
 data class EnvelopeFilterState(
-    val categoryConfig: PersistentList<Category> = persistentListOf(),
+    val temp: String = "",
 ) : UiState
 
 sealed interface EnvelopeFilterSideEffect : SideEffect {

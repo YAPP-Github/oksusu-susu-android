@@ -1,6 +1,5 @@
 package com.susu.feature.envelopefilter.component
 
-import androidx.annotation.IntRange
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -9,7 +8,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -29,9 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.lerp
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.tooling.preview.Preview
@@ -54,13 +50,15 @@ fun MoneySlider(
     onValueChange: (ClosedFloatingPointRange<Float>) -> Unit,
 ) {
     Box(
-        contentAlignment = Alignment.Center
+        modifier = Modifier.height(24.dp),
+        contentAlignment = Alignment.Center,
     ) {
-        Box(modifier = Modifier
-            .clip(RoundedCornerShape(4.dp))
-            .fillMaxWidth()
-            .height(height)
-            .background(Orange20)
+        Box(
+            modifier = Modifier
+                .clip(RoundedCornerShape(4.dp))
+                .fillMaxWidth()
+                .height(height)
+                .background(Orange20),
         )
         RangeSlider(
             modifier = modifier,
@@ -79,10 +77,9 @@ fun MoneySlider(
                     rangeSliderState = it,
                     height = height,
                 )
-            }
+            },
         )
     }
-
 }
 
 @Composable
@@ -112,13 +109,13 @@ fun MoneySliderTrack(
     Canvas(
         modifier
             .fillMaxWidth()
-            .height(height)
+            .height(height),
     ) {
         drawTrack(
             activeRangeStart = rangeSliderState.coercedActiveRangeStartAsFraction,
             activeRangeEnd = rangeSliderState.coercedActiveRangeEndAsFraction,
             inactiveTrackColor = Orange20,
-            activeTrackColor = Orange60
+            activeTrackColor = Orange60,
         )
     }
 }
@@ -128,7 +125,7 @@ internal val RangeSliderState.coercedActiveRangeStartAsFraction
     get() = calcFraction(
         valueRange.start,
         valueRange.endInclusive,
-        activeRangeStart
+        activeRangeStart,
     )
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -136,7 +133,7 @@ internal val RangeSliderState.coercedActiveRangeEndAsFraction
     get() = calcFraction(
         valueRange.start,
         valueRange.endInclusive,
-        activeRangeEnd
+        activeRangeEnd,
     )
 
 // Calculate the 0..1 fraction that `pos` value represents between `a` and `b`
@@ -160,18 +157,18 @@ private fun DrawScope.drawTrack(
         sliderStart,
         sliderEnd,
         trackStrokeWidth,
-        StrokeCap.Round
+        StrokeCap.Round,
     )
     val sliderValueEnd = Offset(
         sliderStart.x +
             (sliderEnd.x - sliderStart.x) * activeRangeEnd,
-        center.y
+        center.y,
     )
 
     val sliderValueStart = Offset(
         sliderStart.x +
             (sliderEnd.x - sliderStart.x) * activeRangeStart,
-        center.y
+        center.y,
     )
 
     drawLine(
@@ -179,7 +176,7 @@ private fun DrawScope.drawTrack(
         sliderValueStart,
         sliderValueEnd,
         trackStrokeWidth,
-        StrokeCap.Round
+        StrokeCap.Round,
     )
 }
 
@@ -188,7 +185,7 @@ private fun DrawScope.drawTrack(
 fun MoneySliderPreview() {
     SusuTheme {
         var value by remember {
-            mutableStateOf(0f .. 3_222f)
+            mutableStateOf(0f..3_222f)
         }
 
         val step = when {
@@ -213,7 +210,7 @@ fun MoneySliderPreview() {
             MoneySlider(
                 value = value,
                 valueRange = 0f..3_222f.roundToStep(step) + step,
-                onValueChange = { value = it.start.roundToStep(step) .. it.endInclusive.roundToStep(step) },
+                onValueChange = { value = it.start.roundToStep(step)..it.endInclusive.roundToStep(step) },
             )
         }
     }
