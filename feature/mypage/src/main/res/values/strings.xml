@@ -28,4 +28,5 @@
     <string name="mypage_social_question">문의 남기기</string>
     <string name="mypage_my_info_profile">프로필 이미지</string>
     <string name="mypage_my_info_snackbar_invalid_name">이름은 한글 또는 영문 10글자로 입력해주세요</string>
+    <string name="mypage_default_recent_version">최신 버전 %s</string>
 </resources>
