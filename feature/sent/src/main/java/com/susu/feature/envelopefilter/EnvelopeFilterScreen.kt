@@ -32,6 +32,7 @@ import com.susu.core.designsystem.component.button.SusuFilledButton
 import com.susu.core.designsystem.component.button.SusuLinedButton
 import com.susu.core.designsystem.component.button.XSmallButtonStyle
 import com.susu.core.designsystem.theme.SusuTheme
+import com.susu.core.model.Friend
 import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.feature.envelopefilter.component.MoneySlider
 import com.susu.feature.envelopefilter.component.SearchBar
@@ -71,6 +72,8 @@ fun EnvelopeFilterRoute(
         onClickBackIcon = viewModel::popBackStack,
         onClickApplyFilterButton = viewModel::popBackStackWithFilter,
         onTextChangeSearch = viewModel::updateName,
+        onClickFriendChip = viewModel::selectFriend,
+        onCloseFriendChip = viewModel::unselectFriend,
     )
 }
 
@@ -82,6 +85,8 @@ fun EnvelopeFilterScreen(
     onClickApplyFilterButton: () -> Unit = {},
     onClickRefreshButton: () -> Unit = {},
     onTextChangeSearch: (String) -> Unit = {},
+    onClickFriendChip: (Friend) -> Unit = {},
+    onCloseFriendChip: (Friend) -> Unit = {},
 ) {
     Column(
         modifier = Modifier
@@ -121,7 +126,7 @@ fun EnvelopeFilterScreen(
                         style = XSmallButtonStyle.height28,
                         isActive = friend in uiState.selectedFriendList,
                         text = friend.name,
-                        onClick = { },
+                        onClick = { onClickFriendChip(friend) },
                     )
                 }
             }
@@ -149,9 +154,12 @@ fun EnvelopeFilterScreen(
                     verticalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxs),
                     horizontalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxs),
                 ) {
-                    SelectedFilterButton(
-                        name = "이진욱",
-                    )
+                    uiState.selectedFriendList.forEach { friend ->
+                        SelectedFilterButton(
+                            name = friend.name,
+                            onClickCloseIcon = { onCloseFriendChip(friend) }
+                        )
+                    }
 
                     SelectedFilterButton(
                         name = "20,000~10,000",

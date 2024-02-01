@@ -58,6 +58,20 @@ class EnvelopeFilterViewModel @Inject constructor(
             }
     }
 
+    fun selectFriend(friend: Friend) = intent {
+        if (friend in selectedFriendList) return@intent this
+        copy(
+            selectedFriendList = selectedFriendList.add(friend),
+        )
+    }
+
+    fun unselectFriend(friend: Friend) = intent {
+        if (friend !in selectedFriendList) return@intent this
+        copy(
+            selectedFriendList = selectedFriendList.remove(friend),
+        )
+    }
+
     fun popBackStack() = postSideEffect(EnvelopeFilterSideEffect.PopBackStack)
     fun popBackStackWithFilter() {
         val filter = EnvelopeFilterArgument(
