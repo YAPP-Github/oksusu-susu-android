@@ -52,7 +52,6 @@ class SusuStatisticsViewModel @Inject constructor(
                 relationshipId = currentState.relationship.id.toInt(),
                 categoryId = currentState.category.id,
             ).onSuccess {
-                println(it)
                 intent { copy(susuStatistics = it) }
             }.onFailure {
                 postSideEffect(SusuStatisticsEffect.HandleException(it, ::getSusuStatistics))
