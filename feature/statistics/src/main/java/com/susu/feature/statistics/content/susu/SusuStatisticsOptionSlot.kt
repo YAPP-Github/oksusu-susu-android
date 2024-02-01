@@ -47,7 +47,7 @@ fun SusuStatisticsOptionSlot(
     ) {
         Text(
             text = title,
-            style = SusuTheme.typography.title_xs,
+            style = SusuTheme.typography.title_xxs,
             color = Gray50,
         )
         Spacer(modifier = Modifier.height(SusuTheme.spacing.spacing_xxs))

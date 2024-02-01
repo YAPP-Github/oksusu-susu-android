@@ -1,33 +1,47 @@
 package com.susu.feature.statistics.content.susu
 
 import androidx.lifecycle.viewModelScope
+import com.susu.core.model.Category
+import com.susu.core.model.Relationship
 import com.susu.core.ui.base.BaseViewModel
-import com.susu.domain.usecase.statistics.GetStatisticsOptionUseCase
+import com.susu.domain.usecase.categoryconfig.GetCategoryConfigUseCase
+import com.susu.domain.usecase.envelope.GetRelationShipConfigListUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class SusuStatisticsViewModel @Inject constructor(
-    private val getStatisticsOptionUseCase: GetStatisticsOptionUseCase,
+    private val getCategoryConfigUseCase: GetCategoryConfigUseCase,
+    private val getRelationShipConfigListUseCase: GetRelationShipConfigListUseCase,
 ) : BaseViewModel<SusuStatisticsState, SusuStatisticsEffect>(SusuStatisticsState()) {
 
     fun getStatisticsOption() {
         viewModelScope.launch {
             intent { copy(isLoading = true) }
-            getStatisticsOptionUseCase().onSuccess {
-                intent { copy(statisticsOption = it) }
-            }.onFailure {
-                postSideEffect(SusuStatisticsEffect.HandleException(it, ::getStatisticsOption))
+            val categoryConfigResult = getCategoryConfigUseCase()
+            val relationshipConfigResult = getRelationShipConfigListUseCase()
+
+            if (categoryConfigResult.isSuccess && relationshipConfigResult.isSuccess) {
+                val categoryConfig = categoryConfigResult.getOrDefault(emptyList()).toPersistentList()
+                val relationshipConfig = relationshipConfigResult.getOrDefault(emptyList()).toPersistentList()
+                intent {
+                    copy(
+                        categoryConfig = categoryConfig,
+                        relationshipConfig = relationshipConfig,
+                        category = categoryConfig.firstOrNull() ?: Category(),
+                        relationship = relationshipConfig.firstOrNull() ?: Relationship(),
+                    )
+                }
             }
             intent { copy(isLoading = false) }
         }
     }
 
     fun selectAge(age: StatisticsAge) = intent { copy(age = age, isAgeSheetOpen = false) }
-    fun selectRelationship(id: Int) = intent { copy(relationshipId = id, isRelationshipSheetOpen = false) }
-    fun selectCategory(id: Int) = intent { copy(categoryId = id, isCategorySheetOpen = false) }
-
+    fun selectRelationship(index: Int) = intent { copy(relationship = relationshipConfig[index], isRelationshipSheetOpen = false) }
+    fun selectCategory(index: Int) = intent { copy(category = categoryConfig[index], isCategorySheetOpen = false) }
     fun showAgeSheet() = intent { copy(isAgeSheetOpen = true) }
     fun showRelationshipSheet() = intent { copy(isRelationshipSheetOpen = true) }
     fun showCategorySheet() = intent { copy(isCategorySheetOpen = true) }

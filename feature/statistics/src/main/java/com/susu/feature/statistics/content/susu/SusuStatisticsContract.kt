@@ -1,8 +1,11 @@
 package com.susu.feature.statistics.content.susu
 
-import com.susu.core.model.StatisticsOption
+import com.susu.core.model.Category
+import com.susu.core.model.Relationship
 import com.susu.core.ui.base.SideEffect
 import com.susu.core.ui.base.UiState
+import kotlinx.collections.immutable.PersistentList
+import kotlinx.collections.immutable.persistentListOf
 
 sealed interface SusuStatisticsEffect : SideEffect {
     data class HandleException(val throwable: Throwable, val retry: () -> Unit) : SusuStatisticsEffect
@@ -11,9 +14,10 @@ sealed interface SusuStatisticsEffect : SideEffect {
 data class SusuStatisticsState(
     val isLoading: Boolean = false,
     val age: StatisticsAge = StatisticsAge.THIRTY,
-    val relationshipId: Int = 0,
-    val categoryId: Int = 0,
-    val statisticsOption: StatisticsOption = StatisticsOption(),
+    val relationship: Relationship = Relationship(),
+    val category: Category = Category(),
+    val categoryConfig: PersistentList<Category> = persistentListOf(),
+    val relationshipConfig: PersistentList<Relationship> = persistentListOf(),
     val isAgeSheetOpen: Boolean = false,
     val isRelationshipSheetOpen: Boolean = false,
     val isCategorySheetOpen: Boolean = false,

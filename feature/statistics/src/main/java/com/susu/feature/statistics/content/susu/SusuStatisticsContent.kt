@@ -16,7 +16,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -101,9 +100,10 @@ fun SusuStatisticsScreen(
             verticalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxs),
         ) {
             SusuStatisticsOptionSlot(
+                title = "지금 평균 수수 보기",
                 age = stringResource(id = R.string.word_age_unit, uiState.age.num),
-                relationship = uiState.statisticsOption.relationships.getOrNull(uiState.relationshipId)?.relation ?: "",
-                category = uiState.statisticsOption.categories.getOrNull(uiState.categoryId)?.name ?: "",
+                relationship = uiState.relationship.relation,
+                category = uiState.category.name,
                 onAgeClick = onClickAge,
                 onCategoryClick = onClickCategory,
                 onRelationshipClick = onClickRelationship,
@@ -174,24 +174,27 @@ fun SusuStatisticsScreen(
                 items = ageItems,
                 selectedItemPosition = uiState.age.ordinal,
                 onClickItem = { onSelectAge(StatisticsAge.entries[it]) },
+                onDismissRequest = onDismissAge,
             )
         }
 
         if (uiState.isRelationshipSheetOpen) {
             SusuSelectionBottomSheet(
                 containerHeight = 322.dp,
-                items = uiState.statisticsOption.relationships.map { it.relation }.toImmutableList(),
-                selectedItemPosition = uiState.relationshipId,
+                items = uiState.relationshipConfig.map { it.relation }.toImmutableList(),
+                selectedItemPosition = uiState.relationshipConfig.indexOf(uiState.relationship),
                 onClickItem = onSelectRelationship,
+                onDismissRequest = onDismissRelationship,
             )
         }
 
         if (uiState.isCategorySheetOpen) {
             SusuSelectionBottomSheet(
                 containerHeight = 322.dp,
-                items = uiState.statisticsOption.categories.map { it.name }.toImmutableList(),
-                selectedItemPosition = uiState.categoryId,
+                items = uiState.categoryConfig.map { it.name }.toImmutableList(),
+                selectedItemPosition = uiState.categoryConfig.indexOf(uiState.category),
                 onClickItem = onSelectCategory,
+                onDismissRequest = onDismissCategory,
             )
         }
 
