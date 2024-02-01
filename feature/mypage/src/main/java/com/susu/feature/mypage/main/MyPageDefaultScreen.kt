@@ -1,6 +1,8 @@
 package com.susu.feature.mypage.main
 
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.os.Environment
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -41,6 +43,7 @@ import com.susu.core.designsystem.theme.Gray60
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.ui.DialogToken
 import com.susu.core.ui.R
+import com.susu.core.ui.SUSU_GOOGLE_FROM_URL
 import com.susu.core.ui.SnackbarToken
 import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.core.ui.extension.susuClickable
@@ -137,6 +140,9 @@ fun MyPageDefaultRoute(
         onLogout = viewModel::showLogoutDialog,
         onWithdraw = viewModel::showWithdrawDialog,
         onExport = viewModel::showExportDialog,
+        onClickFeedback = {
+            context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(SUSU_GOOGLE_FROM_URL)))
+        },
         navigateToInfo = navigateToInfo,
         navigateToSocial = navigateToSocial,
         navigateToPrivacyPolicy = navigateToPrivacyPolicy,
@@ -150,6 +156,7 @@ fun MyPageDefaultScreen(
     onLogout: () -> Unit = {},
     onWithdraw: () -> Unit = {},
     onExport: () -> Unit = {},
+    onClickFeedback: () -> Unit = {},
     navigateToInfo: () -> Unit = {},
     navigateToSocial: () -> Unit = {},
     navigateToPrivacyPolicy: () -> Unit = {},
@@ -248,6 +255,7 @@ fun MyPageDefaultScreen(
                 color = GhostButtonColor.Orange,
                 style = SmallButtonStyle.height40,
                 text = stringResource(com.susu.feature.mypage.R.string.mypage_feedback),
+                onClick = onClickFeedback,
             )
         }
     }

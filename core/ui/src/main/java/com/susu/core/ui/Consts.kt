@@ -26,6 +26,8 @@ val USER_BIRTH_RANGE = 1930..2030
 
 const val INTENT_ACTION_DOWNLOAD_COMPLETE = "android.intent.action.DOWNLOAD_COMPLETE"
 const val PRIVACY_POLICY_URL = "https://sites.google.com/view/team-oksusu/%ED%99%88"
+const val SUSU_GOOGLE_FROM_URL = "https://forms.gle/FHky26kAQdde9RcD7"
+
 enum class SnsProviders(
     val path: String,
     @StringRes val nameId: Int,
