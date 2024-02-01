@@ -216,7 +216,9 @@ fun LedgerEditScreen(
                                 targetTextList = listOf(
                                     stringResource(R.string.ledger_edit_screen_year),
                                     stringResource(R.string.ledger_edit_screen_month),
-                                    stringResource(if (uiState.showOnlyStartDate) R.string.ledger_edit_screen_day else R.string.ledger_edit_screen_from_day),
+                                    stringResource(
+                                        if (uiState.showOnlyStartDate) R.string.ledger_edit_screen_day else R.string.ledger_edit_screen_from_day,
+                                    ),
                                 ),
                                 originalTextStyle = SusuTheme.typography.title_m,
                                 spanStyle = SusuTheme.typography.title_m.copy(Gray80).toSpanStyle(),
@@ -251,7 +253,7 @@ fun LedgerEditScreen(
                                     leftIcon = {
                                         Icon(painter = painterResource(id = R.drawable.ic_date_change), contentDescription = null, tint = Orange60)
                                     },
-                                    onClick = onClickAddEndDateButton
+                                    onClick = onClickAddEndDateButton,
                                 )
                             } else {
                                 SusuLinedButton(
@@ -261,7 +263,7 @@ fun LedgerEditScreen(
                                     leftIcon = {
                                         Icon(painter = painterResource(id = R.drawable.ic_date_change), contentDescription = null, tint = Orange60)
                                     },
-                                    onClick = onClickSetStartDateButton
+                                    onClick = onClickSetStartDateButton,
                                 )
                             }
                         }
