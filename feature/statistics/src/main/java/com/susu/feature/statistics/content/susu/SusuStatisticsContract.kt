@@ -2,6 +2,7 @@ package com.susu.feature.statistics.content.susu
 
 import com.susu.core.model.Category
 import com.susu.core.model.Relationship
+import com.susu.core.model.SusuStatistics
 import com.susu.core.ui.base.SideEffect
 import com.susu.core.ui.base.UiState
 import kotlinx.collections.immutable.PersistentList
@@ -13,7 +14,7 @@ sealed interface SusuStatisticsEffect : SideEffect {
 
 data class SusuStatisticsState(
     val isLoading: Boolean = false,
-    val age: StatisticsAge = StatisticsAge.THIRTY,
+    val age: StatisticsAge = StatisticsAge.TWENTY,
     val relationship: Relationship = Relationship(),
     val category: Category = Category(),
     val categoryConfig: PersistentList<Category> = persistentListOf(),
@@ -21,6 +22,7 @@ data class SusuStatisticsState(
     val isAgeSheetOpen: Boolean = false,
     val isRelationshipSheetOpen: Boolean = false,
     val isCategorySheetOpen: Boolean = false,
+    val susuStatistics: SusuStatistics = SusuStatistics(),
 ) : UiState
 
 enum class StatisticsAge(val num: Int) {

@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -108,38 +109,43 @@ fun RecentSpentGraph(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            spentData.forEachIndexed { i, data ->
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                ) {
-                    StickGraph(
-                        ratio = data.value.toFloat() / maximumAmount,
-                        color = if (isActive) {
-                            if (i == spentData.lastIndex) {
-                                Orange60
+            if (maximumAmount > 0) {
+                spentData.forEachIndexed { i, data ->
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                    ) {
+                        StickGraph(
+                            ratio = data.value.toFloat() / maximumAmount,
+                            color = if (isActive) {
+                                if (i == spentData.lastIndex) {
+                                    Orange60
+                                } else {
+                                    Orange30
+                                }
                             } else {
-                                Orange30
-                            }
-                        } else {
-                            if (i == spentData.lastIndex) {
-                                Gray60
+                                if (i == spentData.lastIndex) {
+                                    Gray60
+                                } else {
+                                    Gray30
+                                }
+                            },
+                        )
+                        Spacer(modifier = Modifier.height(SusuTheme.spacing.spacing_xxxxs))
+                        Text(
+                            text = stringResource(id = R.string.word_month_format, data.title),
+                            style = SusuTheme.typography.title_xxxs,
+                            color = if (i == spentData.lastIndex) {
+                                Gray90
                             } else {
-                                Gray30
-                            }
-                        },
-                    )
-                    Spacer(modifier = Modifier.height(SusuTheme.spacing.spacing_xxxxs))
-                    Text(
-                        text = stringResource(id = R.string.word_month_format, data.title),
-                        style = SusuTheme.typography.title_xxxs,
-                        color = if (i == spentData.lastIndex) {
-                            Gray90
-                        } else {
-                            Gray40
-                        },
-                    )
+                                Gray40
+                            },
+                        )
+                    }
+                    Spacer(modifier = Modifier.width(SusuTheme.spacing.spacing_s))
                 }
-                Spacer(modifier = Modifier.width(SusuTheme.spacing.spacing_s))
+            } else {
+                // TODO: 데이터가 없을 땐?
+                Spacer(modifier = Modifier.fillMaxSize())
             }
         }
     }

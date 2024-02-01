@@ -39,6 +39,7 @@ import com.susu.feature.statistics.component.RecentSpentGraph
 import com.susu.feature.statistics.component.StatisticsHorizontalItem
 import com.susu.feature.statistics.component.StatisticsVerticalItem
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.collections.immutable.toPersistentList
 
 @Composable
 fun SusuStatisticsRoute(
@@ -57,6 +58,10 @@ fun SusuStatisticsRoute(
 
     LaunchedEffect(key1 = Unit) {
         viewModel.getStatisticsOption()
+    }
+
+    LaunchedEffect(key1 = uiState.age, key2 = uiState.category, key3 = uiState.relationship) {
+        viewModel.getSusuStatistics()
     }
 
     SusuStatisticsScreen(
@@ -102,6 +107,7 @@ fun SusuStatisticsScreen(
             SusuStatisticsOptionSlot(
                 title = "지금 평균 수수 보기",
                 age = stringResource(id = R.string.word_age_unit, uiState.age.num),
+                money = uiState.susuStatistics.averageSent,
                 relationship = uiState.relationship.relation,
                 category = uiState.category.name,
                 onAgeClick = onClickAge,
@@ -110,20 +116,23 @@ fun SusuStatisticsScreen(
             )
             StatisticsHorizontalItem(
                 title = "관계 별 평균 수수",
-                name = "",
-                money = 0,
+                name = uiState.susuStatistics.averageRelationship.title,
+                money = uiState.susuStatistics.averageRelationship.value,
                 isActive = !isBlind,
             )
             StatisticsHorizontalItem(
                 title = "경조사 카테고리 별 평균 수수",
-                name = "",
-                money = 0,
+                name = uiState.susuStatistics.averageCategory.title,
+                money = uiState.susuStatistics.averageCategory.value,
                 isActive = !isBlind,
             )
 
             RecentSpentGraph(
                 isActive = !isBlind,
                 graphTitle = "올해 쓴 금액",
+                spentData = uiState.susuStatistics.recentSpent.toPersistentList(),
+                maximumAmount = uiState.susuStatistics.recentMaximumSpent,
+                totalAmount = uiState.susuStatistics.recentTotalSpent,
             )
             Row(
                 modifier = Modifier
@@ -141,7 +150,7 @@ fun SusuStatisticsScreen(
                     )
                 } else {
                     Text(
-                        text = stringResource(R.string.word_month_format, ""),
+                        text = stringResource(R.string.word_month_format, uiState.susuStatistics.mostSpentMonth.toString()),
                         style = SusuTheme.typography.title_xs,
                         color = Blue60,
                     )
@@ -153,16 +162,16 @@ fun SusuStatisticsScreen(
                 StatisticsVerticalItem(
                     modifier = Modifier.weight(1f),
                     title = stringResource(R.string.statistics_most_susu_relationship),
-                    content = "",
-                    count = 0,
+                    content = uiState.susuStatistics.mostRelationship.title,
+                    count = uiState.susuStatistics.mostRelationship.value,
                     isActive = !isBlind,
                 )
                 Spacer(modifier = Modifier.width(SusuTheme.spacing.spacing_xxs))
                 StatisticsVerticalItem(
                     modifier = Modifier.weight(1f),
                     title = stringResource(R.string.statistics_most_susu_event),
-                    content = "",
-                    count = 0,
+                    content = uiState.susuStatistics.mostCategory.title,
+                    count = uiState.susuStatistics.mostCategory.value,
                     isActive = !isBlind,
                 )
             }

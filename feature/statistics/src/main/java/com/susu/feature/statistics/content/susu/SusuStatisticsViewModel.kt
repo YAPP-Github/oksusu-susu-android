@@ -6,6 +6,7 @@ import com.susu.core.model.Relationship
 import com.susu.core.ui.base.BaseViewModel
 import com.susu.domain.usecase.categoryconfig.GetCategoryConfigUseCase
 import com.susu.domain.usecase.envelope.GetRelationShipConfigListUseCase
+import com.susu.domain.usecase.statistics.GetSusuStatisticsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
@@ -15,6 +16,7 @@ import javax.inject.Inject
 class SusuStatisticsViewModel @Inject constructor(
     private val getCategoryConfigUseCase: GetCategoryConfigUseCase,
     private val getRelationShipConfigListUseCase: GetRelationShipConfigListUseCase,
+    private val getSusuStatisticsUseCase: GetSusuStatisticsUseCase,
 ) : BaseViewModel<SusuStatisticsState, SusuStatisticsEffect>(SusuStatisticsState()) {
 
     fun getStatisticsOption() {
@@ -36,6 +38,25 @@ class SusuStatisticsViewModel @Inject constructor(
                 }
             }
             intent { copy(isLoading = false) }
+        }
+    }
+
+    fun getSusuStatistics() {
+        if (currentState.relationship !in currentState.relationshipConfig &&
+            currentState.category !in currentState.categoryConfig
+        ) return
+
+        viewModelScope.launch {
+            getSusuStatisticsUseCase(
+                age = currentState.age.name,
+                relationshipId = currentState.relationship.id.toInt(),
+                categoryId = currentState.category.id,
+            ).onSuccess {
+                println(it)
+                intent { copy(susuStatistics = it) }
+            }.onFailure {
+                postSideEffect(SusuStatisticsEffect.HandleException(it, ::getSusuStatistics))
+            }
         }
     }
 
