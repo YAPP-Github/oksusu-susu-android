@@ -9,4 +9,5 @@ android {
 
 dependencies {
     implementation(libs.kakao.sdk.user)
+    implementation(libs.play.app.update)
 }

@@ -18,6 +18,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -31,6 +32,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory
+import com.google.android.play.core.install.model.UpdateAvailability
 import com.susu.core.designsystem.component.appbar.SusuDefaultAppBar
 import com.susu.core.designsystem.component.appbar.icon.LogoIcon
 import com.susu.core.designsystem.component.button.GhostButtonColor
@@ -44,6 +47,7 @@ import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.ui.DialogToken
 import com.susu.core.ui.R
 import com.susu.core.ui.SUSU_GOOGLE_FROM_URL
+import com.susu.core.ui.SUSU_GOOGLE_PLAY_STORE_URL
 import com.susu.core.ui.SnackbarToken
 import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.core.ui.extension.susuClickable
@@ -62,6 +66,14 @@ fun MyPageDefaultRoute(
     handleException: (Throwable, () -> Unit) -> Unit,
 ) {
     val context = LocalContext.current
+    val appUpdateManager = remember { AppUpdateManagerFactory.create(context) }
+
+    LaunchedEffect(key1 = Unit) {
+        viewModel.getUserInfo()
+        appUpdateManager.appUpdateInfo.addOnSuccessListener { appUpdateInfo ->
+            viewModel.updateCanUpdate(appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE)
+        }
+    }
 
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
@@ -218,12 +230,30 @@ fun MyPageDefaultScreen(
 
         MyPageMenuItem(
             titleText = stringResource(com.susu.feature.mypage.R.string.mypage_app_version),
+            rippleEnabled = uiState.canUpdate,
             action = {
-                Text(
-                    text = stringResource(com.susu.feature.mypage.R.string.mypage_update),
-                    style = SusuTheme.typography.title_xxs,
-                    color = Gray60,
-                )
+                if (uiState.canUpdate) {
+                    Text(
+                        modifier = Modifier.susuClickable(
+                            onClick = {
+                                val intent = Intent(Intent.ACTION_VIEW).apply {
+                                    data = Uri.parse(SUSU_GOOGLE_PLAY_STORE_URL)
+                                    setPackage("com.android.vending") // Google Play 스토어 앱으로 연결되게 함.
+                                }
+                                context.startActivity(intent)
+                            },
+                        ),
+                        text = stringResource(com.susu.feature.mypage.R.string.mypage_update),
+                        style = SusuTheme.typography.title_xxs,
+                        color = Gray60,
+                    )
+                } else {
+                    Text(
+                        text = stringResource(com.susu.feature.mypage.R.string.mypage_default_recent_version, currentAppVersion),
+                        style = SusuTheme.typography.title_xxs,
+                        color = Gray60,
+                    )
+                }
             },
         )
 
