@@ -36,6 +36,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.susu.core.designsystem.component.text.AnimatedCounterText
 import com.susu.core.designsystem.theme.Blue60
 import com.susu.core.designsystem.theme.Gray10
 import com.susu.core.designsystem.theme.Gray100
@@ -81,10 +82,12 @@ fun RecentSpentGraph(
                 color = Gray100,
             )
             if (isActive) {
-                Text(
-                    text = stringResource(R.string.statistics_total_man_format, totalAmount.toString()),
+                AnimatedCounterText(
+                    number = totalAmount,
                     style = SusuTheme.typography.title_xs,
                     color = Blue60,
+                    prefix = stringResource(id = R.string.statistics_total_man_prefix),
+                    postfix = stringResource(id = R.string.statistics_total_man_postfix),
                 )
             } else {
                 Text(

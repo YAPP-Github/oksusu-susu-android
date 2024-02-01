@@ -18,6 +18,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.susu.core.designsystem.component.text.AnimatedCounterText
 import com.susu.core.designsystem.theme.Gray10
 import com.susu.core.designsystem.theme.Gray50
 import com.susu.core.designsystem.theme.Gray80
@@ -25,7 +26,6 @@ import com.susu.core.designsystem.theme.Orange10
 import com.susu.core.designsystem.theme.Orange60
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.ui.extension.susuClickable
-import com.susu.core.ui.extension.toMoneyFormat
 import com.susu.feature.statistics.R
 
 @Composable
@@ -80,10 +80,11 @@ fun SusuStatisticsOptionSlot(
             Row(
                 verticalAlignment = Alignment.Bottom,
             ) {
-                Text(
-                    text = stringResource(id = com.susu.core.ui.R.string.money_unit_format, money.toMoneyFormat()),
+                AnimatedCounterText(
+                    number = money,
                     style = SusuTheme.typography.title_s,
                     color = Orange60,
+                    postfix = stringResource(id = com.susu.core.designsystem.R.string.money_unit),
                 )
                 Spacer(modifier = Modifier.width(SusuTheme.spacing.spacing_xxs))
                 Text(

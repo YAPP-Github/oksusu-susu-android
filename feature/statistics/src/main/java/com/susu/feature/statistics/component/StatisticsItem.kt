@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.susu.core.designsystem.component.text.AnimatedCounterText
 import com.susu.core.designsystem.theme.Gray10
 import com.susu.core.designsystem.theme.Gray100
 import com.susu.core.designsystem.theme.Gray40
@@ -104,10 +105,11 @@ fun StatisticsHorizontalItem(
         ) {
             if (isActive) {
                 Text(text = name, style = SusuTheme.typography.title_s, color = Gray80)
-                Text(
-                    text = stringResource(id = com.susu.core.ui.R.string.money_unit_format, money.toMoneyFormat()),
+                AnimatedCounterText(
+                    number = money,
                     style = SusuTheme.typography.title_s,
                     color = Gray100,
+                    postfix = stringResource(id = com.susu.core.designsystem.R.string.money_unit),
                 )
             } else {
                 Text(text = stringResource(id = R.string.word_unknown), style = SusuTheme.typography.title_s, color = Gray40)
