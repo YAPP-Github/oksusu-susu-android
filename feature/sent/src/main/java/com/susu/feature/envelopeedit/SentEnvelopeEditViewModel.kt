@@ -11,6 +11,7 @@ import com.susu.core.ui.util.getSafeLocalDateTime
 import com.susu.domain.usecase.categoryconfig.GetCategoryConfigUseCase
 import com.susu.domain.usecase.envelope.GetRelationShipConfigListUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
 import kotlinx.datetime.toJavaLocalDateTime
 import kotlinx.datetime.toKotlinLocalDateTime
@@ -27,8 +28,9 @@ class SentEnvelopeEditViewModel @Inject constructor(
     fun initData() {
         // TODO: Argument로 받은 데이터로 설정. UI 개발을 위해 임의의 데이터 사용.
         val category = Category(
-            id = 1,
-            name = "결혼식",
+            id = 5,
+            name = "커스텀",
+            customCategory = "커스텀",
         )
         val envelope = Envelope(
             amount = 150000,
@@ -38,35 +40,40 @@ class SentEnvelopeEditViewModel @Inject constructor(
                 name = "김철수",
             ),
             relationship = Relationship(
-                id = 1,
-                relation = "친구",
+                id = 5,
+                relation = "나",
+                customRelation = "나",
             ),
         )
 
-        intent {
-            copy(
-                amount = envelope.amount,
-                gift = envelope.gift,
-                memo = envelope.memo,
-                hasVisited = envelope.hasVisited,
-                handedOverAt = envelope.handedOverAt.toJavaLocalDateTime(),
-                friendName = envelope.friend.name,
-                relationshipId = envelope.relationship.id,
-                customRelationship = envelope.relationship.customRelation,
-                phoneNumber = envelope.friend.phoneNumber.ifEmpty { null },
-                categoryId = category.id,
-                customCategory = category.customCategory,
-            )
-        }
-    }
-
-    fun getEnvelopConfig() {
         viewModelScope.launch {
-            getRelationShipConfigListUseCase().onSuccess {
-                intent { copy(relationshipConfig = it) }
-            }
-            getCategoryConfigUseCase().onSuccess {
-                intent { copy(categoryConfig = it) }
+            val relationshipConfigResult = getRelationShipConfigListUseCase()
+            val categoryConfigResult = getCategoryConfigUseCase()
+
+            if (relationshipConfigResult.isSuccess && categoryConfigResult.isSuccess) {
+                val relationshipConfig = relationshipConfigResult.getOrDefault(emptyList()).toPersistentList()
+                val categoryConfig = categoryConfigResult.getOrDefault(emptyList()).toPersistentList()
+                intent {
+                    copy(
+                        categoryConfig = categoryConfig,
+                        relationshipConfig = relationshipConfig,
+                        amount = envelope.amount,
+                        gift = envelope.gift,
+                        memo = envelope.memo,
+                        hasVisited = envelope.hasVisited,
+                        handedOverAt = envelope.handedOverAt.toJavaLocalDateTime(),
+                        friendName = envelope.friend.name,
+                        relationshipId = envelope.relationship.id,
+                        customRelationship = envelope.relationship.customRelation,
+                        phoneNumber = envelope.friend.phoneNumber.ifEmpty { null },
+                        categoryId = category.id,
+                        customCategory = category.customCategory,
+                        showCustomCategory = category.id == categoryConfig.last().id,
+                        customCategorySaved = category.id == categoryConfig.last().id,
+                        showCustomRelationship = envelope.relationship.id == relationshipConfig.last().id,
+                        customRelationshipSaved = envelope.relationship.id == relationshipConfig.last().id,
+                    )
+                }
             }
         }
     }

@@ -5,12 +5,14 @@ import com.susu.core.model.Relationship
 import com.susu.core.ui.base.SideEffect
 import com.susu.core.ui.base.UiState
 import com.susu.core.ui.util.currentDate
+import kotlinx.collections.immutable.PersistentList
+import kotlinx.collections.immutable.persistentListOf
 import java.time.LocalDateTime
 
 data class SentEnvelopeEditState(
     val isLoading: Boolean = false,
-    val categoryConfig: List<Category> = emptyList(),
-    val relationshipConfig: List<Relationship> = emptyList(),
+    val categoryConfig: PersistentList<Category> = persistentListOf(),
+    val relationshipConfig: PersistentList<Relationship> = persistentListOf(),
     val amount: Long = 0L,
     val gift: String? = null,
     val memo: String? = null,
