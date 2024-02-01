@@ -16,6 +16,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -29,6 +30,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory
+import com.google.android.play.core.install.model.UpdateAvailability
 import com.susu.core.designsystem.component.appbar.SusuDefaultAppBar
 import com.susu.core.designsystem.component.appbar.icon.LogoIcon
 import com.susu.core.designsystem.component.button.GhostButtonColor
@@ -59,6 +62,14 @@ fun MyPageDefaultRoute(
     handleException: (Throwable, () -> Unit) -> Unit,
 ) {
     val context = LocalContext.current
+    val appUpdateManager = remember { AppUpdateManagerFactory.create(context) }
+
+    LaunchedEffect(key1 = Unit) {
+        viewModel.getUserInfo()
+        appUpdateManager.appUpdateInfo.addOnSuccessListener { appUpdateInfo ->
+            viewModel.updateCanUpdate(appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE)
+        }
+    }
 
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
@@ -212,11 +223,19 @@ fun MyPageDefaultScreen(
         MyPageMenuItem(
             titleText = stringResource(com.susu.feature.mypage.R.string.mypage_app_version),
             action = {
-                Text(
-                    text = stringResource(com.susu.feature.mypage.R.string.mypage_update),
-                    style = SusuTheme.typography.title_xxs,
-                    color = Gray60,
-                )
+                if (uiState.canUpdate) {
+                    Text(
+                        text = stringResource(com.susu.feature.mypage.R.string.mypage_update),
+                        style = SusuTheme.typography.title_xxs,
+                        color = Gray60,
+                    )
+                } else {
+                    Text(
+                        text = stringResource(com.susu.feature.mypage.R.string.mypage_default_recent_version, currentAppVersion),
+                        style = SusuTheme.typography.title_xxs,
+                        color = Gray60,
+                    )
+                }
             },
         )
 

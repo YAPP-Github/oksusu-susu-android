@@ -21,15 +21,11 @@ class MyPageViewModel @Inject constructor(
     private val downloadExcelUseCase: DownloadExcelUseCase,
 ) : BaseViewModel<MyPageState, MyPageEffect>(MyPageState()) {
 
-    init {
-        getUserInfo()
-    }
-
     fun showExportDialog() = postSideEffect(MyPageEffect.ShowExportDialog)
     fun showLogoutDialog() = postSideEffect(MyPageEffect.ShowLogoutDialog)
     fun showWithdrawDialog() = postSideEffect(MyPageEffect.ShowWithdrawDialog)
 
-    private fun getUserInfo() {
+    fun getUserInfo() {
         viewModelScope.launch {
             intent { copy(isLoading = true) }
             getUserUseCase().onSuccess {
@@ -42,6 +38,10 @@ class MyPageViewModel @Inject constructor(
             }
             intent { copy(isLoading = false) }
         }
+    }
+
+    fun updateCanUpdate(canUpdate: Boolean) {
+        intent { copy(canUpdate = canUpdate) }
     }
 
     fun logout() {
