@@ -30,6 +30,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -51,6 +52,8 @@ import com.susu.core.designsystem.theme.Gray50
 import com.susu.core.designsystem.theme.Orange60
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.model.Category
+import com.susu.core.model.Vote
+import com.susu.core.ui.DialogToken
 import com.susu.core.ui.extension.OnBottomReached
 import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.core.ui.extension.susuClickable
@@ -70,15 +73,30 @@ fun CommunityRoute(
     navigateVoteAdd: () -> Unit,
     navigateVoteSearch: () -> Unit,
     navigateVoteDetail: (Long) -> Unit,
+    onShowDialog: (DialogToken) -> Unit,
     handleException: (Throwable, () -> Unit) -> Unit,
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
+    val context = LocalContext.current
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
             is CommunitySideEffect.HandleException -> handleException(sideEffect.throwable, sideEffect.retry)
             CommunitySideEffect.NavigateVoteAdd -> navigateVoteAdd()
             is CommunitySideEffect.NavigateVoteDetail -> navigateVoteDetail(sideEffect.voteId)
             CommunitySideEffect.NavigateVoteSearch -> navigateVoteSearch()
+            is CommunitySideEffect.ShowDeleteDialog -> onShowDialog(
+                DialogToken(
+                    title = "해당 글을 신고할까요?",
+                    text = "신고된 글은 수수에서 확인한 후에 모두에게 제재돼요\n" +
+                        "이 작성자의 글을 보고 싶지 않다면 작성자를 차단해주세요",
+                    confirmText = "신고하기",
+                    dismissText = "닫기",
+                    checkboxText = "작성자도 바로 차단하기",
+                    defaultChecked = false,
+                    onConfirmRequest = sideEffect.onConfirmRequest,
+                    onCheckedAction = sideEffect.onCheckedAction,
+                ),
+            )
         }
     }
 
@@ -119,6 +137,7 @@ fun CommunityRoute(
         onClickShowVotePopular = viewModel::toggleShowVotePopular,
         onClickVote = viewModel::navigateVoteDetail,
         onClickSearchIcon = viewModel::navigateVoteSearch,
+        onClickReport = viewModel::showReportDialog,
     )
 }
 
@@ -135,6 +154,7 @@ fun CommunityScreen(
     onClickCategory: (Category?) -> Unit = {},
     onClickShowVotePopular: () -> Unit = {},
     onClickShowMine: () -> Unit = {},
+    onClickReport: (Vote) -> Unit = {},
 ) {
     Box(
         modifier = Modifier
@@ -295,13 +315,16 @@ fun CommunityScreen(
                         vote = vote,
                         currentTime = currentTime,
                         onClick = { onClickVote(vote.id) },
+                        onClickReport = onClickReport,
                     )
                 }
             }
 
             if (uiState.voteList.isEmpty()) {
                 Box(
-                    modifier = Modifier.fillMaxWidth().weight(1f),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f),
                     contentAlignment = Alignment.Center,
                 ) {
                     Text(

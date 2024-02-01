@@ -60,7 +60,7 @@ interface EnvelopesRepository {
         memo: String? = null,
         hasVisited: Boolean? = null,
         handedOverAt: LocalDateTime,
-        categoryId: Long,
+        categoryId: Long? = null,
         customCategory: String? = null,
     ): Envelope
 }
