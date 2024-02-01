@@ -47,6 +47,7 @@ import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.ui.DialogToken
 import com.susu.core.ui.R
 import com.susu.core.ui.SUSU_GOOGLE_FROM_URL
+import com.susu.core.ui.SUSU_GOOGLE_PLAY_STORE_URL
 import com.susu.core.ui.SnackbarToken
 import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.core.ui.extension.susuClickable
@@ -229,9 +230,19 @@ fun MyPageDefaultScreen(
 
         MyPageMenuItem(
             titleText = stringResource(com.susu.feature.mypage.R.string.mypage_app_version),
+            rippleEnabled = uiState.canUpdate,
             action = {
                 if (uiState.canUpdate) {
                     Text(
+                        modifier = Modifier.susuClickable(
+                            onClick = {
+                                val intent = Intent(Intent.ACTION_VIEW).apply {
+                                    data = Uri.parse(SUSU_GOOGLE_PLAY_STORE_URL)
+                                    setPackage("com.android.vending") // Google Play 스토어 앱으로 연결되게 함.
+                                }
+                                context.startActivity(intent)
+                            }
+                        ),
                         text = stringResource(com.susu.feature.mypage.R.string.mypage_update),
                         style = SusuTheme.typography.title_xxs,
                         color = Gray60,
