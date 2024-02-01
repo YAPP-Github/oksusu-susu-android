@@ -91,7 +91,6 @@ fun SentEnvelopeEditRoute(
     LaunchedEffect(key1 = Unit) {
         viewModel.run {
             initData()
-            getEnvelopConfig()
         }
     }
 
