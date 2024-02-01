@@ -241,7 +241,7 @@ fun MyPageDefaultScreen(
                                     setPackage("com.android.vending") // Google Play 스토어 앱으로 연결되게 함.
                                 }
                                 context.startActivity(intent)
-                            }
+                            },
                         ),
                         text = stringResource(com.susu.feature.mypage.R.string.mypage_update),
                         style = SusuTheme.typography.title_xxs,
