@@ -8,7 +8,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlin.system.exitProcess
 
 @HiltViewModel
 class SentViewModel @Inject constructor(
@@ -56,6 +55,6 @@ class SentViewModel @Inject constructor(
         }
     }
 
-    fun navigateSentEnvelope() = postSideEffect(SentEffect.NavigateEnvelope)
+    fun navigateSentEnvelope(id: Long) = postSideEffect(SentEffect.NavigateEnvelope(id = id))
     fun navigateSentAdd() = postSideEffect(SentEffect.NavigateEnvelopeAdd)
 }

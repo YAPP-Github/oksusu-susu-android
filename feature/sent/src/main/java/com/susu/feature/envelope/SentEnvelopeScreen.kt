@@ -16,12 +16,14 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.susu.core.designsystem.component.appbar.SusuDefaultAppBar
 import com.susu.core.designsystem.component.appbar.icon.BackIcon
 import com.susu.core.designsystem.component.appbar.icon.NotificationIcon
@@ -36,22 +38,31 @@ import com.susu.core.designsystem.theme.Gray90
 import com.susu.core.designsystem.theme.Orange20
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.ui.extension.collectWithLifecycle
+import com.susu.core.ui.extension.toMoneyFormat
 import com.susu.feature.envelope.component.EnvelopeHistoryItem
 import com.susu.feature.sent.R
 
 @Composable
 fun SentEnvelopeRoute(
     viewModel: SentEnvelopeViewModel = hiltViewModel(),
+    friendId: Long,
     popBackStack: () -> Unit,
     navigateSentEnvelopeDetail: () -> Unit,
 ) {
+    val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
             SentEnvelopeSideEffect.PopBackStack -> popBackStack()
+            else -> {}
         }
     }
 
+    LaunchedEffect(key1 = Unit) {
+        viewModel.initData(friendId)
+    }
+
     SentEnvelopeScreen(
+        uiState = uiState,
         onClickBackIcon = viewModel::popBackStack,
         onClickEnvelopeDetail = navigateSentEnvelopeDetail,
     )
@@ -59,6 +70,7 @@ fun SentEnvelopeRoute(
 
 @Composable
 fun SentEnvelopeScreen(
+    uiState: SentEnvelopeState = SentEnvelopeState(),
     modifier: Modifier = Modifier,
     onClickBackIcon: () -> Unit = {},
     onClickSearchIcon: () -> Unit = {},
@@ -75,14 +87,13 @@ fun SentEnvelopeScreen(
                 leftIcon = {
                     BackIcon(onClickBackIcon)
                 },
-                title = "김철수",
+                title = uiState.envelopeInfo[0].friend.name,
                 actions = {
                     SearchIcon(onClickSearchIcon)
                     NotificationIcon(onClickNotificationIcon)
                 },
             )
 
-            // TODO: text 변경하기
             Column(
                 modifier = modifier
                     .padding(
@@ -91,14 +102,16 @@ fun SentEnvelopeScreen(
                     ),
             ) {
                 Text(
-                    text = "전체 100,000원",
+                    text = stringResource(R.string.sent_envelope_card_monee_total) + uiState.envelopeInfo[0].totalAmounts.toMoneyFormat() +
+                        stringResource(R.string.sent_envelope_card_money_won),
                     style = SusuTheme.typography.title_m,
                     color = Gray100,
                 )
                 Spacer(modifier = modifier.size(SusuTheme.spacing.spacing_xxs))
                 SusuBadge(
                     color = BadgeColor.Gray30,
-                    text = "-40,000원",
+                    text = "${uiState.envelopeInfo[0].sentAmounts.toFloat() + uiState.envelopeInfo[0].receivedAmounts}" +
+                        stringResource(R.string.sent_envelope_card_money_won),
                     padding = BadgeStyle.smallBadge,
                 )
                 Spacer(modifier = modifier.size(SusuTheme.spacing.spacing_xl))
@@ -118,7 +131,7 @@ fun SentEnvelopeScreen(
                     )
                 }
                 LinearProgressIndicator(
-                    progress = { 0.7f },
+                    progress = { uiState.envelopeInfo[0].sentAmounts.toFloat() / uiState.envelopeInfo[0].totalAmounts },
                     color = SusuTheme.colorScheme.primary,
                     trackColor = Orange20,
                     strokeCap = StrokeCap.Round,
@@ -131,12 +144,12 @@ fun SentEnvelopeScreen(
                     horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
                     Text(
-                        text = "70,000원",
+                        text = uiState.envelopeInfo[0].sentAmounts.toMoneyFormat() + stringResource(R.string.sent_envelope_card_money_won),
                         style = SusuTheme.typography.title_xxxxs,
                         color = Gray90,
                     )
                     Text(
-                        text = "30,000원",
+                        text = uiState.envelopeInfo[0].receivedAmounts.toMoneyFormat() + stringResource(R.string.sent_envelope_card_money_won),
                         style = SusuTheme.typography.title_xxxxs,
                         color = Gray60,
                     )

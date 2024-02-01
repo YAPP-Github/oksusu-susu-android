@@ -27,7 +27,8 @@ import kotlinx.collections.immutable.PersistentList
 fun SentHistoryCard(
     modifier: Modifier = Modifier,
     envelopeHistoryList: PersistentList<EnvelopeSearch>,
-    onClickHistoryShowAll: () -> Unit = {},
+    friendId: Long,
+    onClickHistoryShowAll: (Long) -> Unit = {},
 ) {
     Card(
         modifier = modifier
@@ -68,7 +69,7 @@ fun SentHistoryCard(
                 text = stringResource(R.string.sent_screen_envelope_history_show_all),
                 modifier = modifier
                     .fillMaxWidth(),
-                onClick = onClickHistoryShowAll,
+                onClick = { onClickHistoryShowAll(friendId) },
             )
         }
     }

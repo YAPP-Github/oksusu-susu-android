@@ -14,7 +14,7 @@ import retrofit2.http.Query
 interface EnvelopesService {
     @GET("envelopes/friend-statistics")
     suspend fun getEnvelopesList(
-        @Query("friendIds") friendIds: List<Int>?,
+        @Query("friendIds") friendIds: List<Long>?,
         @Query("fromTotalAmounts") fromTotalAmounts: Int?,
         @Query("toTotalAmounts") toTotalAmounts: Int?,
         @Query("page") page: Int?,

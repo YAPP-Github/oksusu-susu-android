@@ -23,9 +23,6 @@ import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -48,7 +45,6 @@ import com.susu.core.ui.extension.susuClickable
 import com.susu.core.ui.extension.toMoneyFormat
 import com.susu.feature.sent.FriendStatisticsState
 import com.susu.feature.sent.R
-import com.susu.feature.sent.SentState
 
 @Composable
 fun SentCard(
@@ -59,7 +55,7 @@ fun SentCard(
     sentAmounts: Int = 0,
     receivedAmounts: Int = 0,
     onClickHistory: (Long) -> Unit = {},
-    onClickHistoryShowAll: () -> Unit = {},
+    onClickHistoryShowAll: (Long) -> Unit = {},
 ) {
     val degrees by animateFloatAsState(if (uiState.expand) 180f else 0f, label = "")
 
@@ -161,6 +157,7 @@ fun SentCard(
     ) {
         SentHistoryCard(
             envelopeHistoryList = uiState.envelopesHistoryList,
+            friendId = friend.id,
             onClickHistoryShowAll = onClickHistoryShowAll,
         )
     }

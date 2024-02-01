@@ -10,7 +10,7 @@ import kotlinx.datetime.LocalDateTime
 
 interface EnvelopesRepository {
     suspend fun getEnvelopesList(
-        friendIds: List<Int>?,
+        friendIds: List<Long>?,
         fromTotalAmounts: Int?,
         toTotalAmounts: Int?,
         page: Int?,

@@ -45,7 +45,7 @@ import com.susu.feature.sent.component.SentCard
 fun SentRoute(
     viewModel: SentViewModel = hiltViewModel(),
     padding: PaddingValues,
-    navigateSentEnvelope: () -> Unit,
+    navigateSentEnvelope: (Long) -> Unit,
     navigateSentEnvelopeAdd: () -> Unit,
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
@@ -54,7 +54,8 @@ fun SentRoute(
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
             SentEffect.NavigateEnvelopeAdd -> navigateSentEnvelopeAdd()
-            is SentEffect.NavigateEnvelope -> navigateSentEnvelope()
+            is SentEffect.NavigateEnvelope -> navigateSentEnvelope(sideEffect.id)
+            else -> {}
         }
     }
 
@@ -83,7 +84,7 @@ fun SentScreen(
     onClickSearchIcon: () -> Unit = {},
     onClickNotificationIcon: () -> Unit = {},
     onClickHistory: (Long) -> Unit = {},
-    onClickHistoryShowAll: () -> Unit = {},
+    onClickHistoryShowAll: (Long) -> Unit = {},
     onClickAddEnvelope: () -> Unit = {},
 ) {
     Box(
