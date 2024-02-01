@@ -34,7 +34,7 @@ class LedgerEditViewModel @Inject constructor(
                 id = ledgerId,
                 title = name,
                 startAt = LocalDateTime.of(startYear, startMonth, startDay, 0, 0).toKotlinLocalDateTime(),
-                endAt = LocalDateTime.of(endYear, endMonth, endDay, 0, 0).toKotlinLocalDateTime(),
+                endAt = LocalDateTime.of(endYear ?: startYear, endMonth ?: startMonth, endDay ?: startDay, 0, 0).toKotlinLocalDateTime(),
                 category = Category(
                     id = selectedCategoryId,
                     customCategory = customCategory.ifEmpty { null },
@@ -75,6 +75,7 @@ class LedgerEditViewModel @Inject constructor(
                 endYear = endDate.year,
                 endMonth = endDate.monthValue,
                 endDay = endDate.dayOfMonth,
+                showOnlyStartDate = startDate == endDate,
                 customCategory = customCategory ?: "",
                 isCustomCategoryChipSaved = customCategory.isNullOrEmpty().not(),
                 showCustomCategoryButton = ledger.category.customCategory != null,
@@ -147,4 +148,21 @@ class LedgerEditViewModel @Inject constructor(
     fun hideEndDateBottomSheet() = intent { copy(showEndDateBottomSheet = false) }
 
     fun popBackStack() = postSideEffect(LedgerEditSideEffect.PopBackStack)
+    fun showEndDateText() = intent {
+        copy(
+            endYear = null,
+            endMonth = null,
+            endDay = null,
+            showOnlyStartDate = false,
+        )
+    }
+
+    fun showOnlyStartDateText() = intent {
+        copy(
+            endYear = startYear,
+            endMonth = startMonth,
+            endDay = startDay,
+            showOnlyStartDate = true,
+        )
+    }
 }
