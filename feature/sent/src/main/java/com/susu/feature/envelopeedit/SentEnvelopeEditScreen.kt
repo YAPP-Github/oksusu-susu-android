@@ -37,6 +37,7 @@ import com.susu.core.designsystem.component.button.FilledButtonColor
 import com.susu.core.designsystem.component.button.MediumButtonStyle
 import com.susu.core.designsystem.component.button.SmallButtonStyle
 import com.susu.core.designsystem.component.button.SusuFilledButton
+import com.susu.core.designsystem.component.screen.LoadingScreen
 import com.susu.core.designsystem.component.textfield.SusuBasicTextField
 import com.susu.core.designsystem.component.textfield.SusuPriceTextField
 import com.susu.core.designsystem.component.textfieldbutton.SusuTextFieldWrapContentButton
@@ -101,7 +102,7 @@ fun SentEnvelopeEditRoute(
     SentEnvelopeEditScreen(
         uiState = uiState,
         onClickBackIcon = viewModel::popBackStack,
-        onClickSave = navigateSentEnvelopeDetail,
+        onClickSave = viewModel::editEnvelope,
         onMoneyUpdated = viewModel::updateAmount,
         onSelectCategory = { viewModel.updateCategoryId(it.id) },
         onClickCustomCategoryAdd = viewModel::showCustomCategoryInput,
@@ -376,6 +377,10 @@ fun SentEnvelopeEditScreen(
                 },
                 onItemSelected = { year, month, day -> onDateUpdated(year, month, day) },
             )
+        }
+
+        if (uiState.isLoading) {
+            LoadingScreen()
         }
     }
 }
