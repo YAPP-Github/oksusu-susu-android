@@ -1,5 +1,6 @@
 package com.susu.feature.envelopeedit
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,8 +17,11 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -50,6 +54,8 @@ import com.susu.core.ui.extension.susuClickable
 import com.susu.core.ui.util.to_yyyy_korYear_M_korMonth_d_korDay
 import com.susu.feature.envelopeedit.component.EditDetailItem
 import com.susu.feature.sent.R
+import kotlinx.coroutines.android.awaitFrame
+import kotlinx.coroutines.launch
 
 @Composable
 fun SentEnvelopeEditRoute(
@@ -58,11 +64,27 @@ fun SentEnvelopeEditRoute(
     navigateSentEnvelopeDetail: () -> Unit,
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
+    val categoryFocusRequester = remember { FocusRequester() }
+    val relationshipFocusRequester = remember { FocusRequester() }
+    val scope = rememberCoroutineScope()
 
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
             SentEnvelopeEditSideEffect.PopBackStack -> popBackStack()
             is SentEnvelopeEditSideEffect.HandleException -> {}
+            SentEnvelopeEditSideEffect.FocusCustomCategory -> {
+                scope.launch {
+                    awaitFrame()
+                    categoryFocusRequester.requestFocus()
+                }
+            }
+
+            SentEnvelopeEditSideEffect.FocusCustomRelationship -> {
+                scope.launch {
+                    awaitFrame()
+                    relationshipFocusRequester.requestFocus()
+                }
+            }
         }
     }
 
@@ -71,6 +93,10 @@ fun SentEnvelopeEditRoute(
             initData()
             getEnvelopConfig()
         }
+    }
+
+    BackHandler {
+        popBackStack()
     }
 
     SentEnvelopeEditScreen(
@@ -94,6 +120,12 @@ fun SentEnvelopeEditRoute(
         onPhoneNumberUpdated = viewModel::updatePhoneNumber,
         onDateUpdated = viewModel::updateHandedOverAt,
         onDatePickerSheetDismissed = viewModel::hideDatePickerSheet,
+        categoryFocusRequester = categoryFocusRequester,
+        relationshipFocusRequester = relationshipFocusRequester,
+        onCustomCategoryClosed = viewModel::hideCustomCategoryInput,
+        onCustomCategoryInnerButtonClicked = viewModel::toggleCustomCategoryInputSaved,
+        onCustomRelationshipClosed = viewModel::hideCustomRelationshipInput,
+        onCustomRelationshipInnerButtonClicked = viewModel::toggleCustomRelationshipInputSaved,
     )
 }
 
@@ -102,6 +134,8 @@ fun SentEnvelopeEditRoute(
 fun SentEnvelopeEditScreen(
     modifier: Modifier = Modifier,
     uiState: SentEnvelopeEditState = SentEnvelopeEditState(),
+    categoryFocusRequester: FocusRequester = remember { FocusRequester() },
+    relationshipFocusRequester: FocusRequester = remember { FocusRequester() },
     onClickBackIcon: () -> Unit = {},
     onClickSave: () -> Unit = {},
     onMoneyUpdated: (Long) -> Unit = {},
@@ -109,11 +143,15 @@ fun SentEnvelopeEditScreen(
     onClickCustomCategoryAdd: () -> Unit = {},
     onCustomCategoryUpdated: (String) -> Unit = {},
     onCustomCategoryCleared: () -> Unit = {},
+    onCustomCategoryClosed: () -> Unit = {},
+    onCustomCategoryInnerButtonClicked: () -> Unit = {},
     onFriendNameUpdated: (String) -> Unit = {},
     onSelectRelationship: (Relationship) -> Unit = {},
     onClickCustomRelationshipAdd: () -> Unit = {},
     onCustomRelationshipUpdated: (String) -> Unit = {},
     onCustomRelationshipCleared: () -> Unit = {},
+    onCustomRelationshipClosed: () -> Unit = {},
+    onCustomRelationshipInnerButtonClicked: () -> Unit = {},
     onClickDateText: () -> Unit = {},
     onHasVisitedUpdated: (Boolean) -> Unit = {},
     onGiftUpdated: (String) -> Unit = {},
@@ -156,7 +194,7 @@ fun SentEnvelopeEditScreen(
                     categoryText = stringResource(R.string.sent_envelope_edit_category_event),
                     categoryTextAlign = Alignment.Top,
                 ) {
-                    uiState.categoryConfig.forEach { category ->
+                    uiState.categoryConfig.dropLast(1).forEach { category ->
                         SusuFilledButton(
                             color = FilledButtonColor.Orange,
                             style = SmallButtonStyle.height32,
@@ -165,17 +203,23 @@ fun SentEnvelopeEditScreen(
                             onClick = { onSelectCategory(category) },
                         )
                     }
-                    AddConditionButton(
-                        onClick = onClickCustomCategoryAdd,
-                    )
                     if (uiState.showCustomCategory) {
                         SusuTextFieldWrapContentButton(
-                            style = SmallTextFieldButtonStyle.height32,
+                            focusRequester = categoryFocusRequester,
                             color = TextFieldButtonColor.Orange,
+                            style = SmallTextFieldButtonStyle.height32,
                             text = uiState.customCategory ?: "",
+                            isFocused = uiState.categoryId == uiState.categoryConfig.last().id,
+                            isSaved = uiState.customCategorySaved,
                             onTextChange = onCustomCategoryUpdated,
                             onClickClearIcon = onCustomCategoryCleared,
-                            onClickCloseIcon = { /* 무슨 동작을 해야하지?? */ },
+                            onClickCloseIcon = onCustomCategoryClosed,
+                            onClickFilledButton = onCustomCategoryInnerButtonClicked,
+                            onClickButton = { onSelectCategory(uiState.categoryConfig.last()) },
+                        )
+                    } else {
+                        AddConditionButton(
+                            onClick = onClickCustomCategoryAdd,
                         )
                     }
                 }
@@ -196,7 +240,7 @@ fun SentEnvelopeEditScreen(
                     categoryText = stringResource(R.string.sent_envelope_edit_category_relationship),
                     categoryTextAlign = Alignment.Top,
                 ) {
-                    uiState.relationshipConfig.forEach { relationship ->
+                    uiState.relationshipConfig.dropLast(1).forEach { relationship ->
                         SusuFilledButton(
                             color = FilledButtonColor.Orange,
                             style = SmallButtonStyle.height32,
@@ -205,17 +249,23 @@ fun SentEnvelopeEditScreen(
                             onClick = { onSelectRelationship(relationship) },
                         )
                     }
-                    AddConditionButton(
-                        onClick = onClickCustomRelationshipAdd,
-                    )
                     if (uiState.showCustomRelationship) {
                         SusuTextFieldWrapContentButton(
+                            focusRequester = relationshipFocusRequester,
                             style = SmallTextFieldButtonStyle.height32,
                             color = TextFieldButtonColor.Orange,
                             text = uiState.customRelationship ?: "",
+                            isFocused = uiState.relationshipId == uiState.relationshipConfig.last().id,
+                            isSaved = uiState.customRelationshipSaved,
                             onTextChange = onCustomRelationshipUpdated,
                             onClickClearIcon = onCustomRelationshipCleared,
-                            onClickCloseIcon = { /* 무슨 동작을 해야하지?? */ },
+                            onClickCloseIcon = onCustomRelationshipClosed,
+                            onClickFilledButton = onCustomRelationshipInnerButtonClicked,
+                            onClickButton = { onSelectRelationship(uiState.relationshipConfig.last()) },
+                        )
+                    } else {
+                        AddConditionButton(
+                            onClick = onClickCustomRelationshipAdd,
                         )
                     }
                 }

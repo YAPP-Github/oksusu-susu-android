@@ -7,7 +7,6 @@ import com.susu.core.ui.base.UiState
 import com.susu.core.ui.util.currentDate
 import java.time.LocalDateTime
 
-
 data class SentEnvelopeEditState(
     val isLoading: Boolean = false,
     val categoryConfig: List<Category> = emptyList(),
@@ -20,9 +19,11 @@ data class SentEnvelopeEditState(
     val friendName: String = "",
     val relationshipId: Long = 0,
     val customRelationship: String? = null,
+    val customRelationshipSaved: Boolean = false,
     val phoneNumber: String? = null,
     val categoryId: Int = 0,
     val customCategory: String? = null,
+    val customCategorySaved: Boolean = false,
     val showCustomCategory: Boolean = false,
     val showCustomRelationship: Boolean = false,
     val showDatePickerSheet: Boolean = false,
@@ -31,4 +32,6 @@ data class SentEnvelopeEditState(
 sealed interface SentEnvelopeEditSideEffect : SideEffect {
     data object PopBackStack : SentEnvelopeEditSideEffect
     data class HandleException(val throwable: Throwable, val retry: () -> Unit) : SentEnvelopeEditSideEffect
+    data object FocusCustomCategory : SentEnvelopeEditSideEffect
+    data object FocusCustomRelationship : SentEnvelopeEditSideEffect
 }

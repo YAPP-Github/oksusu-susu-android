@@ -63,10 +63,10 @@ class SentEnvelopeEditViewModel @Inject constructor(
     fun getEnvelopConfig() {
         viewModelScope.launch {
             getRelationShipConfigListUseCase().onSuccess {
-                intent { copy(relationshipConfig = it.dropLast(1)) }
+                intent { copy(relationshipConfig = it) }
             }
             getCategoryConfigUseCase().onSuccess {
-                intent { copy(categoryConfig = it.dropLast(1)) }
+                intent { copy(categoryConfig = it) }
             }
         }
     }
@@ -124,7 +124,20 @@ class SentEnvelopeEditViewModel @Inject constructor(
     }
 
     fun showCustomCategoryInput() {
-        intent { copy(showCustomCategory = true) }
+        intent {
+            copy(
+                showCustomCategory = true,
+                categoryId = categoryConfig.last().id,
+                customCategorySaved = false,
+            )
+        }
+        postSideEffect(SentEnvelopeEditSideEffect.FocusCustomCategory)
+    }
+
+    fun toggleCustomCategoryInputSaved() = intent {
+        copy(
+            customCategorySaved = !customCategorySaved,
+        )
     }
 
     fun hideCustomCategoryInput() {
@@ -132,7 +145,20 @@ class SentEnvelopeEditViewModel @Inject constructor(
     }
 
     fun showCustomRelationshipInput() {
-        intent { copy(showCustomRelationship = true) }
+        intent {
+            copy(
+                showCustomRelationship = true,
+                relationshipId = relationshipConfig.last().id,
+                customRelationshipSaved = false,
+            )
+        }
+        postSideEffect(SentEnvelopeEditSideEffect.FocusCustomRelationship)
+    }
+
+    fun toggleCustomRelationshipInputSaved() = intent {
+        copy(
+            customRelationshipSaved = !customRelationshipSaved,
+        )
     }
 
     fun hideCustomRelationshipInput() {
