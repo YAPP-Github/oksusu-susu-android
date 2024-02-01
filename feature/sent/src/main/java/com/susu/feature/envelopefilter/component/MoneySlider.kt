@@ -3,8 +3,10 @@ package com.susu.feature.envelopefilter.component
 import androidx.annotation.IntRange
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
@@ -16,6 +18,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.RangeSlider
 import androidx.compose.material3.RangeSliderState
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -39,6 +42,7 @@ import com.susu.core.designsystem.theme.Gray10
 import com.susu.core.designsystem.theme.Orange20
 import com.susu.core.designsystem.theme.Orange60
 import com.susu.core.designsystem.theme.SusuTheme
+import kotlin.math.roundToInt
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -48,8 +52,6 @@ fun MoneySlider(
     value: ClosedFloatingPointRange<Float>,
     valueRange: ClosedFloatingPointRange<Float> = 0f..1f,
     onValueChange: (ClosedFloatingPointRange<Float>) -> Unit,
-    @IntRange(from = 0)
-    steps: Int = 0
 ) {
     Box(
         contentAlignment = Alignment.Center
@@ -65,7 +67,7 @@ fun MoneySlider(
             valueRange = valueRange,
             value = value,
             onValueChange = onValueChange,
-            steps = steps,
+            steps = 0,
             startThumb = {
                 MoneySliderThumb()
             },
@@ -184,15 +186,39 @@ private fun DrawScope.drawTrack(
 @Preview(showBackground = true)
 @Composable
 fun MoneySliderPreview() {
-    var value by remember {
-        mutableStateOf(10f .. 10f)
-    }
-
     SusuTheme {
+        var value by remember {
+            mutableStateOf(0f .. 3_222f)
+        }
+
+        val step = when {
+            value.endInclusive <= 10_000 -> 1f
+            value.endInclusive <= 10_000 -> 1000f
+            value.endInclusive <= 1_000_000 -> 10_000f // 0원 ~ 100만원 범위, 1만원 간격
+            value.endInclusive <= 5_000_000 -> 50_000f // 101만원 ~ 500만원 범위, 5만원 간격
+            else -> 10_0000f // 500만원 이상, 10만원 간격
+        }
+
         Column(
             modifier = Modifier.padding(10.dp),
         ) {
-            MoneySlider(value = value, valueRange = 10f .. 10f, onValueChange = { value = it }, steps = 10)
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+            ) {
+                Text(text = "${value.start}")
+
+                Text(text = "${value.endInclusive}")
+            }
+            MoneySlider(
+                value = value,
+                valueRange = 0f..3_222f.roundToStep(step) + step,
+                onValueChange = { value = it.start.roundToStep(step) .. it.endInclusive.roundToStep(step) },
+            )
         }
     }
+}
+
+fun Float.roundToStep(step: Float): Float {
+    return (this / step).roundToInt() * step
 }
