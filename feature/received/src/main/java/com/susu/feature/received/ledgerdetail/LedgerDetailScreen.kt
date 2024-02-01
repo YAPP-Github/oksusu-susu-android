@@ -34,7 +34,10 @@ import com.susu.core.designsystem.component.appbar.SusuDefaultAppBar
 import com.susu.core.designsystem.component.appbar.icon.BackIcon
 import com.susu.core.designsystem.component.appbar.icon.DeleteText
 import com.susu.core.designsystem.component.appbar.icon.EditText
+import com.susu.core.designsystem.component.button.FilledButtonColor
+import com.susu.core.designsystem.component.button.FilterButton
 import com.susu.core.designsystem.component.button.GhostButtonColor
+import com.susu.core.designsystem.component.button.SelectedFilterButton
 import com.susu.core.designsystem.component.button.SmallButtonStyle
 import com.susu.core.designsystem.component.button.SusuFloatingButton
 import com.susu.core.designsystem.component.button.SusuGhostButton
@@ -49,6 +52,8 @@ import com.susu.core.ui.SnackbarToken
 import com.susu.core.ui.alignList
 import com.susu.core.ui.extension.OnBottomReached
 import com.susu.core.ui.extension.collectWithLifecycle
+import com.susu.core.ui.extension.toMoneyFormat
+import com.susu.core.ui.util.to_yyyy_dot_MM_dot_dd
 import com.susu.feature.received.ledgerdetail.component.LedgerDetailEnvelopeContainer
 import com.susu.feature.received.ledgerdetail.component.LedgerDetailOverviewColumn
 
@@ -56,6 +61,8 @@ import com.susu.feature.received.ledgerdetail.component.LedgerDetailOverviewColu
 fun LedgerDetailRoute(
     viewModel: LedgerDetailViewModel = hiltViewModel(),
     envelope: String?,
+    envelopeFilter: String?,
+    navigateEnvelopeFilter: (String) -> Unit,
     toDeleteEnvelopeId: Long?,
     navigateLedgerEdit: (Ledger) -> Unit,
     navigateEnvelopAdd: (String, Long) -> Unit,
@@ -98,6 +105,7 @@ fun LedgerDetailRoute(
             is LedgerDetailSideEffect.ShowSnackbar -> onShowSnackbar(SnackbarToken(message = sideEffect.msg))
             is LedgerDetailSideEffect.NavigateEnvelopeAdd -> navigateEnvelopAdd(sideEffect.categoryName, sideEffect.ledgerId)
             is LedgerDetailSideEffect.NavigateEnvelopeDetail -> navigateEnvelopeDetail(sideEffect.envelope, sideEffect.ledgerId)
+            is LedgerDetailSideEffect.NavigateEnvelopeFilter -> navigateEnvelopeFilter(sideEffect.filter)
         }
     }
 
@@ -107,6 +115,7 @@ fun LedgerDetailRoute(
         viewModel.addEnvelopeIfNeed(envelope)
         viewModel.deleteEnvelopeIfNeed(toDeleteEnvelopeId)
         viewModel.updateEnvelopeIfNeed(envelope)
+        viewModel.filterIfNeed(envelopeFilter)
     }
 
     listState.OnBottomReached(minItemsCount = 4) {
@@ -127,6 +136,7 @@ fun LedgerDetailRoute(
         onClickFloatingButton = viewModel::navigateEnvelopeAdd,
         onClickSeeMoreIcon = viewModel::navigateEnvelopeDetail,
         onClickEnvelopeAddButton = viewModel::navigateEnvelopeAdd,
+        onClickFilterButton = viewModel::navigateEnvelopeFilter,
     )
 }
 
@@ -203,20 +213,6 @@ fun LedgerDetailScreen(
                         SusuGhostButton(
                             color = GhostButtonColor.Black,
                             style = SmallButtonStyle.height32,
-                            text = stringResource(R.string.word_filter),
-                            leftIcon = {
-                                Icon(
-                                    modifier = Modifier.size(16.dp),
-                                    painter = painterResource(id = R.drawable.ic_filter),
-                                    contentDescription = null,
-                                )
-                            },
-                            onClick = onClickFilterButton,
-                        )
-
-                        SusuGhostButton(
-                            color = GhostButtonColor.Black,
-                            style = SmallButtonStyle.height32,
                             text = alignList[0], // TODO State 변환
                             leftIcon = {
                                 Icon(
@@ -226,6 +222,28 @@ fun LedgerDetailScreen(
                             },
                             onClick = onClickAlignButton,
                         )
+
+                        FilterButton(uiState.isFiltered, onClickFilterButton)
+
+                        uiState.selectedFriendList.forEach { friend ->
+                            SelectedFilterButton(
+                                color = FilledButtonColor.Black,
+                                style = SmallButtonStyle.height32,
+                                name = friend.name,
+                                onClickCloseIcon = { },
+                            )
+                        }
+
+                        if (uiState.fromAmount != null && uiState.toAmount != null) {
+                            SelectedFilterButton(
+                                color = FilledButtonColor.Black,
+                                style = SmallButtonStyle.height32,
+                                name = "${uiState.fromAmount.toMoneyFormat()}~${uiState.toAmount.toMoneyFormat()}",
+                                onClickCloseIcon = { },
+                            )
+                        }
+
+                        Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_xxs))
                     }
                 }
 

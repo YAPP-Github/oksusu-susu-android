@@ -22,7 +22,7 @@ import com.susu.feature.mypage.navigation.navigateMyPageInfo
 import com.susu.feature.mypage.navigation.navigateMyPagePrivacyPolicy
 import com.susu.feature.mypage.navigation.navigateMyPageSocial
 import com.susu.feature.received.navigation.ReceivedRoute
-import com.susu.feature.received.navigation.argument.FilterArgument
+import com.susu.feature.received.navigation.argument.LedgerFilterArgument
 import com.susu.feature.received.navigation.navigateLedgerAdd
 import com.susu.feature.received.navigation.navigateLedgerDetail
 import com.susu.feature.received.navigation.navigateLedgerEdit
@@ -33,6 +33,7 @@ import com.susu.feature.received.navigation.navigateReceivedEnvelopeAdd
 import com.susu.feature.received.navigation.navigateReceivedEnvelopeDetail
 import com.susu.feature.received.navigation.navigateReceivedEnvelopeEdit
 import com.susu.feature.sent.navigation.SentRoute
+import com.susu.feature.sent.navigation.navigateEnvelopeFilter
 import com.susu.feature.sent.navigation.navigateSent
 import com.susu.feature.sent.navigation.navigateSentEnvelope
 import com.susu.feature.sent.navigation.navigateSentEnvelopeAdd
@@ -58,12 +59,13 @@ internal class MainNavigator(
         get() = when (currentDestination?.route) {
             in listOf(
                 ReceivedRoute.ledgerSearchRoute,
-                ReceivedRoute.ledgerFilterRoute("{${ReceivedRoute.FILTER_ARGUMENT_NAME}}"),
+                ReceivedRoute.ledgerFilterRoute("{${ReceivedRoute.FILTER_LEDGER_ARGUMENT_NAME}}"),
                 ReceivedRoute.envelopeDetailRoute("{${ReceivedRoute.ENVELOPE_ARGUMENT_NAME}}", "{${ReceivedRoute.LEDGER_ID_ARGUMENT_NAME}}"),
                 ReceivedRoute.envelopeEditRoute("{${ReceivedRoute.ENVELOPE_ARGUMENT_NAME}}", "{${ReceivedRoute.LEDGER_ID_ARGUMENT_NAME}}"),
                 SentRoute.sentEnvelopeRoute,
                 SentRoute.sentEnvelopeDetailRoute,
                 SentRoute.sentEnvelopeEditRoute,
+                SentRoute.envelopeFilterRoute("{${SentRoute.FILTER_ENVELOPE_ARGUMENT}}"),
                 CommunityRoute.route,
                 CommunityRoute.voteAddRoute,
                 CommunityRoute.voteSearchRoute,
@@ -144,7 +146,7 @@ internal class MainNavigator(
         navController.navigateLedgerEdit(ledger)
     }
 
-    fun navigateLedgerFilter(filter: FilterArgument) {
+    fun navigateLedgerFilter(filter: LedgerFilterArgument) {
         navController.navigateLedgerFilter(filter)
     }
 
@@ -186,6 +188,10 @@ internal class MainNavigator(
 
     fun navigateVoteDetail(voteId: Long) {
         navController.navigateVoteDetail(voteId)
+    }
+
+    fun navigateEnvelopeFilter(filter: String) {
+        navController.navigateEnvelopeFilter(filter)
     }
 
     fun popBackStackIfNotHome() {

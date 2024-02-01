@@ -1,6 +1,7 @@
 package com.susu.feature.received.ledgerdetail
 
 import com.susu.core.model.Envelope
+import com.susu.core.model.Friend
 import com.susu.core.model.Ledger
 import com.susu.core.model.SearchEnvelope
 import com.susu.core.ui.base.SideEffect
@@ -16,7 +17,13 @@ data class LedgerDetailState(
     val startDate: String = "",
     val endDate: String = "",
     val envelopeList: PersistentList<SearchEnvelope> = persistentListOf(),
-) : UiState
+    val selectedFriendList: PersistentList<Friend> = persistentListOf(),
+    val fromAmount: Long? = null,
+    val toAmount: Long? = null,
+) : UiState {
+    val isFiltered = fromAmount != null || toAmount != null || selectedFriendList.isNotEmpty()
+
+}
 
 sealed interface LedgerDetailSideEffect : SideEffect {
     data class NavigateEnvelopeAdd(val categoryName: String, val ledgerId: Long) : LedgerDetailSideEffect
@@ -28,4 +35,5 @@ sealed interface LedgerDetailSideEffect : SideEffect {
     data object ShowDeleteSuccessSnackbar : LedgerDetailSideEffect
     data class ShowSnackbar(val msg: String) : LedgerDetailSideEffect
     data class HandleException(val throwable: Throwable, val retry: () -> Unit) : LedgerDetailSideEffect
+    data class NavigateEnvelopeFilter(val filter: String) : LedgerDetailSideEffect
 }

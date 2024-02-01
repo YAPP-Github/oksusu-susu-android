@@ -35,6 +35,9 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.susu.core.designsystem.theme.Gray10
+import com.susu.core.designsystem.theme.Gray100
+import com.susu.core.designsystem.theme.Gray60
+import com.susu.core.designsystem.theme.Gray80
 import com.susu.core.designsystem.theme.Orange20
 import com.susu.core.designsystem.theme.Orange60
 import com.susu.core.designsystem.theme.SusuTheme
@@ -86,7 +89,13 @@ fun MoneySlider(
 private fun MoneySliderThumb() {
     Box(
         modifier = Modifier
-            .shadow(elevation = 8.dp, spotColor = Color(0x14000000), ambientColor = Color(0x14000000), clip = true, shape = CircleShape)
+            .shadow(
+                elevation = 8.dp,
+                spotColor = Gray60,
+                ambientColor = Gray60,
+                clip = true,
+                shape = CircleShape,
+            )
             .size(24.dp)
             .background(color = Gray10, shape = CircleShape)
             .padding(SusuTheme.spacing.spacing_xxxs),

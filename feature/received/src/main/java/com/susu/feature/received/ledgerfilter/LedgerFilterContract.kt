@@ -3,7 +3,7 @@ package com.susu.feature.received.ledgerfilter
 import com.susu.core.model.Category
 import com.susu.core.ui.base.SideEffect
 import com.susu.core.ui.base.UiState
-import com.susu.feature.received.navigation.argument.FilterArgument
+import com.susu.feature.received.navigation.argument.LedgerFilterArgument
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.datetime.toKotlinLocalDateTime
@@ -18,7 +18,7 @@ data class LedgerFilterState(
     val showEndDateBottomSheet: Boolean = false,
 ) : UiState
 
-internal fun LedgerFilterState.toFilterArgument() = FilterArgument(
+internal fun LedgerFilterState.toFilterArgument() = LedgerFilterArgument(
     selectedCategoryList = selectedCategoryList,
     startAt = startAt?.toKotlinLocalDateTime(),
     endAt = endAt?.toKotlinLocalDateTime(),

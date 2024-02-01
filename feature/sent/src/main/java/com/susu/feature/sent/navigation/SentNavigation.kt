@@ -9,6 +9,7 @@ import com.susu.feature.envelope.SentEnvelopeRoute
 import com.susu.feature.envelopeadd.SentEnvelopeAddRoute
 import com.susu.feature.envelopedetail.SentEnvelopeDetailRoute
 import com.susu.feature.envelopeedit.SentEnvelopeEditRoute
+import com.susu.feature.envelopefilter.EnvelopeFilterRoute
 import com.susu.feature.sent.SentRoute
 
 fun NavController.navigateSent(navOptions: NavOptions) {
@@ -31,6 +32,10 @@ fun NavController.navigateSentEnvelopeAdd() {
     navigate(SentRoute.sentEnvelopeAddRoute)
 }
 
+fun NavController.navigateEnvelopeFilter(filter: String) {
+    navigate(SentRoute.envelopeFilterRoute(filter))
+}
+
 fun NavGraphBuilder.sentNavGraph(
     padding: PaddingValues,
     popBackStack: () -> Unit,
@@ -38,6 +43,7 @@ fun NavGraphBuilder.sentNavGraph(
     navigateSentEnvelopeDetail: () -> Unit,
     navigateSentEnvelopeEdit: () -> Unit,
     navigateSentEnvelopeAdd: () -> Unit,
+    popBackStackWithFilter: (String) -> Unit,
     handleException: (Throwable, () -> Unit) -> Unit,
 ) {
     composable(route = SentRoute.route) {
@@ -75,6 +81,16 @@ fun NavGraphBuilder.sentNavGraph(
             handleException = handleException,
         )
     }
+
+    composable(
+        route = SentRoute.envelopeFilterRoute("{${SentRoute.FILTER_ENVELOPE_ARGUMENT}}"),
+    ) {
+        EnvelopeFilterRoute(
+            popBackStack = popBackStack,
+            popBackStackWithFilter = popBackStackWithFilter,
+            handleException = handleException,
+        )
+    }
 }
 
 object SentRoute {
@@ -83,4 +99,8 @@ object SentRoute {
     const val sentEnvelopeDetailRoute = "sent-envelope-detail"
     const val sentEnvelopeEditRoute = "sent-envelope-edit"
     const val sentEnvelopeAddRoute = "sent-envelope-add"
+    const val FILTER_ENVELOPE_ARGUMENT = "filter-envelope"
+
+
+    fun envelopeFilterRoute(filter: String) = "envelope-filter/$filter"
 }

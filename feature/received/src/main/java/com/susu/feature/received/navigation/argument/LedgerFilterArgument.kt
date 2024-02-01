@@ -5,7 +5,7 @@ import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class FilterArgument(
+data class LedgerFilterArgument(
     val selectedCategoryList: List<Category> = emptyList(),
     val startAt: LocalDateTime? = null,
     val endAt: LocalDateTime? = null,

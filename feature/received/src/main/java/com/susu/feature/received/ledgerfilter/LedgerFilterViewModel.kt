@@ -8,7 +8,7 @@ import com.susu.core.ui.extension.decodeFromUri
 import com.susu.core.ui.extension.encodeToUri
 import com.susu.domain.usecase.categoryconfig.GetCategoryConfigUseCase
 import com.susu.feature.received.navigation.ReceivedRoute
-import com.susu.feature.received.navigation.argument.FilterArgument
+import com.susu.feature.received.navigation.argument.LedgerFilterArgument
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.minus
 import kotlinx.collections.immutable.persistentListOf
@@ -27,8 +27,8 @@ class LedgerFilterViewModel @Inject constructor(
 ) : BaseViewModel<LedgerFilterState, LedgerFilterSideEffect>(
     LedgerFilterState(),
 ) {
-    private val argument = savedStateHandle.get<String>(ReceivedRoute.FILTER_ARGUMENT_NAME)!!
-    private var filter = FilterArgument()
+    private val argument = savedStateHandle.get<String>(ReceivedRoute.FILTER_LEDGER_ARGUMENT_NAME)!!
+    private var filter = LedgerFilterArgument()
 
     fun initData() {
         initFilter()
@@ -96,7 +96,7 @@ class LedgerFilterViewModel @Inject constructor(
     fun hideEndDateBottomSheet() = intent { copy(showEndDateBottomSheet = false) }
     fun popBackStack() = postSideEffect(LedgerFilterSideEffect.PopBackStack)
     fun popBackStackWithFilter() {
-        val filter = FilterArgument(
+        val filter = LedgerFilterArgument(
             selectedCategoryList = currentState.selectedCategoryList,
             startAt = currentState.startAt?.toKotlinLocalDateTime(),
             endAt = currentState.endAt?.toKotlinLocalDateTime(),
