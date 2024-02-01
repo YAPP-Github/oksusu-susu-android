@@ -9,11 +9,13 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -32,8 +34,12 @@ import com.susu.core.designsystem.component.button.XSmallButtonStyle
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.feature.envelopefilter.component.MoneySlider
+import com.susu.feature.envelopefilter.component.SearchBar
 import com.susu.feature.sent.R
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.debounce
 
+@OptIn(FlowPreview::class)
 @Composable
 fun EnvelopeFilterRoute(
     viewModel: EnvelopeFilterViewModel = hiltViewModel(),
@@ -54,21 +60,28 @@ fun EnvelopeFilterRoute(
         viewModel.initData()
     }
 
+    LaunchedEffect(key1 = uiState.searchKeyword) {
+        snapshotFlow { uiState.searchKeyword }
+            .debounce(100L)
+            .collect(viewModel::getFriendList)
+    }
+
     EnvelopeFilterScreen(
         uiState = uiState,
         onClickBackIcon = viewModel::popBackStack,
         onClickApplyFilterButton = viewModel::popBackStackWithFilter,
+        onTextChangeSearch = viewModel::updateName,
     )
 }
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun EnvelopeFilterScreen(
-    @Suppress("detekt:UnusedParameter")
     uiState: EnvelopeFilterState = EnvelopeFilterState(),
     onClickBackIcon: () -> Unit = {},
     onClickApplyFilterButton: () -> Unit = {},
     onClickRefreshButton: () -> Unit = {},
+    onTextChangeSearch: (String) -> Unit = {},
 ) {
     Column(
         modifier = Modifier
@@ -92,16 +105,22 @@ fun EnvelopeFilterScreen(
         ) {
             Text(text = stringResource(R.string.envelope_filter_screen_friend), style = SusuTheme.typography.title_xs)
             Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_m))
+            SearchBar(
+                value = uiState.searchKeyword,
+                placeholder = stringResource(R.string.envelope_filter_search_placeholder),
+                onValueChange = onTextChangeSearch,
+            )
+            Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_m))
             FlowRow(
                 horizontalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxs),
                 verticalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxs),
             ) {
-                listOf("이진욱", "김철수", "홍길동", "박예은", "박미영", "서한누리", "서한누리").forEach { category ->
+                uiState.friendList.forEach { friend ->
                     SusuLinedButton(
                         color = LinedButtonColor.Black,
                         style = XSmallButtonStyle.height28,
-                        isActive = true,
-                        text = category,
+                        isActive = friend in uiState.selectedFriendList,
+                        text = friend.name,
                         onClick = { },
                     )
                 }
@@ -123,6 +142,7 @@ fun EnvelopeFilterScreen(
             Spacer(modifier = Modifier.weight(1f))
 
             Column(
+                modifier = Modifier.imePadding(),
                 verticalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_m),
             ) {
                 FlowRow(

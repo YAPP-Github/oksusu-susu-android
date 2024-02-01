@@ -55,4 +55,5 @@
     <string name="sent_envelope_add_date_title_highlight">%s님에게 </string>
     <string name="envelope_filter_screen_friend">보낸 사람</string>
     <string name="envelope_filter_screen_money">받은 봉투 금액</string>
+    <string name="envelope_filter_search_placeholder">보낸 사람을 검색해보세요</string>
 </resources>
