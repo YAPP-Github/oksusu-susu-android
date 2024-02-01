@@ -1,7 +1,6 @@
 package com.susu.domain.usecase.envelope
 
 import com.susu.core.common.runCatchingIgnoreCancelled
-import com.susu.core.model.Category
 import com.susu.domain.repository.EnvelopesRepository
 import com.susu.domain.repository.FriendRepository
 import kotlinx.datetime.LocalDateTime
@@ -28,8 +27,8 @@ class EditSentEnvelopeUseCase @Inject constructor(
                 amount = amount,
                 gift = gift,
                 memo = memo,
-                categoryId = category.id.toLong(),
-                customCategory = category.customCategory,
+                categoryId = categoryId.toLong(),
+                customCategory = customCategory,
                 hasVisited = hasVisited,
                 handedOverAt = handedOverAt,
             )
@@ -43,7 +42,8 @@ class EditSentEnvelopeUseCase @Inject constructor(
         val phoneNumber: String? = null,
         val relationshipId: Long,
         val customRelation: String? = null,
-        val category: Category,
+        val categoryId: Int,
+        val customCategory: String? = null,
         val amount: Long,
         val gift: String? = null,
         val memo: String? = null,

@@ -9,6 +9,7 @@ import com.susu.core.ui.base.BaseViewModel
 import com.susu.core.ui.util.currentDate
 import com.susu.core.ui.util.getSafeLocalDateTime
 import com.susu.domain.usecase.categoryconfig.GetCategoryConfigUseCase
+import com.susu.domain.usecase.envelope.EditSentEnvelopeUseCase
 import com.susu.domain.usecase.envelope.GetRelationShipConfigListUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toPersistentList
@@ -21,9 +22,11 @@ import javax.inject.Inject
 class SentEnvelopeEditViewModel @Inject constructor(
     private val getCategoryConfigUseCase: GetCategoryConfigUseCase,
     private val getRelationShipConfigListUseCase: GetRelationShipConfigListUseCase,
+    private val editSentEnvelopeUseCase: EditSentEnvelopeUseCase,
 ) : BaseViewModel<SentEnvelopeEditState, SentEnvelopeEditSideEffect>(
     SentEnvelopeEditState(),
 ) {
+    private var originalEnvelope: Envelope = Envelope()
 
     fun initData() {
         // TODO: Argument로 받은 데이터로 설정. UI 개발을 위해 임의의 데이터 사용.
@@ -45,6 +48,7 @@ class SentEnvelopeEditViewModel @Inject constructor(
                 customRelation = "나",
             ),
         )
+        originalEnvelope = envelope
 
         viewModelScope.launch {
             val relationshipConfigResult = getRelationShipConfigListUseCase()
@@ -75,6 +79,36 @@ class SentEnvelopeEditViewModel @Inject constructor(
                     )
                 }
             }
+        }
+    }
+
+    fun editEnvelope() {
+        viewModelScope.launch {
+            intent { copy(isLoading = true) }
+            editSentEnvelopeUseCase(
+                param = with(currentState) {
+                    EditSentEnvelopeUseCase.Param(
+                        envelopeId = originalEnvelope.id,
+                        friendId = originalEnvelope.friend.id,
+                        friendName = friendName,
+                        phoneNumber = phoneNumber,
+                        relationshipId = relationshipId,
+                        customRelation = customRelationship,
+                        categoryId = categoryId,
+                        customCategory = customCategory,
+                        amount = amount,
+                        gift = gift,
+                        memo = memo,
+                        handedOverAt = handedOverAt.toKotlinLocalDateTime(),
+                        hasVisited = hasVisited,
+                    )
+                },
+            ).onSuccess {
+                popBackStack()
+            }.onFailure {
+                postSideEffect(SentEnvelopeEditSideEffect.HandleException(it, ::editEnvelope))
+            }
+            intent { copy(isLoading = false) }
         }
     }
 
