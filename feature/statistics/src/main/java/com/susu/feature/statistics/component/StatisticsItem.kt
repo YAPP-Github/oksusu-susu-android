@@ -1,5 +1,9 @@
 package com.susu.feature.statistics.component
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -25,7 +29,6 @@ import com.susu.core.designsystem.theme.Gray60
 import com.susu.core.designsystem.theme.Gray80
 import com.susu.core.designsystem.theme.Orange60
 import com.susu.core.designsystem.theme.SusuTheme
-import com.susu.core.ui.extension.toMoneyFormat
 import com.susu.feature.statistics.R
 
 @Composable
@@ -104,7 +107,15 @@ fun StatisticsHorizontalItem(
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             if (isActive) {
-                Text(text = name, style = SusuTheme.typography.title_s, color = Gray80)
+                AnimatedContent(
+                    targetState = name,
+                    transitionSpec = {
+                        slideInVertically { -it } togetherWith slideOutVertically { it }
+                    },
+                    label = "StatisticsHorizontalItemName",
+                ) {
+                    Text(text = it, style = SusuTheme.typography.title_s, color = Gray80)
+                }
                 AnimatedCounterText(
                     number = money,
                     style = SusuTheme.typography.title_s,
