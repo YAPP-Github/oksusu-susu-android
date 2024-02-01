@@ -183,8 +183,8 @@ class LedgerDetailViewModel @Inject constructor(
     }
 
     fun navigateEnvelopeAdd() = postSideEffect(
-        LedgerDetailSideEffect.NavigateEnvelopeAdd(ledger.category.customCategory ?: ledger.category.name, ledger.id),
+        LedgerDetailSideEffect.NavigateEnvelopeAdd(ledger),
     )
 
-    fun navigateEnvelopeDetail(envelope: Envelope) = postSideEffect(LedgerDetailSideEffect.NavigateEnvelopeDetail(envelope, ledger.id))
+    fun navigateEnvelopeDetail(envelope: Envelope) = postSideEffect(LedgerDetailSideEffect.NavigateEnvelopeDetail(envelope, ledger))
 }

@@ -3,6 +3,7 @@ package com.susu.feature.received.envelopeedit
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.susu.core.model.Envelope
+import com.susu.core.model.Ledger
 import com.susu.core.model.Relationship
 import com.susu.core.ui.base.BaseViewModel
 import com.susu.core.ui.extension.decodeFromUri
@@ -26,7 +27,9 @@ class ReceivedEnvelopeEditViewModel @Inject constructor(
     ReceivedEnvelopeEditState(),
 ) {
     private val argument = savedStateHandle.get<String>(ReceivedRoute.ENVELOPE_ARGUMENT_NAME)!!
-    private val ledgerId = savedStateHandle.get<String>(ReceivedRoute.LEDGER_ID_ARGUMENT_NAME)!!.toLong()
+    private val ledger = run {
+        Json.decodeFromUri<Ledger>(savedStateHandle.get<String>(ReceivedRoute.LEDGER_ARGUMENT_NAME)!!)
+    }
 
     private var isFirstVisited: Boolean = true
 
@@ -62,10 +65,12 @@ class ReceivedEnvelopeEditViewModel @Inject constructor(
                     envelopeId = envelope.id,
                     friendId = envelope.friend.id,
                     friendName = envelope.friend.name,
+                    categoryId = ledger.category.id.toLong(),
+                    customCategory = ledger.category.customCategory,
                     phoneNumber = envelope.friend.phoneNumber.ifEmpty { null },
                     relationshipId = envelope.relationship.id,
                     customRelation = envelope.relationship.customRelation,
-                    ledgerId = ledgerId,
+                    ledgerId = ledger.id,
                     amount = envelope.amount,
                     gift = envelope.gift,
                     memo = envelope.memo,

@@ -163,20 +163,20 @@ internal class MainNavigator(
         navController.navigateMyPageSocial()
     }
 
-    fun navigateReceivedEnvelopeAdd(categoryName: String, ledgerId: Long) {
-        navController.navigateReceivedEnvelopeAdd(categoryName, ledgerId)
+    fun navigateReceivedEnvelopeAdd(ledger: Ledger) {
+        navController.navigateReceivedEnvelopeAdd(ledger)
     }
 
     fun navigateMyPagePrivacyPolicy() {
         navController.navigateMyPagePrivacyPolicy()
     }
 
-    fun navigateReceivedEnvelopeDetail(envelope: Envelope, ledgerId: Long) {
-        navController.navigateReceivedEnvelopeDetail(envelope, ledgerId)
+    fun navigateReceivedEnvelopeDetail(envelope: Envelope, ledger: Ledger) {
+        navController.navigateReceivedEnvelopeDetail(envelope, ledger)
     }
 
-    fun navigateReceivedEnvelopeEdit(envelope: Envelope, ledgerId: Long) {
-        navController.navigateReceivedEnvelopeEdit(envelope, ledgerId)
+    fun navigateReceivedEnvelopeEdit(envelope: Envelope, ledger: Ledger) {
+        navController.navigateReceivedEnvelopeEdit(envelope, ledger)
     }
 
     fun navigateVoteAdd() {
