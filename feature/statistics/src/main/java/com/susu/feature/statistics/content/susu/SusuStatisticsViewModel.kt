@@ -36,6 +36,11 @@ class SusuStatisticsViewModel @Inject constructor(
                         relationship = relationshipConfig.firstOrNull() ?: Relationship(),
                     )
                 }
+            } else {
+                val exception = categoryConfigResult.exceptionOrNull()
+                    ?: relationshipConfigResult.exceptionOrNull()
+                    ?: Throwable()
+                postSideEffect(SusuStatisticsEffect.HandleException(exception, ::getStatisticsOption))
             }
             intent { copy(isLoading = false) }
         }
