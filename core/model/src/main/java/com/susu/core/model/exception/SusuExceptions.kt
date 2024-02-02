@@ -59,7 +59,10 @@ enum class SusuServerError(val exception: Exception) {
 
     /** Vote Error Code */
     ALREADY_VOTED_POST(AlreadyVotedPostException()),
-    CANNOT_BLOCK_MYSELF(CannotBlockMyself()),
+    CANNOT_BLOCK_MYSELF(CannotBlockMyselfException()),
+
+    /** Report Error Code */
+    ALREADY_EXISTS_REPORT_HISTORY_ERROR(AlreadyExistsReportHistoryException()),
 }
 
 /** Common Exception Code */
@@ -207,6 +210,11 @@ class AlreadyVotedPostException(
     override val message: String = "이미 진행된 투표입니다.",
 ) : RuntimeException()
 
-class CannotBlockMyself(
+class CannotBlockMyselfException(
     override val message: String = "본인을 차단할 수 없습니다.",
+) : RuntimeException()
+
+/** Report Error Code */
+class AlreadyExistsReportHistoryException(
+    override val message: String = "이미 신고한 상태입니다.",
 ) : RuntimeException()

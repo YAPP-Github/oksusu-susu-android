@@ -3,7 +3,8 @@ package com.susu.feature.community.votedetail
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.susu.core.model.Vote
-import com.susu.core.model.exception.CannotBlockMyself
+import com.susu.core.model.exception.AlreadyExistsReportHistoryException
+import com.susu.core.model.exception.CannotBlockMyselfException
 import com.susu.core.ui.base.BaseViewModel
 import com.susu.core.ui.extension.encodeToUri
 import com.susu.domain.usecase.block.BlockUserUseCase
@@ -133,7 +134,10 @@ class VoteDetailViewModel @Inject constructor(
     private fun reportVote(voteId: Long): Job = viewModelScope.launch {
         reportVoteUseCase(voteId)
             .onFailure { throwable ->
-                postSideEffect(VoteDetailSideEffect.HandleException(throwable = throwable, retry = { reportVote(voteId) }))
+                when (throwable) {
+                    is AlreadyExistsReportHistoryException -> postSideEffect(VoteDetailSideEffect.ShowSnackbar(throwable.message))
+                    else -> postSideEffect(VoteDetailSideEffect.HandleException(throwable = throwable, retry = { reportVote(voteId) }))
+                }
             }
     }
 
@@ -144,7 +148,7 @@ class VoteDetailViewModel @Inject constructor(
             }
             .onFailure { throwable ->
                 when (throwable) {
-                    is CannotBlockMyself -> postSideEffect(VoteDetailSideEffect.ShowSnackbar(throwable.message))
+                    is CannotBlockMyselfException -> postSideEffect(VoteDetailSideEffect.ShowSnackbar(throwable.message))
                     else -> postSideEffect(VoteDetailSideEffect.HandleException(throwable = throwable, retry = { blockUser(uid) }))
                 }
             }
