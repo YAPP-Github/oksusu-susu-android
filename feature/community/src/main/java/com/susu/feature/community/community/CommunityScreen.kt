@@ -68,6 +68,7 @@ import java.time.LocalDateTime
 fun CommunityRoute(
     padding: PaddingValues,
     vote: String?,
+    needRefresh: Boolean,
     toDeleteVoteId: Long?,
     toUpdateVote: String?,
     viewModel: CommunityViewModel = hiltViewModel(),
@@ -86,7 +87,7 @@ fun CommunityRoute(
             CommunitySideEffect.NavigateVoteAdd -> navigateVoteAdd()
             is CommunitySideEffect.NavigateVoteDetail -> navigateVoteDetail(sideEffect.voteId)
             CommunitySideEffect.NavigateVoteSearch -> navigateVoteSearch()
-            is CommunitySideEffect.ShowDeleteDialog -> onShowDialog(
+            is CommunitySideEffect.ShowReportDialog -> onShowDialog(
                 DialogToken(
                     title = context.getString(R.string.dialog_report_title),
                     text = context.getString(R.string.dialog_report_body),
@@ -122,6 +123,7 @@ fun CommunityRoute(
         viewModel.addVoteIfNeed(vote)
         viewModel.updateVoteIfNeed(toUpdateVote)
         viewModel.deleteVoteIfNeed(toDeleteVoteId)
+        viewModel.needRefreshIfNeed(needRefresh)
     }
 
     voteListState.OnBottomReached(minItemsCount = 4) {

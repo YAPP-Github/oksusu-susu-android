@@ -3,14 +3,19 @@ package com.susu.feature.community.votedetail
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.susu.core.model.Vote
+import com.susu.core.model.exception.CannotBlockMyself
 import com.susu.core.model.exception.NotFoundLedgerException
 import com.susu.core.ui.base.BaseViewModel
 import com.susu.core.ui.extension.encodeToUri
+import com.susu.domain.usecase.block.BlockUserUseCase
+import com.susu.domain.usecase.report.ReportVoteUseCase
 import com.susu.domain.usecase.vote.DeleteVoteUseCase
 import com.susu.domain.usecase.vote.GetVoteDetailUseCase
 import com.susu.domain.usecase.vote.VoteUseCase
+import com.susu.feature.community.community.CommunitySideEffect
 import com.susu.feature.community.navigation.CommunityRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
 import javax.inject.Inject
@@ -20,6 +25,8 @@ class VoteDetailViewModel @Inject constructor(
     private val deleteVoteUseCase: DeleteVoteUseCase,
     private val getVoteDetailUseCase: GetVoteDetailUseCase,
     private val voteUseCase: VoteUseCase,
+    private val reportVoteUseCase: ReportVoteUseCase,
+    private val blockUserUseCase: BlockUserUseCase,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<VoteDetailState, VoteDetailSideEffect>(
     VoteDetailState(),
@@ -117,4 +124,31 @@ class VoteDetailViewModel @Inject constructor(
     fun navigateVoteEdit() = postSideEffect(VoteDetailSideEffect.NavigateVoteEdit(vote))
 
     fun popBackStack() = postSideEffect(VoteDetailSideEffect.PopBackStackWithToUpdateVote(Json.encodeToUri(currentState.vote)))
+
+    fun showReportDialog() = postSideEffect(
+        VoteDetailSideEffect.ShowReportDialog(
+            onConfirmRequest = { reportVote(vote.id) },
+            onCheckedAction = { blockUser(vote.uid) },
+        ),
+    )
+
+    private fun reportVote(voteId: Long): Job = viewModelScope.launch {
+        reportVoteUseCase(voteId)
+            .onFailure { throwable ->
+                postSideEffect(VoteDetailSideEffect.HandleException(throwable = throwable, retry = { reportVote(voteId) }))
+            }
+    }
+
+    private fun blockUser(uid: Long): Job = viewModelScope.launch {
+        blockUserUseCase(uid)
+            .onSuccess {
+                postSideEffect(VoteDetailSideEffect.PopBackStackWithNeedRefresh)
+            }
+            .onFailure { throwable ->
+                when (throwable) {
+                    is CannotBlockMyself -> postSideEffect(VoteDetailSideEffect.ShowSnackbar(throwable.message))
+                    else -> postSideEffect(VoteDetailSideEffect.HandleException(throwable = throwable, retry = { blockUser(uid) }))
+                }
+            }
+    }
 }

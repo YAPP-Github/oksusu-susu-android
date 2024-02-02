@@ -4,7 +4,6 @@ import androidx.lifecycle.viewModelScope
 import com.susu.core.model.Category
 import com.susu.core.model.Vote
 import com.susu.core.model.exception.CannotBlockMyself
-import com.susu.core.model.exception.NotFoundLedgerException
 import com.susu.core.ui.base.BaseViewModel
 import com.susu.core.ui.extension.decodeFromUri
 import com.susu.domain.usecase.block.BlockUserUseCase
@@ -95,6 +94,12 @@ class CommunityViewModel @Inject constructor(
                     .toPersistentList(),
             )
         }
+    }
+
+    fun needRefreshIfNeed(needRefresh: Boolean) {
+        if (needRefresh.not()) return
+
+        getVoteList(true)
     }
 
     fun initData() {
@@ -190,7 +195,7 @@ class CommunityViewModel @Inject constructor(
     fun navigateVoteSearch() = postSideEffect(CommunitySideEffect.NavigateVoteSearch)
 
     fun showReportDialog(vote: Vote) = postSideEffect(
-        CommunitySideEffect.ShowDeleteDialog(
+        CommunitySideEffect.ShowReportDialog(
             onConfirmRequest = { reportVote(vote.id) },
             onCheckedAction = { blockUser(vote.uid) },
         ),

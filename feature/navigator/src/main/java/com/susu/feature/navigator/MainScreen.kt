@@ -172,6 +172,13 @@ internal fun MainScreen(
                         )
                         navigator.popBackStackIfNotHome()
                     },
+                    popBackStackWithNeedRefresh = { needRefresh ->
+                        navigator.navController.previousBackStackEntry?.savedStateHandle?.set(
+                            CommunityRoute.NEED_REFRESH_ARGUMENT_NAME,
+                            needRefresh,
+                        )
+                        navigator.popBackStackIfNotHome()
+                    },
                     onShowSnackbar = viewModel::onShowSnackbar,
                     onShowDialog = viewModel::onShowDialog,
                     handleException = viewModel::handleException,

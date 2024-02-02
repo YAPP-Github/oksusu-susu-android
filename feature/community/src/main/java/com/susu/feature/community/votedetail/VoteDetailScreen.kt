@@ -65,6 +65,7 @@ fun VoteDetailRoute(
     viewModel: VoteDetailViewModel = hiltViewModel(),
     popBackStackWithDeleteVoteId: (Long) -> Unit,
     popBackStackWithToUpdateVote: (String) -> Unit,
+    popBackStackWithNeedRefresh: (Boolean) -> Unit,
     navigateVoteEdit: (Vote) -> Unit,
     onShowSnackbar: (SnackbarToken) -> Unit,
     onShowDialog: (DialogToken) -> Unit,
@@ -89,6 +90,7 @@ fun VoteDetailRoute(
                     ),
                 )
             }
+
             VoteDetailSideEffect.ShowDeleteSuccessSnackbar -> {
                 onShowSnackbar(
                     SnackbarToken(
@@ -96,6 +98,21 @@ fun VoteDetailRoute(
                     ),
                 )
             }
+
+            VoteDetailSideEffect.PopBackStackWithNeedRefresh -> popBackStackWithNeedRefresh(true)
+            is VoteDetailSideEffect.ShowReportDialog -> onShowDialog(
+                DialogToken(
+                    title = context.getString(R.string.dialog_report_title),
+                    text = context.getString(R.string.dialog_report_body),
+                    confirmText = context.getString(R.string.dialog_report_confirm_text),
+                    dismissText = context.getString(R.string.dialog_report_dismiss_text),
+                    checkboxText = context.getString(R.string.dialog_report_checkbox_text),
+                    onConfirmRequest = sideEffect.onConfirmRequest,
+                    onCheckedAction = sideEffect.onCheckedAction,
+                ),
+            )
+
+            is VoteDetailSideEffect.ShowSnackbar -> onShowSnackbar(SnackbarToken(message = sideEffect.message))
         }
     }
 
@@ -125,6 +142,7 @@ fun VoteDetailRoute(
         onClickEdit = viewModel::navigateVoteEdit,
         onClickDelete = viewModel::showDeleteDialog,
         onClickOption = viewModel::vote,
+        onClickReport = viewModel::showReportDialog,
     )
 }
 
@@ -184,10 +202,11 @@ fun VoteDetailScreen(
             ) {
                 // border를 사용하지 않은 이유 see -> https://stackoverflow.com/questions/75964726/jetpack-compose-circle-shape-border-not-being-applied-as-expected
                 Box {
-                    Box(modifier = Modifier
-                        .size(20.dp)
-                        .clip(CircleShape)
-                        .background(Gray15)
+                    Box(
+                        modifier = Modifier
+                            .size(20.dp)
+                            .clip(CircleShape)
+                            .background(Gray15),
                     )
                     Image(
                         modifier = Modifier

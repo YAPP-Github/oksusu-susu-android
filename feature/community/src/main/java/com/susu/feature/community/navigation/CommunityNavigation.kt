@@ -48,6 +48,7 @@ fun NavGraphBuilder.communityNavGraph(
     popBackStackWithVote: (String) -> Unit,
     popBackStackWithToUpdateVote: (String) -> Unit,
     popBackStackWithDeleteVoteId: (Long) -> Unit,
+    popBackStackWithNeedRefresh: (Boolean) -> Unit,
     onShowSnackbar: (SnackbarToken) -> Unit,
     onShowDialog: (DialogToken) -> Unit,
     handleException: (Throwable, () -> Unit) -> Unit,
@@ -56,10 +57,13 @@ fun NavGraphBuilder.communityNavGraph(
         val vote = navBackStackEntry.savedStateHandle.get<String>(CommunityRoute.VOTE_ARGUMENT_NAME)
         val toUpdateVote = navBackStackEntry.savedStateHandle.get<String>(CommunityRoute.TO_UPDATE_VOTE_ARGUMENT_NAME)
         val toDeleteVoteId = navBackStackEntry.savedStateHandle.get<Long>(CommunityRoute.VOTE_ID_ARGUMENT_NAME)
+        val needRefresh = navBackStackEntry.savedStateHandle.get<Boolean>(CommunityRoute.NEED_REFRESH_ARGUMENT_NAME) ?: false
+        navBackStackEntry.savedStateHandle[CommunityRoute.NEED_REFRESH_ARGUMENT_NAME] = false
 
         CommunityRoute(
             padding = padding,
             vote = vote,
+            needRefresh = needRefresh,
             toDeleteVoteId = toDeleteVoteId,
             toUpdateVote = toUpdateVote,
             navigateVoteAdd = navigateVoteAdd,
@@ -92,6 +96,7 @@ fun NavGraphBuilder.communityNavGraph(
         VoteDetailRoute(
             popBackStackWithToUpdateVote = popBackStackWithToUpdateVote,
             popBackStackWithDeleteVoteId = popBackStackWithDeleteVoteId,
+            popBackStackWithNeedRefresh = popBackStackWithNeedRefresh,
             navigateVoteEdit = navigateVoteEdit,
             onShowDialog = onShowDialog,
             onShowSnackbar = onShowSnackbar,
@@ -127,6 +132,7 @@ object CommunityRoute {
     const val VOTE_ARGUMENT_NAME = "vote"
     const val VOTE_ID_ARGUMENT_NAME = "vote-id"
     const val TO_UPDATE_VOTE_ARGUMENT_NAME = "to-update-vote"
+    const val NEED_REFRESH_ARGUMENT_NAME = "need-refresh"
 
     fun voteDetailRoute(voteId: String) = "vote-detail/$voteId"
     fun voteEditRoute(vote: String) = "vote-edit/$vote"
