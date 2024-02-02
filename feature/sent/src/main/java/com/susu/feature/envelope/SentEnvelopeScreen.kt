@@ -12,6 +12,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Text
@@ -37,6 +40,7 @@ import com.susu.core.designsystem.theme.Gray60
 import com.susu.core.designsystem.theme.Gray90
 import com.susu.core.designsystem.theme.Orange20
 import com.susu.core.designsystem.theme.SusuTheme
+import com.susu.core.ui.extension.OnBottomReached
 import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.core.ui.extension.toMoneyFormat
 import com.susu.feature.envelope.component.EnvelopeHistoryItem
@@ -49,6 +53,8 @@ fun SentEnvelopeRoute(
     navigateSentEnvelopeDetail: () -> Unit,
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
+    val historyListState = rememberLazyListState()
+
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
             SentEnvelopeSideEffect.PopBackStack -> popBackStack()
@@ -58,6 +64,10 @@ fun SentEnvelopeRoute(
 
     LaunchedEffect(key1 = Unit) {
         viewModel.initData()
+    }
+
+    historyListState.OnBottomReached {
+        viewModel.getEnvelopeHistoryList()
     }
 
     SentEnvelopeScreen(
@@ -71,6 +81,7 @@ fun SentEnvelopeRoute(
 fun SentEnvelopeScreen(
     uiState: SentEnvelopeState = SentEnvelopeState(),
     modifier: Modifier = Modifier,
+    historyListState: LazyListState = rememberLazyListState(),
     onClickBackIcon: () -> Unit = {},
     onClickSearchIcon: () -> Unit = {},
     onClickNotificationIcon: () -> Unit = {},
@@ -86,7 +97,7 @@ fun SentEnvelopeScreen(
                 leftIcon = {
                     BackIcon(onClickBackIcon)
                 },
-                title = uiState.envelopeInfo[0].friend.name,
+                title = uiState.envelopeInfo.last().friend.name,
                 actions = {
                     SearchIcon(onClickSearchIcon)
                     NotificationIcon(onClickNotificationIcon)
@@ -101,7 +112,7 @@ fun SentEnvelopeScreen(
                     ),
             ) {
                 Text(
-                    text = stringResource(R.string.sent_envelope_card_monee_total) + uiState.envelopeInfo[0].totalAmounts.toMoneyFormat() +
+                    text = stringResource(R.string.sent_envelope_card_monee_total) + uiState.envelopeInfo.last().totalAmounts.toMoneyFormat() +
                         stringResource(R.string.sent_envelope_card_money_won),
                     style = SusuTheme.typography.title_m,
                     color = Gray100,
@@ -109,7 +120,7 @@ fun SentEnvelopeScreen(
                 Spacer(modifier = modifier.size(SusuTheme.spacing.spacing_xxs))
                 SusuBadge(
                     color = BadgeColor.Gray30,
-                    text = "${uiState.envelopeInfo[0].sentAmounts.toFloat() + uiState.envelopeInfo[0].receivedAmounts}" +
+                    text = (uiState.envelopeInfo.last().receivedAmounts - uiState.envelopeInfo.last().sentAmounts).toMoneyFormat() +
                         stringResource(R.string.sent_envelope_card_money_won),
                     padding = BadgeStyle.smallBadge,
                 )
@@ -130,7 +141,7 @@ fun SentEnvelopeScreen(
                     )
                 }
                 LinearProgressIndicator(
-                    progress = { uiState.envelopeInfo[0].sentAmounts.toFloat() / uiState.envelopeInfo[0].totalAmounts },
+                    progress = { uiState.envelopeInfo.last().sentAmounts.toFloat() / uiState.envelopeInfo.last().totalAmounts },
                     color = SusuTheme.colorScheme.primary,
                     trackColor = Orange20,
                     strokeCap = StrokeCap.Round,
@@ -143,12 +154,12 @@ fun SentEnvelopeScreen(
                     horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
                     Text(
-                        text = uiState.envelopeInfo[0].sentAmounts.toMoneyFormat() + stringResource(R.string.sent_envelope_card_money_won),
+                        text = uiState.envelopeInfo.last().sentAmounts.toMoneyFormat() + stringResource(R.string.sent_envelope_card_money_won),
                         style = SusuTheme.typography.title_xxxxs,
                         color = Gray90,
                     )
                     Text(
-                        text = uiState.envelopeInfo[0].receivedAmounts.toMoneyFormat() + stringResource(R.string.sent_envelope_card_money_won),
+                        text = uiState.envelopeInfo.last().receivedAmounts.toMoneyFormat() + stringResource(R.string.sent_envelope_card_money_won),
                         style = SusuTheme.typography.title_xxxxs,
                         color = Gray60,
                     )
@@ -160,15 +171,21 @@ fun SentEnvelopeScreen(
             )
 
             LazyColumn(
+                state = historyListState,
                 contentPadding = PaddingValues(vertical = SusuTheme.spacing.spacing_m),
                 verticalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_m),
             ) {
-                repeat(10) {
-                    item {
-                        EnvelopeHistoryItem(
-                            onClick = onClickEnvelopeDetail,
-                        )
-                    }
+                items(
+                    items = uiState.envelopeHistoryList,
+                    key = { it.envelope.id }
+                ) {
+                    EnvelopeHistoryItem(
+                        type = it.envelope.type,
+                        event = it.category!!.category,
+                        date = it.envelope.handedOverAt!!,
+                        money = it.envelope.amount,
+                        onClick = onClickEnvelopeDetail,
+                    )
                 }
             }
         }

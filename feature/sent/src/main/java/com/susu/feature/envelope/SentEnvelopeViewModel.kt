@@ -19,14 +19,14 @@ class SentEnvelopeViewModel @Inject constructor(
 ) : BaseViewModel<SentEnvelopeState, SentEnvelopeSideEffect>(
     SentEnvelopeState(),
 ) {
-     private val friendId = savedStateHandle.get<Long>(SentRoute.FRIEND_ID_ARGUMENT_NAME)!!
+    private val friendId = savedStateHandle.get<Long>(SentRoute.FRIEND_ID_ARGUMENT_NAME)!!
 
     fun initData() {
-        getEnvelopeInfo(friendId)
-        getEnvelopeDetailHistoryList(friendId)
+        getEnvelopeInfo()
+        getEnvelopeHistoryList()
     }
 
-    fun getEnvelopeInfo(id: Long) = viewModelScope.launch {
+    fun getEnvelopeInfo(id: Long = friendId) = viewModelScope.launch {
         val friendsList: List<Long> = listOf(id)
 
         getEnvelopesListUseCase(
@@ -35,13 +35,13 @@ class SentEnvelopeViewModel @Inject constructor(
             val envelopeInfo = currentState.envelopeInfo.plus(envelope).toPersistentList()
             intent {
                 copy(
-                    envelopeInfo = envelopeInfo
+                    envelopeInfo = envelopeInfo,
                 )
             }
         }
     }
 
-    fun getEnvelopeDetailHistoryList(id: Long) = viewModelScope.launch {
+    fun getEnvelopeHistoryList(id: Long = friendId) = viewModelScope.launch {
         val friendsList: List<Long> = listOf(id)
         val includeList = listOf("CATEGORY")
 

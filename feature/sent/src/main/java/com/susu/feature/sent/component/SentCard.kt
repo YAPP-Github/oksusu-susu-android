@@ -86,7 +86,8 @@ fun SentCard(
                 Spacer(modifier = modifier.size(SusuTheme.spacing.spacing_s))
                 SusuBadge(
                     color = BadgeColor.Gray20,
-                    text = stringResource(R.string.sent_envelope_card_monee_total) + totalAmounts.toMoneyFormat(),
+                    text = stringResource(R.string.sent_envelope_card_monee_total) + totalAmounts.toMoneyFormat() +
+                        stringResource(R.string.sent_envelope_card_money_won),
                     padding = BadgeStyle.smallBadge,
                 )
                 Spacer(modifier = modifier.weight(1f))
