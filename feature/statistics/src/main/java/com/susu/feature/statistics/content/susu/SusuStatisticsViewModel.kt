@@ -44,7 +44,9 @@ class SusuStatisticsViewModel @Inject constructor(
     fun getSusuStatistics() {
         if (currentState.relationship !in currentState.relationshipConfig &&
             currentState.category !in currentState.categoryConfig
-        ) return
+        ) {
+            return
+        }
 
         viewModelScope.launch {
             getSusuStatisticsUseCase(

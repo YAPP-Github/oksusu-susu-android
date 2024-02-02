@@ -78,7 +78,7 @@ fun MyStatisticsContent(
                 spentData = uiState.statistics.recentSpent.toPersistentList(),
                 maximumAmount = uiState.statistics.recentMaximumSpent,
                 totalAmount = uiState.statistics.recentTotalSpent,
-                graphTitle = stringResource(R.string.statistics_recent_8_total_money)
+                graphTitle = stringResource(R.string.statistics_recent_8_total_money),
             )
             Row(
                 modifier = Modifier
