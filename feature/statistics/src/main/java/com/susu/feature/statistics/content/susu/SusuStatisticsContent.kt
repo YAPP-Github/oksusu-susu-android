@@ -106,7 +106,7 @@ fun SusuStatisticsScreen(
             verticalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxs),
         ) {
             SusuStatisticsOptionSlot(
-                title = "지금 평균 수수 보기",
+                title = stringResource(R.string.statistics_susu_average_title),
                 age = stringResource(id = R.string.word_age_unit, uiState.age.num),
                 money = uiState.susuStatistics.averageSent,
                 relationship = uiState.relationship.relation,
@@ -116,13 +116,13 @@ fun SusuStatisticsScreen(
                 onRelationshipClick = onClickRelationship,
             )
             StatisticsHorizontalItem(
-                title = "관계 별 평균 수수",
+                title = stringResource(R.string.statistics_susu_relationship_average),
                 name = uiState.susuStatistics.averageRelationship.title,
                 money = uiState.susuStatistics.averageRelationship.value,
                 isActive = !isBlind,
             )
             StatisticsHorizontalItem(
-                title = "경조사 카테고리 별 평균 수수",
+                title = stringResource(R.string.statistics_susu_category_average),
                 name = uiState.susuStatistics.averageCategory.title,
                 money = uiState.susuStatistics.averageCategory.value,
                 isActive = !isBlind,
@@ -130,7 +130,7 @@ fun SusuStatisticsScreen(
 
             RecentSpentGraph(
                 isActive = !isBlind,
-                graphTitle = "올해 쓴 금액",
+                graphTitle = stringResource(R.string.statistics_susu_this_year_spent),
                 spentData = uiState.susuStatistics.recentSpent.toPersistentList(),
                 maximumAmount = uiState.susuStatistics.recentMaximumSpent,
                 totalAmount = uiState.susuStatistics.recentTotalSpent,

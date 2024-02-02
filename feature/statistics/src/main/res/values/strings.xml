@@ -21,7 +21,10 @@
     <string name="word_statistics_is">는</string>
     <string name="word_statistics_to">에</string>
     <string name="word_statistics_send">을 보내고 있어요</string>
-
     <string name="word_age_unit">%d대</string>
     <string name="word_select_option">옵션 선택</string>
+    <string name="statistics_susu_average_title">지금 평균 수수 보기</string>
+    <string name="statistics_susu_relationship_average">관계 별 평균 수수</string>
+    <string name="statistics_susu_category_average">경조사 카테고리 별 평균 수수</string>
+    <string name="statistics_susu_this_year_spent">올해 쓴 금액</string>
 </resources>
