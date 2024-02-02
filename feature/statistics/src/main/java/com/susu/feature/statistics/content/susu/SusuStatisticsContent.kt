@@ -98,7 +98,9 @@ fun SusuStatisticsScreen(
     onSelectCategory: (Int) -> Unit = {},
 ) {
     val context = LocalContext.current
-    val ageItems = remember { StatisticsAge.entries.map { context.getString(R.string.word_age_unit, it.num) }.toImmutableList() }
+    val ageItems = remember {
+        StatisticsAge.entries.map { context.getString(R.string.word_age_unit, it.num) }.toImmutableList()
+    }
 
     Box(modifier = modifier.fillMaxSize()) {
         Column(
