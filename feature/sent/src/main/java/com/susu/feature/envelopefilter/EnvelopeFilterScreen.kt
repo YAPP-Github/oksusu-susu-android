@@ -132,17 +132,20 @@ fun EnvelopeFilterScreen(
             }
 
             Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_xxxxxxl))
-            Text(
-                text = stringResource(R.string.envelope_filter_screen_money),
-                style = SusuTheme.typography.title_xs,
-            )
-            Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_m))
 
-            Text(text = "20,000원~100,000원", style = SusuTheme.typography.title_m)
+            if (uiState.maxFromAmount != uiState.maxToAmount) {
+                Text(
+                    text = stringResource(R.string.envelope_filter_screen_money),
+                    style = SusuTheme.typography.title_xs,
+                )
+                Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_m))
 
-            Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_xxs))
+                Text(text = "20,000원~100,000원", style = SusuTheme.typography.title_m)
 
-            MoneySlider(value = 20_000f..100_000f, onValueChange = {}, valueRange = 0f..100_000f)
+                Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_xxs))
+
+                MoneySlider(value = 20_000f..100_000f, onValueChange = {}, valueRange = 0f..100_000f)
+            }
 
             Spacer(modifier = Modifier.weight(1f))
 
@@ -157,7 +160,7 @@ fun EnvelopeFilterScreen(
                     uiState.selectedFriendList.forEach { friend ->
                         SelectedFilterButton(
                             name = friend.name,
-                            onClickCloseIcon = { onCloseFriendChip(friend) }
+                            onClickCloseIcon = { onCloseFriendChip(friend) },
                         )
                     }
 

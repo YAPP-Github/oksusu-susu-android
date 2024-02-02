@@ -12,6 +12,8 @@ data class EnvelopeFilterState(
     val friendList: PersistentList<Friend> = persistentListOf(),
     val fromAmount: Long? = null,
     val toAmount: Long? = null,
+    val maxFromAmount: Long = 0,
+    val maxToAmount: Long = 0,
 ) : UiState
 
 sealed interface EnvelopeFilterSideEffect : SideEffect {

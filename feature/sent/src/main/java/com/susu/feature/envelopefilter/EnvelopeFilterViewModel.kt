@@ -7,6 +7,7 @@ import com.susu.core.ui.argument.EnvelopeFilterArgument
 import com.susu.core.ui.base.BaseViewModel
 import com.susu.core.ui.extension.decodeFromUri
 import com.susu.core.ui.extension.encodeToUri
+import com.susu.domain.usecase.envelope.GetEnvelopeFilterConfigUseCase
 import com.susu.domain.usecase.friend.SearchFriendUseCase
 import com.susu.feature.sent.navigation.SentRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,6 +20,7 @@ import javax.inject.Inject
 @HiltViewModel
 class EnvelopeFilterViewModel @Inject constructor(
     private val searchFriendUseCase: SearchFriendUseCase,
+    private val getEnvelopeFilterConfigUseCase: GetEnvelopeFilterConfigUseCase,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<EnvelopeFilterState, EnvelopeFilterSideEffect>(
     EnvelopeFilterState(),
@@ -28,6 +30,7 @@ class EnvelopeFilterViewModel @Inject constructor(
 
     fun initData() {
         initFilter()
+        initConfig()
     }
 
     private fun initFilter() {
@@ -39,6 +42,18 @@ class EnvelopeFilterViewModel @Inject constructor(
                 toAmount = filter.toAmount,
             )
         }
+    }
+
+    private fun initConfig() = viewModelScope.launch {
+        getEnvelopeFilterConfigUseCase()
+            .onSuccess {
+                intent {
+                    copy(
+                        maxFromAmount = it.minReceivedAmount,
+                        maxToAmount = it.maxReceivedAmount,
+                    )
+                }
+            }
     }
 
     fun updateName(searchKeyword: String) = intent {
