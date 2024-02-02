@@ -51,7 +51,7 @@ fun VoteEditRoute(
             is VoteEditSideEffect.HandleException -> handleException(sideEffect.throwable, sideEffect.retry)
             VoteEditSideEffect.PopBackStack -> popBackStack()
             VoteEditSideEffect.ShowCanNotChangeOptionSnackbar -> onShowSnackbar(
-                SnackbarToken(message = context.getString(R.string.snackbar_can_not_change_option))
+                SnackbarToken(message = context.getString(R.string.snackbar_can_not_change_option)),
             )
         }
     }
@@ -67,7 +67,7 @@ fun VoteEditRoute(
         onClickRegister = viewModel::editVote,
         onClickCategoryButton = viewModel::selectCategory,
         onTextChangeContent = viewModel::updateContent,
-        onClickOption = viewModel::showCannotChangeOptionSnackbar
+        onClickOption = viewModel::showCannotChangeOptionSnackbar,
     )
 }
 

@@ -6,7 +6,6 @@ import com.susu.core.model.Category
 import com.susu.core.model.Vote
 import com.susu.core.ui.base.BaseViewModel
 import com.susu.core.ui.extension.decodeFromUri
-import com.susu.domain.usecase.vote.CreateVoteUseCase
 import com.susu.domain.usecase.vote.EditVoteUseCase
 import com.susu.domain.usecase.vote.GetPostCategoryConfigUseCase
 import com.susu.feature.community.navigation.CommunityRoute

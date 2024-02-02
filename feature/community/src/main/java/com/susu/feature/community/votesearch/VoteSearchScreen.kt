@@ -219,7 +219,6 @@ private fun SearchResultColumn(
             )
         }
 
-
         voteList.forEach { vote ->
             SusuRecentSearchContainer(
                 typeIconId = R.drawable.ic_vote,
@@ -228,7 +227,6 @@ private fun SearchResultColumn(
             )
         }
     }
-
 }
 
 @Preview

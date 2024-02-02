@@ -114,7 +114,7 @@ fun NavGraphBuilder.communityNavGraph(
     }
 
     composable(
-        route = CommunityRoute.voteEditRoute("{${CommunityRoute.VOTE_ARGUMENT_NAME}}")
+        route = CommunityRoute.voteEditRoute("{${CommunityRoute.VOTE_ARGUMENT_NAME}}"),
     ) {
         VoteEditRoute(
             popBackStack = popBackStack,

@@ -4,7 +4,6 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.susu.core.model.Vote
 import com.susu.core.model.exception.CannotBlockMyself
-import com.susu.core.model.exception.NotFoundLedgerException
 import com.susu.core.ui.base.BaseViewModel
 import com.susu.core.ui.extension.encodeToUri
 import com.susu.domain.usecase.block.BlockUserUseCase
@@ -12,7 +11,6 @@ import com.susu.domain.usecase.report.ReportVoteUseCase
 import com.susu.domain.usecase.vote.DeleteVoteUseCase
 import com.susu.domain.usecase.vote.GetVoteDetailUseCase
 import com.susu.domain.usecase.vote.VoteUseCase
-import com.susu.feature.community.community.CommunitySideEffect
 import com.susu.feature.community.navigation.CommunityRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job

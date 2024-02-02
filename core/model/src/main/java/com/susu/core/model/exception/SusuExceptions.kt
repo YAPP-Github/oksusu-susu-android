@@ -59,7 +59,7 @@ enum class SusuServerError(val exception: Exception) {
 
     /** Vote Error Code */
     ALREADY_VOTED_POST(AlreadyVotedPostException()),
-    CANNOT_BLOCK_MYSELF(CannotBlockMyself())
+    CANNOT_BLOCK_MYSELF(CannotBlockMyself()),
 }
 
 /** Common Exception Code */

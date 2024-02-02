@@ -76,7 +76,7 @@ class VoteRepositoryImpl @Inject constructor(
         EditVoteRequest(
             boardId = boardId,
             content = content,
-        )
+        ),
     ).getOrThrow().toModel()
 
     override suspend fun deleteVote(id: Long) = api.deleteVote(id).getOrThrow()

@@ -8,8 +8,8 @@ class DeleteVoteUseCase @Inject constructor(
     private val voteRepository: VoteRepository,
 ) {
     suspend operator fun invoke(id: Long) = runCatchingIgnoreCancelled {
-            voteRepository.deleteVote(
-                id = id,
-            )
+        voteRepository.deleteVote(
+            id = id,
+        )
     }
 }

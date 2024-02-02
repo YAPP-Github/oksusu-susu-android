@@ -3,7 +3,6 @@ package com.susu.feature.community.votedetail
 import com.susu.core.model.Vote
 import com.susu.core.ui.base.SideEffect
 import com.susu.core.ui.base.UiState
-import com.susu.feature.community.community.CommunitySideEffect
 
 data class VoteDetailState(
     val vote: Vote = Vote(),

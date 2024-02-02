@@ -3,7 +3,6 @@ package com.susu.feature.community.votedetail
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -42,7 +41,6 @@ import com.susu.core.designsystem.component.badge.BadgeColor
 import com.susu.core.designsystem.component.badge.BadgeStyle
 import com.susu.core.designsystem.component.badge.SusuBadge
 import com.susu.core.designsystem.component.screen.LoadingScreen
-import com.susu.core.designsystem.theme.Gray100
 import com.susu.core.designsystem.theme.Gray15
 import com.susu.core.designsystem.theme.Gray50
 import com.susu.core.designsystem.theme.Orange60
@@ -217,7 +215,6 @@ fun VoteDetailScreen(
                         contentDescription = null,
                     )
                 }
-
 
                 Text(text = stringResource(R.string.word_anonymous_susu), style = SusuTheme.typography.title_xxxs)
 
