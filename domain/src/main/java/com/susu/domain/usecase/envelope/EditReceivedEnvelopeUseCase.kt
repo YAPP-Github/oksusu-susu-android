@@ -28,6 +28,8 @@ class EditReceivedEnvelopeUseCase @Inject constructor(
                 amount = amount,
                 gift = gift,
                 memo = memo,
+                categoryId = categoryId,
+                customCategory = customCategory,
                 hasVisited = hasVisited,
                 handedOverAt = handedOverAt,
             )
@@ -38,6 +40,8 @@ class EditReceivedEnvelopeUseCase @Inject constructor(
         val envelopeId: Long,
         val friendId: Long,
         val friendName: String,
+        val categoryId: Long,
+        val customCategory: String?,
         val phoneNumber: String? = null,
         val relationshipId: Long,
         val customRelation: String? = null,

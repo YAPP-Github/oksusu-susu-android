@@ -39,8 +39,8 @@ private fun Int.safeDiv(parent: Int): Float {
 fun VoteItem(
     showResult: Boolean = true,
     isPick: Boolean = false,
-    voteCount: Long = 3,
-    totalVoteCount: Long = 13,
+    voteCount: Long = 0,
+    totalVoteCount: Long = 0,
     title: String = "",
     onClick: () -> Unit = {},
 ) {

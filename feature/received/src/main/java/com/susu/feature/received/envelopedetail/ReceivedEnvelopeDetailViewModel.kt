@@ -3,6 +3,7 @@ package com.susu.feature.received.envelopedetail
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.susu.core.model.Envelope
+import com.susu.core.model.Ledger
 import com.susu.core.ui.base.BaseViewModel
 import com.susu.core.ui.extension.decodeFromUri
 import com.susu.core.ui.extension.encodeToUri
@@ -23,7 +24,9 @@ class ReceivedEnvelopeDetailViewModel @Inject constructor(
     ReceivedEnvelopeDetailState(),
 ) {
     private val argument = savedStateHandle.get<String>(ReceivedRoute.ENVELOPE_ARGUMENT_NAME)!!
-    private val ledgerId = savedStateHandle.get<String>(ReceivedRoute.LEDGER_ID_ARGUMENT_NAME)!!.toLong()
+    private val ledger = run {
+        Json.decodeFromUri<Ledger>(savedStateHandle.get<String>(ReceivedRoute.LEDGER_ARGUMENT_NAME)!!)
+    }
 
     private var envelope = Envelope()
 
@@ -40,7 +43,7 @@ class ReceivedEnvelopeDetailViewModel @Inject constructor(
             }
     }
 
-    fun navigateEnvelopeEdit() = postSideEffect(ReceivedEnvelopeDetailSideEffect.NavigateReceivedEnvelopeEdit(envelope, ledgerId))
+    fun navigateEnvelopeEdit() = postSideEffect(ReceivedEnvelopeDetailSideEffect.NavigateReceivedEnvelopeEdit(envelope, ledger))
     fun popBackStackWithEnvelope() = postSideEffect(ReceivedEnvelopeDetailSideEffect.PopBackStackWithReceivedEnvelope(Json.encodeToUri(envelope)))
     fun showDeleteDialog() = postSideEffect(
         ReceivedEnvelopeDetailSideEffect.ShowDeleteDialog(

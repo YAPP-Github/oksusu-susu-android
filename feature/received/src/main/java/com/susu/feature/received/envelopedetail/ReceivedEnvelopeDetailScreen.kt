@@ -26,6 +26,7 @@ import com.susu.core.designsystem.component.appbar.icon.EditText
 import com.susu.core.designsystem.theme.Gray100
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.model.Envelope
+import com.susu.core.model.Ledger
 import com.susu.core.ui.DialogToken
 import com.susu.core.ui.SnackbarToken
 import com.susu.core.ui.extension.collectWithLifecycle
@@ -40,7 +41,7 @@ fun ReceivedEnvelopeDetailRoute(
     viewModel: ReceivedEnvelopeDetailViewModel = hiltViewModel(),
     popBackStackWithDeleteReceivedEnvelopeId: (Long) -> Unit,
     popBackStackWithReceivedEnvelope: (String) -> Unit,
-    navigateReceivedEnvelopeEdit: (Envelope, Long) -> Unit,
+    navigateReceivedEnvelopeEdit: (Envelope, Ledger) -> Unit,
     handleException: (Throwable, () -> Unit) -> Unit,
     onShowSnackbar: (SnackbarToken) -> Unit,
     onShowDialog: (DialogToken) -> Unit,
@@ -50,7 +51,7 @@ fun ReceivedEnvelopeDetailRoute(
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
             is ReceivedEnvelopeDetailSideEffect.HandleException -> handleException(sideEffect.throwable, sideEffect.retry)
-            is ReceivedEnvelopeDetailSideEffect.NavigateReceivedEnvelopeEdit -> navigateReceivedEnvelopeEdit(sideEffect.envelope, sideEffect.ledgerId)
+            is ReceivedEnvelopeDetailSideEffect.NavigateReceivedEnvelopeEdit -> navigateReceivedEnvelopeEdit(sideEffect.envelope, sideEffect.ledger)
             is ReceivedEnvelopeDetailSideEffect.PopBackStackWithDeleteReceivedEnvelopeId -> popBackStackWithDeleteReceivedEnvelopeId(
                 sideEffect.envelopeId,
             )

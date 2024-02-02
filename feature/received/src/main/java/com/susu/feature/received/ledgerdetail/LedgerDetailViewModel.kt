@@ -69,10 +69,21 @@ class LedgerDetailViewModel @Inject constructor(
 
         copy(
             envelopeList = envelopeList.map {
-                if (it.envelope.id == searchEnvelope.envelope.id) {
-                    searchEnvelope
-                } else {
-                    it
+                run {
+                    if (it.envelope.id == searchEnvelope.envelope.id) {
+                        searchEnvelope
+                    } else {
+                        it
+                    }
+                }.run {
+                    if (friend.id == searchEnvelope.friend.id) {
+                        copy(
+                            friend = searchEnvelope.friend,
+                            relation = searchEnvelope.relation,
+                        )
+                    } else {
+                        this
+                    }
                 }
             }.toPersistentList(),
         )
@@ -175,8 +186,8 @@ class LedgerDetailViewModel @Inject constructor(
     }
 
     fun navigateEnvelopeAdd() = postSideEffect(
-        LedgerDetailSideEffect.NavigateEnvelopeAdd(ledger.category.customCategory ?: ledger.category.name, ledger.id),
+        LedgerDetailSideEffect.NavigateEnvelopeAdd(ledger),
     )
 
-    fun navigateEnvelopeDetail(envelope: Envelope) = postSideEffect(LedgerDetailSideEffect.NavigateEnvelopeDetail(envelope, ledger.id))
+    fun navigateEnvelopeDetail(envelope: Envelope) = postSideEffect(LedgerDetailSideEffect.NavigateEnvelopeDetail(envelope, ledger))
 }
