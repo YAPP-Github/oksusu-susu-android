@@ -3,6 +3,7 @@ package com.susu.feature.community.community
 import androidx.lifecycle.viewModelScope
 import com.susu.core.model.Category
 import com.susu.core.model.Vote
+import com.susu.core.model.exception.CannotBlockMyself
 import com.susu.core.model.exception.NotFoundLedgerException
 import com.susu.core.ui.base.BaseViewModel
 import com.susu.core.ui.extension.decodeFromUri
@@ -208,7 +209,10 @@ class CommunityViewModel @Inject constructor(
                 getVoteList(true)
             }
             .onFailure { throwable ->
-                postSideEffect(CommunitySideEffect.HandleException(throwable = throwable, retry = { blockUser(uid) }))
+                when (throwable) {
+                    is CannotBlockMyself -> postSideEffect(CommunitySideEffect.ShowSnackbar(throwable.message))
+                    else -> postSideEffect(CommunitySideEffect.HandleException(throwable = throwable, retry = { blockUser(uid) }))
+                }
             }
     }
 }

@@ -19,6 +19,7 @@ data class CommunityState(
 
 sealed interface CommunitySideEffect : SideEffect {
     data class HandleException(val throwable: Throwable, val retry: () -> Unit) : CommunitySideEffect
+    data class ShowSnackbar(val message: String) : CommunitySideEffect
     data object NavigateVoteAdd : CommunitySideEffect
     data object NavigateVoteSearch : CommunitySideEffect
     data class NavigateVoteDetail(val voteId: Long) : CommunitySideEffect

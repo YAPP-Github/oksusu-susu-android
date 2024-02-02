@@ -54,6 +54,7 @@ import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.model.Category
 import com.susu.core.model.Vote
 import com.susu.core.ui.DialogToken
+import com.susu.core.ui.SnackbarToken
 import com.susu.core.ui.extension.OnBottomReached
 import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.core.ui.extension.susuClickable
@@ -75,6 +76,7 @@ fun CommunityRoute(
     navigateVoteDetail: (Long) -> Unit,
     onShowDialog: (DialogToken) -> Unit,
     handleException: (Throwable, () -> Unit) -> Unit,
+    onShowSnackbar: (SnackbarToken) -> Unit,
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
     val context = LocalContext.current
@@ -95,6 +97,8 @@ fun CommunityRoute(
                     onCheckedAction = sideEffect.onCheckedAction,
                 ),
             )
+
+            is CommunitySideEffect.ShowSnackbar -> onShowSnackbar(SnackbarToken(message = sideEffect.message))
         }
     }
 

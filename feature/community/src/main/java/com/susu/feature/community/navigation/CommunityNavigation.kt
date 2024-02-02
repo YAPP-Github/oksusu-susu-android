@@ -66,6 +66,7 @@ fun NavGraphBuilder.communityNavGraph(
             navigateVoteSearch = navigateVoteSearch,
             navigateVoteDetail = navigateVoteDetail,
             onShowDialog = onShowDialog,
+            onShowSnackbar = onShowSnackbar,
             handleException = handleException,
         )
     }
