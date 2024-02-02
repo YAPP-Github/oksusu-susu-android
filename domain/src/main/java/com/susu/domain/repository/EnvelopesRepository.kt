@@ -1,6 +1,7 @@
 package com.susu.domain.repository
 
 import com.susu.core.model.Envelope
+import com.susu.core.model.EnvelopeFilterConfig
 import com.susu.core.model.EnvelopeStatics
 import com.susu.core.model.Relationship
 import com.susu.core.model.SearchEnvelope
@@ -63,4 +64,6 @@ interface EnvelopesRepository {
         categoryId: Long? = null,
         customCategory: String? = null,
     ): Envelope
+
+    suspend fun getEnvelopeFilterConfig(): EnvelopeFilterConfig
 }

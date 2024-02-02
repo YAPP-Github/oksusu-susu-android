@@ -1,6 +1,7 @@
 package com.susu.data.remote.api
 
 import com.susu.data.remote.model.request.EnvelopeRequest
+import com.susu.data.remote.model.response.EnvelopeFilterConfigResponse
 import com.susu.data.remote.model.response.EnvelopeResponse
 import com.susu.data.remote.model.response.EnvelopesListResponse
 import com.susu.data.remote.model.response.RelationShipListResponse
@@ -61,4 +62,7 @@ interface EnvelopesService {
         @Query("size") size: Int?,
         @Query("sort") sort: String?,
     ): ApiResult<SearchEnvelopeResponse>
+
+    @GET("envelopes/configs/search-filter")
+    suspend fun getEnvelopeFilterConfig(): ApiResult<EnvelopeFilterConfigResponse>
 }
