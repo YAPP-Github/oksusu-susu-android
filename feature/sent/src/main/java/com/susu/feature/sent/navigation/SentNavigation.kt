@@ -4,7 +4,9 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
+import androidx.navigation.NavType
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import com.susu.feature.envelope.SentEnvelopeRoute
 import com.susu.feature.envelopeadd.SentEnvelopeAddRoute
 import com.susu.feature.envelopedetail.SentEnvelopeDetailRoute
@@ -50,11 +52,14 @@ fun NavGraphBuilder.sentNavGraph(
 
     // TODO: 수정 필요
     composable(
-        route = SentRoute.sentEnvelopeRoute("${SentRoute.FRIEND_ID_ARGUMENT_NAME}"),
-    ) { navBackStackEntry ->
-        val friendId = navBackStackEntry.savedStateHandle.get<Long>(SentRoute.FRIEND_ID_ARGUMENT_NAME) ?: -1
+        route = SentRoute.sentEnvelopeRoute("{${SentRoute.FRIEND_ID_ARGUMENT_NAME}}"),
+        arguments = listOf(
+            navArgument(SentRoute.FRIEND_ID_ARGUMENT_NAME) {
+                type = NavType.LongType
+            },
+        ),
+    ) {
         SentEnvelopeRoute(
-            friendId = friendId,
             popBackStack = popBackStack,
             navigateSentEnvelopeDetail = navigateSentEnvelopeDetail,
         )

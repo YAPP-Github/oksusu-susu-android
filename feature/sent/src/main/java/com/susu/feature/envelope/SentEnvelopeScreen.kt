@@ -45,7 +45,6 @@ import com.susu.feature.sent.R
 @Composable
 fun SentEnvelopeRoute(
     viewModel: SentEnvelopeViewModel = hiltViewModel(),
-    friendId: Long,
     popBackStack: () -> Unit,
     navigateSentEnvelopeDetail: () -> Unit,
 ) {
@@ -58,7 +57,7 @@ fun SentEnvelopeRoute(
     }
 
     LaunchedEffect(key1 = Unit) {
-        viewModel.initData(friendId)
+        viewModel.initData()
     }
 
     SentEnvelopeScreen(

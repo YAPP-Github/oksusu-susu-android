@@ -9,7 +9,7 @@ import kotlinx.collections.immutable.persistentListOf
 
 data class SentEnvelopeState(
     val isLoading: Boolean = false,
-    val envelopeInfo: PersistentList<FriendStatistics> = persistentListOf(),
+    val envelopeInfo: PersistentList<FriendStatistics> = persistentListOf(FriendStatistics()),
     val envelopeHistoryList: PersistentList<EnvelopeSearch> = persistentListOf(),
 ) : UiState
 
