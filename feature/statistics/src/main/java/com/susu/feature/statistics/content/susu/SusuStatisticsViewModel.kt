@@ -3,6 +3,7 @@ package com.susu.feature.statistics.content.susu
 import androidx.lifecycle.viewModelScope
 import com.susu.core.model.Category
 import com.susu.core.model.Relationship
+import com.susu.core.model.exception.UnknownException
 import com.susu.core.ui.base.BaseViewModel
 import com.susu.domain.usecase.categoryconfig.GetCategoryConfigUseCase
 import com.susu.domain.usecase.envelope.GetRelationShipConfigListUseCase
@@ -39,7 +40,7 @@ class SusuStatisticsViewModel @Inject constructor(
             } else {
                 val exception = categoryConfigResult.exceptionOrNull()
                     ?: relationshipConfigResult.exceptionOrNull()
-                    ?: Throwable()
+                    ?: UnknownException()
                 postSideEffect(SusuStatisticsEffect.HandleException(exception, ::getStatisticsOption))
             }
             intent { copy(isLoading = false) }
