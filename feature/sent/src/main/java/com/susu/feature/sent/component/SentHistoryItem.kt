@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.susu.core.designsystem.component.badge.BadgeColor
 import com.susu.core.designsystem.component.badge.BadgeStyle
@@ -67,7 +68,7 @@ fun SentHistoryItem(
         )
         Spacer(modifier = modifier.weight(1f))
         Text(
-            text = "${money.toInt().toMoneyFormat()}원",
+            text = money.toInt().toMoneyFormat() + stringResource(R.string.sent_envelope_card_money_won),
             style = SusuTheme.typography.title_xxs,
             color = if (type == EnvelopeType.SENT.name) Gray100 else Gray50,
         )

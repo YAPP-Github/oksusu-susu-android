@@ -58,7 +58,7 @@ internal class MainNavigator(
                 ReceivedRoute.ledgerFilterRoute("{${ReceivedRoute.FILTER_ARGUMENT_NAME}}"),
                 ReceivedRoute.envelopeDetailRoute,
                 ReceivedRoute.envelopeEditRoute,
-                SentRoute.sentEnvelopeRoute("${SentRoute.FRIEND_ID_ARGUMENT_NAME}"),
+                SentRoute.sentEnvelopeRoute("{${SentRoute.FRIEND_ID_ARGUMENT_NAME}}"),
                 SentRoute.sentEnvelopeDetailRoute,
                 SentRoute.sentEnvelopeEditRoute,
                 CommunityRoute.route,

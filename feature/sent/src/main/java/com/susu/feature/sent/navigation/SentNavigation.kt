@@ -17,7 +17,6 @@ fun NavController.navigateSent(navOptions: NavOptions) {
     navigate(SentRoute.route, navOptions)
 }
 
-// TODO: 수정?
 fun NavController.navigateSentEnvelope(id: Long) {
     navigate(SentRoute.sentEnvelopeRoute(id = id.toString()))
 }
@@ -50,7 +49,6 @@ fun NavGraphBuilder.sentNavGraph(
         )
     }
 
-    // TODO: 수정 필요
     composable(
         route = SentRoute.sentEnvelopeRoute("{${SentRoute.FRIEND_ID_ARGUMENT_NAME}}"),
         arguments = listOf(
@@ -92,7 +90,6 @@ object SentRoute {
     const val sentEnvelopeEditRoute = "sent-envelope-edit"
     const val sentEnvelopeAddRoute = "sent-envelope-add"
 
-    // TODO: 수정 필요
     fun sentEnvelopeRoute(id: String) = "sent-envelope/$id"
     const val FRIEND_ID_ARGUMENT_NAME = "sent-envelope-id"
 }

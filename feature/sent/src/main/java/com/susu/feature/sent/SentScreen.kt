@@ -55,7 +55,6 @@ fun SentRoute(
         when (sideEffect) {
             SentEffect.NavigateEnvelopeAdd -> navigateSentEnvelopeAdd()
             is SentEffect.NavigateEnvelope -> navigateSentEnvelope(sideEffect.id)
-            else -> {}
         }
     }
 
