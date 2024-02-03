@@ -3,6 +3,7 @@ package com.susu.data.data.repository
 import com.susu.core.model.FriendStatistics
 import com.susu.data.remote.api.EnvelopesService
 import com.susu.core.model.Envelope
+import com.susu.core.model.EnvelopeDetail
 import com.susu.core.model.EnvelopeSearch
 import com.susu.core.model.Relationship
 import com.susu.data.remote.model.request.CategoryRequest
@@ -87,5 +88,11 @@ class EnvelopesRepositoryImpl @Inject constructor(
         page = page,
         size = size,
         sort = sort,
+    ).getOrThrow().toModel()
+
+    override suspend fun getEnvelopeDetail(
+        id: Long
+    ): EnvelopeDetail = envelopesService.getEnvelopeDetail(
+        id = id
     ).getOrThrow().toModel()
 }

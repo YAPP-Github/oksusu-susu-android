@@ -57,7 +57,6 @@ class SentEnvelopeViewModel @Inject constructor(
         }
     }
 
-    // TODO: 봉투 id 값 넘겨주기
-    fun navigateSentEnvelopeDetail() = postSideEffect(SentEnvelopeSideEffect.NavigateEnvelopeDetail)
+    fun navigateSentEnvelopeDetail(id: Long) = postSideEffect(SentEnvelopeSideEffect.NavigateEnvelopeDetail(id = id))
     fun popBackStack() = postSideEffect(SentEnvelopeSideEffect.PopBackStack)
 }

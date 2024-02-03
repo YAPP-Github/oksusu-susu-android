@@ -7,6 +7,7 @@ data class SentEnvelopeEditState(
     val isLoading: Boolean = false,
 ) : UiState
 
-sealed interface SentEnvelopeEditSideEffect : SideEffect {
-    data object PopBackStack : SentEnvelopeEditSideEffect
+sealed interface SentEnvelopeEditEffect : SideEffect {
+//    data class NavigateEnvelope(val id: Long) : SentEnvelopeEditEffect
+    data object PopBackStack : SentEnvelopeEditEffect
 }

@@ -83,7 +83,7 @@ fun EnvelopeHistoryItem(
     }
 }
 
-@Preview
+@Preview(showBackground = true, backgroundColor = 0xffffff)
 @Composable
 fun EnvelopeHistoryItem() {
     SusuTheme {

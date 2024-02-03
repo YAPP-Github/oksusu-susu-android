@@ -59,7 +59,7 @@ internal class MainNavigator(
                 ReceivedRoute.envelopeDetailRoute,
                 ReceivedRoute.envelopeEditRoute,
                 SentRoute.sentEnvelopeRoute("{${SentRoute.FRIEND_ID_ARGUMENT_NAME}}"),
-                SentRoute.sentEnvelopeDetailRoute,
+                SentRoute.sentEnvelopeDetailRoute("{${SentRoute.ENVELOPE_ID_ARGUMENT_NAME}}"),
                 SentRoute.sentEnvelopeEditRoute,
                 CommunityRoute.route,
                 CommunityRoute.voteAddRoute,
@@ -99,8 +99,8 @@ internal class MainNavigator(
         navController.navigateSentEnvelope(id)
     }
 
-    fun navigateSentEnvelopeDetail() {
-        navController.navigateSentEnvelopeDetail()
+    fun navigateSentEnvelopeDetail(id: Long) {
+        navController.navigateSentEnvelopeDetail(id)
     }
 
     fun navigateSentEnvelopeEdit() {

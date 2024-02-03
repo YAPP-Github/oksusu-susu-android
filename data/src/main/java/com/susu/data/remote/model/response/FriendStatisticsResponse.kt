@@ -1,5 +1,6 @@
 package com.susu.data.remote.model.response
 
+import com.susu.core.model.Friend
 import com.susu.core.model.FriendStatistics
 import kotlinx.serialization.Serializable
 
@@ -9,6 +10,19 @@ data class FriendStatisticsResponse(
     val receivedAmounts: Int,
     val sentAmounts: Int,
     val totalAmounts: Int,
+)
+
+@Serializable
+data class FriendInfo(
+    val id: Long,
+    val name: String,
+    val phoneNumber: String = "",
+)
+
+internal fun FriendInfo.toModel() = Friend(
+    id = id,
+    name = name,
+    phoneNumber = phoneNumber,
 )
 
 internal fun FriendStatisticsResponse.toModel() = FriendStatistics(

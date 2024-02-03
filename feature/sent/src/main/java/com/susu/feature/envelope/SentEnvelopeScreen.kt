@@ -50,7 +50,7 @@ import com.susu.feature.sent.R
 fun SentEnvelopeRoute(
     viewModel: SentEnvelopeViewModel = hiltViewModel(),
     popBackStack: () -> Unit,
-    navigateSentEnvelopeDetail: () -> Unit,
+    navigateSentEnvelopeDetail: (Long) -> Unit,
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
     val historyListState = rememberLazyListState()
@@ -58,7 +58,7 @@ fun SentEnvelopeRoute(
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
             SentEnvelopeSideEffect.PopBackStack -> popBackStack()
-            else -> {}
+            is SentEnvelopeSideEffect.NavigateEnvelopeDetail -> navigateSentEnvelopeDetail(sideEffect.id)
         }
     }
 
@@ -73,7 +73,7 @@ fun SentEnvelopeRoute(
     SentEnvelopeScreen(
         uiState = uiState,
         onClickBackIcon = viewModel::popBackStack,
-        onClickEnvelopeDetail = navigateSentEnvelopeDetail,
+        onClickEnvelopeDetail = viewModel::navigateSentEnvelopeDetail,
     )
 }
 
@@ -85,7 +85,7 @@ fun SentEnvelopeScreen(
     onClickBackIcon: () -> Unit = {},
     onClickSearchIcon: () -> Unit = {},
     onClickNotificationIcon: () -> Unit = {},
-    onClickEnvelopeDetail: () -> Unit = {},
+    onClickEnvelopeDetail: (Long) -> Unit = {},
 ) {
     Box(
         modifier = modifier
@@ -184,7 +184,7 @@ fun SentEnvelopeScreen(
                         event = it.category!!.category,
                         date = it.envelope.handedOverAt!!,
                         money = it.envelope.amount,
-                        onClick = onClickEnvelopeDetail,
+                        onClick = { onClickEnvelopeDetail(it.envelope.id) },
                     )
                 }
             }
