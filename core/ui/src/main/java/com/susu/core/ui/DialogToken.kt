@@ -14,7 +14,6 @@ data class DialogToken(
     val dismissText: String? = null,
     val checkboxText: String? = null,
     val defaultChecked: Boolean = false,
-    val isDimmed: Boolean = true,
     val textAlign: TextAlign = TextAlign.Center,
     val onConfirmRequest: () -> Unit = {},
     val onCheckedAction: () -> Unit = {},
