@@ -22,6 +22,7 @@ import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.model.EnvelopeSearch
 import com.susu.feature.sent.R
 import kotlinx.collections.immutable.PersistentList
+import kotlinx.datetime.toJavaLocalDateTime
 
 @Composable
 fun SentHistoryCard(
@@ -56,7 +57,7 @@ fun SentHistoryCard(
                 SentHistoryItem(
                     type = it.envelope.type,
                     event = it.category!!.category,
-                    date = it.envelope.handedOverAt!!,
+                    date = it.envelope.handedOverAt.toJavaLocalDateTime(),
                     money = it.envelope.amount,
                 )
                 Spacer(modifier = modifier.size(SusuTheme.spacing.spacing_xxs))

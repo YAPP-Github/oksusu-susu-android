@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.NavHost
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.susu.core.designsystem.component.dialog.SusuCheckedDialog
 import com.susu.core.designsystem.component.dialog.SusuDialog
 import com.susu.core.designsystem.component.navigation.SusuNavigationBar
 import com.susu.core.designsystem.component.navigation.SusuNavigationItem
@@ -83,6 +84,7 @@ internal fun MainScreen(
                     navigateSentEnvelopeDetail = navigator::navigateSentEnvelopeDetail,
                     navigateSentEnvelopeEdit = navigator::navigateSentEnvelopeEdit,
                     navigateSentEnvelopeAdd = navigator::navigateSentEnvelopeAdd,
+                    handleException = viewModel::handleException,
                 )
 
                 receivedNavGraph(
@@ -109,6 +111,20 @@ internal fun MainScreen(
                         )
                         navigator.popBackStackIfNotHome()
                     },
+                    popBackStackWithEnvelope = { envelope ->
+                        navigator.navController.previousBackStackEntry?.savedStateHandle?.set(
+                            ReceivedRoute.ENVELOPE_ARGUMENT_NAME,
+                            envelope,
+                        )
+                        navigator.popBackStackIfNotHome()
+                    },
+                    popBackStackWithDeleteReceivedEnvelopeId = { id ->
+                        navigator.navController.previousBackStackEntry?.savedStateHandle?.set(
+                            ReceivedRoute.ENVELOPE_ID_ARGUMENT_NAME,
+                            id,
+                        )
+                        navigator.popBackStackIfNotHome()
+                    },
                     navigateLedgerSearch = navigator::navigateLedgerSearch,
                     navigateLedgerDetail = navigator::navigateLedgerDetail,
                     navigateLedgerEdit = navigator::navigateLedgerEdit,
@@ -123,6 +139,7 @@ internal fun MainScreen(
                 )
 
                 statisticsNavGraph(
+                    padding = innerPadding,
                     navigateToMyInfo = navigator::navigateMyPageInfo,
                     onShowDialog = viewModel::onShowDialog,
                     handleException = viewModel::handleException,
@@ -131,11 +148,35 @@ internal fun MainScreen(
                 communityNavGraph(
                     padding = innerPadding,
                     navigateVoteAdd = navigator::navigateVoteAdd,
+                    navigateVoteSearch = navigator::navigateVoteSearch,
+                    navigateVoteDetail = navigator::navigateVoteDetail,
+                    navigateVoteEdit = navigator::navigateVoteEdit,
                     popBackStack = navigator::popBackStackIfNotHome,
                     popBackStackWithVote = { vote ->
                         navigator.navController.previousBackStackEntry?.savedStateHandle?.set(
                             CommunityRoute.VOTE_ARGUMENT_NAME,
                             vote,
+                        )
+                        navigator.popBackStackIfNotHome()
+                    },
+                    popBackStackWithToUpdateVote = { vote ->
+                        navigator.navController.previousBackStackEntry?.savedStateHandle?.set(
+                            CommunityRoute.TO_UPDATE_VOTE_ARGUMENT_NAME,
+                            vote,
+                        )
+                        navigator.popBackStackIfNotHome()
+                    },
+                    popBackStackWithDeleteVoteId = { voteId ->
+                        navigator.navController.previousBackStackEntry?.savedStateHandle?.set(
+                            CommunityRoute.VOTE_ID_ARGUMENT_NAME,
+                            voteId,
+                        )
+                        navigator.popBackStackIfNotHome()
+                    },
+                    popBackStackWithNeedRefresh = { needRefresh ->
+                        navigator.navController.previousBackStackEntry?.savedStateHandle?.set(
+                            CommunityRoute.NEED_REFRESH_ARGUMENT_NAME,
+                            needRefresh,
                         )
                         navigator.popBackStackIfNotHome()
                     },
@@ -171,22 +212,46 @@ internal fun MainScreen(
 
             if (uiState.dialogVisible) {
                 with(uiState.dialogToken) {
-                    SusuDialog(
-                        title = title,
-                        text = text,
-                        confirmText = confirmText,
-                        dismissText = dismissText,
-                        isDimmed = isDimmed,
-                        textAlign = textAlign,
-                        onConfirmRequest = {
-                            onConfirmRequest()
-                            viewModel.dismissDialog()
-                        },
-                        onDismissRequest = {
-                            onDismissRequest()
-                            viewModel.dismissDialog()
-                        },
-                    )
+                    if (checkboxText == null) {
+                        SusuDialog(
+                            title = title,
+                            text = text,
+                            confirmText = confirmText,
+                            dismissText = dismissText,
+                            isDimmed = isDimmed,
+                            textAlign = textAlign,
+                            onConfirmRequest = {
+                                onConfirmRequest()
+                                viewModel.dismissDialog()
+                            },
+                            onDismissRequest = {
+                                onDismissRequest()
+                                viewModel.dismissDialog()
+                            },
+                        )
+                    } else {
+                        SusuCheckedDialog(
+                            title = title,
+                            text = text,
+                            confirmText = confirmText,
+                            dismissText = dismissText,
+                            checkboxText = checkboxText!!,
+                            isDimmed = isDimmed,
+                            defaultChecked = defaultChecked,
+                            textAlign = textAlign,
+                            onConfirmRequest = { checked ->
+                                if (checked) {
+                                    onCheckedAction()
+                                }
+                                onConfirmRequest()
+                                viewModel.dismissDialog()
+                            },
+                            onDismissRequest = {
+                                onDismissRequest()
+                                viewModel.dismissDialog()
+                            },
+                        )
+                    }
                 }
             }
         },

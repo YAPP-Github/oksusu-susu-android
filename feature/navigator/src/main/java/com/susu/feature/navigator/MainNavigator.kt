@@ -9,10 +9,15 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.susu.core.designsystem.theme.SusuTheme
+import com.susu.core.model.Envelope
 import com.susu.core.model.Ledger
+import com.susu.core.model.Vote
 import com.susu.feature.community.navigation.CommunityRoute
 import com.susu.feature.community.navigation.navigateCommunity
 import com.susu.feature.community.navigation.navigateVoteAdd
+import com.susu.feature.community.navigation.navigateVoteDetail
+import com.susu.feature.community.navigation.navigateVoteEdit
+import com.susu.feature.community.navigation.navigateVoteSearch
 import com.susu.feature.loginsignup.navigation.LoginSignupRoute
 import com.susu.feature.mypage.navigation.navigateMyPage
 import com.susu.feature.mypage.navigation.navigateMyPageInfo
@@ -56,13 +61,16 @@ internal class MainNavigator(
             in listOf(
                 ReceivedRoute.ledgerSearchRoute,
                 ReceivedRoute.ledgerFilterRoute("{${ReceivedRoute.FILTER_ARGUMENT_NAME}}"),
-                ReceivedRoute.envelopeDetailRoute,
-                ReceivedRoute.envelopeEditRoute,
+                ReceivedRoute.envelopeDetailRoute("{${ReceivedRoute.ENVELOPE_ARGUMENT_NAME}}", "{${ReceivedRoute.LEDGER_ID_ARGUMENT_NAME}}"),
+                ReceivedRoute.envelopeEditRoute("{${ReceivedRoute.ENVELOPE_ARGUMENT_NAME}}", "{${ReceivedRoute.LEDGER_ID_ARGUMENT_NAME}}"),
                 SentRoute.sentEnvelopeRoute("{${SentRoute.FRIEND_ID_ARGUMENT_NAME}}"),
                 SentRoute.sentEnvelopeDetailRoute("{${SentRoute.ENVELOPE_ID_ARGUMENT_NAME}}"),
                 SentRoute.sentEnvelopeEditRoute,
                 CommunityRoute.route,
                 CommunityRoute.voteAddRoute,
+                CommunityRoute.voteSearchRoute,
+                CommunityRoute.voteDetailRoute("{${CommunityRoute.VOTE_ID_ARGUMENT_NAME}}"),
+                CommunityRoute.voteEditRoute("{${CommunityRoute.VOTE_ARGUMENT_NAME}}"),
             ),
             -> SusuTheme.colorScheme.background10
 
@@ -155,24 +163,36 @@ internal class MainNavigator(
         navController.navigateMyPageSocial()
     }
 
-    fun navigateReceivedEnvelopeAdd(categoryName: String, ledgerId: Long) {
-        navController.navigateReceivedEnvelopeAdd(categoryName, ledgerId)
+    fun navigateReceivedEnvelopeAdd(ledger: Ledger) {
+        navController.navigateReceivedEnvelopeAdd(ledger)
     }
 
     fun navigateMyPagePrivacyPolicy() {
         navController.navigateMyPagePrivacyPolicy()
     }
 
-    fun navigateReceivedEnvelopeDetail() {
-        navController.navigateReceivedEnvelopeDetail()
+    fun navigateReceivedEnvelopeDetail(envelope: Envelope, ledger: Ledger) {
+        navController.navigateReceivedEnvelopeDetail(envelope, ledger)
     }
 
-    fun navigateReceivedEnvelopeEdit() {
-        navController.navigateReceivedEnvelopeEdit()
+    fun navigateReceivedEnvelopeEdit(envelope: Envelope, ledger: Ledger) {
+        navController.navigateReceivedEnvelopeEdit(envelope, ledger)
     }
 
     fun navigateVoteAdd() {
         navController.navigateVoteAdd()
+    }
+
+    fun navigateVoteSearch() {
+        navController.navigateVoteSearch()
+    }
+
+    fun navigateVoteDetail(voteId: Long) {
+        navController.navigateVoteDetail(voteId)
+    }
+
+    fun navigateVoteEdit(vote: Vote) {
+        navController.navigateVoteEdit(vote)
     }
 
     fun popBackStackIfNotHome() {

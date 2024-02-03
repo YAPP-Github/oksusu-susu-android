@@ -3,13 +3,18 @@ package com.susu.feature.community.community
 import androidx.lifecycle.viewModelScope
 import com.susu.core.model.Category
 import com.susu.core.model.Vote
+import com.susu.core.model.exception.AlreadyExistsReportHistoryException
+import com.susu.core.model.exception.CannotBlockMyselfException
 import com.susu.core.ui.base.BaseViewModel
 import com.susu.core.ui.extension.decodeFromUri
+import com.susu.domain.usecase.block.BlockUserUseCase
+import com.susu.domain.usecase.report.ReportVoteUseCase
 import com.susu.domain.usecase.vote.GetPopularVoteListUseCase
 import com.susu.domain.usecase.vote.GetPostCategoryConfigUseCase
 import com.susu.domain.usecase.vote.GetVoteListUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toPersistentList
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -21,6 +26,8 @@ class CommunityViewModel @Inject constructor(
     private val getVoteListUseCase: GetVoteListUseCase,
     private val getPostCategoryConfigUseCase: GetPostCategoryConfigUseCase,
     private val getPopularVoteListUseCase: GetPopularVoteListUseCase,
+    private val reportVoteUseCase: ReportVoteUseCase,
+    private val blockUserUseCase: BlockUserUseCase,
 ) : BaseViewModel<CommunityState, CommunitySideEffect>(
     CommunityState(),
 ) {
@@ -38,7 +45,7 @@ class CommunityViewModel @Inject constructor(
         if (toAddVote in currentState.voteList) return
 
         if (currentState.selectedCategory != null &&
-            currentState.selectedCategory?.id != currentState.categoryConfigList.find { it.name == toAddVote.category }?.id
+            currentState.selectedCategory?.id != currentState.categoryConfigList.find { it.name == toAddVote.boardName }?.id
         ) {
             return
         }
@@ -52,6 +59,48 @@ class CommunityViewModel @Inject constructor(
                     .add(0, toAddVote),
             )
         }
+    }
+
+    fun updateVoteIfNeed(vote: String?) {
+        val toUpdateVote = vote?.let {
+            Json.decodeFromUri<Vote>(vote)
+        } ?: return
+
+        intent {
+            copy(
+                voteList = currentState
+                    .voteList
+                    .map {
+                        if (it.id == toUpdateVote.id) {
+                            toUpdateVote
+                        } else {
+                            it
+                        }
+                    }
+                    .toPersistentList(),
+            )
+        }
+    }
+
+    fun deleteVoteIfNeed(toDeleteVoteId: Long?) {
+        if (toDeleteVoteId == null) return
+
+        intent {
+            copy(
+                voteList = voteList
+                    .filter { it.id != toDeleteVoteId }
+                    .toPersistentList(),
+                popularVoteList = popularVoteList
+                    .filter { it.id != toDeleteVoteId }
+                    .toPersistentList(),
+            )
+        }
+    }
+
+    fun needRefreshIfNeed(needRefresh: Boolean) {
+        if (needRefresh.not()) return
+
+        getVoteList(true)
     }
 
     fun initData() {
@@ -108,8 +157,6 @@ class CommunityViewModel @Inject constructor(
     }
 
     fun getPopularVoteList() = viewModelScope.launch {
-        if (currentState.popularVoteList.isNotEmpty()) return@launch
-
         getPopularVoteListUseCase()
             .onSuccess {
                 intent { copy(popularVoteList = it.toPersistentList()) }
@@ -141,5 +188,40 @@ class CommunityViewModel @Inject constructor(
         }
 
         getVoteList(true)
+    }
+
+    fun navigateVoteAdd() = postSideEffect(CommunitySideEffect.NavigateVoteAdd)
+
+    fun navigateVoteDetail(id: Long) = postSideEffect(CommunitySideEffect.NavigateVoteDetail(id))
+    fun navigateVoteSearch() = postSideEffect(CommunitySideEffect.NavigateVoteSearch)
+
+    fun showReportDialog(vote: Vote) = postSideEffect(
+        CommunitySideEffect.ShowReportDialog(
+            onConfirmRequest = { reportVote(vote.id) },
+            onCheckedAction = { blockUser(vote.uid) },
+        ),
+    )
+
+    private fun reportVote(voteId: Long): Job = viewModelScope.launch {
+        reportVoteUseCase(voteId)
+            .onFailure { throwable ->
+                when (throwable) {
+                    is AlreadyExistsReportHistoryException -> postSideEffect(CommunitySideEffect.ShowSnackbar(throwable.message))
+                    else -> postSideEffect(CommunitySideEffect.HandleException(throwable = throwable, retry = { reportVote(voteId) }))
+                }
+            }
+    }
+
+    private fun blockUser(uid: Long): Job = viewModelScope.launch {
+        blockUserUseCase(uid)
+            .onSuccess {
+                getVoteList(true)
+            }
+            .onFailure { throwable ->
+                when (throwable) {
+                    is CannotBlockMyselfException -> postSideEffect(CommunitySideEffect.ShowSnackbar(throwable.message))
+                    else -> postSideEffect(CommunitySideEffect.HandleException(throwable = throwable, retry = { blockUser(uid) }))
+                }
+            }
     }
 }

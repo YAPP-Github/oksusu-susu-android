@@ -45,6 +45,7 @@ import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.core.ui.extension.toMoneyFormat
 import com.susu.feature.envelope.component.EnvelopeHistoryItem
 import com.susu.feature.sent.R
+import kotlinx.datetime.toJavaLocalDateTime
 
 @Composable
 fun SentEnvelopeRoute(
@@ -182,7 +183,7 @@ fun SentEnvelopeScreen(
                     EnvelopeHistoryItem(
                         type = it.envelope.type,
                         event = it.category!!.category,
-                        date = it.envelope.handedOverAt!!,
+                        date = it.envelope.handedOverAt.toJavaLocalDateTime(),
                         money = it.envelope.amount,
                         onClick = { onClickEnvelopeDetail(it.envelope.id) },
                     )

@@ -40,6 +40,7 @@ fun NavGraphBuilder.sentNavGraph(
     navigateSentEnvelopeDetail: (Long) -> Unit,
     navigateSentEnvelopeEdit: () -> Unit,
     navigateSentEnvelopeAdd: () -> Unit,
+    handleException: (Throwable, () -> Unit) -> Unit,
 ) {
     composable(route = SentRoute.route) {
         SentRoute(
@@ -87,6 +88,7 @@ fun NavGraphBuilder.sentNavGraph(
     composable(route = SentRoute.sentEnvelopeAddRoute) {
         SentEnvelopeAddRoute(
             popBackStack = popBackStack,
+            handleException = handleException,
         )
     }
 }

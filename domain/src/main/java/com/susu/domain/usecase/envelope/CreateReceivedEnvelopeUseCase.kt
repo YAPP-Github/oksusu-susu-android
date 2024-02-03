@@ -22,6 +22,8 @@ class CreateReceivedEnvelopeUseCase @Inject constructor(
             envelopesRepository.createEnvelope(
                 type = "RECEIVED",
                 friendId = friendId,
+                categoryId = categoryId,
+                customCategory = customCategory,
                 ledgerId = ledgerId,
                 amount = amount,
                 gift = gift,
@@ -35,8 +37,10 @@ class CreateReceivedEnvelopeUseCase @Inject constructor(
     data class Param(
         val friendId: Long? = null,
         val friendName: String? = null,
+        val categoryId: Long,
+        val customCategory: String?,
         val phoneNumber: String? = null,
-        val relationshipId: Int? = null,
+        val relationshipId: Long? = null,
         val customRelation: String? = null,
         val ledgerId: Long,
         val amount: Long,

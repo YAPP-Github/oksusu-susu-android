@@ -172,7 +172,7 @@ fun LedgerFilterScreen(
             Spacer(modifier = Modifier.weight(1f))
 
             Column(
-                verticalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxs),
+                verticalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_m),
             ) {
                 FlowRow(
                     verticalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxs),

@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class EnvelopesHistoryListResponse(
     @SerialName("data")
-    val envelopesHistoryList: List<SearchEnvelopeResponse>,
+    val envelopesHistoryList: List<EnvelopeHistoryResponse>,
     val page: Int = 0,
     val size: Int,
     val sort: Sort,

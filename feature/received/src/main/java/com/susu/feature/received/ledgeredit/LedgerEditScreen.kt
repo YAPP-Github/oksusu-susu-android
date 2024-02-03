@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -21,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -31,18 +33,25 @@ import com.susu.core.designsystem.component.appbar.icon.BackIcon
 import com.susu.core.designsystem.component.bottomsheet.datepicker.SusuLimitDatePickerBottomSheet
 import com.susu.core.designsystem.component.button.AddConditionButton
 import com.susu.core.designsystem.component.button.FilledButtonColor
+import com.susu.core.designsystem.component.button.LinedButtonColor
 import com.susu.core.designsystem.component.button.MediumButtonStyle
 import com.susu.core.designsystem.component.button.SmallButtonStyle
 import com.susu.core.designsystem.component.button.SusuFilledButton
+import com.susu.core.designsystem.component.button.SusuLinedButton
+import com.susu.core.designsystem.component.button.XSmallButtonStyle
 import com.susu.core.designsystem.component.textfield.SusuBasicTextField
 import com.susu.core.designsystem.component.textfieldbutton.SusuTextFieldWrapContentButton
 import com.susu.core.designsystem.component.textfieldbutton.TextFieldButtonColor
 import com.susu.core.designsystem.component.textfieldbutton.style.SmallTextFieldButtonStyle
+import com.susu.core.designsystem.theme.Gray100
+import com.susu.core.designsystem.theme.Gray30
 import com.susu.core.designsystem.theme.Gray80
+import com.susu.core.designsystem.theme.Orange60
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.core.ui.extension.susuClickable
 import com.susu.core.ui.util.AnnotatedText
+import com.susu.core.ui.util.currentDate
 import com.susu.feature.received.R
 import com.susu.feature.received.ledgeredit.component.LedgerEditContainer
 import kotlinx.coroutines.android.awaitFrame
@@ -52,7 +61,6 @@ import kotlinx.coroutines.launch
 fun LedgerEditRoute(
     viewModel: LedgerEditViewModel = hiltViewModel(),
     popBackStack: () -> Unit,
-    popBackStackWithLedger: (String) -> Unit,
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
 
@@ -62,7 +70,6 @@ fun LedgerEditRoute(
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
             LedgerEditSideEffect.PopBackStack -> popBackStack()
-            is LedgerEditSideEffect.PopBackStackWithLedger -> popBackStackWithLedger(sideEffect.ledger)
             LedgerEditSideEffect.FocusCustomCategory -> scope.launch {
                 awaitFrame()
                 focusRequester.requestFocus()
@@ -92,6 +99,8 @@ fun LedgerEditRoute(
         onClickEndDateText = viewModel::showEndDateBottomSheet,
         onDismissEndDateBottomSheet = viewModel::hideEndDateBottomSheet,
         onClickSaveButton = viewModel::editLedger,
+        onClickAddEndDateButton = viewModel::showEndDateText,
+        onClickSetStartDateButton = viewModel::showOnlyStartDateText,
     )
 }
 
@@ -115,6 +124,8 @@ fun LedgerEditScreen(
     onClickEndDateText: () -> Unit = {},
     onDismissEndDateBottomSheet: () -> Unit = {},
     onClickSaveButton: () -> Unit = {},
+    onClickAddEndDateButton: () -> Unit = {},
+    onClickSetStartDateButton: () -> Unit = {},
 ) {
     Box(
         modifier = Modifier
@@ -197,7 +208,7 @@ fun LedgerEditScreen(
                             AnnotatedText(
                                 modifier = Modifier.susuClickable(rippleEnabled = false, onClick = onClickStartDateText),
                                 originalText = stringResource(
-                                    R.string.ledger_edit_screen_from_date,
+                                    if (uiState.showOnlyStartDate) R.string.ledger_edit_screen_date else R.string.ledger_edit_screen_from_date,
                                     uiState.startYear,
                                     uiState.startMonth,
                                     uiState.startDay,
@@ -205,27 +216,56 @@ fun LedgerEditScreen(
                                 targetTextList = listOf(
                                     stringResource(R.string.ledger_edit_screen_year),
                                     stringResource(R.string.ledger_edit_screen_month),
-                                    stringResource(R.string.ledger_edit_screen_from_day),
+                                    stringResource(
+                                        if (uiState.showOnlyStartDate) R.string.ledger_edit_screen_day else R.string.ledger_edit_screen_from_day,
+                                    ),
                                 ),
                                 originalTextStyle = SusuTheme.typography.title_m,
                                 spanStyle = SusuTheme.typography.title_m.copy(Gray80).toSpanStyle(),
                             )
-                            AnnotatedText(
-                                modifier = Modifier.susuClickable(rippleEnabled = false, onClick = onClickEndDateText),
-                                originalText = stringResource(
-                                    R.string.ledger_edit_screen_until_date,
-                                    uiState.endYear,
-                                    uiState.endMonth,
-                                    uiState.endDay,
-                                ),
-                                targetTextList = listOf(
-                                    stringResource(R.string.ledger_edit_screen_year),
-                                    stringResource(R.string.ledger_edit_screen_month),
-                                    stringResource(R.string.ledger_edit_screen_until_day),
-                                ),
-                                originalTextStyle = SusuTheme.typography.title_m,
-                                spanStyle = SusuTheme.typography.title_m.copy(Gray80).toSpanStyle(),
-                            )
+
+                            if (uiState.showOnlyStartDate.not()) {
+                                AnnotatedText(
+                                    modifier = Modifier.susuClickable(rippleEnabled = false, onClick = onClickEndDateText),
+                                    originalText = stringResource(
+                                        R.string.ledger_edit_screen_until_date,
+                                        uiState.endYear ?: currentDate.year,
+                                        uiState.endMonth ?: currentDate.month.value,
+                                        uiState.endDay ?: currentDate.dayOfMonth,
+                                    ),
+                                    targetTextList = listOf(
+                                        stringResource(R.string.ledger_edit_screen_year),
+                                        stringResource(R.string.ledger_edit_screen_month),
+                                        stringResource(R.string.ledger_edit_screen_until_day),
+                                    ),
+                                    originalTextStyle = SusuTheme.typography.title_m.copy(if (uiState.endYear == null) Gray30 else Gray100),
+                                    spanStyle = SusuTheme.typography.title_m.copy(Gray80).toSpanStyle(),
+                                )
+                            }
+
+                            Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_xxs))
+
+                            if (uiState.showOnlyStartDate) {
+                                SusuLinedButton(
+                                    color = LinedButtonColor.Orange,
+                                    style = XSmallButtonStyle.height28,
+                                    text = stringResource(R.string.ledger_edit_screen_add_end_date),
+                                    leftIcon = {
+                                        Icon(painter = painterResource(id = R.drawable.ic_date_change), contentDescription = null, tint = Orange60)
+                                    },
+                                    onClick = onClickAddEndDateButton,
+                                )
+                            } else {
+                                SusuLinedButton(
+                                    color = LinedButtonColor.Orange,
+                                    style = XSmallButtonStyle.height28,
+                                    text = stringResource(R.string.ledger_edit_screen_add_start_date),
+                                    leftIcon = {
+                                        Icon(painter = painterResource(id = R.drawable.ic_date_change), contentDescription = null, tint = Orange60)
+                                    },
+                                    onClick = onClickSetStartDateButton,
+                                )
+                            }
                         }
                     },
                 )

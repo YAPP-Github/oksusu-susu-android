@@ -11,4 +11,22 @@
     <string name="word_people">%s명</string>
     <string name="popular_vote_card_count">%s명 참여 중</string>
     <string name="vote_card_count">%d명 참여</string>
+    <string name="word_before_hour">%1$s시간 전</string>
+    <string name="word_before_minute">%1$s분 전</string>
+    <string name="word_anonymous_susu">익명 수수</string>
+    <string name="word_me">나</string>
+    <string name="community_screen_empty_vote">아직 작성된 투표 글이 없어요</string>
+    <string name="vote_search_screen_placeholder">찾고 싶은 투표를 검색해보세요</string>
+    <string name="vote_search_screen_empty_result_description">궁금하신 것들의 키워드를\n검색해볼 수 있어요</string>
+    <string name="vote_search_screen_recent_search_empty_title">어떤 투표를 찾아드릴까요?</string>
+    <string name="vote_search_screen_search_result_empty_title">원하는 검색 결과가 없나요?</string>
+    <string name="delete_vote_dialog_title">투표를 삭제할까요?</string>
+    <string name="delete_vote_dialog_body">삭제한 투표는 다시 복구할 수 없어요</string>
+    <string name="delete_vote_success_toast">투표가 삭제되었어요</string>
+    <string name="snackbar_can_not_change_option">시작된 투표는 보기를 편집할 수 없어요</string>
+    <string name="dialog_report_title">해당 글을 신고할까요?</string>
+    <string name="dialog_report_body">신고된 글은 수수에서 확인한 후에 모두에게 제재돼요\n이 작성자의 글을 보고 싶지 않다면 작성자를 차단해주세요</string>
+    <string name="dialog_report_confirm_text">신고하기</string>
+    <string name="dialog_report_dismiss_text">닫기</string>
+    <string name="dialog_report_checkbox_text">작성자도 바로 차단하기</string>
 </resources>

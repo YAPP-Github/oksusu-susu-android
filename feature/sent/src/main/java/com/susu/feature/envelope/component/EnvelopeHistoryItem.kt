@@ -85,7 +85,7 @@ fun EnvelopeHistoryItem(
 
 @Preview(showBackground = true, backgroundColor = 0xffffff)
 @Composable
-fun EnvelopeHistoryItem() {
+fun EnvelopeHistoryItemPreView() {
     SusuTheme {
         EnvelopeHistoryItem(
             type = "SENT",

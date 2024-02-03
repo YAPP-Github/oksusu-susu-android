@@ -1,5 +1,6 @@
 package com.susu.feature.envelopeadd
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -15,83 +16,106 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.susu.core.designsystem.component.appbar.SusuProgressAppBar
 import com.susu.core.designsystem.component.appbar.icon.BackIcon
 import com.susu.core.designsystem.component.button.FilledButtonColor
 import com.susu.core.designsystem.component.button.MediumButtonStyle
 import com.susu.core.designsystem.component.button.SusuFilledButton
 import com.susu.core.designsystem.theme.SusuTheme
+import com.susu.core.model.Category
+import com.susu.core.model.Relationship
+import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.core.ui.extension.susuDefaultAnimatedContentTransitionSpec
-import com.susu.feature.envelopeadd.content.DateContent
-import com.susu.feature.envelopeadd.content.EventContent
-import com.susu.feature.envelopeadd.content.MemoContent
-import com.susu.feature.envelopeadd.content.MoneyContent
-import com.susu.feature.envelopeadd.content.MoreContent
-import com.susu.feature.envelopeadd.content.NameContent
-import com.susu.feature.envelopeadd.content.PhoneContent
-import com.susu.feature.envelopeadd.content.PresentContent
-import com.susu.feature.envelopeadd.content.RelationshipContent
-import com.susu.feature.envelopeadd.content.VisitedContent
-import com.susu.feature.sent.R
-
-enum class EnvelopeAddStep {
-    MONEY,
-    NAME,
-    RELATIONSHIP,
-    EVENT,
-    DATE,
-    MORE,
-    VISITED,
-    PRESENT,
-    PHONE,
-    MEMO,
-}
+import com.susu.feature.envelopeadd.content.category.CategoryContentRoute
+import com.susu.feature.envelopeadd.content.date.DateContentRoute
+import com.susu.feature.envelopeadd.content.memo.MemoContentRoute
+import com.susu.feature.envelopeadd.content.money.MoneyContentRoute
+import com.susu.feature.envelopeadd.content.more.MoreContentRoute
+import com.susu.feature.envelopeadd.content.name.NameContentRoute
+import com.susu.feature.envelopeadd.content.phone.PhoneContentRoute
+import com.susu.feature.envelopeadd.content.present.PresentContentRoute
+import com.susu.feature.envelopeadd.content.relationship.RelationshipContentRoute
+import com.susu.feature.envelopeadd.content.visited.VisitedContentRoute
+import java.time.LocalDateTime
 
 @Composable
 fun SentEnvelopeAddRoute(
+    viewModel: EnvelopeAddViewModel = hiltViewModel(),
     popBackStack: () -> Unit,
+    handleException: (Throwable, () -> Unit) -> Unit,
 ) {
-    var currentStep by remember { mutableStateOf(EnvelopeAddStep.MONEY) }
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    viewModel.sideEffect.collectWithLifecycle { sideEffect ->
+        when (sideEffect) {
+            is EnvelopeAddEffect.HandleException -> handleException(sideEffect.throwable, sideEffect.retry)
+            EnvelopeAddEffect.PopBackStack -> popBackStack()
+        }
+    }
+
+    var friendName by remember {
+        mutableStateOf("")
+    }
+
+    var categoryName by remember {
+        mutableStateOf("")
+    }
+
+    BackHandler {
+        viewModel.goPrevStep()
+    }
 
     SentEnvelopeAddScreen(
-        currentStep = currentStep,
-        onClickBack = popBackStack,
-        onClickNext = {
-            // TODO: 수정 필요 (MORE 이후 분리 필요)
-            currentStep = when (currentStep) {
-                EnvelopeAddStep.MONEY -> EnvelopeAddStep.NAME
-                EnvelopeAddStep.NAME -> EnvelopeAddStep.RELATIONSHIP
-                EnvelopeAddStep.RELATIONSHIP -> EnvelopeAddStep.EVENT
-                EnvelopeAddStep.EVENT -> EnvelopeAddStep.DATE
-                EnvelopeAddStep.DATE -> EnvelopeAddStep.MORE
-                EnvelopeAddStep.MORE -> EnvelopeAddStep.VISITED
-                EnvelopeAddStep.VISITED -> EnvelopeAddStep.PRESENT
-                EnvelopeAddStep.PRESENT -> EnvelopeAddStep.PHONE
-                EnvelopeAddStep.PHONE -> EnvelopeAddStep.MEMO
-                else -> EnvelopeAddStep.MEMO
-            }
+        uiState = uiState,
+        friendName = friendName,
+        categoryName = categoryName,
+        onClickBack = viewModel::goPrevStep,
+        onClickNext = viewModel::goNextStep,
+        updateParentMoney = viewModel::updateMoney,
+        updateParentName = { name ->
+            viewModel.updateName(name)
+            friendName = name
         },
+        updateParentFriendId = viewModel::updateFriendId,
+        updateParentSelectedRelation = viewModel::updateSelectedRelationShip,
+        updateParentCategory = { category ->
+            viewModel.updateSelectedCategory(category)
+            categoryName = category?.name ?: ""
+        },
+        updateParentDate = viewModel::updateDate,
+        updateParentMoreStep = viewModel::updateMoreStep,
+        updateParentVisited = viewModel::updateHasVisited,
+        updateParentMemo = viewModel::updateMemo,
+        updateParentPhoneNumber = viewModel::updatePhoneNumber,
+        updateParentPresent = viewModel::updatePresent,
     )
 }
 
 @Composable
 fun SentEnvelopeAddScreen(
-    modifier: Modifier = Modifier,
-    currentStep: EnvelopeAddStep = EnvelopeAddStep.MONEY,
+    uiState: EnvelopeAddState = EnvelopeAddState(),
+    friendName: String = "",
     onClickBack: () -> Unit = {},
     onClickNext: () -> Unit = {},
+    updateParentMoney: (Long) -> Unit = {},
+    updateParentName: (String) -> Unit = {},
+    updateParentFriendId: (Long?) -> Unit = {},
+    updateParentSelectedRelation: (Relationship?) -> Unit = {},
+    updateParentCategory: (Category?) -> Unit = {},
+    updateParentDate: (LocalDateTime?) -> Unit = {},
+    updateParentMoreStep: (List<EnvelopeAddStep>) -> Unit = {},
+    categoryName: String = "",
+    updateParentVisited: (Boolean?) -> Unit = {},
+    updateParentMemo: (String?) -> Unit = {},
+    updateParentPhoneNumber: (String?) -> Unit = {},
+    updateParentPresent: (String?) -> Unit = {},
 ) {
-    // TODO: 수정 필요
-    val relationshipList = listOf("친구", "가족", "친척", "동료", "직접 입력")
-    val friendList = listOf("김철수", "국영수", "신짱구", "홍길동")
-    val eventList = listOf("결혼식", "돌잔치", "장례식", "생일 기념일", "직접 입력")
-    val moreList = listOf("방문여부", "선물", "메모", "보낸 이의 연락처")
-    val visitedList = listOf("예", "아니요")
-
     Column(
-        modifier = modifier
-            .background(SusuTheme.colorScheme.background15)
-            .fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .background(SusuTheme.colorScheme.background15),
     ) {
         SusuProgressAppBar(
             leftIcon = {
@@ -99,12 +123,12 @@ fun SentEnvelopeAddScreen(
                     onClick = onClickBack,
                 )
             },
-            currentStep = currentStep.ordinal + 1,
+            currentStep = uiState.progress,
             entireStep = EnvelopeAddStep.entries.size,
         )
         AnimatedContent(
-            modifier = modifier.weight(1f),
-            targetState = currentStep,
+            modifier = Modifier.weight(1f),
+            targetState = uiState.currentStep,
             label = "SentEnvelopeAddScreen",
             transitionSpec = {
                 susuDefaultAnimatedContentTransitionSpec(
@@ -113,28 +137,57 @@ fun SentEnvelopeAddScreen(
             },
         ) { targetState ->
             when (targetState) {
-                EnvelopeAddStep.MONEY -> MoneyContent()
-                EnvelopeAddStep.NAME -> NameContent(friendList = friendList)
-                EnvelopeAddStep.RELATIONSHIP -> RelationshipContent(relationshipList = relationshipList)
-                EnvelopeAddStep.EVENT -> EventContent(eventList = eventList)
-                EnvelopeAddStep.DATE -> DateContent(name = "김철수")
-                EnvelopeAddStep.MORE -> MoreContent(moreList = moreList)
-                EnvelopeAddStep.VISITED -> VisitedContent(
-                    event = "결혼식",
-                    visitedList = visitedList,
+                EnvelopeAddStep.MONEY -> MoneyContentRoute(updateParentMoney = updateParentMoney)
+                EnvelopeAddStep.NAME -> NameContentRoute(
+                    updateParentName = updateParentName,
+                    updateParentFriendId = updateParentFriendId,
                 )
-                EnvelopeAddStep.PRESENT -> PresentContent()
-                EnvelopeAddStep.PHONE -> PhoneContent(name = "김철수")
-                EnvelopeAddStep.MEMO -> MemoContent()
+
+                EnvelopeAddStep.RELATIONSHIP -> RelationshipContentRoute(
+                    updateParentSelectedRelation = updateParentSelectedRelation,
+                )
+
+                EnvelopeAddStep.EVENT -> CategoryContentRoute(
+                    updateParentCategory = updateParentCategory,
+                )
+
+                EnvelopeAddStep.DATE -> DateContentRoute(
+                    friendName = friendName,
+                    updateParentDate = updateParentDate,
+                )
+
+                EnvelopeAddStep.MORE -> MoreContentRoute(
+                    updateParentMoreStep = updateParentMoreStep,
+                )
+
+                EnvelopeAddStep.VISITED -> VisitedContentRoute(
+                    categoryName = categoryName,
+                    updateParentVisited = updateParentVisited,
+                )
+
+                EnvelopeAddStep.PRESENT -> PresentContentRoute(
+                    updateParentPresent = updateParentPresent,
+                )
+
+                EnvelopeAddStep.PHONE -> PhoneContentRoute(
+                    friendName = friendName,
+                    updateParentPhone = updateParentPhoneNumber,
+                )
+
+                EnvelopeAddStep.MEMO -> MemoContentRoute(
+                    updateParentMemo = updateParentMemo,
+                )
             }
         }
         SusuFilledButton(
             color = FilledButtonColor.Black,
             style = MediumButtonStyle.height60,
             shape = RectangleShape,
-            text = stringResource(R.string.sent_envelope_add_next),
+            text = stringResource(id = uiState.buttonResId),
             onClick = onClickNext,
-            modifier = modifier
+            isClickable = uiState.buttonEnabled,
+            isActive = uiState.buttonEnabled,
+            modifier = Modifier
                 .fillMaxWidth()
                 .imePadding(),
         )

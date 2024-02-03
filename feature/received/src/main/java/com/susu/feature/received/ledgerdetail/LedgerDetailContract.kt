@@ -1,8 +1,12 @@
 package com.susu.feature.received.ledgerdetail
 
+import com.susu.core.model.Envelope
 import com.susu.core.model.Ledger
+import com.susu.core.model.SearchEnvelope
 import com.susu.core.ui.base.SideEffect
 import com.susu.core.ui.base.UiState
+import kotlinx.collections.immutable.PersistentList
+import kotlinx.collections.immutable.persistentListOf
 
 data class LedgerDetailState(
     val name: String = "",
@@ -11,11 +15,12 @@ data class LedgerDetailState(
     val category: String = "",
     val startDate: String = "",
     val endDate: String = "",
+    val envelopeList: PersistentList<SearchEnvelope> = persistentListOf(),
 ) : UiState
 
 sealed interface LedgerDetailSideEffect : SideEffect {
-    data class NavigateEnvelopeAdd(val categoryName: String, val ledgerId: Long) : LedgerDetailSideEffect
-    data object NavigateEnvelopeDetail : LedgerDetailSideEffect
+    data class NavigateEnvelopeAdd(val ledger: Ledger) : LedgerDetailSideEffect
+    data class NavigateEnvelopeDetail(val envelope: Envelope, val ledger: Ledger) : LedgerDetailSideEffect
     data class NavigateLedgerEdit(val ledger: Ledger) : LedgerDetailSideEffect
     data class PopBackStackWithLedger(val ledger: String) : LedgerDetailSideEffect
     data class PopBackStackWithDeleteLedgerId(val ledgerId: Long) : LedgerDetailSideEffect

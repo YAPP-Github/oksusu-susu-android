@@ -1,22 +1,26 @@
 package com.susu.data.remote.model.response
 
-import com.susu.core.model.Envelope
-import com.susu.core.model.EnvelopeSearch
 import com.susu.core.model.Relationship
 import kotlinx.datetime.LocalDateTime
-import kotlinx.datetime.toJavaLocalDateTime
+import com.susu.core.model.SearchEnvelope
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class SearchEnvelopeResponse(
-    val envelope: EnvelopeInfo,
-    val category: CategoryInfo? = null,
-    val friend: FriendInfo? = null,
-    val relation: RelationshipInfo? = null,
+    val data: List<SearchEnvelopeData>,
 )
 
 @Serializable
-data class EnvelopeInfo(
+data class SearchEnvelopeData(
+    val envelope: Envelope,
+    val category: CategoryInfo,
+    val friend: FriendInfo,
+    val relationship: RelationInfo,
+    val friendRelationship: FriendRelationship,
+)
+
+@Serializable
+data class Envelope(
     val id: Long,
     val uid: Long,
     val type: String,
@@ -24,36 +28,47 @@ data class EnvelopeInfo(
     val gift: String? = null,
     val memo: String? = null,
     val hasVisited: Boolean? = null,
-    val handedOverAt: LocalDateTime? = null,
+    val handedOverAt: LocalDateTime,
 )
 
 @Serializable
-data class RelationshipInfo(
-    val id: Int,
+data class RelationInfo(
+    val id: Long,
     val relation: String,
-    val description: String = "",
 )
 
-internal fun EnvelopeInfo.toModel() = Envelope(
-    id = id,
-    uid = uid,
-    type = type,
-    amount = amount,
-    gift = gift,
-    memo = memo,
-    hasVisited = hasVisited,
-    handedOverAt = handedOverAt?.toJavaLocalDateTime(),
+@Serializable
+data class FriendRelationship(
+    val id: Long,
+    val friendId: Long,
+    val relationshipId: Long,
+    val customRelation: String? = null,
 )
 
-internal fun RelationshipInfo.toModel() = Relationship(
-    id = id,
-    relation = relation,
-    description = description,
-)
-
-internal fun SearchEnvelopeResponse.toModel() = EnvelopeSearch(
-    envelope = envelope.toModel(),
-    category = category?.toModel(),
-    friend = friend?.toModel(),
-    relationship = relation?.toModel(),
-)
+internal fun SearchEnvelopeResponse.toModel() = data.map {
+    SearchEnvelope(
+        envelope = com.susu.core.model.Envelope(
+            id = it.envelope.id,
+            uid = it.envelope.uid,
+            type = it.envelope.type,
+            friend = it.friend.toModel(),
+            relationship = Relationship(
+                id = it.relationship.id,
+                relation = it.relationship.relation,
+                customRelation = it.friendRelationship.customRelation,
+            ),
+            amount = it.envelope.amount,
+            gift = it.envelope.gift,
+            memo = it.envelope.memo,
+            hasVisited = it.envelope.hasVisited,
+            handedOverAt = it.envelope.handedOverAt,
+        ),
+        category = it.category.toModel(),
+        friend = it.friend.toModel(),
+        relation = Relationship(
+            id = it.relationship.id,
+            relation = it.relationship.relation,
+            customRelation = it.friendRelationship.customRelation,
+        ),
+    )
+}

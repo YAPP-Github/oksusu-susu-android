@@ -25,6 +25,7 @@ import com.susu.core.designsystem.component.button.MediumButtonStyle
 import com.susu.core.designsystem.component.button.SusuFilledButton
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.model.Relationship
+import com.susu.core.ui.SnackbarToken
 import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.core.ui.extension.susuDefaultAnimatedContentTransitionSpec
 import com.susu.feature.received.envelopeadd.content.date.DateContentRoute
@@ -42,6 +43,8 @@ import java.time.LocalDateTime
 fun ReceivedEnvelopeAddRoute(
     viewModel: ReceivedEnvelopeAddViewModel = hiltViewModel(),
     popBackStack: () -> Unit,
+    popBackStackWithEnvelope: (String) -> Unit,
+    onShowSnackbar: (SnackbarToken) -> Unit,
     handleException: (Throwable, () -> Unit) -> Unit,
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
@@ -49,6 +52,8 @@ fun ReceivedEnvelopeAddRoute(
         when (sideEffect) {
             is ReceivedEnvelopeAddSideEffect.HandleException -> handleException(sideEffect.throwable, sideEffect.retry)
             ReceivedEnvelopeAddSideEffect.PopBackStack -> popBackStack()
+            is ReceivedEnvelopeAddSideEffect.ShowSnackbar -> onShowSnackbar(SnackbarToken(message = sideEffect.message))
+            is ReceivedEnvelopeAddSideEffect.PopBackStackWithEnvelope -> popBackStackWithEnvelope(sideEffect.envelope)
         }
     }
 

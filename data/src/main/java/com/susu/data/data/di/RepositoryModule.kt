@@ -1,5 +1,6 @@
 package com.susu.data.data.di
 
+import com.susu.data.data.repository.BlockRepositoryImpl
 import com.susu.data.data.repository.CategoryConfigRepositoryImpl
 import com.susu.data.data.repository.EnvelopesRepositoryImpl
 import com.susu.data.data.repository.ExcelRepositoryImpl
@@ -7,12 +8,15 @@ import com.susu.data.data.repository.FriendRepositoryImpl
 import com.susu.data.data.repository.LedgerRecentSearchRepositoryImpl
 import com.susu.data.data.repository.LedgerRepositoryImpl
 import com.susu.data.data.repository.LoginRepositoryImpl
+import com.susu.data.data.repository.ReportRepositoryImpl
 import com.susu.data.data.repository.SignUpRepositoryImpl
 import com.susu.data.data.repository.StatisticsRepositoryImpl
 import com.susu.data.data.repository.TermRepositoryImpl
 import com.susu.data.data.repository.TokenRepositoryImpl
 import com.susu.data.data.repository.UserRepositoryImpl
+import com.susu.data.data.repository.VoteRecentSearchRepositoryImpl
 import com.susu.data.data.repository.VoteRepositoryImpl
+import com.susu.domain.repository.BlockRepository
 import com.susu.domain.repository.CategoryConfigRepository
 import com.susu.domain.repository.EnvelopesRepository
 import com.susu.domain.repository.ExcelRepository
@@ -20,11 +24,13 @@ import com.susu.domain.repository.FriendRepository
 import com.susu.domain.repository.LedgerRecentSearchRepository
 import com.susu.domain.repository.LedgerRepository
 import com.susu.domain.repository.LoginRepository
+import com.susu.domain.repository.ReportRepository
 import com.susu.domain.repository.SignUpRepository
 import com.susu.domain.repository.StatisticsRepository
 import com.susu.domain.repository.TermRepository
 import com.susu.domain.repository.TokenRepository
 import com.susu.domain.repository.UserRepository
+import com.susu.domain.repository.VoteRecentSearchRepository
 import com.susu.domain.repository.VoteRepository
 import dagger.Binds
 import dagger.Module
@@ -99,4 +105,19 @@ abstract class RepositoryModule {
     abstract fun bindVoteRepository(
         voteRepositoryImpl: VoteRepositoryImpl,
     ): VoteRepository
+
+    @Binds
+    abstract fun bindVoteRecentSearchRepository(
+        voteRecentSearchRepositoryImpl: VoteRecentSearchRepositoryImpl,
+    ): VoteRecentSearchRepository
+
+    @Binds
+    abstract fun bindBlockRepository(
+        blockRepositoryImpl: BlockRepositoryImpl,
+    ): BlockRepository
+
+    @Binds
+    abstract fun bindReportRepository(
+        reportRepositoryImpl: ReportRepositoryImpl,
+    ): ReportRepository
 }
