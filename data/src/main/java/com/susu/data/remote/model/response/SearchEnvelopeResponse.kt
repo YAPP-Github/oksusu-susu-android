@@ -1,8 +1,8 @@
 package com.susu.data.remote.model.response
 
 import com.susu.core.model.Relationship
-import kotlinx.datetime.LocalDateTime
 import com.susu.core.model.SearchEnvelope
+import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.Serializable
 
 @Serializable

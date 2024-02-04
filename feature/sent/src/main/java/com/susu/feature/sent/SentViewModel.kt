@@ -45,10 +45,14 @@ class SentViewModel @Inject constructor(
             intent {
                 copy(
                     envelopesList = envelopesList.map {
-                        if (it.friend.id == id) it.copy(
-                            envelopesHistoryList = newEnvelopesHistoryList,
-                            expand = !it.expand
-                        ) else it
+                        if (it.friend.id == id) {
+                            it.copy(
+                                envelopesHistoryList = newEnvelopesHistoryList,
+                                expand = !it.expand,
+                            )
+                        } else {
+                            it
+                        }
                     }.toPersistentList(),
                 )
             }

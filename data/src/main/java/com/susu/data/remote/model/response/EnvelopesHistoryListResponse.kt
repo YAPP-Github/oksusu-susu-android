@@ -11,7 +11,7 @@ data class EnvelopesHistoryListResponse(
     val size: Int,
     val sort: Sort,
     val totalCount: Int,
-    val totalPage: Int
+    val totalPage: Int,
 )
 
 internal fun EnvelopesHistoryListResponse.toModel() = this.envelopesHistoryList.map { envelopesHistory ->

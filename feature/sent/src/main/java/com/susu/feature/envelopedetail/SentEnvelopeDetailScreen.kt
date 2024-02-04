@@ -126,8 +126,11 @@ fun SentEnvelopeDetailScreen(
                     )
                     DetailItem(
                         categoryText = stringResource(R.string.sent_envelope_detail_category_visited),
-                        contentText = if (uiState.visited == true) stringResource(R.string.sent_envelope_detail_category_visited_yes)
-                        else stringResource(R.string.sent_envelope_detail_category_visited_no),
+                        contentText = if (uiState.visited == true) {
+                            stringResource(R.string.sent_envelope_detail_category_visited_yes)
+                        } else {
+                            stringResource(R.string.sent_envelope_detail_category_visited_no)
+                        },
                         isEmptyContent = uiState.visited == null,
                     )
                     DetailItem(

@@ -69,8 +69,8 @@ fun NavGraphBuilder.sentNavGraph(
         arguments = listOf(
             navArgument(SentRoute.ENVELOPE_ID_ARGUMENT_NAME) {
                 type = NavType.LongType
-            }
-        )
+            },
+        ),
     ) {
         SentEnvelopeDetailRoute(
             popBackStack = popBackStack,

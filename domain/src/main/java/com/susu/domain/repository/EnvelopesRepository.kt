@@ -1,9 +1,9 @@
 package com.susu.domain.repository
 
-import com.susu.core.model.FriendStatistics
 import com.susu.core.model.Envelope
 import com.susu.core.model.EnvelopeDetail
 import com.susu.core.model.EnvelopeSearch
+import com.susu.core.model.FriendStatistics
 import com.susu.core.model.Relationship
 import com.susu.core.model.SearchEnvelope
 import kotlinx.datetime.LocalDateTime

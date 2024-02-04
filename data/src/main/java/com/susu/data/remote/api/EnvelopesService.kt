@@ -1,13 +1,13 @@
 package com.susu.data.remote.api
 
-import com.susu.data.remote.model.response.EnvelopesListResponse
-import com.susu.data.remote.retrofit.ApiResult
 import com.susu.data.remote.model.request.EnvelopeRequest
 import com.susu.data.remote.model.response.EnvelopeDetailResponse
 import com.susu.data.remote.model.response.EnvelopeResponse
 import com.susu.data.remote.model.response.EnvelopesHistoryListResponse
+import com.susu.data.remote.model.response.EnvelopesListResponse
 import com.susu.data.remote.model.response.RelationShipListResponse
 import com.susu.data.remote.model.response.SearchEnvelopeResponse
+import com.susu.data.remote.retrofit.ApiResult
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET

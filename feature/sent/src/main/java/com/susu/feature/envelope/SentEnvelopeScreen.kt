@@ -178,7 +178,7 @@ fun SentEnvelopeScreen(
             ) {
                 items(
                     items = uiState.envelopeHistoryList,
-                    key = { it.envelope.id }
+                    key = { it.envelope.id },
                 ) {
                     EnvelopeHistoryItem(
                         type = it.envelope.type,

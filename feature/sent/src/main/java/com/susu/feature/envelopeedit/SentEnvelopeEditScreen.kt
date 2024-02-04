@@ -71,6 +71,7 @@ fun SentEnvelopeEditRoute(
 fun SentEnvelopeEditScreen(
     modifier: Modifier = Modifier,
     onClickBackIcon: () -> Unit = {},
+    @Suppress("detekt:UnusedParameter")
     onClickSave: (Long) -> Unit = {},
 ) {
     // TODO: 수정 필요

@@ -100,7 +100,7 @@ fun SentCard(
                         .susuClickable(
                             onClick = {
                                 onClickHistory(friend.id)
-                            }
+                            },
                         )
                         .rotate(degrees = degrees),
                 )

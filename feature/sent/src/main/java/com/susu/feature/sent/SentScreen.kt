@@ -140,7 +140,7 @@ fun SentScreen(
                     padding = PaddingValues(SusuTheme.spacing.spacing_m),
                 )
                 EmptyView(
-                    onClickAddEnvelope = onClickAddEnvelope
+                    onClickAddEnvelope = onClickAddEnvelope,
                 )
             }
         }
