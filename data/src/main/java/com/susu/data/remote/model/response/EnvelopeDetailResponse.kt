@@ -9,18 +9,11 @@ data class EnvelopeDetailResponse(
     val envelope: EnvelopeInfo,
     val category: CategoryInfo,
     val relationship: RelationshipInfo,
-    val friendRelationship: FriendRelationshipInfo,
+    val friendRelationship: FriendRelationShipInfo,
     val friend: FriendInfo,
 )
 
-@Serializable
-data class FriendRelationshipInfo(
-    val id: Long,
-    val friendId: Long,
-    val relationshipId: Long,
-)
-
-internal fun FriendRelationshipInfo.toModel() = FriendRelationship(
+internal fun FriendRelationShipInfo.toModel() = FriendRelationship(
     id = id,
     friendId = friendId,
     relationshipId = relationshipId,
