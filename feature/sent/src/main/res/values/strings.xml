@@ -55,4 +55,19 @@
     <string name="sent_envelope_add_date_title_highlight">%s님에게 </string>
     <string name="envelope_filter_screen_friend">보낸 사람</string>
     <string name="envelope_filter_screen_money">받은 봉투 금액</string>
+    <string name="sent_envelope_add_date_to">님에게</string>
+    <string name="sent_envelope_add_phone_to">"님의 "</string>
+    <string name="sent_envelope_add_visited_to">"을 "</string>
+    <string name="sent_envelope_card_monee_total">"전체 "</string>
+    <string name="sent_envelope_card_money_won">원</string>
+    <string name="sent_envelope_detail_category_event">경조사</string>
+    <string name="sent_envelope_detail_category_name">이름</string>
+    <string name="sent_envelope_detail_category_relationship">나와의 관계</string>
+    <string name="sent_envelope_detail_category_date">날짜</string>
+    <string name="sent_envelope_detail_category_visited">방문 여부</string>
+    <string name="sent_envelope_detail_category_gift">선물</string>
+    <string name="sent_envelope_detail_category_phone">연락처</string>
+    <string name="sent_envelope_detail_category_memo">메모</string>
+    <string name="sent_envelope_detail_category_visited_yes">예</string>
+    <string name="sent_envelope_detail_category_visited_no">아니요</string>
 </resources>

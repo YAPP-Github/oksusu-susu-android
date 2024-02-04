@@ -51,11 +51,12 @@ import com.susu.feature.sent.R
 fun SentEnvelopeEditRoute(
     viewModel: SentEnvelopeEditViewModel = hiltViewModel(),
     popBackStack: () -> Unit,
-    navigateSentEnvelopeDetail: () -> Unit,
+    navigateSentEnvelopeDetail: (Long) -> Unit,
 ) {
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
-            SentEnvelopeEditSideEffect.PopBackStack -> popBackStack()
+            SentEnvelopeEditEffect.PopBackStack -> popBackStack()
+            else -> {}
         }
     }
 
@@ -70,7 +71,8 @@ fun SentEnvelopeEditRoute(
 fun SentEnvelopeEditScreen(
     modifier: Modifier = Modifier,
     onClickBackIcon: () -> Unit = {},
-    onClickSave: () -> Unit = {},
+    @Suppress("detekt:UnusedParameter")
+    onClickSave: (Long) -> Unit = {},
 ) {
     // TODO: 수정 필요
     var money by remember { mutableStateOf(150000) }
@@ -287,7 +289,7 @@ fun SentEnvelopeEditScreen(
                 style = MediumButtonStyle.height60,
                 shape = RectangleShape,
                 text = stringResource(R.string.sent_envelope_edit_save),
-                onClick = onClickSave,
+//                onClick = { onClickSave() }, // TODO: 친구 id 값 넣어주기
             )
         }
 

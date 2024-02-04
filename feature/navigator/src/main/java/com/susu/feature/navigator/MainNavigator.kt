@@ -63,8 +63,8 @@ internal class MainNavigator(
                 ReceivedRoute.ledgerFilterRoute("{${ReceivedRoute.FILTER_ARGUMENT_NAME}}"),
                 ReceivedRoute.envelopeDetailRoute("{${ReceivedRoute.ENVELOPE_ARGUMENT_NAME}}", "{${ReceivedRoute.LEDGER_ID_ARGUMENT_NAME}}"),
                 ReceivedRoute.envelopeEditRoute("{${ReceivedRoute.ENVELOPE_ARGUMENT_NAME}}", "{${ReceivedRoute.LEDGER_ID_ARGUMENT_NAME}}"),
-                SentRoute.sentEnvelopeRoute,
-                SentRoute.sentEnvelopeDetailRoute,
+                SentRoute.sentEnvelopeRoute("{${SentRoute.FRIEND_ID_ARGUMENT_NAME}}"),
+                SentRoute.sentEnvelopeDetailRoute("{${SentRoute.ENVELOPE_ID_ARGUMENT_NAME}}"),
                 SentRoute.sentEnvelopeEditRoute,
                 CommunityRoute.route,
                 CommunityRoute.voteAddRoute,
@@ -103,12 +103,12 @@ internal class MainNavigator(
         }
     }
 
-    fun navigateSentEnvelope() {
-        navController.navigateSentEnvelope()
+    fun navigateSentEnvelope(id: Long) {
+        navController.navigateSentEnvelope(id)
     }
 
-    fun navigateSentEnvelopeDetail() {
-        navController.navigateSentEnvelopeDetail()
+    fun navigateSentEnvelopeDetail(id: Long) {
+        navController.navigateSentEnvelopeDetail(id)
     }
 
     fun navigateSentEnvelopeEdit() {

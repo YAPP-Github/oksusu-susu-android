@@ -48,6 +48,7 @@ internal fun CategoryInfo.toModel() = Category(
     id = id,
     seq = seq,
     name = category,
+    category = category,
     customCategory = customCategory,
     style = style,
 )

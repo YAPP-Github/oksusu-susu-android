@@ -5,8 +5,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class SentEnvelopeEditViewModel @Inject constructor() : BaseViewModel<SentEnvelopeEditState, SentEnvelopeEditSideEffect>(
+class SentEnvelopeEditViewModel @Inject constructor() : BaseViewModel<SentEnvelopeEditState, SentEnvelopeEditEffect>(
     SentEnvelopeEditState(),
 ) {
-    fun popBackStack() = postSideEffect(SentEnvelopeEditSideEffect.PopBackStack)
+    fun popBackStack() = postSideEffect(SentEnvelopeEditEffect.PopBackStack)
 }

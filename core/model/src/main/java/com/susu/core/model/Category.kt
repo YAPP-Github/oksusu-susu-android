@@ -9,6 +9,7 @@ data class Category(
     val id: Int = 0,
     val seq: Int = 0,
     val name: String = "",
+    val category: String = "",
     val customCategory: String? = null,
     val style: String = "",
 )

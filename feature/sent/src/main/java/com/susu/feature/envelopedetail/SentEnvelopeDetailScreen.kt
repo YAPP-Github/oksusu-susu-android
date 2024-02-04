@@ -11,9 +11,12 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.susu.core.designsystem.component.appbar.SusuDefaultAppBar
 import com.susu.core.designsystem.component.appbar.icon.BackIcon
 import com.susu.core.designsystem.component.appbar.icon.DeleteText
@@ -21,7 +24,9 @@ import com.susu.core.designsystem.component.appbar.icon.EditText
 import com.susu.core.designsystem.theme.Gray100
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.ui.extension.collectWithLifecycle
+import com.susu.core.ui.extension.toMoneyFormat
 import com.susu.feature.envelopedetail.component.DetailItem
+import com.susu.feature.sent.R
 
 @Composable
 fun SentEnvelopeDetailRoute(
@@ -29,20 +34,29 @@ fun SentEnvelopeDetailRoute(
     popBackStack: () -> Unit,
     navigateSentEnvelopeEdit: () -> Unit,
 ) {
+    val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
+
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
-            SentEnvelopeDetailSideEffect.PopBackStack -> popBackStack()
+            SentEnvelopeDetailEffect.PopBackStack -> popBackStack()
+            is SentEnvelopeDetailEffect.NavigateEnvelopeEdit -> navigateSentEnvelopeEdit()
         }
     }
 
+    LaunchedEffect(key1 = Unit) {
+        viewModel.getEnvelopeDetail()
+    }
+
     SentEnvelopeDetailScreen(
+        uiState = uiState,
         onClickBackIcon = viewModel::popBackStack,
-        onClickEdit = navigateSentEnvelopeEdit,
+        onClickEdit = viewModel::navigateSentEnvelopeEdit,
     )
 }
 
 @Composable
 fun SentEnvelopeDetailScreen(
+    uiState: SentEnvelopeDetailState = SentEnvelopeDetailState(),
     modifier: Modifier = Modifier,
     onClickBackIcon: () -> Unit = {},
     onClickEdit: () -> Unit = {},
@@ -72,7 +86,7 @@ fun SentEnvelopeDetailScreen(
                     Spacer(modifier = modifier.size(SusuTheme.spacing.spacing_m))
                 },
             )
-            // TODO: text 수정
+
             Column(
                 modifier = modifier
                     .fillMaxSize()
@@ -84,51 +98,55 @@ fun SentEnvelopeDetailScreen(
                     .verticalScroll(scrollState),
             ) {
                 Text(
-                    text = "150,000원",
+                    text = uiState.money.toMoneyFormat() + stringResource(R.string.sent_envelope_card_money_won),
                     style = SusuTheme.typography.title_xxl,
                     color = Gray100,
                 )
                 Spacer(modifier = modifier.size(SusuTheme.spacing.spacing_m))
                 Column {
                     DetailItem(
-                        categoryText = "경조사",
-                        contentText = "결혼식",
-                        isEmptyContent = false,
+                        categoryText = stringResource(R.string.sent_envelope_detail_category_event),
+                        contentText = uiState.event,
+                        isEmptyContent = uiState.event.isEmpty(),
                     )
                     DetailItem(
-                        categoryText = "이름",
-                        contentText = "김철수",
-                        isEmptyContent = false,
+                        categoryText = stringResource(R.string.sent_envelope_detail_category_name),
+                        contentText = uiState.name,
+                        isEmptyContent = uiState.name.isEmpty(),
                     )
                     DetailItem(
-                        categoryText = "나와의 관계",
-                        contentText = "친구",
-                        isEmptyContent = false,
+                        categoryText = stringResource(R.string.sent_envelope_detail_category_relationship),
+                        contentText = uiState.relationship,
+                        isEmptyContent = uiState.relationship.isEmpty(),
                     )
                     DetailItem(
-                        categoryText = "날짜",
-                        contentText = "2023년 11월 25일",
-                        isEmptyContent = false,
+                        categoryText = stringResource(R.string.sent_envelope_detail_category_date),
+                        contentText = uiState.date,
+                        isEmptyContent = uiState.date.isEmpty(),
                     )
                     DetailItem(
-                        categoryText = "방문 여부",
-                        contentText = "예",
-                        isEmptyContent = false,
+                        categoryText = stringResource(R.string.sent_envelope_detail_category_visited),
+                        contentText = if (uiState.visited == true) {
+                            stringResource(R.string.sent_envelope_detail_category_visited_yes)
+                        } else {
+                            stringResource(R.string.sent_envelope_detail_category_visited_no)
+                        },
+                        isEmptyContent = uiState.visited == null,
                     )
                     DetailItem(
-                        categoryText = "선물",
-                        contentText = "한끼 식사",
-                        isEmptyContent = true,
+                        categoryText = stringResource(R.string.sent_envelope_detail_category_gift),
+                        contentText = uiState.gift,
+                        isEmptyContent = uiState.gift.isEmpty(),
                     )
                     DetailItem(
-                        categoryText = "연락처",
-                        contentText = "01012345678",
-                        isEmptyContent = true,
+                        categoryText = stringResource(R.string.sent_envelope_detail_category_phone),
+                        contentText = uiState.phoneNumber,
+                        isEmptyContent = uiState.phoneNumber.isEmpty(),
                     )
                     DetailItem(
-                        categoryText = "메모",
-                        contentText = "가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하",
-                        isEmptyContent = true,
+                        categoryText = stringResource(R.string.sent_envelope_detail_category_memo),
+                        contentText = uiState.memo,
+                        isEmptyContent = uiState.memo.isEmpty(),
                     )
                 }
             }
