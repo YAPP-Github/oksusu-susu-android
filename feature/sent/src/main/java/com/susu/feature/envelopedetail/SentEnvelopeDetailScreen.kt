@@ -39,7 +39,7 @@ fun SentEnvelopeDetailRoute(
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
             SentEnvelopeDetailEffect.PopBackStack -> popBackStack()
-            is SentEnvelopeDetailEffect.NavigateEnvelopeEdit -> navigateSentEnvelopeEdit
+            is SentEnvelopeDetailEffect.NavigateEnvelopeEdit -> navigateSentEnvelopeEdit()
         }
     }
 
