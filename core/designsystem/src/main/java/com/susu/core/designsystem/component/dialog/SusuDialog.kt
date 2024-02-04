@@ -1,11 +1,9 @@
 package com.susu.core.designsystem.component.dialog
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -14,10 +12,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import com.susu.core.designsystem.component.button.FilledButtonColor
 import com.susu.core.designsystem.component.button.GhostButtonColor
 import com.susu.core.designsystem.component.button.SmallButtonStyle
@@ -30,28 +28,18 @@ import com.susu.core.designsystem.theme.SusuTheme
 
 @Composable
 fun SusuDialog(
-    modifier: Modifier = Modifier,
     title: String? = null,
     text: String? = null,
     confirmText: String = "",
     dismissText: String? = null,
-    isDimmed: Boolean = true,
     textAlign: TextAlign = TextAlign.Center,
     onConfirmRequest: () -> Unit = {},
     onDismissRequest: () -> Unit = {},
 ) {
-    val rootModifier = modifier
-        .fillMaxSize()
-        .background(color = if (isDimmed) Color.Black.copy(alpha = 0.16f) else Color.Transparent)
-        .padding(horizontal = SusuTheme.spacing.spacing_xl)
-
-    Box(
-        modifier = rootModifier,
-    ) {
+    Dialog(onDismissRequest = onDismissRequest) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .align(Alignment.Center)
                 .background(color = Gray10, shape = RoundedCornerShape(8.dp))
                 .padding(SusuTheme.spacing.spacing_xl),
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -100,7 +88,7 @@ fun SusuDialog(
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun SusuDialogPreview() {
     SusuTheme {
@@ -112,7 +100,7 @@ fun SusuDialogPreview() {
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun SusuDialogLongTitlePreview() {
     SusuTheme {

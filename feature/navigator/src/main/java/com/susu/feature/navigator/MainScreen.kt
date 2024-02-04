@@ -218,7 +218,6 @@ internal fun MainScreen(
                             text = text,
                             confirmText = confirmText,
                             dismissText = dismissText,
-                            isDimmed = isDimmed,
                             textAlign = textAlign,
                             onConfirmRequest = {
                                 onConfirmRequest()
@@ -236,7 +235,6 @@ internal fun MainScreen(
                             confirmText = confirmText,
                             dismissText = dismissText,
                             checkboxText = checkboxText!!,
-                            isDimmed = isDimmed,
                             defaultChecked = defaultChecked,
                             textAlign = textAlign,
                             onConfirmRequest = { checked ->
