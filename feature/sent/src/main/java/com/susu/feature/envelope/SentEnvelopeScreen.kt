@@ -80,8 +80,8 @@ fun SentEnvelopeRoute(
 
 @Composable
 fun SentEnvelopeScreen(
-    uiState: SentEnvelopeState = SentEnvelopeState(),
     modifier: Modifier = Modifier,
+    uiState: SentEnvelopeState = SentEnvelopeState(),
     historyListState: LazyListState = rememberLazyListState(),
     onClickBackIcon: () -> Unit = {},
     onClickSearchIcon: () -> Unit = {},
@@ -98,7 +98,7 @@ fun SentEnvelopeScreen(
                 leftIcon = {
                     BackIcon(onClickBackIcon)
                 },
-                title = uiState.envelopeInfo.last().friend.name,
+                title = uiState.envelopeInfo.friend.name,
                 actions = {
                     SearchIcon(onClickSearchIcon)
                     NotificationIcon(onClickNotificationIcon)
@@ -113,7 +113,7 @@ fun SentEnvelopeScreen(
                     ),
             ) {
                 Text(
-                    text = stringResource(R.string.sent_envelope_card_monee_total) + uiState.envelopeInfo.last().totalAmounts.toMoneyFormat() +
+                    text = stringResource(R.string.sent_envelope_card_monee_total) + uiState.envelopeInfo.totalAmounts.toMoneyFormat() +
                         stringResource(R.string.sent_envelope_card_money_won),
                     style = SusuTheme.typography.title_m,
                     color = Gray100,
@@ -121,7 +121,7 @@ fun SentEnvelopeScreen(
                 Spacer(modifier = modifier.size(SusuTheme.spacing.spacing_xxs))
                 SusuBadge(
                     color = BadgeColor.Gray30,
-                    text = (uiState.envelopeInfo.last().receivedAmounts - uiState.envelopeInfo.last().sentAmounts).toMoneyFormat() +
+                    text = (uiState.envelopeInfo.receivedAmounts - uiState.envelopeInfo.sentAmounts).toMoneyFormat() +
                         stringResource(R.string.sent_envelope_card_money_won),
                     padding = BadgeStyle.smallBadge,
                 )
@@ -142,7 +142,7 @@ fun SentEnvelopeScreen(
                     )
                 }
                 LinearProgressIndicator(
-                    progress = { uiState.envelopeInfo.last().sentAmounts.toFloat() / uiState.envelopeInfo.last().totalAmounts },
+                    progress = { uiState.envelopeInfo.sentAmounts.toFloat() / uiState.envelopeInfo.totalAmounts },
                     color = SusuTheme.colorScheme.primary,
                     trackColor = Orange20,
                     strokeCap = StrokeCap.Round,
@@ -155,12 +155,12 @@ fun SentEnvelopeScreen(
                     horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
                     Text(
-                        text = uiState.envelopeInfo.last().sentAmounts.toMoneyFormat() + stringResource(R.string.sent_envelope_card_money_won),
+                        text = uiState.envelopeInfo.sentAmounts.toMoneyFormat() + stringResource(R.string.sent_envelope_card_money_won),
                         style = SusuTheme.typography.title_xxxxs,
                         color = Gray90,
                     )
                     Text(
-                        text = uiState.envelopeInfo.last().receivedAmounts.toMoneyFormat() + stringResource(R.string.sent_envelope_card_money_won),
+                        text = uiState.envelopeInfo.receivedAmounts.toMoneyFormat() + stringResource(R.string.sent_envelope_card_money_won),
                         style = SusuTheme.typography.title_xxxxs,
                         color = Gray60,
                     )

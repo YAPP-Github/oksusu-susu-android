@@ -26,13 +26,13 @@ class SentEnvelopeViewModel @Inject constructor(
         getEnvelopeHistoryList()
     }
 
-    fun getEnvelopeInfo(id: Long = friendId) = viewModelScope.launch {
+    private fun getEnvelopeInfo(id: Long = friendId) = viewModelScope.launch {
         val friendsList: List<Long> = listOf(id)
 
         getEnvelopesListUseCase(
             GetEnvelopesListUseCase.Param(friendIds = friendsList),
         ).onSuccess { envelope ->
-            val envelopeInfo = currentState.envelopeInfo.plus(envelope).toPersistentList()
+            val envelopeInfo = envelope.getOrNull(0) ?: return@launch
             intent {
                 copy(
                     envelopeInfo = envelopeInfo,
