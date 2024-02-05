@@ -10,9 +10,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -42,10 +46,12 @@ fun SentEnvelopeSearchRoute(
     popBackStack: () -> Unit,
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
+    val focusRequester = remember { FocusRequester() }
+    val focusManager = LocalFocusManager.current
 
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
-            EnvelopeSearchEffect.FocusClear -> {}
+            EnvelopeSearchEffect.FocusClear -> focusManager.clearFocus()
             is EnvelopeSearchEffect.NavigateEnvelopDetail -> navigateSentEnvelopeDetail(sideEffect.envelopeId)
             EnvelopeSearchEffect.PopBackStack -> popBackStack()
         }
@@ -63,26 +69,32 @@ fun SentEnvelopeSearchRoute(
 
     SentEnvelopeSearchScreen(
         uiState = uiState,
+        focusRequester = focusRequester,
         onSearchKeywordUpdated = viewModel::updateSearchKeyword,
         onClickClearIcon = { viewModel.updateSearchKeyword("") },
         onSelectRecentSearch = {
+            viewModel.clearFocus()
             viewModel.upsertEnvelopeRecentSearch(it)
             viewModel.updateSearchKeyword(it)
         },
         onDeleteRecentSearch = viewModel::deleteEnvelopeRecentSearch,
         popBackStack = popBackStack,
-        onClickEnvelope = { viewModel.navigateToEnvelopeDetail(it.id) },
+        onClickEnvelope = { id, search ->
+            viewModel.upsertEnvelopeRecentSearch(search)
+            viewModel.navigateToEnvelopeDetail(id)
+        },
     )
 }
 
 @Composable
 fun SentEnvelopeSearchScreen(
     uiState: EnvelopeSearchState = EnvelopeSearchState(),
+    focusRequester: FocusRequester = remember { FocusRequester() },
     onSearchKeywordUpdated: (String) -> Unit = {},
     onClickClearIcon: () -> Unit = {},
     onSelectRecentSearch: (String) -> Unit = {},
     onDeleteRecentSearch: (String) -> Unit = {},
-    onClickEnvelope: (Envelope) -> Unit = {},
+    onClickEnvelope: (Long, String) -> Unit = { _, _ -> },
     popBackStack: () -> Unit = {},
 ) {
     Column(
@@ -98,7 +110,7 @@ fun SentEnvelopeSearchScreen(
             modifier = Modifier.padding(
                 horizontal = SusuTheme.spacing.spacing_m,
                 vertical = SusuTheme.spacing.spacing_xxs,
-            ),
+            ).focusRequester(focusRequester),
             value = uiState.searchKeyword,
             placeholder = stringResource(R.string.sent_envelope_search_search_title),
             onValueChange = onSearchKeywordUpdated,
@@ -142,7 +154,7 @@ fun SentEnvelopeSearchScreen(
                         .fillMaxWidth()
                         .padding(horizontal = SusuTheme.spacing.spacing_m),
                     searchResult = uiState.envelopeList,
-                    onClickItem = onClickEnvelope,
+                    onClickItem = { onClickEnvelope(it.id, uiState.searchKeyword) },
                 )
             }
         }

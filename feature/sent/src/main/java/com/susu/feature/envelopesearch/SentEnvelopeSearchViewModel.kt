@@ -88,4 +88,6 @@ class EnvelopeSearchViewModel @Inject constructor(
             copy(recentSearchKeywordList = searchList.toPersistentList())
         }
     }
+
+    fun clearFocus() = postSideEffect(EnvelopeSearchEffect.FocusClear)
 }
