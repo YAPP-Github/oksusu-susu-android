@@ -31,6 +31,7 @@
     <string name="sent_envelope_edit_category_phone_placeholder">01012345678</string>
     <string name="sent_envelope_edit_category_memo_placeholder">입력해주세요</string>
     <string name="sent_envelope_edit_save">저장</string>
+
     <string name="sent_envelope_add_date">%d년 %d월 %d일</string>
     <string name="sent_envelope_add_name_title">누구에게 보냈나요</string>
     <string name="sent_envelope_add_name_placeholder">이름을 입력해주세요</string>
@@ -70,4 +71,7 @@
     <string name="sent_envelope_detail_category_memo">메모</string>
     <string name="sent_envelope_detail_category_visited_yes">예</string>
     <string name="sent_envelope_detail_category_visited_no">아니요</string>
+    <string name="sent_envelope_detail_delete_title">봉투를 삭제할까요?</string>
+    <string name="sent_envelope_detail_delete_description">삭제한 봉투는 다시 복구할 수 없어요</string>
+    <string name="sent_envelope_detail_delete_snackbar">봉투가 삭제됐어요</string>
 </resources>

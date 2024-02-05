@@ -3,6 +3,7 @@ package com.susu.feature.envelopedetail
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.susu.core.ui.base.BaseViewModel
+import com.susu.domain.usecase.envelope.DeleteEnvelopeUseCase
 import com.susu.domain.usecase.envelope.GetEnvelopeDetailUseCase
 import com.susu.feature.sent.navigation.SentRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -12,6 +13,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SentEnvelopeDetailViewModel @Inject constructor(
     private val getEnvelopeDetailUseCase: GetEnvelopeDetailUseCase,
+    private val deleteEnvelopeUseCase: DeleteEnvelopeUseCase,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<SentEnvelopeDetailState, SentEnvelopeDetailEffect>(
     SentEnvelopeDetailState(),
@@ -24,6 +26,16 @@ class SentEnvelopeDetailViewModel @Inject constructor(
                     envelopeDetail = envelopeDetail,
                 )
             }
+        }
+    }
+
+    fun showDeleteDialog() {
+        postSideEffect(SentEnvelopeDetailEffect.ShowDeleteDialog)
+    }
+
+    fun deleteEnvelope() = viewModelScope.launch {
+        deleteEnvelopeUseCase(envelopeId).onSuccess {
+            postSideEffect(SentEnvelopeDetailEffect.ShowDeleteSuccessSnackBar, SentEnvelopeDetailEffect.PopBackStack)
         }
     }
 

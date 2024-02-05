@@ -8,6 +8,8 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.susu.core.model.EnvelopeDetail
+import com.susu.core.ui.DialogToken
+import com.susu.core.ui.SnackbarToken
 import com.susu.core.ui.extension.encodeToUri
 import com.susu.feature.envelope.SentEnvelopeRoute
 import com.susu.feature.envelopeadd.SentEnvelopeAddRoute
@@ -43,6 +45,8 @@ fun NavGraphBuilder.sentNavGraph(
     navigateSentEnvelopeDetail: (Long) -> Unit,
     navigateSentEnvelopeEdit: (EnvelopeDetail) -> Unit,
     navigateSentEnvelopeAdd: () -> Unit,
+    onShowSnackbar: (SnackbarToken) -> Unit,
+    onShowDialog: (DialogToken) -> Unit,
     handleException: (Throwable, () -> Unit) -> Unit,
 ) {
     composable(route = SentRoute.route) {
@@ -78,6 +82,9 @@ fun NavGraphBuilder.sentNavGraph(
         SentEnvelopeDetailRoute(
             popBackStack = popBackStack,
             navigateSentEnvelopeEdit = navigateSentEnvelopeEdit,
+            onShowSnackbar = onShowSnackbar,
+            onShowDialog = onShowDialog,
+            handleException = handleException,
         )
     }
 

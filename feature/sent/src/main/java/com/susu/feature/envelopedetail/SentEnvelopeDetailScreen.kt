@@ -13,6 +13,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -24,6 +25,8 @@ import com.susu.core.designsystem.component.appbar.icon.EditText
 import com.susu.core.designsystem.theme.Gray100
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.model.EnvelopeDetail
+import com.susu.core.ui.DialogToken
+import com.susu.core.ui.SnackbarToken
 import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.core.ui.extension.toMoneyFormat
 import com.susu.core.ui.util.to_yyyy_korYear_M_korMonth_d_korDay
@@ -36,13 +39,34 @@ fun SentEnvelopeDetailRoute(
     viewModel: SentEnvelopeDetailViewModel = hiltViewModel(),
     popBackStack: () -> Unit,
     navigateSentEnvelopeEdit: (EnvelopeDetail) -> Unit,
+    onShowSnackbar: (SnackbarToken) -> Unit,
+    onShowDialog: (DialogToken) -> Unit,
+    handleException: (Throwable, () -> Unit) -> Unit,
 ) {
+    val context = LocalContext.current
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
 
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
             SentEnvelopeDetailEffect.PopBackStack -> popBackStack()
             is SentEnvelopeDetailEffect.NavigateEnvelopeEdit -> navigateSentEnvelopeEdit(sideEffect.envelopeDetail)
+            SentEnvelopeDetailEffect.ShowDeleteDialog -> onShowDialog(
+                DialogToken(
+                    title = context.getString(R.string.sent_envelope_detail_delete_title),
+                    text = context.getString(R.string.sent_envelope_detail_delete_description),
+                    confirmText = context.getString(com.susu.core.ui.R.string.word_delete),
+                    dismissText = context.getString(com.susu.core.ui.R.string.word_cancel),
+                    onConfirmRequest = viewModel::deleteEnvelope,
+                ),
+            )
+
+            SentEnvelopeDetailEffect.ShowDeleteSuccessSnackBar -> onShowSnackbar(
+                SnackbarToken(
+                    message = context.getString(R.string.sent_envelope_detail_delete_snackbar),
+                ),
+            )
+
+            is SentEnvelopeDetailEffect.HandleException -> handleException(sideEffect.throwable, sideEffect.retry)
         }
     }
 
@@ -54,6 +78,7 @@ fun SentEnvelopeDetailRoute(
         uiState = uiState,
         onClickBackIcon = viewModel::popBackStack,
         onClickEdit = viewModel::navigateSentEnvelopeEdit,
+        onClickDelete = viewModel::showDeleteDialog,
     )
 }
 
