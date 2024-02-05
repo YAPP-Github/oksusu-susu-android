@@ -73,8 +73,6 @@ fun SentRoute(
         onClickHistory = { friendId ->
             viewModel.getEnvelopesHistoryList(friendId)
         },
-        onClickHistoryShowAll = viewModel::navigateSentEnvelope,
-        onClickAddEnvelope = viewModel::navigateSentAdd,
     )
 }
 

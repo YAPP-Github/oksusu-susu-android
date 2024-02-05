@@ -110,6 +110,7 @@ fun NavGraphBuilder.sentNavGraph(
 
     composable(route = SentRoute.sentEnvelopeSearchRoute) {
         SentEnvelopeSearchRoute(
+            navigateSentEnvelopeDetail = navigateSentEnvelopeDetail,
             popBackStack = popBackStack,
         )
     }

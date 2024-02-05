@@ -14,6 +14,6 @@ data class EnvelopeSearchState(
 
 sealed interface EnvelopeSearchEffect : SideEffect {
     data object PopBackStack : EnvelopeSearchEffect
-    data class NavigateEnvelopDetail(val envelope: Envelope) : EnvelopeSearchEffect
+    data class NavigateEnvelopDetail(val envelopeId: Long) : EnvelopeSearchEffect
     data object FocusClear : EnvelopeSearchEffect
 }

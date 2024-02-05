@@ -22,6 +22,10 @@ class EnvelopeSearchViewModel @Inject constructor(
     private val searchSentEnvelopeListUseCase: SearchSentEnvelopeListUseCase,
 ) : BaseViewModel<EnvelopeSearchState, EnvelopeSearchEffect>(EnvelopeSearchState()) {
 
+    fun navigateToEnvelopeDetail(id: Long) {
+        postSideEffect(EnvelopeSearchEffect.NavigateEnvelopDetail(id))
+    }
+
     fun getEnvelopeRecentSearchList() {
         viewModelScope.launch {
             getEnvelopeRecentSearchUserCase().onSuccess(::updateRecentSearchList)

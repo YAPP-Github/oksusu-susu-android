@@ -38,6 +38,7 @@ import kotlinx.coroutines.flow.debounce
 @Composable
 fun SentEnvelopeSearchRoute(
     viewModel: EnvelopeSearchViewModel = hiltViewModel(),
+    navigateSentEnvelopeDetail: (Long) -> Unit,
     popBackStack: () -> Unit,
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
@@ -45,7 +46,7 @@ fun SentEnvelopeSearchRoute(
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
             EnvelopeSearchEffect.FocusClear -> {}
-            is EnvelopeSearchEffect.NavigateEnvelopDetail -> {}
+            is EnvelopeSearchEffect.NavigateEnvelopDetail -> navigateSentEnvelopeDetail(sideEffect.envelopeId)
             EnvelopeSearchEffect.PopBackStack -> popBackStack()
         }
     }
@@ -70,6 +71,7 @@ fun SentEnvelopeSearchRoute(
         },
         onDeleteRecentSearch = viewModel::deleteEnvelopeRecentSearch,
         popBackStack = popBackStack,
+        onClickEnvelope = { viewModel.navigateToEnvelopeDetail(it.id) },
     )
 }
 
