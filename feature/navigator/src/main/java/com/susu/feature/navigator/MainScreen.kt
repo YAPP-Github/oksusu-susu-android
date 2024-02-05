@@ -85,6 +85,8 @@ internal fun MainScreen(
                     navigateSentEnvelopeEdit = navigator::navigateSentEnvelopeEdit,
                     navigateSentEnvelopeAdd = navigator::navigateSentEnvelopeAdd,
                     handleException = viewModel::handleException,
+                    onShowSnackbar = viewModel::onShowSnackbar,
+                    onShowDialog = viewModel::onShowDialog,
                 )
 
                 receivedNavGraph(

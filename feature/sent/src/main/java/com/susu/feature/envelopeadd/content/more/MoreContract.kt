@@ -1,9 +1,9 @@
 package com.susu.feature.envelopeadd.content.more
 
+import com.susu.core.ui.R
 import com.susu.core.ui.base.SideEffect
 import com.susu.core.ui.base.UiState
 import com.susu.feature.envelopeadd.EnvelopeAddStep
-import com.susu.feature.sent.R
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentMapOf
@@ -13,10 +13,10 @@ data class MoreState(
 ) : UiState
 
 val moreStep = persistentMapOf(
-    EnvelopeAddStep.VISITED to R.string.sent_envelope_edit_category_visited,
-    EnvelopeAddStep.PRESENT to R.string.sent_envelope_edit_category_present,
-    EnvelopeAddStep.MEMO to R.string.sent_envelope_edit_category_memo,
-    EnvelopeAddStep.PHONE to R.string.sent_envelope_edit_category_phone,
+    EnvelopeAddStep.VISITED to R.string.word_is_visited,
+    EnvelopeAddStep.PRESENT to R.string.word_gift,
+    EnvelopeAddStep.MEMO to R.string.word_memo,
+    EnvelopeAddStep.PHONE to com.susu.feature.sent.R.string.sent_add_more_step_phone,
 )
 
 sealed interface MoreSideEffect : SideEffect {

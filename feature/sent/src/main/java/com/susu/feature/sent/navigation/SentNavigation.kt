@@ -7,11 +7,16 @@ import androidx.navigation.NavOptions
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.susu.core.model.EnvelopeDetail
+import com.susu.core.ui.DialogToken
+import com.susu.core.ui.SnackbarToken
+import com.susu.core.ui.extension.encodeToUri
 import com.susu.feature.envelope.SentEnvelopeRoute
 import com.susu.feature.envelopeadd.SentEnvelopeAddRoute
 import com.susu.feature.envelopedetail.SentEnvelopeDetailRoute
 import com.susu.feature.envelopeedit.SentEnvelopeEditRoute
 import com.susu.feature.sent.SentRoute
+import kotlinx.serialization.json.Json
 
 fun NavController.navigateSent(navOptions: NavOptions) {
     navigate(SentRoute.route, navOptions)
@@ -25,8 +30,8 @@ fun NavController.navigateSentEnvelopeDetail(id: Long) {
     navigate(SentRoute.sentEnvelopeDetailRoute(id = id.toString()))
 }
 
-fun NavController.navigateSentEnvelopeEdit() {
-    navigate(SentRoute.sentEnvelopeEditRoute)
+fun NavController.navigateSentEnvelopeEdit(envelopeDetail: EnvelopeDetail) {
+    navigate(SentRoute.sentEnvelopeEditRoute(Json.encodeToUri(envelopeDetail)))
 }
 
 fun NavController.navigateSentEnvelopeAdd() {
@@ -38,8 +43,10 @@ fun NavGraphBuilder.sentNavGraph(
     popBackStack: () -> Unit,
     navigateSentEnvelope: (Long) -> Unit,
     navigateSentEnvelopeDetail: (Long) -> Unit,
-    navigateSentEnvelopeEdit: () -> Unit,
+    navigateSentEnvelopeEdit: (EnvelopeDetail) -> Unit,
     navigateSentEnvelopeAdd: () -> Unit,
+    onShowSnackbar: (SnackbarToken) -> Unit,
+    onShowDialog: (DialogToken) -> Unit,
     handleException: (Throwable, () -> Unit) -> Unit,
 ) {
     composable(route = SentRoute.route) {
@@ -75,13 +82,15 @@ fun NavGraphBuilder.sentNavGraph(
         SentEnvelopeDetailRoute(
             popBackStack = popBackStack,
             navigateSentEnvelopeEdit = navigateSentEnvelopeEdit,
+            onShowSnackbar = onShowSnackbar,
+            onShowDialog = onShowDialog,
+            handleException = handleException,
         )
     }
 
-    composable(route = SentRoute.sentEnvelopeEditRoute) {
+    composable(route = SentRoute.sentEnvelopeEditRoute("{${SentRoute.ENVELOPE_DETAIL_ARGUMENT_NAME}}")) {
         SentEnvelopeEditRoute(
             popBackStack = popBackStack,
-            navigateSentEnvelopeDetail = navigateSentEnvelopeDetail,
         )
     }
 
@@ -95,7 +104,6 @@ fun NavGraphBuilder.sentNavGraph(
 
 object SentRoute {
     const val route = "sent"
-    const val sentEnvelopeEditRoute = "sent-envelope-edit"
     const val sentEnvelopeAddRoute = "sent-envelope-add"
 
     fun sentEnvelopeRoute(id: String) = "sent-envelope/$id"
@@ -103,4 +111,7 @@ object SentRoute {
 
     fun sentEnvelopeDetailRoute(id: String) = "sent-envelope-detail/$id"
     const val ENVELOPE_ID_ARGUMENT_NAME = "sent-envelope-detail-id"
+
+    fun sentEnvelopeEditRoute(envelopeDetail: String) = "sent-envelope-edit/$envelopeDetail"
+    const val ENVELOPE_DETAIL_ARGUMENT_NAME = "envelope-detail"
 }

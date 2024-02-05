@@ -3,17 +3,17 @@ package com.susu.feature.envelopedetail
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.susu.core.ui.base.BaseViewModel
-import com.susu.core.ui.util.to_yyyy_korYear_M_korMonth_d_korDay
+import com.susu.domain.usecase.envelope.DeleteEnvelopeUseCase
 import com.susu.domain.usecase.envelope.GetEnvelopeDetailUseCase
 import com.susu.feature.sent.navigation.SentRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import kotlinx.datetime.toJavaLocalDateTime
 import javax.inject.Inject
 
 @HiltViewModel
 class SentEnvelopeDetailViewModel @Inject constructor(
     private val getEnvelopeDetailUseCase: GetEnvelopeDetailUseCase,
+    private val deleteEnvelopeUseCase: DeleteEnvelopeUseCase,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<SentEnvelopeDetailState, SentEnvelopeDetailEffect>(
     SentEnvelopeDetailState(),
@@ -23,20 +23,31 @@ class SentEnvelopeDetailViewModel @Inject constructor(
         getEnvelopeDetailUseCase(id).onSuccess { envelopeDetail ->
             intent {
                 copy(
-                    money = envelopeDetail.envelope.amount.toInt(),
-                    event = envelopeDetail.category.category,
-                    name = envelopeDetail.friend.name,
-                    relationship = envelopeDetail.relationship.relation,
-                    date = envelopeDetail.envelope.handedOverAt.toJavaLocalDateTime().to_yyyy_korYear_M_korMonth_d_korDay(),
-                    visited = envelopeDetail.envelope.hasVisited,
-                    gift = envelopeDetail.envelope.gift!!,
-                    phoneNumber = envelopeDetail.friend.phoneNumber,
-                    memo = envelopeDetail.envelope.memo!!,
+                    envelopeDetail = envelopeDetail,
                 )
             }
+        }.onFailure {
+            postSideEffect(SentEnvelopeDetailEffect.HandleException(it, ::getEnvelopeDetail))
         }
     }
 
-    fun navigateSentEnvelopeEdit() = postSideEffect(SentEnvelopeDetailEffect.NavigateEnvelopeEdit)
+    fun showDeleteDialog() {
+        postSideEffect(SentEnvelopeDetailEffect.ShowDeleteDialog)
+    }
+
+    fun deleteEnvelope() = viewModelScope.launch {
+        deleteEnvelopeUseCase(envelopeId).onSuccess {
+            postSideEffect(SentEnvelopeDetailEffect.ShowDeleteSuccessSnackBar, SentEnvelopeDetailEffect.PopBackStack)
+        }.onFailure {
+            postSideEffect(SentEnvelopeDetailEffect.HandleException(it, ::deleteEnvelope))
+        }
+    }
+
+    fun navigateSentEnvelopeEdit() = postSideEffect(
+        SentEnvelopeDetailEffect.NavigateEnvelopeEdit(
+            currentState.envelopeDetail,
+        ),
+    )
+
     fun popBackStack() = postSideEffect(SentEnvelopeDetailEffect.PopBackStack)
 }

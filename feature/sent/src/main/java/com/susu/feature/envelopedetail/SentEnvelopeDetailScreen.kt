@@ -13,6 +13,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -23,23 +24,49 @@ import com.susu.core.designsystem.component.appbar.icon.DeleteText
 import com.susu.core.designsystem.component.appbar.icon.EditText
 import com.susu.core.designsystem.theme.Gray100
 import com.susu.core.designsystem.theme.SusuTheme
+import com.susu.core.model.EnvelopeDetail
+import com.susu.core.ui.DialogToken
+import com.susu.core.ui.SnackbarToken
 import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.core.ui.extension.toMoneyFormat
+import com.susu.core.ui.util.to_yyyy_korYear_M_korMonth_d_korDay
 import com.susu.feature.envelopedetail.component.DetailItem
 import com.susu.feature.sent.R
+import kotlinx.datetime.toJavaLocalDateTime
 
 @Composable
 fun SentEnvelopeDetailRoute(
     viewModel: SentEnvelopeDetailViewModel = hiltViewModel(),
     popBackStack: () -> Unit,
-    navigateSentEnvelopeEdit: () -> Unit,
+    navigateSentEnvelopeEdit: (EnvelopeDetail) -> Unit,
+    onShowSnackbar: (SnackbarToken) -> Unit,
+    onShowDialog: (DialogToken) -> Unit,
+    handleException: (Throwable, () -> Unit) -> Unit,
 ) {
+    val context = LocalContext.current
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
 
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
             SentEnvelopeDetailEffect.PopBackStack -> popBackStack()
-            is SentEnvelopeDetailEffect.NavigateEnvelopeEdit -> navigateSentEnvelopeEdit()
+            is SentEnvelopeDetailEffect.NavigateEnvelopeEdit -> navigateSentEnvelopeEdit(sideEffect.envelopeDetail)
+            SentEnvelopeDetailEffect.ShowDeleteDialog -> onShowDialog(
+                DialogToken(
+                    title = context.getString(R.string.sent_envelope_detail_delete_title),
+                    text = context.getString(R.string.sent_envelope_detail_delete_description),
+                    confirmText = context.getString(com.susu.core.ui.R.string.word_delete),
+                    dismissText = context.getString(com.susu.core.ui.R.string.word_cancel),
+                    onConfirmRequest = viewModel::deleteEnvelope,
+                ),
+            )
+
+            SentEnvelopeDetailEffect.ShowDeleteSuccessSnackBar -> onShowSnackbar(
+                SnackbarToken(
+                    message = context.getString(R.string.sent_envelope_detail_delete_snackbar),
+                ),
+            )
+
+            is SentEnvelopeDetailEffect.HandleException -> handleException(sideEffect.throwable, sideEffect.retry)
         }
     }
 
@@ -51,13 +78,14 @@ fun SentEnvelopeDetailRoute(
         uiState = uiState,
         onClickBackIcon = viewModel::popBackStack,
         onClickEdit = viewModel::navigateSentEnvelopeEdit,
+        onClickDelete = viewModel::showDeleteDialog,
     )
 }
 
 @Composable
 fun SentEnvelopeDetailScreen(
-    uiState: SentEnvelopeDetailState = SentEnvelopeDetailState(),
     modifier: Modifier = Modifier,
+    uiState: SentEnvelopeDetailState = SentEnvelopeDetailState(),
     onClickBackIcon: () -> Unit = {},
     onClickEdit: () -> Unit = {},
     onClickDelete: () -> Unit = {},
@@ -97,57 +125,58 @@ fun SentEnvelopeDetailScreen(
                     )
                     .verticalScroll(scrollState),
             ) {
-                Text(
-                    text = uiState.money.toMoneyFormat() + stringResource(R.string.sent_envelope_card_money_won),
-                    style = SusuTheme.typography.title_xxl,
-                    color = Gray100,
-                )
-                Spacer(modifier = modifier.size(SusuTheme.spacing.spacing_m))
-                Column {
-                    DetailItem(
-                        categoryText = stringResource(R.string.sent_envelope_detail_category_event),
-                        contentText = uiState.event,
-                        isEmptyContent = uiState.event.isEmpty(),
+                with(uiState.envelopeDetail) {
+                    Text(
+                        text = envelope.amount.toMoneyFormat() + stringResource(R.string.sent_envelope_card_money_won),
+                        style = SusuTheme.typography.title_xxl,
+                        color = Gray100,
                     )
-                    DetailItem(
-                        categoryText = stringResource(R.string.sent_envelope_detail_category_name),
-                        contentText = uiState.name,
-                        isEmptyContent = uiState.name.isEmpty(),
-                    )
-                    DetailItem(
-                        categoryText = stringResource(R.string.sent_envelope_detail_category_relationship),
-                        contentText = uiState.relationship,
-                        isEmptyContent = uiState.relationship.isEmpty(),
-                    )
-                    DetailItem(
-                        categoryText = stringResource(R.string.sent_envelope_detail_category_date),
-                        contentText = uiState.date,
-                        isEmptyContent = uiState.date.isEmpty(),
-                    )
-                    DetailItem(
-                        categoryText = stringResource(R.string.sent_envelope_detail_category_visited),
-                        contentText = if (uiState.visited == true) {
-                            stringResource(R.string.sent_envelope_detail_category_visited_yes)
-                        } else {
-                            stringResource(R.string.sent_envelope_detail_category_visited_no)
-                        },
-                        isEmptyContent = uiState.visited == null,
-                    )
-                    DetailItem(
-                        categoryText = stringResource(R.string.sent_envelope_detail_category_gift),
-                        contentText = uiState.gift,
-                        isEmptyContent = uiState.gift.isEmpty(),
-                    )
-                    DetailItem(
-                        categoryText = stringResource(R.string.sent_envelope_detail_category_phone),
-                        contentText = uiState.phoneNumber,
-                        isEmptyContent = uiState.phoneNumber.isEmpty(),
-                    )
-                    DetailItem(
-                        categoryText = stringResource(R.string.sent_envelope_detail_category_memo),
-                        contentText = uiState.memo,
-                        isEmptyContent = uiState.memo.isEmpty(),
-                    )
+                    Spacer(modifier = modifier.size(SusuTheme.spacing.spacing_m))
+                    Column {
+                        DetailItem(
+                            categoryText = stringResource(com.susu.core.ui.R.string.word_event),
+                            contentText = category.category,
+                            isEmptyContent = category.category.isEmpty(),
+                        )
+                        DetailItem(
+                            categoryText = stringResource(com.susu.core.ui.R.string.word_name),
+                            contentText = friend.name,
+                            isEmptyContent = friend.name.isEmpty(),
+                        )
+                        DetailItem(
+                            categoryText = stringResource(com.susu.core.ui.R.string.word_relationship),
+                            contentText = relationship.relation,
+                            isEmptyContent = relationship.relation.isEmpty(),
+                        )
+                        DetailItem(
+                            categoryText = stringResource(com.susu.core.ui.R.string.word_date),
+                            contentText = envelope.handedOverAt.toJavaLocalDateTime().to_yyyy_korYear_M_korMonth_d_korDay(),
+                        )
+                        DetailItem(
+                            categoryText = stringResource(com.susu.core.ui.R.string.word_is_visited),
+                            contentText = if (envelope.hasVisited == true) {
+                                stringResource(com.susu.core.ui.R.string.word_yes)
+                            } else {
+                                stringResource(com.susu.core.ui.R.string.word_no)
+                            },
+                            isEmptyContent = envelope.hasVisited == null,
+                        )
+                        DetailItem(
+                            categoryText = stringResource(com.susu.core.ui.R.string.word_gift),
+                            contentText = envelope.gift ?: "",
+                            isEmptyContent = envelope.gift.isNullOrEmpty(),
+                        )
+                        DetailItem(
+                            categoryText = stringResource(com.susu.core.ui.R.string.word_phone_number),
+                            contentText = friend.phoneNumber,
+                            isEmptyContent = friend.phoneNumber.isEmpty(),
+                        )
+                        DetailItem(
+                            categoryText = stringResource(com.susu.core.ui.R.string.word_memo),
+                            contentText = envelope.memo ?: "",
+                            isEmptyContent = envelope.memo.isNullOrEmpty(),
+                        )
+                    }
                 }
             }
         }

@@ -22,15 +22,15 @@ import com.susu.core.designsystem.theme.SusuTheme
 
 @Composable
 fun DetailItem(
-    modifier: Modifier = Modifier,
     categoryText: String,
+    contentText: String,
+    modifier: Modifier = Modifier,
+    isEmptyContent: Boolean = false,
     categoryStyle: TextStyle = SusuTheme.typography.title_xxs,
     categoryTextColor: Color = Gray60,
     categoryWidth: Dp = 72.dp,
-    contentText: String,
     contentStyle: TextStyle = SusuTheme.typography.title_s,
     contentColor: Color = Gray100,
-    isEmptyContent: Boolean,
     padding: PaddingValues = PaddingValues(vertical = SusuTheme.spacing.spacing_m),
 ) {
     if (!isEmptyContent) {
