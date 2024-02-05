@@ -62,7 +62,6 @@ import kotlinx.coroutines.launch
 fun SentEnvelopeEditRoute(
     viewModel: SentEnvelopeEditViewModel = hiltViewModel(),
     popBackStack: () -> Unit,
-    navigateSentEnvelopeDetail: () -> Unit,
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
     val categoryFocusRequester = remember { FocusRequester() }

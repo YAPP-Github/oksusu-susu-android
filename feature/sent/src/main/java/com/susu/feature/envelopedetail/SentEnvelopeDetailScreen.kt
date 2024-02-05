@@ -25,8 +25,10 @@ import com.susu.core.designsystem.theme.Gray100
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.core.ui.extension.toMoneyFormat
+import com.susu.core.ui.util.to_yyyy_korYear_M_korMonth_d_korDay
 import com.susu.feature.envelopedetail.component.DetailItem
 import com.susu.feature.sent.R
+import kotlinx.datetime.toJavaLocalDateTime
 
 @Composable
 fun SentEnvelopeDetailRoute(
@@ -56,8 +58,8 @@ fun SentEnvelopeDetailRoute(
 
 @Composable
 fun SentEnvelopeDetailScreen(
-    uiState: SentEnvelopeDetailState = SentEnvelopeDetailState(),
     modifier: Modifier = Modifier,
+    uiState: SentEnvelopeDetailState = SentEnvelopeDetailState(),
     onClickBackIcon: () -> Unit = {},
     onClickEdit: () -> Unit = {},
     onClickDelete: () -> Unit = {},
@@ -97,57 +99,58 @@ fun SentEnvelopeDetailScreen(
                     )
                     .verticalScroll(scrollState),
             ) {
-                Text(
-                    text = uiState.money.toMoneyFormat() + stringResource(R.string.sent_envelope_card_money_won),
-                    style = SusuTheme.typography.title_xxl,
-                    color = Gray100,
-                )
-                Spacer(modifier = modifier.size(SusuTheme.spacing.spacing_m))
-                Column {
-                    DetailItem(
-                        categoryText = stringResource(R.string.sent_envelope_detail_category_event),
-                        contentText = uiState.event,
-                        isEmptyContent = uiState.event.isEmpty(),
+                with(uiState.envelopeDetail) {
+                    Text(
+                        text = envelope.amount.toMoneyFormat() + stringResource(R.string.sent_envelope_card_money_won),
+                        style = SusuTheme.typography.title_xxl,
+                        color = Gray100,
                     )
-                    DetailItem(
-                        categoryText = stringResource(R.string.sent_envelope_detail_category_name),
-                        contentText = uiState.name,
-                        isEmptyContent = uiState.name.isEmpty(),
-                    )
-                    DetailItem(
-                        categoryText = stringResource(R.string.sent_envelope_detail_category_relationship),
-                        contentText = uiState.relationship,
-                        isEmptyContent = uiState.relationship.isEmpty(),
-                    )
-                    DetailItem(
-                        categoryText = stringResource(R.string.sent_envelope_detail_category_date),
-                        contentText = uiState.date,
-                        isEmptyContent = uiState.date.isEmpty(),
-                    )
-                    DetailItem(
-                        categoryText = stringResource(R.string.sent_envelope_detail_category_visited),
-                        contentText = if (uiState.visited == true) {
-                            stringResource(R.string.sent_envelope_detail_category_visited_yes)
-                        } else {
-                            stringResource(R.string.sent_envelope_detail_category_visited_no)
-                        },
-                        isEmptyContent = uiState.visited == null,
-                    )
-                    DetailItem(
-                        categoryText = stringResource(R.string.sent_envelope_detail_category_gift),
-                        contentText = uiState.gift,
-                        isEmptyContent = uiState.gift.isEmpty(),
-                    )
-                    DetailItem(
-                        categoryText = stringResource(R.string.sent_envelope_detail_category_phone),
-                        contentText = uiState.phoneNumber,
-                        isEmptyContent = uiState.phoneNumber.isEmpty(),
-                    )
-                    DetailItem(
-                        categoryText = stringResource(R.string.sent_envelope_detail_category_memo),
-                        contentText = uiState.memo,
-                        isEmptyContent = uiState.memo.isEmpty(),
-                    )
+                    Spacer(modifier = modifier.size(SusuTheme.spacing.spacing_m))
+                    Column {
+                        DetailItem(
+                            categoryText = stringResource(R.string.sent_envelope_detail_category_event),
+                            contentText = category.category,
+                            isEmptyContent = category.category.isEmpty(),
+                        )
+                        DetailItem(
+                            categoryText = stringResource(R.string.sent_envelope_detail_category_name),
+                            contentText = friend.name,
+                            isEmptyContent = friend.name.isEmpty(),
+                        )
+                        DetailItem(
+                            categoryText = stringResource(R.string.sent_envelope_detail_category_relationship),
+                            contentText = relationship.relation,
+                            isEmptyContent = relationship.relation.isEmpty(),
+                        )
+                        DetailItem(
+                            categoryText = stringResource(R.string.sent_envelope_detail_category_date),
+                            contentText = envelope.handedOverAt.toJavaLocalDateTime().to_yyyy_korYear_M_korMonth_d_korDay(),
+                        )
+                        DetailItem(
+                            categoryText = stringResource(R.string.sent_envelope_detail_category_visited),
+                            contentText = if (envelope.hasVisited == true) {
+                                stringResource(R.string.sent_envelope_detail_category_visited_yes)
+                            } else {
+                                stringResource(R.string.sent_envelope_detail_category_visited_no)
+                            },
+                            isEmptyContent = envelope.hasVisited == null,
+                        )
+                        DetailItem(
+                            categoryText = stringResource(R.string.sent_envelope_detail_category_gift),
+                            contentText = envelope.gift ?: "",
+                            isEmptyContent = envelope.gift.isNullOrEmpty(),
+                        )
+                        DetailItem(
+                            categoryText = stringResource(R.string.sent_envelope_detail_category_phone),
+                            contentText = friend.phoneNumber,
+                            isEmptyContent = friend.phoneNumber.isEmpty(),
+                        )
+                        DetailItem(
+                            categoryText = stringResource(R.string.sent_envelope_detail_category_memo),
+                            contentText = envelope.memo ?: "",
+                            isEmptyContent = envelope.memo.isNullOrEmpty(),
+                        )
+                    }
                 }
             }
         }
