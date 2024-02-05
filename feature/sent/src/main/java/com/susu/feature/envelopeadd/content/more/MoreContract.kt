@@ -1,8 +1,8 @@
 package com.susu.feature.envelopeadd.content.more
 
+import com.susu.core.ui.R
 import com.susu.core.ui.base.SideEffect
 import com.susu.core.ui.base.UiState
-import com.susu.core.ui.R
 import com.susu.feature.envelopeadd.EnvelopeAddStep
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
