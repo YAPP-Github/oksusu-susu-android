@@ -1,10 +1,12 @@
 package com.susu.data.remote.di
 
 import com.susu.data.remote.api.AuthService
+import com.susu.data.remote.api.BlockService
 import com.susu.data.remote.api.CategoryService
 import com.susu.data.remote.api.EnvelopesService
 import com.susu.data.remote.api.FriendService
 import com.susu.data.remote.api.LedgerService
+import com.susu.data.remote.api.ReportService
 import com.susu.data.remote.api.SignUpService
 import com.susu.data.remote.api.StatisticsService
 import com.susu.data.remote.api.TermService
@@ -86,5 +88,17 @@ object ApiServiceModule {
     @Provides
     fun providesVoteService(retrofit: Retrofit): VoteService {
         return retrofit.create(VoteService::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun providesReportService(retrofit: Retrofit): ReportService {
+        return retrofit.create(ReportService::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun providesBlockService(retrofit: Retrofit): BlockService {
+        return retrofit.create(BlockService::class.java)
     }
 }

@@ -48,16 +48,16 @@ fun NavController.navigateLedgerAdd() {
     navigate(ReceivedRoute.ledgerAddRoute)
 }
 
-fun NavController.navigateReceivedEnvelopeAdd(categoryName: String, ledgerId: Long) {
-    navigate(ReceivedRoute.envelopeAddRoute(categoryName, ledgerId.toString()))
+fun NavController.navigateReceivedEnvelopeAdd(ledger: Ledger) {
+    navigate(ReceivedRoute.envelopeAddRoute(Json.encodeToUri(ledger)))
 }
 
-fun NavController.navigateReceivedEnvelopeDetail(envelope: Envelope) {
-    navigate(ReceivedRoute.envelopeDetailRoute(Json.encodeToUri(envelope)))
+fun NavController.navigateReceivedEnvelopeDetail(envelope: Envelope, ledger: Ledger) {
+    navigate(ReceivedRoute.envelopeDetailRoute(Json.encodeToUri(envelope), Json.encodeToUri(ledger)))
 }
 
-fun NavController.navigateReceivedEnvelopeEdit() {
-    navigate(ReceivedRoute.envelopeEditRoute)
+fun NavController.navigateReceivedEnvelopeEdit(envelope: Envelope, ledger: Ledger) {
+    navigate(ReceivedRoute.envelopeEditRoute(Json.encodeToUri(envelope), Json.encodeToUri(ledger)))
 }
 
 @Suppress("detekt:LongMethod")
@@ -72,9 +72,9 @@ fun NavGraphBuilder.receivedNavGraph(
     navigateLedgerEdit: (Ledger) -> Unit,
     navigateLedgerFilter: (FilterArgument) -> Unit,
     navigateLedgerAdd: () -> Unit,
-    navigateEnvelopAdd: (String, Long) -> Unit,
-    navigateEnvelopeDetail: (Envelope) -> Unit,
-    navigateEnvelopeEdit: () -> Unit,
+    navigateEnvelopAdd: (Ledger) -> Unit,
+    navigateEnvelopeDetail: (Envelope, Ledger) -> Unit,
+    navigateEnvelopeEdit: (Envelope, Ledger) -> Unit,
     popBackStackWithEnvelope: (String) -> Unit,
     popBackStackWithDeleteReceivedEnvelopeId: (Long) -> Unit,
     onShowSnackbar: (SnackbarToken) -> Unit,
@@ -158,13 +158,7 @@ fun NavGraphBuilder.receivedNavGraph(
 
     composable(
         route = ReceivedRoute.envelopeAddRoute(
-            categoryName = "{${ReceivedRoute.CATEGORY_ARGUMENT_NAME}}",
-            ledgerId = "{${ReceivedRoute.LEDGER_ID_ARGUMENT_NAME}}",
-        ),
-        arguments = listOf(
-            navArgument(ReceivedRoute.CATEGORY_ARGUMENT_NAME) {
-                type = NavType.StringType
-            },
+            ledger = "{${ReceivedRoute.LEDGER_ARGUMENT_NAME}}",
         ),
     ) {
         ReceivedEnvelopeAddRoute(
@@ -176,10 +170,14 @@ fun NavGraphBuilder.receivedNavGraph(
     }
 
     composable(
-        route = ReceivedRoute.envelopeDetailRoute("{${ReceivedRoute.ENVELOPE_ARGUMENT_NAME}}"),
+        route = ReceivedRoute.envelopeDetailRoute(
+            envelope = "{${ReceivedRoute.ENVELOPE_ARGUMENT_NAME}}",
+            ledger = "{${ReceivedRoute.LEDGER_ARGUMENT_NAME}}",
+        ),
     ) {
         ReceivedEnvelopeDetailRoute(
             popBackStackWithDeleteReceivedEnvelopeId = popBackStackWithDeleteReceivedEnvelopeId,
+            popBackStackWithReceivedEnvelope = popBackStackWithEnvelope,
             navigateReceivedEnvelopeEdit = navigateEnvelopeEdit,
             onShowSnackbar = onShowSnackbar,
             onShowDialog = onShowDialog,
@@ -188,9 +186,15 @@ fun NavGraphBuilder.receivedNavGraph(
     }
 
     composable(
-        route = ReceivedRoute.envelopeEditRoute,
+        route = ReceivedRoute.envelopeEditRoute(
+            envelope = "{${ReceivedRoute.ENVELOPE_ARGUMENT_NAME}}",
+            ledger = "{${ReceivedRoute.LEDGER_ARGUMENT_NAME}}",
+        ),
     ) {
-        ReceivedEnvelopeEditRoute(popBackStack = popBackStack)
+        ReceivedEnvelopeEditRoute(
+            popBackStack = popBackStack,
+            handleException = handleException,
+        )
     }
 }
 
@@ -210,7 +214,7 @@ object ReceivedRoute {
 
     const val ledgerAddRoute = "ledger-add"
 
-    fun envelopeAddRoute(categoryName: String, ledgerId: String) = "envelope-add/$categoryName/$ledgerId"
-    fun envelopeDetailRoute(envelope: String) = "envelope-detail/$envelope"
-    const val envelopeEditRoute = "envelope-edit" // TODO 파라미터 넘기는 방식으로 수정해야함.
+    fun envelopeAddRoute(ledger: String) = "envelope-add/$ledger"
+    fun envelopeDetailRoute(envelope: String, ledger: String) = "envelope-detail/$envelope/$ledger"
+    fun envelopeEditRoute(envelope: String, ledger: String) = "envelope-edit/$envelope/$ledger"
 }

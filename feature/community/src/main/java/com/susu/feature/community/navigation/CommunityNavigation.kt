@@ -7,12 +7,16 @@ import androidx.navigation.NavOptions
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.susu.core.model.Vote
 import com.susu.core.ui.DialogToken
 import com.susu.core.ui.SnackbarToken
+import com.susu.core.ui.extension.encodeToUri
 import com.susu.feature.community.community.CommunityRoute
 import com.susu.feature.community.voteadd.VoteAddRoute
 import com.susu.feature.community.votedetail.VoteDetailRoute
+import com.susu.feature.community.voteedit.VoteEditRoute
 import com.susu.feature.community.votesearch.VoteSearchRoute
+import kotlinx.serialization.json.Json
 
 fun NavController.navigateVoteAdd() {
     navigate(CommunityRoute.voteAddRoute)
@@ -30,31 +34,43 @@ fun NavController.navigateVoteDetail(voteId: Long) {
     navigate(CommunityRoute.voteDetailRoute(voteId.toString()))
 }
 
+fun NavController.navigateVoteEdit(vote: Vote) {
+    navigate(CommunityRoute.voteEditRoute(Json.encodeToUri(vote)))
+}
+
 fun NavGraphBuilder.communityNavGraph(
     padding: PaddingValues,
     navigateVoteAdd: () -> Unit,
     navigateVoteSearch: () -> Unit,
     navigateVoteDetail: (Long) -> Unit,
+    navigateVoteEdit: (Vote) -> Unit,
     popBackStack: () -> Unit,
     popBackStackWithVote: (String) -> Unit,
     popBackStackWithToUpdateVote: (String) -> Unit,
-    @Suppress("detekt:UnusedParameter")
+    popBackStackWithDeleteVoteId: (Long) -> Unit,
+    popBackStackWithNeedRefresh: (Boolean) -> Unit,
     onShowSnackbar: (SnackbarToken) -> Unit,
-    @Suppress("detekt:UnusedParameter")
     onShowDialog: (DialogToken) -> Unit,
     handleException: (Throwable, () -> Unit) -> Unit,
 ) {
     composable(route = CommunityRoute.route) { navBackStackEntry ->
         val vote = navBackStackEntry.savedStateHandle.get<String>(CommunityRoute.VOTE_ARGUMENT_NAME)
         val toUpdateVote = navBackStackEntry.savedStateHandle.get<String>(CommunityRoute.TO_UPDATE_VOTE_ARGUMENT_NAME)
+        val toDeleteVoteId = navBackStackEntry.savedStateHandle.get<Long>(CommunityRoute.VOTE_ID_ARGUMENT_NAME)
+        val needRefresh = navBackStackEntry.savedStateHandle.get<Boolean>(CommunityRoute.NEED_REFRESH_ARGUMENT_NAME) ?: false
+        navBackStackEntry.savedStateHandle[CommunityRoute.NEED_REFRESH_ARGUMENT_NAME] = false
 
         CommunityRoute(
             padding = padding,
             vote = vote,
+            needRefresh = needRefresh,
+            toDeleteVoteId = toDeleteVoteId,
             toUpdateVote = toUpdateVote,
             navigateVoteAdd = navigateVoteAdd,
             navigateVoteSearch = navigateVoteSearch,
             navigateVoteDetail = navigateVoteDetail,
+            onShowDialog = onShowDialog,
+            onShowSnackbar = onShowSnackbar,
             handleException = handleException,
         )
     }
@@ -79,6 +95,11 @@ fun NavGraphBuilder.communityNavGraph(
     ) {
         VoteDetailRoute(
             popBackStackWithToUpdateVote = popBackStackWithToUpdateVote,
+            popBackStackWithDeleteVoteId = popBackStackWithDeleteVoteId,
+            popBackStackWithNeedRefresh = popBackStackWithNeedRefresh,
+            navigateVoteEdit = navigateVoteEdit,
+            onShowDialog = onShowDialog,
+            onShowSnackbar = onShowSnackbar,
             handleException = handleException,
         )
     }
@@ -86,7 +107,20 @@ fun NavGraphBuilder.communityNavGraph(
     composable(
         route = CommunityRoute.voteSearchRoute,
     ) {
-        VoteSearchRoute(popBackStack = popBackStack, navigateVoteDetail = navigateVoteDetail)
+        VoteSearchRoute(
+            popBackStack = popBackStack,
+            navigateVoteDetail = navigateVoteDetail,
+        )
+    }
+
+    composable(
+        route = CommunityRoute.voteEditRoute("{${CommunityRoute.VOTE_ARGUMENT_NAME}}"),
+    ) {
+        VoteEditRoute(
+            popBackStack = popBackStack,
+            onShowSnackbar = onShowSnackbar,
+            handleException = handleException,
+        )
     }
 }
 
@@ -98,6 +132,8 @@ object CommunityRoute {
     const val VOTE_ARGUMENT_NAME = "vote"
     const val VOTE_ID_ARGUMENT_NAME = "vote-id"
     const val TO_UPDATE_VOTE_ARGUMENT_NAME = "to-update-vote"
+    const val NEED_REFRESH_ARGUMENT_NAME = "need-refresh"
 
     fun voteDetailRoute(voteId: String) = "vote-detail/$voteId"
+    fun voteEditRoute(vote: String) = "vote-edit/$vote"
 }

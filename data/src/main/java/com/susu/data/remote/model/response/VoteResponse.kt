@@ -11,7 +11,7 @@ import kotlinx.serialization.Serializable
 data class VoteResponse(
     val id: Long,
     val uid: Long = 0,
-    val boardName: String,
+    val board: BoardResponse,
     val content: String,
     val isModified: Boolean,
     val createdAt: LocalDateTime = java.time.LocalDateTime.now().toKotlinLocalDateTime(),
@@ -20,10 +20,17 @@ data class VoteResponse(
     val optionList: List<VoteOption>,
 )
 
+@Serializable
+data class BoardResponse(
+    val id: Long,
+    val name: String,
+)
+
 internal fun VoteResponse.toModel() = Vote(
     id = id,
     uid = uid,
-    boardName = boardName,
+    boardId = board.id,
+    boardName = board.name,
     content = content,
     count = count,
     isModified = isModified,

@@ -3,8 +3,8 @@ package com.susu.feature.community.votedetail
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -26,6 +26,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -44,6 +45,9 @@ import com.susu.core.designsystem.theme.Gray15
 import com.susu.core.designsystem.theme.Gray50
 import com.susu.core.designsystem.theme.Orange60
 import com.susu.core.designsystem.theme.SusuTheme
+import com.susu.core.model.Vote
+import com.susu.core.ui.DialogToken
+import com.susu.core.ui.SnackbarToken
 import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.core.ui.extension.susuClickable
 import com.susu.core.ui.util.to_yyyy_dot_MM_dot_dd
@@ -57,15 +61,56 @@ import java.time.temporal.ChronoUnit
 @Composable
 fun VoteDetailRoute(
     viewModel: VoteDetailViewModel = hiltViewModel(),
+    popBackStackWithDeleteVoteId: (Long) -> Unit,
     popBackStackWithToUpdateVote: (String) -> Unit,
+    popBackStackWithNeedRefresh: (Boolean) -> Unit,
+    navigateVoteEdit: (Vote) -> Unit,
+    onShowSnackbar: (SnackbarToken) -> Unit,
+    onShowDialog: (DialogToken) -> Unit,
     handleException: (Throwable, () -> Unit) -> Unit,
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
+    val context = LocalContext.current
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
             is VoteDetailSideEffect.HandleException -> handleException(sideEffect.throwable, sideEffect.retry)
             is VoteDetailSideEffect.PopBackStackWithToUpdateVote -> popBackStackWithToUpdateVote(sideEffect.vote)
-            is VoteDetailSideEffect.PopBackStackWithVote -> TODO()
+            is VoteDetailSideEffect.NavigateVoteEdit -> navigateVoteEdit(sideEffect.vote)
+            is VoteDetailSideEffect.PopBackStackWithDeleteVoteId -> popBackStackWithDeleteVoteId(sideEffect.voteId)
+            is VoteDetailSideEffect.ShowDeleteDialog -> {
+                onShowDialog(
+                    DialogToken(
+                        title = context.getString(R.string.delete_vote_dialog_title),
+                        text = context.getString(R.string.delete_vote_dialog_body),
+                        confirmText = context.getString(com.susu.core.ui.R.string.word_delete),
+                        dismissText = context.getString(com.susu.core.ui.R.string.word_cancel),
+                        onConfirmRequest = sideEffect.onConfirmRequest,
+                    ),
+                )
+            }
+
+            VoteDetailSideEffect.ShowDeleteSuccessSnackbar -> {
+                onShowSnackbar(
+                    SnackbarToken(
+                        message = context.getString(R.string.delete_vote_success_toast),
+                    ),
+                )
+            }
+
+            VoteDetailSideEffect.PopBackStackWithNeedRefresh -> popBackStackWithNeedRefresh(true)
+            is VoteDetailSideEffect.ShowReportDialog -> onShowDialog(
+                DialogToken(
+                    title = context.getString(R.string.dialog_report_title),
+                    text = context.getString(R.string.dialog_report_body),
+                    confirmText = context.getString(R.string.dialog_report_confirm_text),
+                    dismissText = context.getString(R.string.dialog_report_dismiss_text),
+                    checkboxText = context.getString(R.string.dialog_report_checkbox_text),
+                    onConfirmRequest = sideEffect.onConfirmRequest,
+                    onCheckedAction = sideEffect.onCheckedAction,
+                ),
+            )
+
+            is VoteDetailSideEffect.ShowSnackbar -> onShowSnackbar(SnackbarToken(message = sideEffect.message))
         }
     }
 
@@ -92,7 +137,10 @@ fun VoteDetailRoute(
         uiState = uiState,
         currentTime = currentTime,
         onClickBack = viewModel::popBackStack,
+        onClickEdit = viewModel::navigateVoteEdit,
+        onClickDelete = viewModel::showDeleteDialog,
         onClickOption = viewModel::vote,
+        onClickReport = viewModel::showReportDialog,
     )
 }
 
@@ -150,14 +198,23 @@ fun VoteDetailScreen(
                 horizontalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxs),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                Image(
-                    modifier = Modifier
-                        .clip(CircleShape)
-                        .size(20.dp)
-                        .border(width = 1.dp, color = Gray15, shape = CircleShape),
-                    painter = painterResource(id = com.susu.core.ui.R.drawable.img_default_profile),
-                    contentDescription = null,
-                )
+                // border를 사용하지 않은 이유 see -> https://stackoverflow.com/questions/75964726/jetpack-compose-circle-shape-border-not-being-applied-as-expected
+                Box {
+                    Box(
+                        modifier = Modifier
+                            .size(20.dp)
+                            .clip(CircleShape)
+                            .background(Gray15),
+                    )
+                    Image(
+                        modifier = Modifier
+                            .size(18.dp)
+                            .clip(CircleShape)
+                            .align(Alignment.Center),
+                        painter = painterResource(id = com.susu.core.ui.R.drawable.img_default_profile),
+                        contentDescription = null,
+                    )
+                }
 
                 Text(text = stringResource(R.string.word_anonymous_susu), style = SusuTheme.typography.title_xxxs)
 

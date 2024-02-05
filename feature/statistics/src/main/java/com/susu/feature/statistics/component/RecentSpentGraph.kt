@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -35,6 +36,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.susu.core.designsystem.component.text.AnimatedCounterText
 import com.susu.core.designsystem.theme.Blue60
 import com.susu.core.designsystem.theme.Gray10
 import com.susu.core.designsystem.theme.Gray100
@@ -59,6 +61,7 @@ fun RecentSpentGraph(
     spentData: PersistentList<StatisticsElement> = persistentListOf(),
     totalAmount: Int = 0,
     maximumAmount: Int = 0,
+    graphTitle: String = "",
 ) {
     Column(
         modifier = modifier
@@ -74,15 +77,17 @@ fun RecentSpentGraph(
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             Text(
-                text = stringResource(R.string.statistics_recent_8_total_money),
+                text = graphTitle,
                 style = SusuTheme.typography.title_xs,
                 color = Gray100,
             )
             if (isActive) {
-                Text(
-                    text = stringResource(R.string.statistics_total_man_format, totalAmount.toString()),
+                AnimatedCounterText(
+                    number = totalAmount,
                     style = SusuTheme.typography.title_xs,
                     color = Blue60,
+                    prefix = stringResource(id = R.string.statistics_total_man_prefix),
+                    postfix = stringResource(id = R.string.statistics_total_man_postfix),
                 )
             } else {
                 Text(
@@ -107,38 +112,43 @@ fun RecentSpentGraph(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            spentData.forEachIndexed { i, data ->
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                ) {
-                    StickGraph(
-                        ratio = data.value.toFloat() / maximumAmount,
-                        color = if (isActive) {
-                            if (i == spentData.lastIndex) {
-                                Orange60
+            if (maximumAmount > 0) {
+                spentData.forEachIndexed { i, data ->
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                    ) {
+                        StickGraph(
+                            ratio = data.value.toFloat() / maximumAmount,
+                            color = if (isActive) {
+                                if (i == spentData.lastIndex) {
+                                    Orange60
+                                } else {
+                                    Orange30
+                                }
                             } else {
-                                Orange30
-                            }
-                        } else {
-                            if (i == spentData.lastIndex) {
-                                Gray60
+                                if (i == spentData.lastIndex) {
+                                    Gray60
+                                } else {
+                                    Gray30
+                                }
+                            },
+                        )
+                        Spacer(modifier = Modifier.height(SusuTheme.spacing.spacing_xxxxs))
+                        Text(
+                            text = stringResource(id = R.string.word_month_format, data.title),
+                            style = SusuTheme.typography.title_xxxs,
+                            color = if (i == spentData.lastIndex) {
+                                Gray90
                             } else {
-                                Gray30
-                            }
-                        },
-                    )
-                    Spacer(modifier = Modifier.height(SusuTheme.spacing.spacing_xxxxs))
-                    Text(
-                        text = stringResource(id = R.string.word_month_format, data.title),
-                        style = SusuTheme.typography.title_xxxs,
-                        color = if (i == spentData.lastIndex) {
-                            Gray90
-                        } else {
-                            Gray40
-                        },
-                    )
+                                Gray40
+                            },
+                        )
+                    }
+                    Spacer(modifier = Modifier.width(SusuTheme.spacing.spacing_s))
                 }
-                Spacer(modifier = Modifier.width(SusuTheme.spacing.spacing_s))
+            } else {
+                // TODO: 데이터가 없을 땐?
+                Spacer(modifier = Modifier.fillMaxSize())
             }
         }
     }

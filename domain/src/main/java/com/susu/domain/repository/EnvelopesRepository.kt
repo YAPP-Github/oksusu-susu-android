@@ -1,20 +1,22 @@
 package com.susu.domain.repository
 
 import com.susu.core.model.Envelope
-import com.susu.core.model.EnvelopeStatics
+import com.susu.core.model.EnvelopeDetail
+import com.susu.core.model.EnvelopeSearch
+import com.susu.core.model.FriendStatistics
 import com.susu.core.model.Relationship
 import com.susu.core.model.SearchEnvelope
 import kotlinx.datetime.LocalDateTime
 
 interface EnvelopesRepository {
     suspend fun getEnvelopesList(
-        friendIds: List<Int>?,
+        friendIds: List<Long>?,
         fromTotalAmounts: Int?,
         toTotalAmounts: Int?,
         page: Int?,
         size: Int?,
         sort: String?,
-    ): List<EnvelopeStatics>
+    ): List<FriendStatistics>
 
     suspend fun getRelationShipConfigList(): List<Relationship>
 
@@ -30,6 +32,22 @@ interface EnvelopesRepository {
         categoryId: Long? = null,
         customCategory: String? = null,
     ): Envelope
+
+    suspend fun getEnvelopesHistoryList(
+        friendIds: List<Long>?,
+        ledgerId: Int?,
+        type: List<String>?,
+        include: List<String>?,
+        fromAmount: Int?,
+        toAmount: Int?,
+        page: Int?,
+        size: Int?,
+        sort: String?,
+    ): List<EnvelopeSearch>
+
+    suspend fun getEnvelopeDetail(
+        id: Long,
+    ): EnvelopeDetail
 
     suspend fun searchEnvelope(
         friendIds: List<Int>?,
@@ -49,4 +67,18 @@ interface EnvelopesRepository {
     suspend fun deleteEnvelope(
         id: Long,
     )
+
+    suspend fun editEnvelope(
+        id: Long,
+        type: String,
+        friendId: Long,
+        ledgerId: Long? = null,
+        amount: Long,
+        gift: String? = null,
+        memo: String? = null,
+        hasVisited: Boolean? = null,
+        handedOverAt: LocalDateTime,
+        categoryId: Long? = null,
+        customCategory: String? = null,
+    ): Envelope
 }

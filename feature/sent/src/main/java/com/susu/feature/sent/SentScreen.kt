@@ -12,19 +12,20 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.susu.core.designsystem.component.appbar.SusuDefaultAppBar
 import com.susu.core.designsystem.component.appbar.icon.LogoIcon
 import com.susu.core.designsystem.component.appbar.icon.NotificationIcon
@@ -36,35 +37,59 @@ import com.susu.core.designsystem.component.button.SusuGhostButton
 import com.susu.core.designsystem.theme.Gray100
 import com.susu.core.designsystem.theme.Gray50
 import com.susu.core.designsystem.theme.SusuTheme
+import com.susu.core.ui.extension.OnBottomReached
+import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.feature.sent.component.SentCard
 
 @Composable
 fun SentRoute(
+    viewModel: SentViewModel = hiltViewModel(),
     padding: PaddingValues,
-    navigateSentEnvelope: () -> Unit,
+    navigateSentEnvelope: (Long) -> Unit,
     navigateSentEnvelopeAdd: () -> Unit,
     navigateSentEnvelopeSearch: () -> Unit,
 ) {
+    val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
+    val envelopesListState = rememberLazyListState()
+
+    viewModel.sideEffect.collectWithLifecycle { sideEffect ->
+        when (sideEffect) {
+            SentEffect.NavigateEnvelopeAdd -> navigateSentEnvelopeAdd()
+            is SentEffect.NavigateEnvelope -> navigateSentEnvelope(sideEffect.id)
+        }
+    }
+
+    envelopesListState.OnBottomReached {
+        viewModel.getEnvelopesList()
+    }
+
     SentScreen(
+        uiState = uiState,
+        envelopesListState = envelopesListState,
         padding = padding,
         onClickHistoryShowAll = navigateSentEnvelope,
         onClickAddEnvelope = navigateSentEnvelopeAdd,
         onClickSearchIcon = navigateSentEnvelopeSearch,
+        onClickHistory = { friendId ->
+            viewModel.getEnvelopesHistoryList(friendId)
+        },
+        onClickHistoryShowAll = viewModel::navigateSentEnvelope,
+        onClickAddEnvelope = viewModel::navigateSentAdd,
     )
 }
 
 @Composable
 fun SentScreen(
-    padding: PaddingValues,
     modifier: Modifier = Modifier,
+    uiState: SentState = SentState(),
+    envelopesListState: LazyListState = rememberLazyListState(),
+    padding: PaddingValues,
     onClickSearchIcon: () -> Unit = {},
     onClickNotificationIcon: () -> Unit = {},
-    onClickHistoryShowAll: () -> Unit = {},
+    onClickHistory: (Long) -> Unit = {},
+    onClickHistoryShowAll: (Long) -> Unit = {},
     onClickAddEnvelope: () -> Unit = {},
 ) {
-    // TODO: 수정 필요 (확인을 위해 false로 설정)
-    var isEmpty by remember { mutableStateOf(false) }
-
     Box(
         modifier = Modifier
             .background(SusuTheme.colorScheme.background15)
@@ -84,28 +109,43 @@ fun SentScreen(
                 },
             )
 
-            if (!isEmpty) {
-                LazyColumn(
-                    verticalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxs),
-                    contentPadding = PaddingValues(SusuTheme.spacing.spacing_m),
-                ) {
-                    // TODO: 수정 필요
-                    item {
-                        FilterSection(
-                            padding = PaddingValues(
-                                bottom = SusuTheme.spacing.spacing_xxs,
-                            ),
-                        )
-                    }
-                    items(8) {
-                        SentCard(onClick = onClickHistoryShowAll)
-                    }
+            LazyColumn(
+                modifier = modifier.fillMaxSize(),
+                state = envelopesListState,
+                verticalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxs),
+                contentPadding = PaddingValues(SusuTheme.spacing.spacing_m),
+            ) {
+                item {
+                    FilterSection(
+                        padding = PaddingValues(
+                            bottom = SusuTheme.spacing.spacing_xxs,
+                        ),
+                    )
                 }
-            } else {
+
+                items(
+                    items = uiState.envelopesList,
+                    key = { it.friend.id },
+                ) {
+                    SentCard(
+                        uiState = it,
+                        friend = it.friend,
+                        totalAmounts = it.totalAmounts,
+                        sentAmounts = it.sentAmounts,
+                        receivedAmounts = it.receivedAmounts,
+                        onClickHistory = onClickHistory,
+                        onClickHistoryShowAll = onClickHistoryShowAll,
+                    )
+                }
+            }
+
+            if (uiState.showEmptyEnvelopes) {
                 FilterSection(
                     padding = PaddingValues(SusuTheme.spacing.spacing_m),
                 )
-                EmptyView()
+                EmptyView(
+                    onClickAddEnvelope = onClickAddEnvelope,
+                )
             }
         }
 
@@ -161,6 +201,7 @@ fun FilterSection(
 @Composable
 fun EmptyView(
     modifier: Modifier = Modifier,
+    onClickAddEnvelope: () -> Unit = {},
 ) {
     Column(
         modifier = modifier.fillMaxSize(),
@@ -177,6 +218,7 @@ fun EmptyView(
             color = GhostButtonColor.Black,
             style = SmallButtonStyle.height40,
             text = stringResource(R.string.sent_screen_empty_view_add_button),
+            onClick = onClickAddEnvelope,
         )
     }
 }

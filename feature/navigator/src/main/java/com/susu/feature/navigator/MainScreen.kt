@@ -86,6 +86,8 @@ internal fun MainScreen(
                     navigateSentEnvelopeAdd = navigator::navigateSentEnvelopeAdd,
                     navigateSentEnvelopeSearch = navigator::navigateSentEnvelopeSearch,
                     handleException = viewModel::handleException,
+                    onShowSnackbar = viewModel::onShowSnackbar,
+                    onShowDialog = viewModel::onShowDialog,
                 )
 
                 receivedNavGraph(
@@ -140,6 +142,7 @@ internal fun MainScreen(
                 )
 
                 statisticsNavGraph(
+                    padding = innerPadding,
                     navigateToMyInfo = navigator::navigateMyPageInfo,
                     onShowDialog = viewModel::onShowDialog,
                     handleException = viewModel::handleException,
@@ -150,6 +153,7 @@ internal fun MainScreen(
                     navigateVoteAdd = navigator::navigateVoteAdd,
                     navigateVoteSearch = navigator::navigateVoteSearch,
                     navigateVoteDetail = navigator::navigateVoteDetail,
+                    navigateVoteEdit = navigator::navigateVoteEdit,
                     popBackStack = navigator::popBackStackIfNotHome,
                     popBackStackWithVote = { vote ->
                         navigator.navController.previousBackStackEntry?.savedStateHandle?.set(
@@ -162,6 +166,20 @@ internal fun MainScreen(
                         navigator.navController.previousBackStackEntry?.savedStateHandle?.set(
                             CommunityRoute.TO_UPDATE_VOTE_ARGUMENT_NAME,
                             vote,
+                        )
+                        navigator.popBackStackIfNotHome()
+                    },
+                    popBackStackWithDeleteVoteId = { voteId ->
+                        navigator.navController.previousBackStackEntry?.savedStateHandle?.set(
+                            CommunityRoute.VOTE_ID_ARGUMENT_NAME,
+                            voteId,
+                        )
+                        navigator.popBackStackIfNotHome()
+                    },
+                    popBackStackWithNeedRefresh = { needRefresh ->
+                        navigator.navController.previousBackStackEntry?.savedStateHandle?.set(
+                            CommunityRoute.NEED_REFRESH_ARGUMENT_NAME,
+                            needRefresh,
                         )
                         navigator.popBackStackIfNotHome()
                     },
@@ -203,7 +221,6 @@ internal fun MainScreen(
                             text = text,
                             confirmText = confirmText,
                             dismissText = dismissText,
-                            isDimmed = isDimmed,
                             textAlign = textAlign,
                             onConfirmRequest = {
                                 onConfirmRequest()
@@ -221,7 +238,6 @@ internal fun MainScreen(
                             confirmText = confirmText,
                             dismissText = dismissText,
                             checkboxText = checkboxText!!,
-                            isDimmed = isDimmed,
                             defaultChecked = defaultChecked,
                             textAlign = textAlign,
                             onConfirmRequest = { checked ->

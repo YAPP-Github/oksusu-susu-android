@@ -1,5 +1,6 @@
 package com.susu.feature.received.envelopedetail
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -23,17 +25,23 @@ import com.susu.core.designsystem.component.appbar.icon.DeleteText
 import com.susu.core.designsystem.component.appbar.icon.EditText
 import com.susu.core.designsystem.theme.Gray100
 import com.susu.core.designsystem.theme.SusuTheme
+import com.susu.core.model.Envelope
+import com.susu.core.model.Ledger
 import com.susu.core.ui.DialogToken
 import com.susu.core.ui.SnackbarToken
 import com.susu.core.ui.extension.collectWithLifecycle
+import com.susu.core.ui.extension.toMoneyFormat
+import com.susu.core.ui.util.to_yyyy_korYear_M_korMonth_d_korDay
 import com.susu.feature.received.R
 import com.susu.feature.received.envelopedetail.component.DetailItem
+import kotlinx.datetime.toJavaLocalDateTime
 
 @Composable
 fun ReceivedEnvelopeDetailRoute(
     viewModel: ReceivedEnvelopeDetailViewModel = hiltViewModel(),
     popBackStackWithDeleteReceivedEnvelopeId: (Long) -> Unit,
-    navigateReceivedEnvelopeEdit: () -> Unit,
+    popBackStackWithReceivedEnvelope: (String) -> Unit,
+    navigateReceivedEnvelopeEdit: (Envelope, Ledger) -> Unit,
     handleException: (Throwable, () -> Unit) -> Unit,
     onShowSnackbar: (SnackbarToken) -> Unit,
     onShowDialog: (DialogToken) -> Unit,
@@ -43,11 +51,12 @@ fun ReceivedEnvelopeDetailRoute(
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
             is ReceivedEnvelopeDetailSideEffect.HandleException -> handleException(sideEffect.throwable, sideEffect.retry)
-            is ReceivedEnvelopeDetailSideEffect.NavigateReceivedEnvelopeEdit -> TODO()
+            is ReceivedEnvelopeDetailSideEffect.NavigateReceivedEnvelopeEdit -> navigateReceivedEnvelopeEdit(sideEffect.envelope, sideEffect.ledger)
             is ReceivedEnvelopeDetailSideEffect.PopBackStackWithDeleteReceivedEnvelopeId -> popBackStackWithDeleteReceivedEnvelopeId(
                 sideEffect.envelopeId,
             )
-            is ReceivedEnvelopeDetailSideEffect.PopBackStackWithReceivedEnvelope -> TODO()
+
+            is ReceivedEnvelopeDetailSideEffect.PopBackStackWithReceivedEnvelope -> popBackStackWithReceivedEnvelope(sideEffect.envelope)
             is ReceivedEnvelopeDetailSideEffect.ShowDeleteDialog -> onShowDialog(
                 DialogToken(
                     title = context.getString(R.string.dialog_delete_envelope_title),
@@ -57,11 +66,17 @@ fun ReceivedEnvelopeDetailRoute(
                     onConfirmRequest = sideEffect.onConfirmRequest,
                 ),
             )
+
             ReceivedEnvelopeDetailSideEffect.ShowDeleteSuccessSnackbar -> onShowSnackbar(
                 SnackbarToken(message = context.getString(R.string.toast_delete_envelope_success)),
             )
+
             is ReceivedEnvelopeDetailSideEffect.ShowSnackbar -> TODO()
         }
+    }
+
+    BackHandler {
+        viewModel.popBackStackWithEnvelope()
     }
 
     LaunchedEffect(key1 = Unit) {
@@ -70,14 +85,14 @@ fun ReceivedEnvelopeDetailRoute(
 
     ReceivedEnvelopeDetailScreen(
         uiState = uiState,
-        onClickEdit = navigateReceivedEnvelopeEdit,
+        onClickEdit = viewModel::navigateEnvelopeEdit,
         onClickDelete = viewModel::showDeleteDialog,
+        onClickBackIcon = viewModel::popBackStackWithEnvelope,
     )
 }
 
 @Composable
 fun ReceivedEnvelopeDetailScreen(
-    @Suppress("detekt:UnusedParameter")
     uiState: ReceivedEnvelopeDetailState = ReceivedEnvelopeDetailState(),
     onClickBackIcon: () -> Unit = {},
     onClickEdit: () -> Unit = {},
@@ -107,7 +122,7 @@ fun ReceivedEnvelopeDetailScreen(
                     Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_m))
                 },
             )
-            // TODO: text 수정
+
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -119,41 +134,52 @@ fun ReceivedEnvelopeDetailScreen(
                     .verticalScroll(scrollState),
             ) {
                 Text(
-                    text = "150,000원",
+                    text = stringResource(id = com.susu.core.ui.R.string.money_unit_format, uiState.envelope.amount.toMoneyFormat()),
                     style = SusuTheme.typography.title_xxl,
                     color = Gray100,
                 )
                 Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_m))
                 Column {
                     DetailItem(
-                        categoryText = "이름",
-                        contentText = "김철수",
+                        categoryText = stringResource(id = com.susu.core.ui.R.string.word_name),
+                        contentText = uiState.envelope.friend.name,
                         isEmptyContent = false,
                     )
                     DetailItem(
-                        categoryText = "나와의 관계",
-                        contentText = "친구",
+                        categoryText = stringResource(com.susu.core.ui.R.string.word_relationship),
+                        contentText = uiState.envelope.relationship.customRelation ?: uiState.envelope.relationship.relation,
                         isEmptyContent = false,
                     )
                     DetailItem(
-                        categoryText = "방문 여부",
-                        contentText = "예",
+                        categoryText = stringResource(com.susu.core.ui.R.string.word_date),
+                        contentText = uiState.envelope.handedOverAt.toJavaLocalDateTime().to_yyyy_korYear_M_korMonth_d_korDay(),
                         isEmptyContent = false,
                     )
                     DetailItem(
-                        categoryText = "선물",
-                        contentText = "한끼 식사",
-                        isEmptyContent = false,
+                        categoryText = stringResource(com.susu.core.ui.R.string.word_is_visited),
+                        contentText = if (uiState.envelope.hasVisited == true) {
+                            stringResource(id = com.susu.core.ui.R.string.word_yes)
+                        } else {
+                            stringResource(
+                                id = com.susu.core.ui.R.string.word_no,
+                            )
+                        },
+                        isEmptyContent = uiState.envelope.hasVisited == null,
                     )
                     DetailItem(
-                        categoryText = "연락처",
-                        contentText = "01012345678",
-                        isEmptyContent = false,
+                        categoryText = stringResource(com.susu.core.ui.R.string.word_gift),
+                        contentText = uiState.envelope.gift ?: "",
+                        isEmptyContent = uiState.envelope.gift == null,
                     )
                     DetailItem(
-                        categoryText = "메모",
-                        contentText = "가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하",
-                        isEmptyContent = false,
+                        categoryText = stringResource(id = com.susu.core.ui.R.string.word_phone_number),
+                        contentText = uiState.envelope.friend.phoneNumber,
+                        isEmptyContent = uiState.envelope.friend.phoneNumber.isEmpty(),
+                    )
+                    DetailItem(
+                        categoryText = stringResource(id = com.susu.core.ui.R.string.word_memo),
+                        contentText = uiState.envelope.memo ?: "",
+                        isEmptyContent = uiState.envelope.memo == null,
                     )
                 }
             }

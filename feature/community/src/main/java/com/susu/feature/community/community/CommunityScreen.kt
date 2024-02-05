@@ -30,6 +30,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -51,6 +52,9 @@ import com.susu.core.designsystem.theme.Gray50
 import com.susu.core.designsystem.theme.Orange60
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.model.Category
+import com.susu.core.model.Vote
+import com.susu.core.ui.DialogToken
+import com.susu.core.ui.SnackbarToken
 import com.susu.core.ui.extension.OnBottomReached
 import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.core.ui.extension.susuClickable
@@ -64,20 +68,38 @@ import java.time.LocalDateTime
 fun CommunityRoute(
     padding: PaddingValues,
     vote: String?,
+    needRefresh: Boolean,
+    toDeleteVoteId: Long?,
     toUpdateVote: String?,
     viewModel: CommunityViewModel = hiltViewModel(),
     navigateVoteAdd: () -> Unit,
     navigateVoteSearch: () -> Unit,
     navigateVoteDetail: (Long) -> Unit,
+    onShowDialog: (DialogToken) -> Unit,
     handleException: (Throwable, () -> Unit) -> Unit,
+    onShowSnackbar: (SnackbarToken) -> Unit,
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
+    val context = LocalContext.current
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
             is CommunitySideEffect.HandleException -> handleException(sideEffect.throwable, sideEffect.retry)
             CommunitySideEffect.NavigateVoteAdd -> navigateVoteAdd()
             is CommunitySideEffect.NavigateVoteDetail -> navigateVoteDetail(sideEffect.voteId)
             CommunitySideEffect.NavigateVoteSearch -> navigateVoteSearch()
+            is CommunitySideEffect.ShowReportDialog -> onShowDialog(
+                DialogToken(
+                    title = context.getString(R.string.dialog_report_title),
+                    text = context.getString(R.string.dialog_report_body),
+                    confirmText = context.getString(R.string.dialog_report_confirm_text),
+                    dismissText = context.getString(R.string.dialog_report_dismiss_text),
+                    checkboxText = context.getString(R.string.dialog_report_checkbox_text),
+                    onConfirmRequest = sideEffect.onConfirmRequest,
+                    onCheckedAction = sideEffect.onCheckedAction,
+                ),
+            )
+
+            is CommunitySideEffect.ShowSnackbar -> onShowSnackbar(SnackbarToken(message = sideEffect.message))
         }
     }
 
@@ -100,6 +122,8 @@ fun CommunityRoute(
         viewModel.getPopularVoteList()
         viewModel.addVoteIfNeed(vote)
         viewModel.updateVoteIfNeed(toUpdateVote)
+        viewModel.deleteVoteIfNeed(toDeleteVoteId)
+        viewModel.needRefreshIfNeed(needRefresh)
     }
 
     voteListState.OnBottomReached(minItemsCount = 4) {
@@ -117,6 +141,7 @@ fun CommunityRoute(
         onClickShowVotePopular = viewModel::toggleShowVotePopular,
         onClickVote = viewModel::navigateVoteDetail,
         onClickSearchIcon = viewModel::navigateVoteSearch,
+        onClickReport = viewModel::showReportDialog,
     )
 }
 
@@ -133,6 +158,7 @@ fun CommunityScreen(
     onClickCategory: (Category?) -> Unit = {},
     onClickShowVotePopular: () -> Unit = {},
     onClickShowMine: () -> Unit = {},
+    onClickReport: (Vote) -> Unit = {},
 ) {
     Box(
         modifier = Modifier
@@ -293,13 +319,16 @@ fun CommunityScreen(
                         vote = vote,
                         currentTime = currentTime,
                         onClick = { onClickVote(vote.id) },
+                        onClickReport = onClickReport,
                     )
                 }
             }
 
             if (uiState.voteList.isEmpty()) {
                 Box(
-                    modifier = Modifier.fillMaxWidth().weight(1f),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f),
                     contentAlignment = Alignment.Center,
                 ) {
                     Text(

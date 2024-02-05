@@ -23,9 +23,6 @@ import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -43,18 +40,24 @@ import com.susu.core.designsystem.theme.Gray60
 import com.susu.core.designsystem.theme.Gray90
 import com.susu.core.designsystem.theme.Orange20
 import com.susu.core.designsystem.theme.SusuTheme
+import com.susu.core.model.Friend
 import com.susu.core.ui.extension.susuClickable
+import com.susu.core.ui.extension.toMoneyFormat
+import com.susu.feature.sent.FriendStatisticsState
 import com.susu.feature.sent.R
 
 @Composable
 fun SentCard(
     modifier: Modifier = Modifier,
-    onClick: () -> Unit = {},
+    uiState: FriendStatisticsState = FriendStatisticsState(),
+    friend: Friend,
+    totalAmounts: Int = 0,
+    sentAmounts: Int = 0,
+    receivedAmounts: Int = 0,
+    onClickHistory: (Long) -> Unit = {},
+    onClickHistoryShowAll: (Long) -> Unit = {},
 ) {
-    // TODO: 수정 필요
-    var expanded by remember { mutableStateOf(false) }
-    val degrees by animateFloatAsState(if (expanded) 180f else 0f, label = "")
-    val historyCount = 3
+    val degrees by animateFloatAsState(if (uiState.expand) 180f else 0f, label = "")
 
     Box(
         modifier = modifier
@@ -76,14 +79,15 @@ fun SentCard(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
-                    text = "김철수",
+                    text = friend.name,
                     style = SusuTheme.typography.title_xs,
                     color = Gray100,
                 )
                 Spacer(modifier = modifier.size(SusuTheme.spacing.spacing_s))
                 SusuBadge(
                     color = BadgeColor.Gray20,
-                    text = "전체 100,000원",
+                    text = stringResource(R.string.sent_envelope_card_monee_total) + totalAmounts.toMoneyFormat() +
+                        stringResource(R.string.sent_envelope_card_money_won),
                     padding = BadgeStyle.smallBadge,
                 )
                 Spacer(modifier = modifier.weight(1f))
@@ -93,9 +97,11 @@ fun SentCard(
                     tint = Gray100,
                     modifier = modifier
                         .clip(CircleShape)
-                        .susuClickable {
-                            expanded = !expanded
-                        }
+                        .susuClickable(
+                            onClick = {
+                                onClickHistory(friend.id)
+                            },
+                        )
                         .rotate(degrees = degrees),
                 )
             }
@@ -118,13 +124,13 @@ fun SentCard(
                 )
             }
             LinearProgressIndicator(
-                progress = { 0.7f },
-                color = SusuTheme.colorScheme.primary,
-                trackColor = Orange20,
-                strokeCap = StrokeCap.Round,
+                progress = { sentAmounts.toFloat() / totalAmounts },
                 modifier = modifier
                     .fillMaxWidth()
                     .padding(vertical = SusuTheme.spacing.spacing_xxxxs),
+                color = SusuTheme.colorScheme.primary,
+                trackColor = Orange20,
+                strokeCap = StrokeCap.Round,
             )
             Row(
                 modifier = modifier
@@ -133,12 +139,12 @@ fun SentCard(
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 Text(
-                    text = "70,000원",
+                    text = sentAmounts.toMoneyFormat() + stringResource(R.string.sent_envelope_card_money_won),
                     style = SusuTheme.typography.title_xxxs,
                     color = Gray90,
                 )
                 Text(
-                    text = "30,000원",
+                    text = receivedAmounts.toMoneyFormat() + stringResource(R.string.sent_envelope_card_money_won),
                     style = SusuTheme.typography.title_xxxs,
                     color = Gray60,
                 )
@@ -146,13 +152,14 @@ fun SentCard(
         }
     }
     AnimatedVisibility(
-        visible = expanded,
+        visible = uiState.expand,
         enter = fadeIn() + expandVertically(),
         exit = fadeOut() + shrinkVertically(),
     ) {
         SentHistoryCard(
-            historyCount = historyCount,
-            onClick = onClick,
+            envelopeHistoryList = uiState.envelopesHistoryList,
+            friendId = friend.id,
+            onClickHistoryShowAll = onClickHistoryShowAll,
         )
     }
 }

@@ -1,11 +1,11 @@
 package com.susu.data.remote.model.response
 
-import com.susu.core.model.EnvelopeStatics
 import com.susu.core.model.Friend
+import com.susu.core.model.FriendStatistics
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class EnvelopesResponse(
+data class FriendStatisticsResponse(
     val friend: FriendInfo,
     val receivedAmounts: Int,
     val sentAmounts: Int,
@@ -15,23 +15,17 @@ data class EnvelopesResponse(
 @Serializable
 data class FriendInfo(
     val id: Long,
-    val uid: Long = 0,
-    val createdAt: String = "",
-    val modifiedAt: String = "",
     val name: String,
     val phoneNumber: String = "",
 )
 
 internal fun FriendInfo.toModel() = Friend(
     id = id,
-    uid = uid,
     name = name,
     phoneNumber = phoneNumber,
-    createdAt = createdAt,
-    modifiedAt = modifiedAt,
 )
 
-internal fun EnvelopesResponse.toModel() = EnvelopeStatics(
+internal fun FriendStatisticsResponse.toModel() = FriendStatistics(
     friend = friend.toModel(),
     receivedAmounts = receivedAmounts,
     sentAmounts = sentAmounts,

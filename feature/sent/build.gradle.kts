@@ -6,3 +6,7 @@ plugins {
 android {
     namespace = "com.susu.feature.sent"
 }
+
+dependencies {
+    implementation(libs.kotlinx.serialization.json)
+}

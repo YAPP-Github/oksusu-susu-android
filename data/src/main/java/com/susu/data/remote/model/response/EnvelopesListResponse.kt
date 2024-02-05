@@ -6,12 +6,12 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class EnvelopesListResponse(
     @SerialName("data")
-    val envelopesList: List<EnvelopesResponse>,
+    val envelopesList: List<FriendStatisticsResponse>,
     val page: Int,
     val size: Int,
-    val sort: Sort,
-    val totalCount: Int,
     val totalPage: Int,
+    val totalCount: Int,
+    val sort: Sort,
 )
 
 @Serializable

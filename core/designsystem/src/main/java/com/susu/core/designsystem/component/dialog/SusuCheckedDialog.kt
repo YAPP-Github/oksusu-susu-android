@@ -1,11 +1,9 @@
 package com.susu.core.designsystem.component.dialog
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -19,10 +17,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import com.susu.core.designsystem.component.button.FilledButtonColor
 import com.susu.core.designsystem.component.button.GhostButtonColor
 import com.susu.core.designsystem.component.button.SmallButtonStyle
@@ -34,34 +32,26 @@ import com.susu.core.designsystem.theme.Gray100
 import com.susu.core.designsystem.theme.Gray40
 import com.susu.core.designsystem.theme.Gray80
 import com.susu.core.designsystem.theme.SusuTheme
+import com.susu.core.ui.extension.susuClickable
 
 @Composable
 fun SusuCheckedDialog(
-    modifier: Modifier = Modifier,
     title: String? = null,
     text: String? = null,
     defaultChecked: Boolean = false,
     checkboxText: String = "",
     confirmText: String = "",
     dismissText: String? = null,
-    isDimmed: Boolean = true,
     textAlign: TextAlign = TextAlign.Center,
     onConfirmRequest: (isChecked: Boolean) -> Unit = {},
     onDismissRequest: () -> Unit = {},
 ) {
-    val rootModifier = modifier
-        .fillMaxSize()
-        .background(color = if (isDimmed) Color.Black.copy(alpha = 0.16f) else Color.Transparent)
-        .padding(horizontal = SusuTheme.spacing.spacing_xl)
     var isChecked by remember { mutableStateOf(defaultChecked) }
 
-    Box(
-        modifier = rootModifier,
-    ) {
+    Dialog(onDismissRequest = onDismissRequest) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .align(Alignment.Center)
                 .background(color = Gray10, shape = RoundedCornerShape(8.dp))
                 .padding(SusuTheme.spacing.spacing_xl),
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -97,6 +87,10 @@ fun SusuCheckedDialog(
                     text = checkboxText,
                     style = SusuTheme.typography.title_xxs,
                     color = if (isChecked) Gray100 else Gray40,
+                    modifier = Modifier.susuClickable(
+                        onClick = { isChecked = !isChecked },
+                        rippleEnabled = false,
+                    ),
                 )
             }
             Spacer(modifier = Modifier.height(SusuTheme.spacing.spacing_xl))
