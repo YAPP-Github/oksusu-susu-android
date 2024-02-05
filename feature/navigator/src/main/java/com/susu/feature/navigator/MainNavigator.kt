@@ -10,6 +10,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.model.Envelope
+import com.susu.core.model.EnvelopeDetail
 import com.susu.core.model.Ledger
 import com.susu.core.model.Vote
 import com.susu.feature.community.navigation.CommunityRoute
@@ -65,7 +66,7 @@ internal class MainNavigator(
                 ReceivedRoute.envelopeEditRoute("{${ReceivedRoute.ENVELOPE_ARGUMENT_NAME}}", "{${ReceivedRoute.LEDGER_ID_ARGUMENT_NAME}}"),
                 SentRoute.sentEnvelopeRoute("{${SentRoute.FRIEND_ID_ARGUMENT_NAME}}"),
                 SentRoute.sentEnvelopeDetailRoute("{${SentRoute.ENVELOPE_ID_ARGUMENT_NAME}}"),
-                SentRoute.sentEnvelopeEditRoute,
+                SentRoute.sentEnvelopeEditRoute("{${SentRoute.ENVELOPE_DETAIL_ARGUMENT_NAME}}"),
                 CommunityRoute.route,
                 CommunityRoute.voteAddRoute,
                 CommunityRoute.voteSearchRoute,
@@ -111,8 +112,8 @@ internal class MainNavigator(
         navController.navigateSentEnvelopeDetail(id)
     }
 
-    fun navigateSentEnvelopeEdit() {
-        navController.navigateSentEnvelopeEdit()
+    fun navigateSentEnvelopeEdit(envelopeDetail: EnvelopeDetail) {
+        navController.navigateSentEnvelopeEdit(envelopeDetail)
     }
 
     fun navigateSentEnvelopeAdd() {

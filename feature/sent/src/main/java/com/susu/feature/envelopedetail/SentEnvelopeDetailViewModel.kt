@@ -27,6 +27,11 @@ class SentEnvelopeDetailViewModel @Inject constructor(
         }
     }
 
-    fun navigateSentEnvelopeEdit() = postSideEffect(SentEnvelopeDetailEffect.NavigateEnvelopeEdit)
+    fun navigateSentEnvelopeEdit() = postSideEffect(
+        SentEnvelopeDetailEffect.NavigateEnvelopeEdit(
+            currentState.envelopeDetail,
+        ),
+    )
+
     fun popBackStack() = postSideEffect(SentEnvelopeDetailEffect.PopBackStack)
 }

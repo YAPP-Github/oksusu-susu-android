@@ -23,6 +23,7 @@ import com.susu.core.designsystem.component.appbar.icon.DeleteText
 import com.susu.core.designsystem.component.appbar.icon.EditText
 import com.susu.core.designsystem.theme.Gray100
 import com.susu.core.designsystem.theme.SusuTheme
+import com.susu.core.model.EnvelopeDetail
 import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.core.ui.extension.toMoneyFormat
 import com.susu.core.ui.util.to_yyyy_korYear_M_korMonth_d_korDay
@@ -34,14 +35,14 @@ import kotlinx.datetime.toJavaLocalDateTime
 fun SentEnvelopeDetailRoute(
     viewModel: SentEnvelopeDetailViewModel = hiltViewModel(),
     popBackStack: () -> Unit,
-    navigateSentEnvelopeEdit: () -> Unit,
+    navigateSentEnvelopeEdit: (EnvelopeDetail) -> Unit,
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
 
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
             SentEnvelopeDetailEffect.PopBackStack -> popBackStack()
-            is SentEnvelopeDetailEffect.NavigateEnvelopeEdit -> navigateSentEnvelopeEdit()
+            is SentEnvelopeDetailEffect.NavigateEnvelopeEdit -> navigateSentEnvelopeEdit(sideEffect.envelopeDetail)
         }
     }
 

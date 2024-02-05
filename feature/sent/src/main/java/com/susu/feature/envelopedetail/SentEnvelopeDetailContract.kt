@@ -10,6 +10,6 @@ data class SentEnvelopeDetailState(
 ) : UiState
 
 sealed interface SentEnvelopeDetailEffect : SideEffect {
-    data object NavigateEnvelopeEdit : SentEnvelopeDetailEffect
+    data class NavigateEnvelopeEdit(val envelopeDetail: EnvelopeDetail) : SentEnvelopeDetailEffect
     data object PopBackStack : SentEnvelopeDetailEffect
 }

@@ -1,21 +1,21 @@
 package com.susu.feature.envelopeedit
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.susu.core.model.Category
-import com.susu.core.model.Envelope
-import com.susu.core.model.Friend
-import com.susu.core.model.Relationship
+import com.susu.core.model.EnvelopeDetail
 import com.susu.core.ui.base.BaseViewModel
-import com.susu.core.ui.util.currentDate
+import com.susu.core.ui.extension.decodeFromUri
 import com.susu.core.ui.util.getSafeLocalDateTime
 import com.susu.domain.usecase.categoryconfig.GetCategoryConfigUseCase
 import com.susu.domain.usecase.envelope.EditSentEnvelopeUseCase
 import com.susu.domain.usecase.envelope.GetRelationShipConfigListUseCase
+import com.susu.feature.sent.navigation.SentRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
 import kotlinx.datetime.toJavaLocalDateTime
 import kotlinx.datetime.toKotlinLocalDateTime
+import kotlinx.serialization.json.Json
 import javax.inject.Inject
 
 @HiltViewModel
@@ -23,33 +23,15 @@ class SentEnvelopeEditViewModel @Inject constructor(
     private val getCategoryConfigUseCase: GetCategoryConfigUseCase,
     private val getRelationShipConfigListUseCase: GetRelationShipConfigListUseCase,
     private val editSentEnvelopeUseCase: EditSentEnvelopeUseCase,
+    savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<SentEnvelopeEditState, SentEnvelopeEditSideEffect>(
     SentEnvelopeEditState(),
 ) {
-    private var originalEnvelope: Envelope = Envelope()
+    private val envelopeDetail = Json.decodeFromUri<EnvelopeDetail>(
+        savedStateHandle.get<String>(SentRoute.ENVELOPE_DETAIL_ARGUMENT_NAME)!!,
+    )
 
     fun initData() {
-        // TODO: Argument로 받은 데이터로 설정. UI 개발을 위해 임의의 데이터 사용.
-        val category = Category(
-            id = 5,
-            name = "커스텀",
-            customCategory = "커스텀",
-        )
-        val envelope = Envelope(
-            amount = 150000,
-            hasVisited = true,
-            handedOverAt = currentDate.toKotlinLocalDateTime(),
-            friend = Friend(
-                name = "김철수",
-            ),
-            relationship = Relationship(
-                id = 5,
-                relation = "나",
-                customRelation = "나",
-            ),
-        )
-        originalEnvelope = envelope
-
         viewModelScope.launch {
             val relationshipConfigResult = getRelationShipConfigListUseCase()
             val categoryConfigResult = getCategoryConfigUseCase()
@@ -57,26 +39,28 @@ class SentEnvelopeEditViewModel @Inject constructor(
             if (relationshipConfigResult.isSuccess && categoryConfigResult.isSuccess) {
                 val relationshipConfig = relationshipConfigResult.getOrDefault(emptyList()).toPersistentList()
                 val categoryConfig = categoryConfigResult.getOrDefault(emptyList()).toPersistentList()
-                intent {
-                    copy(
-                        categoryConfig = categoryConfig,
-                        relationshipConfig = relationshipConfig,
-                        amount = envelope.amount,
-                        gift = envelope.gift,
-                        memo = envelope.memo,
-                        hasVisited = envelope.hasVisited,
-                        handedOverAt = envelope.handedOverAt.toJavaLocalDateTime(),
-                        friendName = envelope.friend.name,
-                        relationshipId = envelope.relationship.id,
-                        customRelationship = envelope.relationship.customRelation,
-                        phoneNumber = envelope.friend.phoneNumber.ifEmpty { null },
-                        categoryId = category.id,
-                        customCategory = category.customCategory,
-                        showCustomCategory = category.id == categoryConfig.last().id,
-                        customCategorySaved = category.id == categoryConfig.last().id,
-                        showCustomRelationship = envelope.relationship.id == relationshipConfig.last().id,
-                        customRelationshipSaved = envelope.relationship.id == relationshipConfig.last().id,
-                    )
+                with(envelopeDetail) {
+                    intent {
+                        copy(
+                            categoryConfig = categoryConfig,
+                            relationshipConfig = relationshipConfig,
+                            amount = envelope.amount,
+                            gift = envelope.gift,
+                            memo = envelope.memo,
+                            hasVisited = envelope.hasVisited,
+                            handedOverAt = envelope.handedOverAt.toJavaLocalDateTime(),
+                            friendName = friend.name,
+                            relationshipId = relationship.id,
+                            customRelationship = relationship.customRelation,
+                            phoneNumber = friend.phoneNumber.ifEmpty { null },
+                            categoryId = category.id,
+                            customCategory = category.customCategory,
+                            showCustomCategory = category.id == categoryConfig.last().id,
+                            customCategorySaved = category.id == categoryConfig.last().id,
+                            showCustomRelationship = relationship.id == relationshipConfig.last().id,
+                            customRelationshipSaved = relationship.id == relationshipConfig.last().id,
+                        )
+                    }
                 }
             }
         }
@@ -88,8 +72,8 @@ class SentEnvelopeEditViewModel @Inject constructor(
             editSentEnvelopeUseCase(
                 param = with(currentState) {
                     EditSentEnvelopeUseCase.Param(
-                        envelopeId = originalEnvelope.id,
-                        friendId = originalEnvelope.friend.id,
+                        envelopeId = envelopeDetail.envelope.id,
+                        friendId = envelopeDetail.friend.id,
                         friendName = friendName,
                         phoneNumber = phoneNumber,
                         relationshipId = relationshipId,
