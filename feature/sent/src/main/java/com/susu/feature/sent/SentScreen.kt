@@ -47,6 +47,7 @@ fun SentRoute(
     padding: PaddingValues,
     navigateSentEnvelope: (Long) -> Unit,
     navigateSentEnvelopeAdd: () -> Unit,
+    navigateSentEnvelopeSearch: () -> Unit,
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
     val envelopesListState = rememberLazyListState()
@@ -66,11 +67,12 @@ fun SentRoute(
         uiState = uiState,
         envelopesListState = envelopesListState,
         padding = padding,
+        onClickHistoryShowAll = navigateSentEnvelope,
+        onClickAddEnvelope = navigateSentEnvelopeAdd,
+        onClickSearchIcon = navigateSentEnvelopeSearch,
         onClickHistory = { friendId ->
             viewModel.getEnvelopesHistoryList(friendId)
         },
-        onClickHistoryShowAll = viewModel::navigateSentEnvelope,
-        onClickAddEnvelope = viewModel::navigateSentAdd,
     )
 }
 

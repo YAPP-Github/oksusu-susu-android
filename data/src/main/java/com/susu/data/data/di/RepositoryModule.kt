@@ -2,6 +2,7 @@ package com.susu.data.data.di
 
 import com.susu.data.data.repository.BlockRepositoryImpl
 import com.susu.data.data.repository.CategoryConfigRepositoryImpl
+import com.susu.data.data.repository.EnvelopeRecentSearchRepositoryImpl
 import com.susu.data.data.repository.EnvelopesRepositoryImpl
 import com.susu.data.data.repository.ExcelRepositoryImpl
 import com.susu.data.data.repository.FriendRepositoryImpl
@@ -18,6 +19,7 @@ import com.susu.data.data.repository.VoteRecentSearchRepositoryImpl
 import com.susu.data.data.repository.VoteRepositoryImpl
 import com.susu.domain.repository.BlockRepository
 import com.susu.domain.repository.CategoryConfigRepository
+import com.susu.domain.repository.EnvelopeRecentSearchRepository
 import com.susu.domain.repository.EnvelopesRepository
 import com.susu.domain.repository.ExcelRepository
 import com.susu.domain.repository.FriendRepository
@@ -105,6 +107,11 @@ abstract class RepositoryModule {
     abstract fun bindVoteRepository(
         voteRepositoryImpl: VoteRepositoryImpl,
     ): VoteRepository
+
+    @Binds
+    abstract fun bindEnvelopeRecentSearchRepository(
+        envelopeRecentSearchRepositoryImpl: EnvelopeRecentSearchRepositoryImpl,
+    ): EnvelopeRecentSearchRepository
 
     @Binds
     abstract fun bindVoteRecentSearchRepository(

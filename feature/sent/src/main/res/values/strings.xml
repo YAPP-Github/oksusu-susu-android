@@ -35,6 +35,13 @@
     <string name="sent_envelope_add_visited_highlight">"%s을 "</string>
     <string name="sent_envelope_add_date_title">%s님에게 언제 보냈나요</string>
     <string name="sent_envelope_add_date_title_highlight">%s님에게 </string>
+    <string name="sent_envelope_search_who_envelope">%s의 봉투</string>
+    <string name="sent_envelope_search_search_title">찾고 싶은 봉투를 검색해보세요</string>
+    <string name="sent_envelope_search_recent_search">최근 검색</string>
+    <string name="sent_envelope_search_search_result">검색 결과</string>
+    <string name="sent_envelope_search_empty_search_title">어떤 봉투를 찾아드릴까요?</string>
+    <string name="sent_envelope_search_description">사람 이름, 보낸 금액, 경조사 명 등을\n검색해볼 수 있어요</string>
+    <string name="sent_envelope_search_empty_result_title">원하는 검색 결과가 없나요?</string>
     <string name="envelope_filter_screen_friend">보낸 사람</string>
     <string name="envelope_filter_screen_money">받은 봉투 금액</string>
     <string name="sent_envelope_add_date_to">님에게</string>

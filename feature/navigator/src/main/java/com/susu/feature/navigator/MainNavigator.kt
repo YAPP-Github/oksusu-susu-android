@@ -41,6 +41,7 @@ import com.susu.feature.sent.navigation.navigateSentEnvelope
 import com.susu.feature.sent.navigation.navigateSentEnvelopeAdd
 import com.susu.feature.sent.navigation.navigateSentEnvelopeDetail
 import com.susu.feature.sent.navigation.navigateSentEnvelopeEdit
+import com.susu.feature.sent.navigation.navigateSentEnvelopeSearch
 import com.susu.feature.statistics.navigation.navigateStatistics
 
 internal class MainNavigator(
@@ -118,6 +119,10 @@ internal class MainNavigator(
 
     fun navigateSentEnvelopeAdd() {
         navController.navigateSentEnvelopeAdd()
+    }
+
+    fun navigateSentEnvelopeSearch() {
+        navController.navigateSentEnvelopeSearch()
     }
 
     fun navigateLogin() {

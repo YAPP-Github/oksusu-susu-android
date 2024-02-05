@@ -23,4 +23,8 @@ object DaoModule {
     @Singleton
     @Provides
     fun provideCategoryConfigDao(db: RoomInMemoryDataBase) = db.categoryConfigDao()
+
+    @Singleton
+    @Provides
+    fun provideEnvelopeRecentSearchDao(db: RoomDataBase) = db.envelopeRecentSearchDao()
 }

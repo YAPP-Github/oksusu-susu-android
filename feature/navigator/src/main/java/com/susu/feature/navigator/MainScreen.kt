@@ -84,6 +84,7 @@ internal fun MainScreen(
                     navigateSentEnvelopeDetail = navigator::navigateSentEnvelopeDetail,
                     navigateSentEnvelopeEdit = navigator::navigateSentEnvelopeEdit,
                     navigateSentEnvelopeAdd = navigator::navigateSentEnvelopeAdd,
+                    navigateSentEnvelopeSearch = navigator::navigateSentEnvelopeSearch,
                     handleException = viewModel::handleException,
                     onShowSnackbar = viewModel::onShowSnackbar,
                     onShowDialog = viewModel::onShowDialog,

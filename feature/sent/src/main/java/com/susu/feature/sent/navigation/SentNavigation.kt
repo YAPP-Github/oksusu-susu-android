@@ -15,6 +15,7 @@ import com.susu.feature.envelope.SentEnvelopeRoute
 import com.susu.feature.envelopeadd.SentEnvelopeAddRoute
 import com.susu.feature.envelopedetail.SentEnvelopeDetailRoute
 import com.susu.feature.envelopeedit.SentEnvelopeEditRoute
+import com.susu.feature.envelopesearch.SentEnvelopeSearchRoute
 import com.susu.feature.sent.SentRoute
 import kotlinx.serialization.json.Json
 
@@ -38,6 +39,10 @@ fun NavController.navigateSentEnvelopeAdd() {
     navigate(SentRoute.sentEnvelopeAddRoute)
 }
 
+fun NavController.navigateSentEnvelopeSearch() {
+    navigate(SentRoute.sentEnvelopeSearchRoute)
+}
+
 fun NavGraphBuilder.sentNavGraph(
     padding: PaddingValues,
     popBackStack: () -> Unit,
@@ -45,6 +50,7 @@ fun NavGraphBuilder.sentNavGraph(
     navigateSentEnvelopeDetail: (Long) -> Unit,
     navigateSentEnvelopeEdit: (EnvelopeDetail) -> Unit,
     navigateSentEnvelopeAdd: () -> Unit,
+    navigateSentEnvelopeSearch: () -> Unit,
     onShowSnackbar: (SnackbarToken) -> Unit,
     onShowDialog: (DialogToken) -> Unit,
     handleException: (Throwable, () -> Unit) -> Unit,
@@ -54,6 +60,7 @@ fun NavGraphBuilder.sentNavGraph(
             padding = padding,
             navigateSentEnvelope = navigateSentEnvelope,
             navigateSentEnvelopeAdd = navigateSentEnvelopeAdd,
+            navigateSentEnvelopeSearch = navigateSentEnvelopeSearch,
         )
     }
 
@@ -100,6 +107,13 @@ fun NavGraphBuilder.sentNavGraph(
             handleException = handleException,
         )
     }
+
+    composable(route = SentRoute.sentEnvelopeSearchRoute) {
+        SentEnvelopeSearchRoute(
+            navigateSentEnvelopeDetail = navigateSentEnvelopeDetail,
+            popBackStack = popBackStack,
+        )
+    }
 }
 
 object SentRoute {
@@ -114,4 +128,5 @@ object SentRoute {
 
     fun sentEnvelopeEditRoute(envelopeDetail: String) = "sent-envelope-edit/$envelopeDetail"
     const val ENVELOPE_DETAIL_ARGUMENT_NAME = "envelope-detail"
+    const val sentEnvelopeSearchRoute = "sent-envelope-search"
 }
