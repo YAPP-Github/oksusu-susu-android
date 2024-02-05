@@ -22,7 +22,7 @@ class EditSentEnvelopeUseCase @Inject constructor(
 
             envelopesRepository.editEnvelope(
                 id = envelopeId,
-                type = "SENT",
+                type = envelopeType,
                 friendId = friendId,
                 amount = amount,
                 gift = gift,
@@ -37,6 +37,7 @@ class EditSentEnvelopeUseCase @Inject constructor(
 
     data class Param(
         val envelopeId: Long,
+        val envelopeType: String,
         val friendId: Long,
         val friendName: String,
         val phoneNumber: String? = null,

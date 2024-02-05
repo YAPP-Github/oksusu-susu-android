@@ -73,6 +73,7 @@ class SentEnvelopeEditViewModel @Inject constructor(
                 param = with(currentState) {
                     EditSentEnvelopeUseCase.Param(
                         envelopeId = envelopeDetail.envelope.id,
+                        envelopeType = envelopeDetail.envelope.type,
                         friendId = envelopeDetail.friend.id,
                         friendName = friendName,
                         phoneNumber = phoneNumber,
