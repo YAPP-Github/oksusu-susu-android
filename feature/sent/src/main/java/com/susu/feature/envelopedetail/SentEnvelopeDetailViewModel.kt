@@ -26,6 +26,8 @@ class SentEnvelopeDetailViewModel @Inject constructor(
                     envelopeDetail = envelopeDetail,
                 )
             }
+        }.onFailure {
+            postSideEffect(SentEnvelopeDetailEffect.HandleException(it, ::getEnvelopeDetail))
         }
     }
 
@@ -36,6 +38,8 @@ class SentEnvelopeDetailViewModel @Inject constructor(
     fun deleteEnvelope() = viewModelScope.launch {
         deleteEnvelopeUseCase(envelopeId).onSuccess {
             postSideEffect(SentEnvelopeDetailEffect.ShowDeleteSuccessSnackBar, SentEnvelopeDetailEffect.PopBackStack)
+        }.onFailure {
+            postSideEffect(SentEnvelopeDetailEffect.HandleException(it, ::deleteEnvelope))
         }
     }
 
