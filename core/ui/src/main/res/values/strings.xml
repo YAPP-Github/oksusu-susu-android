@@ -13,6 +13,7 @@
     <string name="word_total_money">전체 %s원</string>
     <string name="word_total_count">총 %d개</string>
     <string name="content_description_see_more_icon">더보기 아이콘</string>
+    <string name="word_event">경조사</string>
     <string name="word_event_name">경조사명</string>
     <string name="word_event_category">경조사 카테고리</string>
     <string name="word_event_range">경조사 기간</string>

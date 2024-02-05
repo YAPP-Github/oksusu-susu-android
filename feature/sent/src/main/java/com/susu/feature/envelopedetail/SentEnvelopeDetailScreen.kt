@@ -134,45 +134,45 @@ fun SentEnvelopeDetailScreen(
                     Spacer(modifier = modifier.size(SusuTheme.spacing.spacing_m))
                     Column {
                         DetailItem(
-                            categoryText = stringResource(R.string.sent_envelope_detail_category_event),
+                            categoryText = stringResource(com.susu.core.ui.R.string.word_event),
                             contentText = category.category,
                             isEmptyContent = category.category.isEmpty(),
                         )
                         DetailItem(
-                            categoryText = stringResource(R.string.sent_envelope_detail_category_name),
+                            categoryText = stringResource(com.susu.core.ui.R.string.word_name),
                             contentText = friend.name,
                             isEmptyContent = friend.name.isEmpty(),
                         )
                         DetailItem(
-                            categoryText = stringResource(R.string.sent_envelope_detail_category_relationship),
+                            categoryText = stringResource(com.susu.core.ui.R.string.word_relationship),
                             contentText = relationship.relation,
                             isEmptyContent = relationship.relation.isEmpty(),
                         )
                         DetailItem(
-                            categoryText = stringResource(R.string.sent_envelope_detail_category_date),
+                            categoryText = stringResource(com.susu.core.ui.R.string.word_date),
                             contentText = envelope.handedOverAt.toJavaLocalDateTime().to_yyyy_korYear_M_korMonth_d_korDay(),
                         )
                         DetailItem(
-                            categoryText = stringResource(R.string.sent_envelope_detail_category_visited),
+                            categoryText = stringResource(com.susu.core.ui.R.string.word_is_visited),
                             contentText = if (envelope.hasVisited == true) {
-                                stringResource(R.string.sent_envelope_detail_category_visited_yes)
+                                stringResource(com.susu.core.ui.R.string.word_yes)
                             } else {
-                                stringResource(R.string.sent_envelope_detail_category_visited_no)
+                                stringResource(com.susu.core.ui.R.string.word_no)
                             },
                             isEmptyContent = envelope.hasVisited == null,
                         )
                         DetailItem(
-                            categoryText = stringResource(R.string.sent_envelope_detail_category_gift),
+                            categoryText = stringResource(com.susu.core.ui.R.string.word_gift),
                             contentText = envelope.gift ?: "",
                             isEmptyContent = envelope.gift.isNullOrEmpty(),
                         )
                         DetailItem(
-                            categoryText = stringResource(R.string.sent_envelope_detail_category_phone),
+                            categoryText = stringResource(com.susu.core.ui.R.string.word_phone_number),
                             contentText = friend.phoneNumber,
                             isEmptyContent = friend.phoneNumber.isEmpty(),
                         )
                         DetailItem(
-                            categoryText = stringResource(R.string.sent_envelope_detail_category_memo),
+                            categoryText = stringResource(com.susu.core.ui.R.string.word_memo),
                             contentText = envelope.memo ?: "",
                             isEmptyContent = envelope.memo.isNullOrEmpty(),
                         )

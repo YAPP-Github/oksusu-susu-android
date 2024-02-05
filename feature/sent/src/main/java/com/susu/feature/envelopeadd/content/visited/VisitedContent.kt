@@ -86,7 +86,7 @@ fun VisitedContent(
                 SusuFilledButton(
                     color = FilledButtonColor.Orange,
                     style = MediumButtonStyle.height60,
-                    text = stringResource(id = R.string.sent_envelope_edit_category_visited_yes),
+                    text = stringResource(id = com.susu.core.ui.R.string.word_yes),
                     onClick = onClickVisitedButton,
                     modifier = modifier.fillMaxWidth(),
                 )
@@ -94,7 +94,7 @@ fun VisitedContent(
                 SusuGhostButton(
                     color = GhostButtonColor.Black,
                     style = MediumButtonStyle.height60,
-                    text = stringResource(id = R.string.sent_envelope_edit_category_visited_yes),
+                    text = stringResource(id = com.susu.core.ui.R.string.word_yes),
                     onClick = onClickVisitedButton,
                     modifier = modifier.fillMaxWidth(),
                     rippleEnabled = false,
@@ -105,7 +105,7 @@ fun VisitedContent(
                 SusuFilledButton(
                     color = FilledButtonColor.Orange,
                     style = MediumButtonStyle.height60,
-                    text = stringResource(id = R.string.sent_envelope_edit_category_visited_no),
+                    text = stringResource(id = com.susu.core.ui.R.string.word_no),
                     onClick = onClickNotVisitedButton,
                     modifier = modifier.fillMaxWidth(),
                 )
@@ -113,7 +113,7 @@ fun VisitedContent(
                 SusuGhostButton(
                     color = GhostButtonColor.Black,
                     style = MediumButtonStyle.height60,
-                    text = stringResource(id = R.string.sent_envelope_edit_category_visited_no),
+                    text = stringResource(id = com.susu.core.ui.R.string.word_no),
                     onClick = onClickNotVisitedButton,
                     modifier = modifier.fillMaxWidth(),
                     rippleEnabled = false,

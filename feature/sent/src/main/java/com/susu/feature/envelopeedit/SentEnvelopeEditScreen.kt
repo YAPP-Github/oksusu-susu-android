@@ -190,7 +190,7 @@ fun SentEnvelopeEditScreen(
                 )
                 Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_m))
                 EditDetailItem(
-                    categoryText = stringResource(R.string.sent_envelope_edit_category_event),
+                    categoryText = stringResource(com.susu.core.ui.R.string.word_event),
                     categoryTextAlign = Alignment.Top,
                 ) {
                     uiState.categoryConfig.dropLast(1).forEach { category ->
@@ -223,7 +223,7 @@ fun SentEnvelopeEditScreen(
                     }
                 }
                 EditDetailItem(
-                    categoryText = stringResource(R.string.sent_envelope_edit_category_name),
+                    categoryText = stringResource(com.susu.core.ui.R.string.word_name),
                     categoryTextAlign = Alignment.CenterVertically,
                 ) {
                     SusuBasicTextField(
@@ -236,7 +236,7 @@ fun SentEnvelopeEditScreen(
                     )
                 }
                 EditDetailItem(
-                    categoryText = stringResource(R.string.sent_envelope_edit_category_relationship),
+                    categoryText = stringResource(com.susu.core.ui.R.string.word_relationship),
                     categoryTextAlign = Alignment.Top,
                 ) {
                     uiState.relationshipConfig.dropLast(1).forEach { relationship ->
@@ -269,7 +269,7 @@ fun SentEnvelopeEditScreen(
                     }
                 }
                 EditDetailItem(
-                    categoryText = stringResource(R.string.sent_envelope_edit_category_date),
+                    categoryText = stringResource(com.susu.core.ui.R.string.word_date),
                     categoryTextAlign = Alignment.CenterVertically,
                 ) {
                     Text(
@@ -285,13 +285,13 @@ fun SentEnvelopeEditScreen(
                     )
                 }
                 EditDetailItem(
-                    categoryText = stringResource(R.string.sent_envelope_edit_category_visited),
+                    categoryText = stringResource(com.susu.core.ui.R.string.word_is_visited),
                     categoryTextAlign = Alignment.Top,
                 ) {
                     SusuFilledButton(
                         color = FilledButtonColor.Orange,
                         style = SmallButtonStyle.height32,
-                        text = stringResource(R.string.sent_envelope_edit_category_visited_yes),
+                        text = stringResource(com.susu.core.ui.R.string.word_yes),
                         isActive = uiState.hasVisited == true,
                         onClick = { onHasVisitedUpdated(true) },
                         modifier = Modifier.weight(1f),
@@ -299,14 +299,14 @@ fun SentEnvelopeEditScreen(
                     SusuFilledButton(
                         color = FilledButtonColor.Orange,
                         style = SmallButtonStyle.height32,
-                        text = stringResource(R.string.sent_envelope_edit_category_visited_no),
+                        text = stringResource(com.susu.core.ui.R.string.word_no),
                         isActive = uiState.hasVisited == false,
                         onClick = { onHasVisitedUpdated(false) },
                         modifier = Modifier.weight(1f),
                     )
                 }
                 EditDetailItem(
-                    categoryText = stringResource(R.string.sent_envelope_edit_category_present),
+                    categoryText = stringResource(com.susu.core.ui.R.string.word_gift),
                     categoryTextColor = if (uiState.gift != null) Gray70 else Gray40,
                     categoryTextAlign = Alignment.CenterVertically,
                 ) {
@@ -320,7 +320,7 @@ fun SentEnvelopeEditScreen(
                     )
                 }
                 EditDetailItem(
-                    categoryText = stringResource(R.string.sent_envelope_edit_category_phone),
+                    categoryText = stringResource(com.susu.core.ui.R.string.word_phone_number),
                     categoryTextColor = if (uiState.phoneNumber != null) Gray70 else Gray40,
                     categoryTextAlign = Alignment.CenterVertically,
                 ) {
@@ -335,7 +335,7 @@ fun SentEnvelopeEditScreen(
                     )
                 }
                 EditDetailItem(
-                    categoryText = stringResource(R.string.sent_envelope_edit_category_memo),
+                    categoryText = stringResource(com.susu.core.ui.R.string.word_memo),
                     categoryTextColor = if (uiState.memo != null) Gray70 else Gray40,
                     categoryTextAlign = Alignment.Top,
                 ) {
@@ -359,7 +359,7 @@ fun SentEnvelopeEditScreen(
                 color = FilledButtonColor.Black,
                 style = MediumButtonStyle.height60,
                 shape = RectangleShape,
-                text = stringResource(R.string.sent_envelope_edit_save),
+                text = stringResource(com.susu.core.ui.R.string.word_save),
                 onClick = onClickSave,
             )
         }
