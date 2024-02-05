@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class EnvelopeSearchViewModel @Inject constructor(
+class SentEnvelopeSearchViewModel @Inject constructor(
     private val getEnvelopeRecentSearchUserCase: GetEnvelopeRecentSearchListUseCase,
     private val deleteEnvelopeRecentSearchUseCase: DeleteEnvelopeRecentSearchUseCase,
     private val upsertEnvelopeRecentSearchUseCase: UpsertEnvelopeRecentSearchUseCase,

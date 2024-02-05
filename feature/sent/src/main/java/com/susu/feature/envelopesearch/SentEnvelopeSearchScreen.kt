@@ -41,7 +41,7 @@ import kotlinx.coroutines.flow.debounce
 @OptIn(FlowPreview::class)
 @Composable
 fun SentEnvelopeSearchRoute(
-    viewModel: EnvelopeSearchViewModel = hiltViewModel(),
+    viewModel: SentEnvelopeSearchViewModel = hiltViewModel(),
     navigateSentEnvelopeDetail: (Long) -> Unit,
     popBackStack: () -> Unit,
 ) {
