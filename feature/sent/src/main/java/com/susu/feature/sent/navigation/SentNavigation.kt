@@ -15,6 +15,7 @@ import com.susu.feature.envelope.SentEnvelopeRoute
 import com.susu.feature.envelopeadd.SentEnvelopeAddRoute
 import com.susu.feature.envelopedetail.SentEnvelopeDetailRoute
 import com.susu.feature.envelopeedit.SentEnvelopeEditRoute
+import com.susu.feature.envelopefilter.EnvelopeFilterRoute
 import com.susu.feature.envelopesearch.SentEnvelopeSearchRoute
 import com.susu.feature.sent.SentRoute
 import kotlinx.serialization.json.Json
@@ -43,6 +44,10 @@ fun NavController.navigateSentEnvelopeSearch() {
     navigate(SentRoute.sentEnvelopeSearchRoute)
 }
 
+fun NavController.navigateEnvelopeFilter(filter: String) {
+    navigate(SentRoute.envelopeFilterRoute(filter))
+}
+
 fun NavGraphBuilder.sentNavGraph(
     padding: PaddingValues,
     popBackStack: () -> Unit,
@@ -53,6 +58,7 @@ fun NavGraphBuilder.sentNavGraph(
     navigateSentEnvelopeSearch: () -> Unit,
     onShowSnackbar: (SnackbarToken) -> Unit,
     onShowDialog: (DialogToken) -> Unit,
+    popBackStackWithFilter: (String) -> Unit,
     handleException: (Throwable, () -> Unit) -> Unit,
 ) {
     composable(route = SentRoute.route) {
@@ -114,6 +120,16 @@ fun NavGraphBuilder.sentNavGraph(
             popBackStack = popBackStack,
         )
     }
+
+    composable(
+        route = SentRoute.envelopeFilterRoute("{${SentRoute.FILTER_ENVELOPE_ARGUMENT}}"),
+    ) {
+        EnvelopeFilterRoute(
+            popBackStack = popBackStack,
+            popBackStackWithFilter = popBackStackWithFilter,
+            handleException = handleException,
+        )
+    }
 }
 
 object SentRoute {
@@ -129,4 +145,7 @@ object SentRoute {
     fun sentEnvelopeEditRoute(envelopeDetail: String) = "sent-envelope-edit/$envelopeDetail"
     const val ENVELOPE_DETAIL_ARGUMENT_NAME = "envelope-detail"
     const val sentEnvelopeSearchRoute = "sent-envelope-search"
+    const val FILTER_ENVELOPE_ARGUMENT = "filter-envelope"
+
+    fun envelopeFilterRoute(filter: String) = "envelope-filter/$filter"
 }

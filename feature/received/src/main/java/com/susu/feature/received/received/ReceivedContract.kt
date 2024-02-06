@@ -6,7 +6,7 @@ import com.susu.core.model.Ledger
 import com.susu.core.ui.R
 import com.susu.core.ui.base.SideEffect
 import com.susu.core.ui.base.UiState
-import com.susu.feature.received.navigation.argument.FilterArgument
+import com.susu.feature.received.navigation.argument.LedgerFilterArgument
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
 import java.time.LocalDateTime
@@ -50,6 +50,6 @@ sealed interface ReceivedEffect : SideEffect {
     data class NavigateLedgerDetail(val ledger: Ledger) : ReceivedEffect
     data object NavigateLedgerAdd : ReceivedEffect
     data object NavigateLedgerSearch : ReceivedEffect
-    data class NavigateLedgerFilter(val filter: FilterArgument) : ReceivedEffect
+    data class NavigateLedgerFilter(val filter: LedgerFilterArgument) : ReceivedEffect
     data object ScrollToTop : ReceivedEffect
 }

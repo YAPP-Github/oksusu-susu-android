@@ -2,6 +2,7 @@ package com.susu.domain.repository
 
 import com.susu.core.model.Envelope
 import com.susu.core.model.EnvelopeDetail
+import com.susu.core.model.EnvelopeFilterConfig
 import com.susu.core.model.EnvelopeSearch
 import com.susu.core.model.FriendStatistics
 import com.susu.core.model.Relationship
@@ -81,4 +82,6 @@ interface EnvelopesRepository {
         categoryId: Long? = null,
         customCategory: String? = null,
     ): Envelope
+
+    suspend fun getEnvelopeFilterConfig(): EnvelopeFilterConfig
 }

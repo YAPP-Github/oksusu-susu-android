@@ -9,11 +9,13 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -30,10 +32,16 @@ import com.susu.core.designsystem.component.button.SusuFilledButton
 import com.susu.core.designsystem.component.button.SusuLinedButton
 import com.susu.core.designsystem.component.button.XSmallButtonStyle
 import com.susu.core.designsystem.theme.SusuTheme
+import com.susu.core.model.Friend
 import com.susu.core.ui.extension.collectWithLifecycle
+import com.susu.core.ui.extension.toMoneyFormat
 import com.susu.feature.envelopefilter.component.MoneySlider
+import com.susu.feature.envelopefilter.component.SearchBar
 import com.susu.feature.sent.R
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.debounce
 
+@OptIn(FlowPreview::class)
 @Composable
 fun EnvelopeFilterRoute(
     viewModel: EnvelopeFilterViewModel = hiltViewModel(),
@@ -54,21 +62,35 @@ fun EnvelopeFilterRoute(
         viewModel.initData()
     }
 
+    LaunchedEffect(key1 = uiState.searchKeyword) {
+        snapshotFlow { uiState.searchKeyword }
+            .debounce(100L)
+            .collect(viewModel::getFriendList)
+    }
+
     EnvelopeFilterScreen(
         uiState = uiState,
         onClickBackIcon = viewModel::popBackStack,
         onClickApplyFilterButton = viewModel::popBackStackWithFilter,
+        onTextChangeSearch = viewModel::updateName,
+        onClickFriendChip = viewModel::selectFriend,
+        onCloseFriendChip = viewModel::unselectFriend,
+        onMoneyValueChange = viewModel::updateMoneyRange,
+        onClickRefreshButton = viewModel::clearFilter,
     )
 }
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun EnvelopeFilterScreen(
-    @Suppress("detekt:UnusedParameter")
     uiState: EnvelopeFilterState = EnvelopeFilterState(),
     onClickBackIcon: () -> Unit = {},
     onClickApplyFilterButton: () -> Unit = {},
     onClickRefreshButton: () -> Unit = {},
+    onTextChangeSearch: (String) -> Unit = {},
+    onClickFriendChip: (Friend) -> Unit = {},
+    onCloseFriendChip: (Friend) -> Unit = {},
+    onMoneyValueChange: (Float?, Float?) -> Unit = { _, _ -> },
 ) {
     Column(
         modifier = Modifier
@@ -92,50 +114,77 @@ fun EnvelopeFilterScreen(
         ) {
             Text(text = stringResource(R.string.envelope_filter_screen_friend), style = SusuTheme.typography.title_xs)
             Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_m))
+            SearchBar(
+                value = uiState.searchKeyword,
+                placeholder = stringResource(R.string.envelope_filter_search_placeholder),
+                onValueChange = onTextChangeSearch,
+            )
+            Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_m))
             FlowRow(
                 horizontalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxs),
                 verticalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxs),
             ) {
-                listOf("이진욱", "김철수", "홍길동", "박예은", "박미영", "서한누리", "서한누리").forEach { category ->
+                uiState.friendList.forEach { friend ->
                     SusuLinedButton(
                         color = LinedButtonColor.Black,
                         style = XSmallButtonStyle.height28,
-                        isActive = true,
-                        text = category,
-                        onClick = { },
+                        isActive = friend in uiState.selectedFriendList,
+                        text = friend.name,
+                        onClick = { onClickFriendChip(friend) },
                     )
                 }
             }
 
             Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_xxxxxxl))
-            Text(
-                text = stringResource(R.string.envelope_filter_screen_money),
-                style = SusuTheme.typography.title_xs,
-            )
-            Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_m))
 
-            Text(text = "20,000원~100,000원", style = SusuTheme.typography.title_m)
+            if (uiState.maxFromAmount != uiState.maxToAmount) {
+                Text(
+                    text = stringResource(R.string.envelope_filter_screen_money),
+                    style = SusuTheme.typography.title_xs,
+                )
+                Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_m))
 
-            Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_xxs))
+                Text(
+                    text = stringResource(
+                        R.string.envelope_filter_range_text,
+                        uiState.sliderValue.start.toMoneyFormat(),
+                        uiState.sliderValue.endInclusive.toMoneyFormat(),
+                    ),
+                    style = SusuTheme.typography.title_m,
+                )
 
-            MoneySlider(value = 20_000f..100_000f, onValueChange = {}, valueRange = 0f..100_000f)
+                Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_xxs))
+
+                MoneySlider(
+                    value = uiState.sliderValue,
+                    onValueChange = { onMoneyValueChange(it.start, it.endInclusive) },
+                    valueRange = uiState.sliderValueRange,
+                )
+            }
 
             Spacer(modifier = Modifier.weight(1f))
 
             Column(
+                modifier = Modifier.imePadding(),
                 verticalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_m),
             ) {
                 FlowRow(
                     verticalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxs),
                     horizontalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxs),
                 ) {
-                    SelectedFilterButton(
-                        name = "이진욱",
-                    )
+                    uiState.selectedFriendList.forEach { friend ->
+                        SelectedFilterButton(
+                            name = friend.name,
+                            onClickCloseIcon = { onCloseFriendChip(friend) },
+                        )
+                    }
 
-                    SelectedFilterButton(
-                        name = "20,000~10,000",
-                    )
+                    if (uiState.fromAmount != null) {
+                        SelectedFilterButton(
+                            name = "${uiState.sliderValue.start.toMoneyFormat()}~${uiState.sliderValue.endInclusive.toMoneyFormat()}",
+                            onClickCloseIcon = { onMoneyValueChange(null, null) },
+                        )
+                    }
                 }
 
                 Row(

@@ -53,7 +53,7 @@ import com.susu.core.ui.extension.OnBottomReached
 import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.core.ui.util.to_yyyy_dot_MM_dot_dd
 import com.susu.feature.received.R
-import com.susu.feature.received.navigation.argument.FilterArgument
+import com.susu.feature.received.navigation.argument.LedgerFilterArgument
 import com.susu.feature.received.received.component.LedgerAddCard
 import com.susu.feature.received.received.component.LedgerCard
 import kotlinx.collections.immutable.toPersistentList
@@ -72,7 +72,7 @@ fun ReceivedRoute(
     padding: PaddingValues,
     navigateLedgerDetail: (Ledger) -> Unit,
     navigateLedgerSearch: () -> Unit,
-    navigateLedgerFilter: (FilterArgument) -> Unit,
+    navigateLedgerFilter: (LedgerFilterArgument) -> Unit,
     navigateLedgerAdd: () -> Unit,
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value

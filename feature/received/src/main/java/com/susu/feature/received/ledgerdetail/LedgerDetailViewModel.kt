@@ -3,9 +3,11 @@ package com.susu.feature.received.ledgerdetail
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.susu.core.model.Envelope
+import com.susu.core.model.Friend
 import com.susu.core.model.Ledger
 import com.susu.core.model.SearchEnvelope
 import com.susu.core.model.exception.NotFoundLedgerException
+import com.susu.core.ui.argument.EnvelopeFilterArgument
 import com.susu.core.ui.base.BaseViewModel
 import com.susu.core.ui.extension.decodeFromUri
 import com.susu.core.ui.extension.encodeToUri
@@ -36,7 +38,31 @@ class LedgerDetailViewModel @Inject constructor(
     private var page = 0
     private var isLast = false
 
+    private var filter: EnvelopeFilterArgument = EnvelopeFilterArgument()
+    private var filterUri: String? = null
+
     private var isFirstVisited: Boolean = true
+
+    fun filterIfNeed(filterUri: String?) {
+        if (filterUri == null) return
+
+        if (this.filterUri == filterUri) return
+        this.filterUri = filterUri
+
+        val envelopeFilterArgument = Json.decodeFromUri<EnvelopeFilterArgument>(filterUri)
+        if (filter == envelopeFilterArgument) return
+
+        filter = envelopeFilterArgument
+        intent {
+            copy(
+                selectedFriendList = filter.selectedFriendList.toPersistentList(),
+                fromAmount = filter.fromAmount,
+                toAmount = filter.toAmount,
+            )
+        }
+
+        getReceivedEnvelopeList(true)
+    }
 
     fun addEnvelopeIfNeed(envelopeUri: String?) = intent {
         val envelope = envelopeUri?.let {
@@ -139,12 +165,12 @@ class LedgerDetailViewModel @Inject constructor(
 
         searchReceivedEnvelopeListUseCase(
             param = SearchReceivedEnvelopeListUseCase.Param(
-                friendIds = null,
+                friendIds = currentState.selectedFriendList.map { it.id.toInt() },
                 ledgerId = ledger.id,
-                fromAmount = null,
-                toAmount = null,
+                fromAmount = currentState.fromAmount,
+                toAmount = currentState.toAmount,
                 page = page,
-                sort = null,
+                sort = EnvelopeAlign.entries[currentState.selectedAlignPosition].query,
             ),
         ).onSuccess { envelopeList ->
             isLast = envelopeList.isEmpty()
@@ -160,6 +186,31 @@ class LedgerDetailViewModel @Inject constructor(
         }
     }
 
+    fun removeFriend(friend: Friend) {
+        intent {
+            filter = filter.copy(
+                selectedFriendList = selectedFriendList.minus(friend),
+            )
+            copy(
+                selectedFriendList = selectedFriendList.minus(friend).toPersistentList(),
+            )
+        }
+
+        getReceivedEnvelopeList(true)
+    }
+
+    fun clearAmount() {
+        intent {
+            copy(
+                fromAmount = null,
+                toAmount = null,
+            )
+        }
+
+        getReceivedEnvelopeList(true)
+    }
+
+    fun navigateEnvelopeFilter() = postSideEffect(LedgerDetailSideEffect.NavigateEnvelopeFilter(Json.encodeToUri(filter)))
     fun navigateLedgerEdit() = postSideEffect(LedgerDetailSideEffect.NavigateLedgerEdit(ledger))
 
     fun popBackStackWithLedger() = postSideEffect(LedgerDetailSideEffect.PopBackStackWithLedger(Json.encodeToUri(ledger)))
@@ -190,4 +241,17 @@ class LedgerDetailViewModel @Inject constructor(
     )
 
     fun navigateEnvelopeDetail(envelope: Envelope) = postSideEffect(LedgerDetailSideEffect.NavigateEnvelopeDetail(envelope, ledger))
+    fun showAlignBottomSheet() = intent {
+        copy(showAlignBottomSheet = true)
+    }
+
+    fun hideAlignBottomSheet() = intent {
+        copy(showAlignBottomSheet = false)
+    }
+
+    fun updateAlignBottomSheet(position: Int) {
+        intent { copy(selectedAlignPosition = position) }
+        getReceivedEnvelopeList(true)
+        hideAlignBottomSheet()
+    }
 }

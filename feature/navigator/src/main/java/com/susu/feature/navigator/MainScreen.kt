@@ -28,6 +28,7 @@ import com.susu.feature.loginsignup.navigation.loginSignupNavGraph
 import com.susu.feature.mypage.navigation.myPageNavGraph
 import com.susu.feature.received.navigation.ReceivedRoute
 import com.susu.feature.received.navigation.receivedNavGraph
+import com.susu.feature.sent.navigation.SentRoute
 import com.susu.feature.sent.navigation.sentNavGraph
 import com.susu.feature.statistics.navigation.statisticsNavGraph
 import kotlinx.collections.immutable.ImmutableList
@@ -84,6 +85,13 @@ internal fun MainScreen(
                     navigateSentEnvelopeDetail = navigator::navigateSentEnvelopeDetail,
                     navigateSentEnvelopeEdit = navigator::navigateSentEnvelopeEdit,
                     navigateSentEnvelopeAdd = navigator::navigateSentEnvelopeAdd,
+                    popBackStackWithFilter = { filter ->
+                        navigator.navController.previousBackStackEntry?.savedStateHandle?.set(
+                            SentRoute.FILTER_ENVELOPE_ARGUMENT,
+                            filter,
+                        )
+                        navigator.popBackStackIfNotHome()
+                    },
                     navigateSentEnvelopeSearch = navigator::navigateSentEnvelopeSearch,
                     handleException = viewModel::handleException,
                     onShowSnackbar = viewModel::onShowSnackbar,
@@ -92,6 +100,7 @@ internal fun MainScreen(
 
                 receivedNavGraph(
                     padding = innerPadding,
+                    envelopeFilterArgumentName = SentRoute.FILTER_ENVELOPE_ARGUMENT,
                     popBackStack = navigator::popBackStackIfNotHome,
                     popBackStackWithLedger = { ledger ->
                         navigator.navController.previousBackStackEntry?.savedStateHandle?.set(
@@ -109,7 +118,7 @@ internal fun MainScreen(
                     },
                     popBackStackWithFilter = { filter ->
                         navigator.navController.previousBackStackEntry?.savedStateHandle?.set(
-                            ReceivedRoute.FILTER_ARGUMENT_NAME,
+                            ReceivedRoute.FILTER_LEDGER_ARGUMENT_NAME,
                             filter,
                         )
                         navigator.popBackStackIfNotHome()
@@ -136,6 +145,7 @@ internal fun MainScreen(
                     navigateEnvelopAdd = navigator::navigateReceivedEnvelopeAdd,
                     navigateEnvelopeDetail = navigator::navigateReceivedEnvelopeDetail,
                     navigateEnvelopeEdit = navigator::navigateReceivedEnvelopeEdit,
+                    navigateEnvelopeFilter = navigator::navigateEnvelopeFilter,
                     onShowSnackbar = viewModel::onShowSnackbar,
                     onShowDialog = viewModel::onShowDialog,
                     handleException = viewModel::handleException,

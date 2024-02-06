@@ -44,6 +44,8 @@
     <string name="sent_envelope_search_empty_result_title">원하는 검색 결과가 없나요?</string>
     <string name="envelope_filter_screen_friend">보낸 사람</string>
     <string name="envelope_filter_screen_money">받은 봉투 금액</string>
+    <string name="envelope_filter_search_placeholder">보낸 사람을 검색해보세요</string>
+    <string name="envelope_filter_range_text">%1$s원~%2$s원</string>
     <string name="sent_envelope_add_date_to">님에게</string>
     <string name="sent_envelope_add_phone_to">"님의 "</string>
     <string name="sent_envelope_add_visited_to">"을 "</string>

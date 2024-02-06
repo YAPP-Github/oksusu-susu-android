@@ -2,6 +2,7 @@ package com.susu.data.data.repository
 
 import com.susu.core.model.Envelope
 import com.susu.core.model.EnvelopeDetail
+import com.susu.core.model.EnvelopeFilterConfig
 import com.susu.core.model.EnvelopeSearch
 import com.susu.core.model.FriendStatistics
 import com.susu.core.model.Relationship
@@ -149,6 +150,12 @@ class EnvelopesRepositoryImpl @Inject constructor(
             },
         ),
     ).getOrThrow().toModel()
+
+    override suspend fun getEnvelopeFilterConfig(): EnvelopeFilterConfig =
+        envelopesService
+            .getEnvelopeFilterConfig()
+            .getOrThrow()
+            .toModel()
 
     override suspend fun getEnvelopeDetail(
         id: Long,

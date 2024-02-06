@@ -8,7 +8,7 @@ import com.susu.core.ui.extension.decodeFromUri
 import com.susu.core.ui.util.currentDate
 import com.susu.core.ui.util.isBetween
 import com.susu.domain.usecase.ledger.GetLedgerListUseCase
-import com.susu.feature.received.navigation.argument.FilterArgument
+import com.susu.feature.received.navigation.argument.LedgerFilterArgument
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
@@ -29,7 +29,7 @@ class ReceivedViewModel @Inject constructor(
 
     private var page = 0
     private var isLast = false
-    private var filter: FilterArgument = FilterArgument()
+    private var filter: LedgerFilterArgument = LedgerFilterArgument()
     private var filterUri: String? = null
     private var isFirstVisit = true
 
@@ -45,10 +45,10 @@ class ReceivedViewModel @Inject constructor(
         if (this.filterUri == filterUri) return
         this.filterUri = filterUri
 
-        val filterArgument = Json.decodeFromUri<FilterArgument>(filterUri)
-        if (filter == filterArgument) return
+        val ledgerFilterArgument = Json.decodeFromUri<LedgerFilterArgument>(filterUri)
+        if (filter == ledgerFilterArgument) return
 
-        filter = filterArgument
+        filter = ledgerFilterArgument
         intent {
             copy(
                 selectedCategoryList = filter.selectedCategoryList.toPersistentList(),
@@ -175,7 +175,7 @@ class ReceivedViewModel @Inject constructor(
     fun navigateLedgerFilter() = postSideEffect(
         ReceivedEffect.NavigateLedgerFilter(
             with(currentState) {
-                FilterArgument(
+                LedgerFilterArgument(
                     selectedCategoryList = selectedCategoryList,
                     startAt = startAt?.toKotlinLocalDateTime(),
                     endAt = endAt?.toKotlinLocalDateTime(),
