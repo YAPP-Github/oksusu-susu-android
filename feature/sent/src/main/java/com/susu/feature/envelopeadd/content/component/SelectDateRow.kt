@@ -11,7 +11,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.susu.core.designsystem.theme.Gray100
 import com.susu.core.designsystem.theme.Gray30
 import com.susu.core.designsystem.theme.SusuTheme
-import com.susu.core.ui.util.AnnotatedText
+import com.susu.core.ui.util.AnnotatedTextByIndex
 import com.susu.feature.sent.R
 import java.time.LocalDateTime
 
@@ -30,17 +30,20 @@ fun SelectDateRow(
         verticalAlignment = Alignment.Bottom,
     ) {
         if (year == null || month == null || day == null) {
-            AnnotatedText(
+            val yearStringRange = 0..currentDate.year.toString().length
+            val monthStringRange = yearStringRange.last + 2..yearStringRange.last + 2 + currentDate.monthValue.toString().length
+            val dayStringRange = monthStringRange.last + 2..monthStringRange.last + 2 + currentDate.dayOfMonth.toString().length
+            AnnotatedTextByIndex(
                 originalText = stringResource(
                     R.string.sent_envelope_add_date,
                     currentDate.year,
                     currentDate.month.value,
                     currentDate.dayOfMonth,
                 ),
-                targetTextList = listOf(
-                    currentDate.year.toString(),
-                    currentDate.month.value.toString(),
-                    currentDate.dayOfMonth.toString(),
+                targetTextRangeList = listOf(
+                    yearStringRange,
+                    monthStringRange,
+                    dayStringRange,
                 ),
                 originalTextStyle = SusuTheme.typography.title_xl,
                 spanStyle = SusuTheme.typography.title_xl.copy(Gray30).toSpanStyle(),
