@@ -11,6 +11,7 @@ data class Vote(
     val id: Long = 0,
     val uid: Long = 0,
     val profile: Profile = Profile(),
+    val boardId: Long = 0,
     val boardName: String = "",
     val content: String = "",
     val count: Long = 0,

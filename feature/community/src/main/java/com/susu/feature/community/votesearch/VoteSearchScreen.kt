@@ -203,27 +203,28 @@ private fun SearchResultColumn(
     voteList: PersistentList<Vote>,
     onClickItem: (Vote) -> Unit,
 ) {
-    if (showSearchResultEmpty) {
-        ResultEmptyColumn(
-            title = stringResource(R.string.vote_search_screen_search_result_empty_title),
+    Column(
+        modifier = Modifier.padding(top = SusuTheme.spacing.spacing_xxl),
+        verticalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_m),
+    ) {
+        Text(
+            text = stringResource(com.susu.core.ui.R.string.word_search_result),
+            style = SusuTheme.typography.title_xxs,
+            color = Gray60,
         )
-    } else {
-        Column(
-            modifier = Modifier.padding(top = SusuTheme.spacing.spacing_xxl),
-            verticalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_m),
-        ) {
-            Text(
-                text = stringResource(com.susu.core.ui.R.string.word_search_result),
-                style = SusuTheme.typography.title_xxs,
-                color = Gray60,
+
+        if (showSearchResultEmpty) {
+            ResultEmptyColumn(
+                title = stringResource(R.string.vote_search_screen_search_result_empty_title),
             )
-            voteList.forEach { vote ->
-                SusuRecentSearchContainer(
-                    typeIconId = R.drawable.ic_vote,
-                    text = vote.content,
-                    onClick = { onClickItem(vote) },
-                )
-            }
+        }
+
+        voteList.forEach { vote ->
+            SusuRecentSearchContainer(
+                typeIconId = R.drawable.ic_vote,
+                text = vote.content,
+                onClick = { onClickItem(vote) },
+            )
         }
     }
 }

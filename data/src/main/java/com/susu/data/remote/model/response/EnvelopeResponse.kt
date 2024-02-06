@@ -26,6 +26,12 @@ data class EnvelopeInfo(
 )
 
 @Serializable
+data class RelationshipInfo(
+    val id: Long,
+    val relation: String,
+)
+
+@Serializable
 data class FriendRelationShipInfo(
     val id: Long,
     val friendId: Long,
@@ -33,10 +39,15 @@ data class FriendRelationShipInfo(
     val customRelation: String? = null,
 )
 
-@Serializable
-data class RelationshipInfo(
-    val id: Long,
-    val relation: String,
+internal fun EnvelopeInfo.toModel() = Envelope(
+    id = id,
+    uid = uid,
+    type = type,
+    amount = amount,
+    gift = gift,
+    memo = memo,
+    hasVisited = hasVisited,
+    handedOverAt = handedOverAt,
 )
 
 internal fun EnvelopeResponse.toModel() = Envelope(

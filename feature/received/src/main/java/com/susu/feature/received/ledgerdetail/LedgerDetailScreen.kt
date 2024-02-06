@@ -69,8 +69,8 @@ fun LedgerDetailRoute(
     navigateEnvelopeFilter: (String) -> Unit,
     toDeleteEnvelopeId: Long?,
     navigateLedgerEdit: (Ledger) -> Unit,
-    navigateEnvelopAdd: (String, Long) -> Unit,
-    navigateEnvelopeDetail: (Envelope, Long) -> Unit,
+    navigateEnvelopAdd: (Ledger) -> Unit,
+    navigateEnvelopeDetail: (Envelope, Ledger) -> Unit,
     popBackStackWithLedger: (String) -> Unit,
     popBackStackWithDeleteLedgerId: (Long) -> Unit,
     onShowSnackbar: (SnackbarToken) -> Unit,
@@ -110,6 +110,8 @@ fun LedgerDetailRoute(
             is LedgerDetailSideEffect.NavigateEnvelopeAdd -> navigateEnvelopAdd(sideEffect.categoryName, sideEffect.ledgerId)
             is LedgerDetailSideEffect.NavigateEnvelopeDetail -> navigateEnvelopeDetail(sideEffect.envelope, sideEffect.ledgerId)
             is LedgerDetailSideEffect.NavigateEnvelopeFilter -> navigateEnvelopeFilter(sideEffect.filter)
+            is LedgerDetailSideEffect.NavigateEnvelopeAdd -> navigateEnvelopAdd(sideEffect.ledger)
+            is LedgerDetailSideEffect.NavigateEnvelopeDetail -> navigateEnvelopeDetail(sideEffect.envelope, sideEffect.ledger)
         }
     }
 

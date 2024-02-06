@@ -1,5 +1,9 @@
 package com.susu.feature.statistics.component
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -16,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.susu.core.designsystem.component.text.AnimatedCounterText
 import com.susu.core.designsystem.theme.Gray10
 import com.susu.core.designsystem.theme.Gray100
 import com.susu.core.designsystem.theme.Gray40
@@ -24,7 +29,6 @@ import com.susu.core.designsystem.theme.Gray60
 import com.susu.core.designsystem.theme.Gray80
 import com.susu.core.designsystem.theme.Orange60
 import com.susu.core.designsystem.theme.SusuTheme
-import com.susu.core.ui.extension.toMoneyFormat
 import com.susu.feature.statistics.R
 
 @Composable
@@ -103,11 +107,20 @@ fun StatisticsHorizontalItem(
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             if (isActive) {
-                Text(text = name, style = SusuTheme.typography.title_s, color = Gray80)
-                Text(
-                    text = stringResource(id = com.susu.core.ui.R.string.money_unit_format, money.toMoneyFormat()),
+                AnimatedContent(
+                    targetState = name,
+                    transitionSpec = {
+                        slideInVertically { -it } togetherWith slideOutVertically { it }
+                    },
+                    label = "StatisticsHorizontalItemName",
+                ) {
+                    Text(text = it, style = SusuTheme.typography.title_s, color = Gray80)
+                }
+                AnimatedCounterText(
+                    number = money,
                     style = SusuTheme.typography.title_s,
                     color = Gray100,
+                    postfix = stringResource(id = com.susu.core.designsystem.R.string.money_unit),
                 )
             } else {
                 Text(text = stringResource(id = R.string.word_unknown), style = SusuTheme.typography.title_s, color = Gray40)

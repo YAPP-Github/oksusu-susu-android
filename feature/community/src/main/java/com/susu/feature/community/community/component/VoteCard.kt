@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -41,6 +42,7 @@ fun VoteCard(
     vote: Vote = Vote(),
     currentTime: LocalDateTime = LocalDateTime.now(),
     onClick: () -> Unit = {},
+    onClickReport: (Vote) -> Unit = {},
 ) {
     Column(
         modifier = Modifier
@@ -126,6 +128,7 @@ fun VoteCard(
             )
 
             Image(
+                modifier = Modifier.clip(CircleShape).susuClickable(onClick = { onClickReport(vote) }),
                 painter = painterResource(id = R.drawable.ic_report),
                 contentDescription = stringResource(com.susu.core.ui.R.string.content_description_report_button),
             )

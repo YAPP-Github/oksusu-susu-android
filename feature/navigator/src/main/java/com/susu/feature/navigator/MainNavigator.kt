@@ -10,11 +10,14 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.model.Envelope
+import com.susu.core.model.EnvelopeDetail
 import com.susu.core.model.Ledger
+import com.susu.core.model.Vote
 import com.susu.feature.community.navigation.CommunityRoute
 import com.susu.feature.community.navigation.navigateCommunity
 import com.susu.feature.community.navigation.navigateVoteAdd
 import com.susu.feature.community.navigation.navigateVoteDetail
+import com.susu.feature.community.navigation.navigateVoteEdit
 import com.susu.feature.community.navigation.navigateVoteSearch
 import com.susu.feature.loginsignup.navigation.LoginSignupRoute
 import com.susu.feature.mypage.navigation.navigateMyPage
@@ -39,6 +42,7 @@ import com.susu.feature.sent.navigation.navigateSentEnvelope
 import com.susu.feature.sent.navigation.navigateSentEnvelopeAdd
 import com.susu.feature.sent.navigation.navigateSentEnvelopeDetail
 import com.susu.feature.sent.navigation.navigateSentEnvelopeEdit
+import com.susu.feature.sent.navigation.navigateSentEnvelopeSearch
 import com.susu.feature.statistics.navigation.navigateStatistics
 
 internal class MainNavigator(
@@ -66,10 +70,14 @@ internal class MainNavigator(
                 SentRoute.sentEnvelopeDetailRoute,
                 SentRoute.sentEnvelopeEditRoute,
                 SentRoute.envelopeFilterRoute("{${SentRoute.FILTER_ENVELOPE_ARGUMENT}}"),
+                SentRoute.sentEnvelopeRoute("{${SentRoute.FRIEND_ID_ARGUMENT_NAME}}"),
+                SentRoute.sentEnvelopeDetailRoute("{${SentRoute.ENVELOPE_ID_ARGUMENT_NAME}}"),
+                SentRoute.sentEnvelopeEditRoute("{${SentRoute.ENVELOPE_DETAIL_ARGUMENT_NAME}}"),
                 CommunityRoute.route,
                 CommunityRoute.voteAddRoute,
                 CommunityRoute.voteSearchRoute,
                 CommunityRoute.voteDetailRoute("{${CommunityRoute.VOTE_ID_ARGUMENT_NAME}}"),
+                CommunityRoute.voteEditRoute("{${CommunityRoute.VOTE_ARGUMENT_NAME}}"),
             ),
             -> SusuTheme.colorScheme.background10
 
@@ -102,20 +110,24 @@ internal class MainNavigator(
         }
     }
 
-    fun navigateSentEnvelope() {
-        navController.navigateSentEnvelope()
+    fun navigateSentEnvelope(id: Long) {
+        navController.navigateSentEnvelope(id)
     }
 
-    fun navigateSentEnvelopeDetail() {
-        navController.navigateSentEnvelopeDetail()
+    fun navigateSentEnvelopeDetail(id: Long) {
+        navController.navigateSentEnvelopeDetail(id)
     }
 
-    fun navigateSentEnvelopeEdit() {
-        navController.navigateSentEnvelopeEdit()
+    fun navigateSentEnvelopeEdit(envelopeDetail: EnvelopeDetail) {
+        navController.navigateSentEnvelopeEdit(envelopeDetail)
     }
 
     fun navigateSentEnvelopeAdd() {
         navController.navigateSentEnvelopeAdd()
+    }
+
+    fun navigateSentEnvelopeSearch() {
+        navController.navigateSentEnvelopeSearch()
     }
 
     fun navigateLogin() {
@@ -162,20 +174,20 @@ internal class MainNavigator(
         navController.navigateMyPageSocial()
     }
 
-    fun navigateReceivedEnvelopeAdd(categoryName: String, ledgerId: Long) {
-        navController.navigateReceivedEnvelopeAdd(categoryName, ledgerId)
+    fun navigateReceivedEnvelopeAdd(ledger: Ledger) {
+        navController.navigateReceivedEnvelopeAdd(ledger)
     }
 
     fun navigateMyPagePrivacyPolicy() {
         navController.navigateMyPagePrivacyPolicy()
     }
 
-    fun navigateReceivedEnvelopeDetail(envelope: Envelope, ledgerId: Long) {
-        navController.navigateReceivedEnvelopeDetail(envelope, ledgerId)
+    fun navigateReceivedEnvelopeDetail(envelope: Envelope, ledger: Ledger) {
+        navController.navigateReceivedEnvelopeDetail(envelope, ledger)
     }
 
-    fun navigateReceivedEnvelopeEdit(envelope: Envelope, ledgerId: Long) {
-        navController.navigateReceivedEnvelopeEdit(envelope, ledgerId)
+    fun navigateReceivedEnvelopeEdit(envelope: Envelope, ledger: Ledger) {
+        navController.navigateReceivedEnvelopeEdit(envelope, ledger)
     }
 
     fun navigateVoteAdd() {
@@ -192,6 +204,10 @@ internal class MainNavigator(
 
     fun navigateEnvelopeFilter(filter: String) {
         navController.navigateEnvelopeFilter(filter)
+    }
+
+    fun navigateVoteEdit(vote: Vote) {
+        navController.navigateVoteEdit(vote)
     }
 
     fun popBackStackIfNotHome() {

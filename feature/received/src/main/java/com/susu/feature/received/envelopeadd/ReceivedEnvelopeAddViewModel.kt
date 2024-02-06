@@ -2,9 +2,11 @@ package com.susu.feature.received.envelopeadd
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.susu.core.model.Ledger
 import com.susu.core.model.Relationship
 import com.susu.core.model.exception.AlreadyRegisteredFriendPhoneNumberException
 import com.susu.core.ui.base.BaseViewModel
+import com.susu.core.ui.extension.decodeFromUri
 import com.susu.core.ui.extension.encodeToUri
 import com.susu.domain.usecase.envelope.CreateReceivedEnvelopeUseCase
 import com.susu.feature.received.navigation.ReceivedRoute
@@ -22,8 +24,11 @@ class ReceivedEnvelopeAddViewModel @Inject constructor(
 ) : BaseViewModel<ReceivedEnvelopeAddState, ReceivedEnvelopeAddSideEffect>(
     ReceivedEnvelopeAddState(),
 ) {
-    val categoryName = savedStateHandle.get<String>(ReceivedRoute.CATEGORY_ARGUMENT_NAME)!!
-    private val ledgerId = savedStateHandle.get<String>(ReceivedRoute.LEDGER_ID_ARGUMENT_NAME)!!
+    private val ledger = run {
+        Json.decodeFromUri<Ledger>(savedStateHandle.get<String>(ReceivedRoute.LEDGER_ARGUMENT_NAME)!!)
+    }
+    val categoryName = ledger.category.customCategory ?: ledger.category.name
+    private val ledgerId = ledger.id
 
     private var money: Long = 0
     private var name: String = ""
@@ -44,10 +49,12 @@ class ReceivedEnvelopeAddViewModel @Inject constructor(
             param = CreateReceivedEnvelopeUseCase.Param(
                 friendId = friendId,
                 friendName = name,
+                categoryId = ledger.category.id.toLong(),
+                customCategory = ledger.category.customCategory,
                 phoneNumber = phoneNumber,
                 relationshipId = relationShip?.id,
                 customRelation = relationShip?.customRelation,
-                ledgerId = ledgerId.toLong(),
+                ledgerId = ledgerId,
                 amount = money,
                 gift = present,
                 memo = memo,

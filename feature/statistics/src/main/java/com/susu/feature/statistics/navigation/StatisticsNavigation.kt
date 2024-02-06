@@ -1,5 +1,6 @@
 package com.susu.feature.statistics.navigation
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
@@ -12,12 +13,14 @@ fun NavController.navigateStatistics(navOptions: NavOptions) {
 }
 
 fun NavGraphBuilder.statisticsNavGraph(
+    padding: PaddingValues,
     navigateToMyInfo: () -> Unit,
     onShowDialog: (DialogToken) -> Unit,
     handleException: (Throwable, () -> Unit) -> Unit,
 ) {
     composable(route = StatisticsRoute.route) {
         StatisticsRoute(
+            padding = padding,
             navigateToMyInfo = navigateToMyInfo,
             onShowDialog = onShowDialog,
             handleException = handleException,

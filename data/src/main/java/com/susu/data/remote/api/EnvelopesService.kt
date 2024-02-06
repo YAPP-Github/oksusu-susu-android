@@ -2,7 +2,9 @@ package com.susu.data.remote.api
 
 import com.susu.data.remote.model.request.EnvelopeRequest
 import com.susu.data.remote.model.response.EnvelopeFilterConfigResponse
+import com.susu.data.remote.model.response.EnvelopeDetailResponse
 import com.susu.data.remote.model.response.EnvelopeResponse
+import com.susu.data.remote.model.response.EnvelopesHistoryListResponse
 import com.susu.data.remote.model.response.EnvelopesListResponse
 import com.susu.data.remote.model.response.RelationShipListResponse
 import com.susu.data.remote.model.response.SearchEnvelopeResponse
@@ -18,9 +20,9 @@ import retrofit2.http.Query
 interface EnvelopesService {
     @GET("envelopes/friend-statistics")
     suspend fun getEnvelopesList(
-        @Query("friendIds") friendIds: List<Int>?,
+        @Query("friendIds") friendIds: List<Long>?,
         @Query("fromTotalAmounts") fromTotalAmounts: Int?,
-        @Query("toTotalAmounts") toTotalMounts: Int?,
+        @Query("toTotalAmounts") toTotalAmounts: Int?,
         @Query("page") page: Int?,
         @Query("size") size: Int?,
         @Query("sort") sort: String?,
@@ -33,6 +35,24 @@ interface EnvelopesService {
     suspend fun createEnvelope(
         @Body envelopeRequest: EnvelopeRequest,
     ): ApiResult<EnvelopeResponse>
+
+    @GET("envelopes")
+    suspend fun getEnvelopesHistoryList(
+        @Query("friendIds") friendIds: List<Long>?,
+        @Query("ledgerId") ledgerId: Int?,
+        @Query("types") types: List<String>?,
+        @Query("include") include: List<String>?,
+        @Query("fromAmount") fromAmount: Int?,
+        @Query("toAmount") toAmount: Int?,
+        @Query("page") page: Int?,
+        @Query("size") size: Int?,
+        @Query("sort") sort: String?,
+    ): ApiResult<EnvelopesHistoryListResponse>
+
+    @GET("envelopes/{id}")
+    suspend fun getEnvelopeDetail(
+        @Path("id") id: Long,
+    ): ApiResult<EnvelopeDetailResponse>
 
     @PATCH("envelopes/{id}")
     suspend fun editEnvelope(

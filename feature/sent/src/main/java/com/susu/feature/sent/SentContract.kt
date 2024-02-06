@@ -1,6 +1,8 @@
 package com.susu.feature.sent
 
-import com.susu.core.model.EnvelopeStatics
+import com.susu.core.model.EnvelopeSearch
+import com.susu.core.model.Friend
+import com.susu.core.model.FriendStatistics
 import com.susu.core.ui.base.SideEffect
 import com.susu.core.ui.base.UiState
 import kotlinx.collections.immutable.PersistentList
@@ -8,12 +10,27 @@ import kotlinx.collections.immutable.persistentListOf
 
 data class SentState(
     val isLoading: Boolean = false,
-    val envelopesList: PersistentList<EnvelopeStatics> = persistentListOf(),
+    val envelopesList: PersistentList<FriendStatisticsState> = persistentListOf(),
     val showEmptyEnvelopes: Boolean = false,
 ) : UiState
 
-sealed interface SentSideEffect : SideEffect {
-    data object NavigateEnvelopeDetail : SentSideEffect
-    data object NavigateEnvelopeAdd : SentSideEffect
-    data object NavigateEnvelopeSearch : SentSideEffect
+data class FriendStatisticsState(
+    val friend: Friend = Friend(),
+    val receivedAmounts: Int = 0,
+    val sentAmounts: Int = 0,
+    val totalAmounts: Int = 0,
+    val envelopesHistoryList: PersistentList<EnvelopeSearch> = persistentListOf(),
+    val expand: Boolean = false,
+)
+
+internal fun FriendStatistics.toState() = FriendStatisticsState(
+    friend = friend,
+    receivedAmounts = receivedAmounts,
+    sentAmounts = sentAmounts,
+    totalAmounts = totalAmounts,
+)
+
+sealed interface SentEffect : SideEffect {
+    data class NavigateEnvelope(val id: Long) : SentEffect
+    data object NavigateEnvelopeAdd : SentEffect
 }

@@ -30,11 +30,13 @@ fun MyPageMenuItem(
     action: @Composable (() -> Unit)? = null,
     actionItemPadding: Dp = SusuTheme.spacing.spacing_m,
     onMenuClick: () -> Unit = {},
+    rippleEnabled: Boolean = true,
 ) {
     Row(
         modifier = modifier
             .fillMaxWidth()
             .susuClickable(
+                rippleEnabled = rippleEnabled,
                 onClick = onMenuClick,
             )
             .padding(padding),

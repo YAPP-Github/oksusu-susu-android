@@ -6,31 +6,13 @@
     <string name="sent_screen_envelope_sent">보냈어요</string>
     <string name="sent_screen_envelope_received">받았어요</string>
     <string name="sent_screen_envelope_history_show_all">전체 보기</string>
-
     <string name="content_description_envelope_show_history">내역 보기</string>
-    <string name="sent_envelope_edit_category_event">경조사</string>
-    <string name="sent_envelope_edit_category_name">이름</string>
     <string name="sent_envelope_edit_category_name_placeholder">김철수</string>
-    <string name="sent_envelope_edit_category_relationship">나와의 관계</string>
-    <string name="sent_envelope_edit_category_date">날짜</string>
-    <string name="sent_envelope_edit_category_visited">방문 여부</string>
-    <string name="sent_envelope_edit_category_present">선물</string>
-    <string name="sent_envelope_edit_category_phone">연락처</string>
-    <string name="sent_envelope_edit_category_memo">메모</string>
-    <string name="sent_envelope_edit_category_event_wedding">결혼식</string>
-    <string name="sent_envelope_edit_category_event_first_birth">돌잔치</string>
-    <string name="sent_envelope_edit_category_edit_funeral">장례식</string>
-    <string name="sent_envelope_edit_category_edit_birthday">생일 기념일</string>
-    <string name="sent_envelope_edit_category_relationship_friend">친구</string>
-    <string name="sent_envelope_edit_category_relationship_family">가족</string>
-    <string name="sent_envelope_edit_category_relationship_relatives">친척</string>
-    <string name="sent_envelope_edit_category_relationship_colleague">동료</string>
-    <string name="sent_envelope_edit_category_visited_yes">예</string>
-    <string name="sent_envelope_edit_category_visited_no">아니요</string>
     <string name="sent_envelope_edit_category_present_placeholder">한끼 식사</string>
     <string name="sent_envelope_edit_category_phone_placeholder">01012345678</string>
     <string name="sent_envelope_edit_category_memo_placeholder">입력해주세요</string>
     <string name="sent_envelope_edit_save">저장</string>
+
     <string name="sent_envelope_add_date">%d년 %d월 %d일</string>
     <string name="sent_envelope_add_name_title">누구에게 보냈나요</string>
     <string name="sent_envelope_add_name_placeholder">이름을 입력해주세요</string>
@@ -53,8 +35,25 @@
     <string name="sent_envelope_add_visited_highlight">"%s을 "</string>
     <string name="sent_envelope_add_date_title">%s님에게 언제 보냈나요</string>
     <string name="sent_envelope_add_date_title_highlight">%s님에게 </string>
+    <string name="sent_envelope_search_who_envelope">%s의 봉투</string>
+    <string name="sent_envelope_search_search_title">찾고 싶은 봉투를 검색해보세요</string>
+    <string name="sent_envelope_search_recent_search">최근 검색</string>
+    <string name="sent_envelope_search_search_result">검색 결과</string>
+    <string name="sent_envelope_search_empty_search_title">어떤 봉투를 찾아드릴까요?</string>
+    <string name="sent_envelope_search_description">사람 이름, 보낸 금액, 경조사 명 등을\n검색해볼 수 있어요</string>
+    <string name="sent_envelope_search_empty_result_title">원하는 검색 결과가 없나요?</string>
     <string name="envelope_filter_screen_friend">보낸 사람</string>
     <string name="envelope_filter_screen_money">받은 봉투 금액</string>
     <string name="envelope_filter_search_placeholder">보낸 사람을 검색해보세요</string>
     <string name="envelope_filter_range_text">%1$s원~%2$s원</string>
+    <string name="sent_envelope_add_date_to">님에게</string>
+    <string name="sent_envelope_add_phone_to">"님의 "</string>
+    <string name="sent_envelope_add_visited_to">"을 "</string>
+    <string name="sent_envelope_card_monee_total">"전체 "</string>
+    <string name="sent_envelope_card_money_won">원</string>
+
+    <string name="sent_envelope_detail_delete_title">봉투를 삭제할까요?</string>
+    <string name="sent_envelope_detail_delete_description">삭제한 봉투는 다시 복구할 수 없어요</string>
+    <string name="sent_envelope_detail_delete_snackbar">봉투가 삭제됐어요</string>
+    <string name="sent_add_more_step_phone">받은 이의 연락처</string>
 </resources>
