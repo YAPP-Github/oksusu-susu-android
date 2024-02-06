@@ -241,7 +241,6 @@ class LedgerDetailViewModel @Inject constructor(
     )
 
     fun navigateEnvelopeDetail(envelope: Envelope) = postSideEffect(LedgerDetailSideEffect.NavigateEnvelopeDetail(envelope, ledger))
-    fun navigateEnvelopeDetail(envelope: Envelope) = postSideEffect(LedgerDetailSideEffect.NavigateEnvelopeDetail(envelope, ledger.id))
     fun showAlignBottomSheet() = intent {
         copy(showAlignBottomSheet = true)
     }

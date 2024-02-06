@@ -2,7 +2,6 @@ package com.susu.data.data.repository
 
 import com.susu.core.model.Envelope
 import com.susu.core.model.EnvelopeFilterConfig
-import com.susu.core.model.EnvelopeStatics
 import com.susu.core.model.EnvelopeDetail
 import com.susu.core.model.EnvelopeSearch
 import com.susu.core.model.FriendStatistics

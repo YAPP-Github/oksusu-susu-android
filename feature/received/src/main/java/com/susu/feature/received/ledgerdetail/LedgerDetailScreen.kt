@@ -107,8 +107,6 @@ fun LedgerDetailRoute(
             is LedgerDetailSideEffect.PopBackStackWithDeleteLedgerId -> popBackStackWithDeleteLedgerId(sideEffect.ledgerId)
             is LedgerDetailSideEffect.HandleException -> handleException(sideEffect.throwable, sideEffect.retry)
             is LedgerDetailSideEffect.ShowSnackbar -> onShowSnackbar(SnackbarToken(message = sideEffect.msg))
-            is LedgerDetailSideEffect.NavigateEnvelopeAdd -> navigateEnvelopAdd(sideEffect.categoryName, sideEffect.ledgerId)
-            is LedgerDetailSideEffect.NavigateEnvelopeDetail -> navigateEnvelopeDetail(sideEffect.envelope, sideEffect.ledgerId)
             is LedgerDetailSideEffect.NavigateEnvelopeFilter -> navigateEnvelopeFilter(sideEffect.filter)
             is LedgerDetailSideEffect.NavigateEnvelopeAdd -> navigateEnvelopAdd(sideEffect.ledger)
             is LedgerDetailSideEffect.NavigateEnvelopeDetail -> navigateEnvelopeDetail(sideEffect.envelope, sideEffect.ledger)
