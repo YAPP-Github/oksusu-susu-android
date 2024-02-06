@@ -88,6 +88,13 @@ internal fun MainScreen(
                         )
                         navigator.popBackStackIfNotHome()
                     },
+                    popBackStackWithRefresh = {
+                        navigator.navController.previousBackStackEntry?.savedStateHandle?.set(
+                            SentRoute.SENT_REFRESH_ARGUMENT_NAME,
+                            true,
+                        )
+                        navigator.popBackStackIfNotHome()
+                    },
                     navigateSentEnvelope = navigator::navigateSentEnvelope,
                     navigateSentEnvelopeDetail = navigator::navigateSentEnvelopeDetail,
                     navigateSentEnvelopeEdit = navigator::navigateSentEnvelopeEdit,

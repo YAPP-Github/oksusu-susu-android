@@ -5,6 +5,7 @@ import com.susu.core.ui.base.BaseViewModel
 import com.susu.domain.usecase.envelope.GetEnvelopesHistoryListUseCase
 import com.susu.domain.usecase.envelope.GetEnvelopesListUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -18,7 +19,16 @@ class SentViewModel @Inject constructor(
 ) {
     private var page = 0
 
-    fun getEnvelopesList() = viewModelScope.launch {
+    fun getEnvelopesList(refresh: Boolean?) = viewModelScope.launch {
+        if (currentState.isLoading) return@launch
+
+        intent { copy(isLoading = true) }
+
+        if (refresh == true) {
+            intent { copy(envelopesList = persistentListOf()) }
+            page = 0
+        }
+
         getEnvelopesListUseCase(
             GetEnvelopesListUseCase.Param(page = page),
         ).onSuccess { envelopesList ->
@@ -31,6 +41,8 @@ class SentViewModel @Inject constructor(
                 )
             }
         }
+
+        intent { copy(isLoading = false) }
     }
 
     fun getEnvelopesHistoryList(id: Long) = viewModelScope.launch {

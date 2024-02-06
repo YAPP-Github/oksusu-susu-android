@@ -46,6 +46,7 @@ import com.susu.feature.sent.component.SentCard
 fun SentRoute(
     viewModel: SentViewModel = hiltViewModel(),
     deletedFriendId: Long?,
+    refresh: Boolean?,
     padding: PaddingValues,
     navigateSentEnvelope: (Long) -> Unit,
     navigateSentEnvelopeAdd: () -> Unit,
@@ -62,13 +63,16 @@ fun SentRoute(
         }
     }
 
-    envelopesListState.OnBottomReached {
-        viewModel.getEnvelopesList()
-    }
-
     LaunchedEffect(key1 = Unit) {
+        viewModel.getEnvelopesList(refresh)
         if (deletedFriendId != null) {
             viewModel.deleteEmptyFriendStatistics(deletedFriendId)
+        }
+    }
+
+    envelopesListState.OnBottomReached {
+        if (uiState.envelopesList.isNotEmpty()) {
+            viewModel.getEnvelopesList(refresh = false)
         }
     }
 
