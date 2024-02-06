@@ -21,6 +21,7 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -38,6 +39,7 @@ import com.susu.core.designsystem.component.appbar.SusuDefaultAppBar
 import com.susu.core.designsystem.component.appbar.icon.BackIcon
 import com.susu.core.designsystem.component.appbar.icon.DeleteText
 import com.susu.core.designsystem.component.appbar.icon.EditText
+import com.susu.core.designsystem.component.bottomsheet.SusuSelectionBottomSheet
 import com.susu.core.designsystem.component.button.FilledButtonColor
 import com.susu.core.designsystem.component.button.FilterButton
 import com.susu.core.designsystem.component.button.GhostButtonColor
@@ -61,6 +63,8 @@ import com.susu.core.ui.extension.toMoneyFormat
 import com.susu.core.ui.util.to_yyyy_dot_MM_dot_dd
 import com.susu.feature.received.ledgerdetail.component.LedgerDetailEnvelopeContainer
 import com.susu.feature.received.ledgerdetail.component.LedgerDetailOverviewColumn
+import com.susu.feature.received.received.LedgerAlign
+import kotlinx.collections.immutable.toPersistentList
 import java.util.concurrent.Flow
 
 @Composable
@@ -145,10 +149,13 @@ fun LedgerDetailRoute(
         onClickFilterButton = viewModel::navigateEnvelopeFilter,
         onClickCloseFriend = viewModel::removeFriend,
         onClickCloseAmount = viewModel::clearAmount,
+        onClickAlignButton = viewModel::showAlignBottomSheet,
+        onDismissAlignBottomSheet = viewModel::hideAlignBottomSheet,
+        onClickAlignBottomSheetItem = viewModel::updateAlignBottomSheet,
     )
 }
 
-@OptIn(ExperimentalLayoutApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LedgerDetailScreen(
     uiState: LedgerDetailState = LedgerDetailState(),
@@ -157,12 +164,14 @@ fun LedgerDetailScreen(
     onClickEdit: () -> Unit = {},
     onClickDelete: () -> Unit = {},
     onClickFilterButton: () -> Unit = {},
-    onClickAlignButton: () -> Unit = {},
     onClickEnvelopeAddButton: () -> Unit = {},
     onClickFloatingButton: () -> Unit = {},
     onClickSeeMoreIcon: (Envelope) -> Unit = {},
     onClickCloseFriend: (Friend) -> Unit = {},
     onClickCloseAmount: () -> Unit = {},
+    onClickAlignButton: () -> Unit = {},
+    onDismissAlignBottomSheet: () -> Unit = {},
+    onClickAlignBottomSheetItem: (Int) -> Unit = {},
 ) {
     Box(
         modifier = Modifier
@@ -224,7 +233,7 @@ fun LedgerDetailScreen(
                         SusuGhostButton(
                             color = GhostButtonColor.Black,
                             style = SmallButtonStyle.height32,
-                            text = alignList[0], // TODO State 변환
+                            text = stringResource(id = EnvelopeAlign.entries[uiState.selectedAlignPosition].stringResId),
                             leftIcon = {
                                 Icon(
                                     painter = painterResource(id = R.drawable.ic_align),
@@ -289,6 +298,16 @@ fun LedgerDetailScreen(
                     }
                 }
             }
+        }
+
+        if (uiState.showAlignBottomSheet) {
+            SusuSelectionBottomSheet(
+                onDismissRequest = onDismissAlignBottomSheet,
+                containerHeight = 250.dp,
+                items = EnvelopeAlign.entries.map { stringResource(id = it.stringResId) }.toPersistentList(),
+                selectedItemPosition = uiState.selectedAlignPosition,
+                onClickItem = onClickAlignBottomSheetItem,
+            )
         }
 
         SusuFloatingButton(

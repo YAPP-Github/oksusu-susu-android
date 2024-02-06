@@ -17,6 +17,7 @@ import com.susu.domain.usecase.envelope.SearchReceivedEnvelopeListUseCase
 import com.susu.domain.usecase.ledger.DeleteLedgerUseCase
 import com.susu.domain.usecase.ledger.GetLedgerUseCase
 import com.susu.feature.received.navigation.ReceivedRoute
+import com.susu.feature.received.received.LedgerAlign
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
@@ -160,7 +161,7 @@ class LedgerDetailViewModel @Inject constructor(
                 fromAmount = currentState.fromAmount,
                 toAmount = currentState.toAmount,
                 page = page,
-                sort = null,
+                sort = EnvelopeAlign.entries[currentState.selectedAlignPosition].query,
             ),
         ).onSuccess { envelopeList ->
             isLast = envelopeList.isEmpty()
@@ -231,4 +232,17 @@ class LedgerDetailViewModel @Inject constructor(
     )
 
     fun navigateEnvelopeDetail(envelope: Envelope) = postSideEffect(LedgerDetailSideEffect.NavigateEnvelopeDetail(envelope, ledger.id))
+    fun showAlignBottomSheet() = intent {
+        copy(showAlignBottomSheet = true)
+    }
+
+    fun hideAlignBottomSheet() = intent {
+        copy(showAlignBottomSheet = false)
+    }
+
+    fun updateAlignBottomSheet(position: Int) {
+        intent { copy(selectedAlignPosition = position) }
+        getReceivedEnvelopeList(true)
+        hideAlignBottomSheet()
+    }
 }

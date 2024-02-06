@@ -1,11 +1,14 @@
 package com.susu.feature.received.ledgerdetail
 
+import androidx.annotation.StringRes
 import com.susu.core.model.Envelope
 import com.susu.core.model.Friend
 import com.susu.core.model.Ledger
 import com.susu.core.model.SearchEnvelope
+import com.susu.core.ui.R
 import com.susu.core.ui.base.SideEffect
 import com.susu.core.ui.base.UiState
+import com.susu.feature.received.received.LedgerAlign
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
 
@@ -20,9 +23,32 @@ data class LedgerDetailState(
     val selectedFriendList: PersistentList<Friend> = persistentListOf(),
     val fromAmount: Long? = null,
     val toAmount: Long? = null,
-) : UiState {
+    val showAlignBottomSheet: Boolean = false,
+    val selectedAlignPosition: Int = EnvelopeAlign.RECENT.ordinal,
+    ) : UiState {
     val isFiltered = fromAmount != null || toAmount != null || selectedFriendList.isNotEmpty()
+}
 
+enum class EnvelopeAlign(
+    @StringRes val stringResId: Int,
+    val query: String,
+) {
+    RECENT(
+        stringResId = R.string.word_align_recently,
+        query = "createdAt,desc",
+    ),
+    OUTDATED(
+        stringResId = R.string.word_align_outdated,
+        query = "createdAt,asc",
+    ),
+    HIGH_AMOUNT(
+        stringResId = R.string.word_align_high_amount,
+        query = "totalReceivedAmounts,desc",
+    ),
+    LOW_AMOUNT(
+        stringResId = R.string.word_align_low_amount,
+        query = "totalReceivedAmounts,asc",
+    ),
 }
 
 sealed interface LedgerDetailSideEffect : SideEffect {
