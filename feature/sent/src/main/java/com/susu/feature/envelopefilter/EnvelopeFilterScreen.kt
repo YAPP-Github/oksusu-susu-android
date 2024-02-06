@@ -90,7 +90,7 @@ fun EnvelopeFilterScreen(
     onTextChangeSearch: (String) -> Unit = {},
     onClickFriendChip: (Friend) -> Unit = {},
     onCloseFriendChip: (Friend) -> Unit = {},
-    onMoneyValueChange: (Float?, Float?) -> Unit = { _, _ ->  }
+    onMoneyValueChange: (Float?, Float?) -> Unit = { _, _ -> },
 ) {
     Column(
         modifier = Modifier
@@ -182,7 +182,7 @@ fun EnvelopeFilterScreen(
                     if (uiState.fromAmount != null) {
                         SelectedFilterButton(
                             name = "${uiState.sliderValue.start.toMoneyFormat()}~${uiState.sliderValue.endInclusive.toMoneyFormat()}",
-                            onClickCloseIcon = { onMoneyValueChange(null, null) }
+                            onClickCloseIcon = { onMoneyValueChange(null, null) },
                         )
                     }
                 }

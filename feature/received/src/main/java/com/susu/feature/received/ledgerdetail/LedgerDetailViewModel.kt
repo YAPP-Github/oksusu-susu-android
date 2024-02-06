@@ -2,7 +2,6 @@ package com.susu.feature.received.ledgerdetail
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.susu.core.model.Category
 import com.susu.core.model.Envelope
 import com.susu.core.model.Friend
 import com.susu.core.model.Ledger
@@ -17,7 +16,6 @@ import com.susu.domain.usecase.envelope.SearchReceivedEnvelopeListUseCase
 import com.susu.domain.usecase.ledger.DeleteLedgerUseCase
 import com.susu.domain.usecase.ledger.GetLedgerUseCase
 import com.susu.feature.received.navigation.ReceivedRoute
-import com.susu.feature.received.received.LedgerAlign
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch

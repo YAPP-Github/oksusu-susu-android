@@ -101,6 +101,5 @@ object SentRoute {
     const val sentEnvelopeAddRoute = "sent-envelope-add"
     const val FILTER_ENVELOPE_ARGUMENT = "filter-envelope"
 
-
     fun envelopeFilterRoute(filter: String) = "envelope-filter/$filter"
 }

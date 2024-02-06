@@ -35,13 +35,10 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.susu.core.designsystem.theme.Gray10
-import com.susu.core.designsystem.theme.Gray100
 import com.susu.core.designsystem.theme.Gray60
-import com.susu.core.designsystem.theme.Gray80
 import com.susu.core.designsystem.theme.Orange20
 import com.susu.core.designsystem.theme.Orange60
 import com.susu.core.designsystem.theme.SusuTheme
-import com.susu.core.ui.extension.toMoneyFormat
 import kotlin.math.roundToInt
 
 @OptIn(ExperimentalMaterial3Api::class)

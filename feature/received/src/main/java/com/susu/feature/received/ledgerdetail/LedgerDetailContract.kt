@@ -8,7 +8,6 @@ import com.susu.core.model.SearchEnvelope
 import com.susu.core.ui.R
 import com.susu.core.ui.base.SideEffect
 import com.susu.core.ui.base.UiState
-import com.susu.feature.received.received.LedgerAlign
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
 
@@ -25,7 +24,7 @@ data class LedgerDetailState(
     val toAmount: Long? = null,
     val showAlignBottomSheet: Boolean = false,
     val selectedAlignPosition: Int = EnvelopeAlign.RECENT.ordinal,
-    ) : UiState {
+) : UiState {
     val isFiltered = fromAmount != null || toAmount != null || selectedFriendList.isNotEmpty()
 }
 

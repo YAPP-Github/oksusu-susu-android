@@ -103,7 +103,7 @@ class EnvelopeFilterViewModel @Inject constructor(
     fun updateMoneyRange(fromAmount: Float?, toAmount: Float?) = intent {
         copy(
             toAmount = toAmount?.roundToStep(step, maxFromAmount, maxToAmount)?.toLong(),
-            fromAmount = fromAmount?.roundToStep(step, maxFromAmount, maxToAmount)?.toLong()
+            fromAmount = fromAmount?.roundToStep(step, maxFromAmount, maxToAmount)?.toLong(),
         )
     }
 
@@ -123,5 +123,4 @@ class EnvelopeFilterViewModel @Inject constructor(
             toAmount = null,
         )
     }
-
 }

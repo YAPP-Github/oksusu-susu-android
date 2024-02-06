@@ -127,9 +127,9 @@ class EnvelopesRepositoryImpl @Inject constructor(
         ),
     ).getOrThrow().toModel()
 
-    override suspend fun getEnvelopeFilterConfig()
-        : EnvelopeFilterConfig = envelopesService
-        .getEnvelopeFilterConfig()
-        .getOrThrow()
-        .toModel()
+    override suspend fun getEnvelopeFilterConfig(): EnvelopeFilterConfig =
+        envelopesService
+            .getEnvelopeFilterConfig()
+            .getOrThrow()
+            .toModel()
 }
