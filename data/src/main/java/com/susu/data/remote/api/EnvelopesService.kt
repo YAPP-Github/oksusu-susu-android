@@ -1,8 +1,8 @@
 package com.susu.data.remote.api
 
 import com.susu.data.remote.model.request.EnvelopeRequest
-import com.susu.data.remote.model.response.EnvelopeFilterConfigResponse
 import com.susu.data.remote.model.response.EnvelopeDetailResponse
+import com.susu.data.remote.model.response.EnvelopeFilterConfigResponse
 import com.susu.data.remote.model.response.EnvelopeResponse
 import com.susu.data.remote.model.response.EnvelopesHistoryListResponse
 import com.susu.data.remote.model.response.EnvelopesListResponse
