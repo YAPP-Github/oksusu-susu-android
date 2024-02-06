@@ -33,4 +33,5 @@ internal fun FriendStatistics.toState() = FriendStatisticsState(
 sealed interface SentEffect : SideEffect {
     data class NavigateEnvelope(val id: Long) : SentEffect
     data object NavigateEnvelopeAdd : SentEffect
+    data object NavigateEnvelopeSearch : SentEffect
 }

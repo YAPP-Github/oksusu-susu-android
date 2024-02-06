@@ -51,6 +51,7 @@ import kotlinx.datetime.toJavaLocalDateTime
 fun SentEnvelopeRoute(
     viewModel: SentEnvelopeViewModel = hiltViewModel(),
     popBackStack: () -> Unit,
+    popBackStackWithDeleteFriendId: (Long) -> Unit,
     navigateSentEnvelopeDetail: (Long) -> Unit,
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
@@ -60,6 +61,7 @@ fun SentEnvelopeRoute(
         when (sideEffect) {
             SentEnvelopeSideEffect.PopBackStack -> popBackStack()
             is SentEnvelopeSideEffect.NavigateEnvelopeDetail -> navigateSentEnvelopeDetail(sideEffect.id)
+            is SentEnvelopeSideEffect.PopBackStackWithDeleteFriendId -> popBackStackWithDeleteFriendId(sideEffect.id)
         }
     }
 

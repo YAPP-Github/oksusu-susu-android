@@ -45,7 +45,7 @@ class EnvelopeAddViewModel @Inject constructor(
                     category = category!!,
                 ),
             ).onSuccess {
-                postSideEffect(EnvelopeAddEffect.PopBackStack)
+                postSideEffect(EnvelopeAddEffect.PopBackStackWithRefresh)
             }.onFailure {
                 postSideEffect(EnvelopeAddEffect.HandleException(it, ::createEnvelope))
             }

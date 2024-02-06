@@ -16,4 +16,5 @@ data class SentEnvelopeState(
 sealed interface SentEnvelopeSideEffect : SideEffect {
     data class NavigateEnvelopeDetail(val id: Long) : SentEnvelopeSideEffect
     data object PopBackStack : SentEnvelopeSideEffect
+    data class PopBackStackWithDeleteFriendId(val id: Long) : SentEnvelopeSideEffect
 }

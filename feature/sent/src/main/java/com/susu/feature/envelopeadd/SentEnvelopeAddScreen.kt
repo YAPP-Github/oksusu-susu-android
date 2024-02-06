@@ -44,6 +44,7 @@ import java.time.LocalDateTime
 fun SentEnvelopeAddRoute(
     viewModel: EnvelopeAddViewModel = hiltViewModel(),
     popBackStack: () -> Unit,
+    popBackStackWithRefresh: () -> Unit,
     handleException: (Throwable, () -> Unit) -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -52,6 +53,7 @@ fun SentEnvelopeAddRoute(
         when (sideEffect) {
             is EnvelopeAddEffect.HandleException -> handleException(sideEffect.throwable, sideEffect.retry)
             EnvelopeAddEffect.PopBackStack -> popBackStack()
+            EnvelopeAddEffect.PopBackStackWithRefresh -> popBackStackWithRefresh()
         }
     }
 

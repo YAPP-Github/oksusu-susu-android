@@ -18,6 +18,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -44,6 +45,8 @@ import com.susu.feature.sent.component.SentCard
 @Composable
 fun SentRoute(
     viewModel: SentViewModel = hiltViewModel(),
+    deletedFriendId: Long?,
+    refresh: Boolean?,
     padding: PaddingValues,
     navigateSentEnvelope: (Long) -> Unit,
     navigateSentEnvelopeAdd: () -> Unit,
@@ -56,20 +59,30 @@ fun SentRoute(
         when (sideEffect) {
             SentEffect.NavigateEnvelopeAdd -> navigateSentEnvelopeAdd()
             is SentEffect.NavigateEnvelope -> navigateSentEnvelope(sideEffect.id)
+            SentEffect.NavigateEnvelopeSearch -> navigateSentEnvelopeSearch()
+        }
+    }
+
+    LaunchedEffect(key1 = Unit) {
+        viewModel.getEnvelopesList(refresh)
+        if (deletedFriendId != null) {
+            viewModel.deleteEmptyFriendStatistics(deletedFriendId)
         }
     }
 
     envelopesListState.OnBottomReached {
-        viewModel.getEnvelopesList()
+        if (uiState.envelopesList.isNotEmpty()) {
+            viewModel.getEnvelopesList(refresh = false)
+        }
     }
 
     SentScreen(
         uiState = uiState,
         envelopesListState = envelopesListState,
         padding = padding,
-        onClickHistoryShowAll = navigateSentEnvelope,
-        onClickAddEnvelope = navigateSentEnvelopeAdd,
-        onClickSearchIcon = navigateSentEnvelopeSearch,
+        onClickHistoryShowAll = viewModel::navigateSentEnvelope,
+        onClickAddEnvelope = viewModel::navigateSentAdd,
+        onClickSearchIcon = viewModel::navigateSentEnvelopeSearch,
         onClickHistory = { friendId ->
             viewModel.getEnvelopesHistoryList(friendId)
         },

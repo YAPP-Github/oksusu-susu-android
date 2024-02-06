@@ -51,6 +51,8 @@ fun NavController.navigateEnvelopeFilter(filter: String) {
 fun NavGraphBuilder.sentNavGraph(
     padding: PaddingValues,
     popBackStack: () -> Unit,
+    popBackStackWithDeleteFriendId: (Long) -> Unit,
+    popBackStackWithRefresh: () -> Unit,
     navigateSentEnvelope: (Long) -> Unit,
     navigateSentEnvelopeDetail: (Long) -> Unit,
     navigateSentEnvelopeEdit: (EnvelopeDetail) -> Unit,
@@ -61,9 +63,14 @@ fun NavGraphBuilder.sentNavGraph(
     popBackStackWithFilter: (String) -> Unit,
     handleException: (Throwable, () -> Unit) -> Unit,
 ) {
-    composable(route = SentRoute.route) {
+    composable(route = SentRoute.route) { navBackStackEntry ->
+        val deletedFriendId = navBackStackEntry.savedStateHandle.get<Long>(SentRoute.FRIEND_ID_ARGUMENT_NAME)
+        val refresh = navBackStackEntry.savedStateHandle.get<Boolean>(SentRoute.SENT_REFRESH_ARGUMENT_NAME)
+
         SentRoute(
             padding = padding,
+            deletedFriendId = deletedFriendId,
+            refresh = refresh,
             navigateSentEnvelope = navigateSentEnvelope,
             navigateSentEnvelopeAdd = navigateSentEnvelopeAdd,
             navigateSentEnvelopeSearch = navigateSentEnvelopeSearch,
@@ -81,6 +88,7 @@ fun NavGraphBuilder.sentNavGraph(
         SentEnvelopeRoute(
             popBackStack = popBackStack,
             navigateSentEnvelopeDetail = navigateSentEnvelopeDetail,
+            popBackStackWithDeleteFriendId = popBackStackWithDeleteFriendId,
         )
     }
 
@@ -110,6 +118,7 @@ fun NavGraphBuilder.sentNavGraph(
     composable(route = SentRoute.sentEnvelopeAddRoute) {
         SentEnvelopeAddRoute(
             popBackStack = popBackStack,
+            popBackStackWithRefresh = popBackStackWithRefresh,
             handleException = handleException,
         )
     }
@@ -135,7 +144,7 @@ fun NavGraphBuilder.sentNavGraph(
 object SentRoute {
     const val route = "sent"
     const val sentEnvelopeAddRoute = "sent-envelope-add"
-
+    const val SENT_REFRESH_ARGUMENT_NAME = "sent-refresh"
     fun sentEnvelopeRoute(id: String) = "sent-envelope/$id"
     const val FRIEND_ID_ARGUMENT_NAME = "sent-envelope-id"
 
@@ -144,6 +153,7 @@ object SentRoute {
 
     fun sentEnvelopeEditRoute(envelopeDetail: String) = "sent-envelope-edit/$envelopeDetail"
     const val ENVELOPE_DETAIL_ARGUMENT_NAME = "envelope-detail"
+
     const val sentEnvelopeSearchRoute = "sent-envelope-search"
     const val FILTER_ENVELOPE_ARGUMENT = "filter-envelope"
 

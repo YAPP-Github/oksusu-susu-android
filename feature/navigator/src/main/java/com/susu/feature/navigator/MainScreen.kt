@@ -81,6 +81,20 @@ internal fun MainScreen(
                 sentNavGraph(
                     padding = innerPadding,
                     popBackStack = navigator::popBackStackIfNotHome,
+                    popBackStackWithDeleteFriendId = { friendId ->
+                        navigator.navController.previousBackStackEntry?.savedStateHandle?.set(
+                            SentRoute.FRIEND_ID_ARGUMENT_NAME,
+                            friendId,
+                        )
+                        navigator.popBackStackIfNotHome()
+                    },
+                    popBackStackWithRefresh = {
+                        navigator.navController.previousBackStackEntry?.savedStateHandle?.set(
+                            SentRoute.SENT_REFRESH_ARGUMENT_NAME,
+                            true,
+                        )
+                        navigator.popBackStackIfNotHome()
+                    },
                     navigateSentEnvelope = navigator::navigateSentEnvelope,
                     navigateSentEnvelopeDetail = navigator::navigateSentEnvelopeDetail,
                     navigateSentEnvelopeEdit = navigator::navigateSentEnvelopeEdit,

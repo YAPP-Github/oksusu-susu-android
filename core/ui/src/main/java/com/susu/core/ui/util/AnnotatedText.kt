@@ -30,3 +30,25 @@ fun AnnotatedText(
         text = annotatedString,
     )
 }
+
+@Composable
+fun AnnotatedTextByIndex(
+    modifier: Modifier = Modifier,
+    originalText: String,
+    originalTextStyle: TextStyle,
+    targetTextRangeList: List<IntRange>,
+    spanStyle: SpanStyle,
+) {
+    val annotatedString = buildAnnotatedString {
+        append(originalText)
+
+        targetTextRangeList.forEach { range ->
+            addStyle(style = spanStyle, start = range.first, end = range.last)
+        }
+    }
+    Text(
+        modifier = modifier,
+        style = originalTextStyle,
+        text = annotatedString,
+    )
+}
