@@ -41,6 +41,7 @@ import com.susu.core.designsystem.theme.Gray80
 import com.susu.core.designsystem.theme.Orange20
 import com.susu.core.designsystem.theme.Orange60
 import com.susu.core.designsystem.theme.SusuTheme
+import com.susu.core.ui.extension.toMoneyFormat
 import kotlin.math.roundToInt
 
 @OptIn(ExperimentalMaterial3Api::class)

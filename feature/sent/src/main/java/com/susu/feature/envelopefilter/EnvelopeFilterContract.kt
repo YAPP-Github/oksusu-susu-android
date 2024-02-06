@@ -14,7 +14,10 @@ data class EnvelopeFilterState(
     val toAmount: Long? = null,
     val maxFromAmount: Long = 0,
     val maxToAmount: Long = 0,
-) : UiState
+) : UiState {
+    val sliderValue = fromAmount?.toFloat()?.rangeTo(toAmount?.toFloat()!!) ?: maxFromAmount.toFloat()..maxToAmount.toFloat()
+    val sliderValueRange =  maxFromAmount.toFloat()..maxToAmount.toFloat()
+}
 
 sealed interface EnvelopeFilterSideEffect : SideEffect {
     data object PopBackStack : EnvelopeFilterSideEffect

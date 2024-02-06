@@ -2,9 +2,12 @@ package com.susu.feature.received.ledgerdetail
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -17,6 +20,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -45,6 +49,7 @@ import com.susu.core.designsystem.theme.Gray25
 import com.susu.core.designsystem.theme.Gray50
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.model.Envelope
+import com.susu.core.model.Friend
 import com.susu.core.model.Ledger
 import com.susu.core.ui.DialogToken
 import com.susu.core.ui.R
@@ -56,6 +61,7 @@ import com.susu.core.ui.extension.toMoneyFormat
 import com.susu.core.ui.util.to_yyyy_dot_MM_dot_dd
 import com.susu.feature.received.ledgerdetail.component.LedgerDetailEnvelopeContainer
 import com.susu.feature.received.ledgerdetail.component.LedgerDetailOverviewColumn
+import java.util.concurrent.Flow
 
 @Composable
 fun LedgerDetailRoute(
@@ -137,9 +143,12 @@ fun LedgerDetailRoute(
         onClickSeeMoreIcon = viewModel::navigateEnvelopeDetail,
         onClickEnvelopeAddButton = viewModel::navigateEnvelopeAdd,
         onClickFilterButton = viewModel::navigateEnvelopeFilter,
+        onClickCloseFriend = viewModel::removeFriend,
+        onClickCloseAmount = viewModel::clearAmount,
     )
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun LedgerDetailScreen(
     uiState: LedgerDetailState = LedgerDetailState(),
@@ -152,6 +161,8 @@ fun LedgerDetailScreen(
     onClickEnvelopeAddButton: () -> Unit = {},
     onClickFloatingButton: () -> Unit = {},
     onClickSeeMoreIcon: (Envelope) -> Unit = {},
+    onClickCloseFriend: (Friend) -> Unit = {},
+    onClickCloseAmount: () -> Unit = {},
 ) {
     Box(
         modifier = Modifier
@@ -205,11 +216,11 @@ fun LedgerDetailScreen(
 
                 item {
                     Row(
-                        modifier = Modifier.padding(
-                            horizontal = SusuTheme.spacing.spacing_m,
-                        ),
+                        modifier = Modifier
+                            .horizontalScroll(rememberScrollState()),
                         horizontalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxs),
                     ) {
+                        Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_xxs))
                         SusuGhostButton(
                             color = GhostButtonColor.Black,
                             style = SmallButtonStyle.height32,
@@ -230,7 +241,7 @@ fun LedgerDetailScreen(
                                 color = FilledButtonColor.Black,
                                 style = SmallButtonStyle.height32,
                                 name = friend.name,
-                                onClickCloseIcon = { },
+                                onClickCloseIcon = { onClickCloseFriend(friend) },
                             )
                         }
 
@@ -239,7 +250,7 @@ fun LedgerDetailScreen(
                                 color = FilledButtonColor.Black,
                                 style = SmallButtonStyle.height32,
                                 name = "${uiState.fromAmount.toMoneyFormat()}~${uiState.toAmount.toMoneyFormat()}",
-                                onClickCloseIcon = { },
+                                onClickCloseIcon = { onClickCloseAmount() },
                             )
                         }
 

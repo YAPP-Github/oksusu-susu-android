@@ -34,6 +34,7 @@ import com.susu.core.designsystem.component.button.XSmallButtonStyle
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.model.Friend
 import com.susu.core.ui.extension.collectWithLifecycle
+import com.susu.core.ui.extension.toMoneyFormat
 import com.susu.feature.envelopefilter.component.MoneySlider
 import com.susu.feature.envelopefilter.component.SearchBar
 import com.susu.feature.sent.R
@@ -74,6 +75,8 @@ fun EnvelopeFilterRoute(
         onTextChangeSearch = viewModel::updateName,
         onClickFriendChip = viewModel::selectFriend,
         onCloseFriendChip = viewModel::unselectFriend,
+        onMoneyValueChange = viewModel::updateMoneyRange,
+        onClickRefreshButton = viewModel::clearFilter,
     )
 }
 
@@ -87,6 +90,7 @@ fun EnvelopeFilterScreen(
     onTextChangeSearch: (String) -> Unit = {},
     onClickFriendChip: (Friend) -> Unit = {},
     onCloseFriendChip: (Friend) -> Unit = {},
+    onMoneyValueChange: (Float?, Float?) -> Unit = { _, _ ->  }
 ) {
     Column(
         modifier = Modifier
@@ -140,11 +144,22 @@ fun EnvelopeFilterScreen(
                 )
                 Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_m))
 
-                Text(text = "20,000원~100,000원", style = SusuTheme.typography.title_m)
+                Text(
+                    text = stringResource(
+                        R.string.envelope_filter_range_text,
+                        uiState.sliderValue.start.toMoneyFormat(),
+                        uiState.sliderValue.endInclusive.toMoneyFormat(),
+                    ),
+                    style = SusuTheme.typography.title_m,
+                )
 
                 Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_xxs))
 
-                MoneySlider(value = 20_000f..100_000f, onValueChange = {}, valueRange = 0f..100_000f)
+                MoneySlider(
+                    value = uiState.sliderValue,
+                    onValueChange = { onMoneyValueChange(it.start, it.endInclusive) },
+                    valueRange = uiState.sliderValueRange,
+                )
             }
 
             Spacer(modifier = Modifier.weight(1f))
@@ -164,9 +179,12 @@ fun EnvelopeFilterScreen(
                         )
                     }
 
-                    SelectedFilterButton(
-                        name = "20,000~10,000",
-                    )
+                    if (uiState.fromAmount != null) {
+                        SelectedFilterButton(
+                            name = "${uiState.sliderValue.start.toMoneyFormat()}~${uiState.sliderValue.endInclusive.toMoneyFormat()}",
+                            onClickCloseIcon = { onMoneyValueChange(null, null) }
+                        )
+                    }
                 }
 
                 Row(

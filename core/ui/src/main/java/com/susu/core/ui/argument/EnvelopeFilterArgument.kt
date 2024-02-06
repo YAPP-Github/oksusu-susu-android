@@ -8,4 +8,5 @@ data class EnvelopeFilterArgument(
     val selectedFriendList: List<Friend> = emptyList(),
     val fromAmount: Long? = null,
     val toAmount: Long? = null,
+    val isSent: Boolean = false,
 )

@@ -7,9 +7,13 @@ import kotlinx.serialization.Serializable
 data class EnvelopeFilterConfigResponse(
     val minReceivedAmount: Long,
     val maxReceivedAmount: Long,
+    val minSentAmount: Long,
+    val maxSentAmount: Long,
 )
 
 internal fun EnvelopeFilterConfigResponse.toModel() = EnvelopeFilterConfig(
     minReceivedAmount = minReceivedAmount,
     maxReceivedAmount = maxReceivedAmount,
+    minSentAmount = minSentAmount,
+    maxSentAmount = maxSentAmount,
 )
