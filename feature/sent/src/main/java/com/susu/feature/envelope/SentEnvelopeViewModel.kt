@@ -32,12 +32,13 @@ class SentEnvelopeViewModel @Inject constructor(
         getEnvelopesListUseCase(
             GetEnvelopesListUseCase.Param(friendIds = friendsList),
         ).onSuccess { envelope ->
-            val envelopeInfo = envelope.getOrNull(0) ?: return@launch
-            intent {
-                copy(
-                    envelopeInfo = envelopeInfo,
-                )
-            }
+            envelope.getOrNull(0)?.let {
+                intent {
+                    copy(
+                        envelopeInfo = it,
+                    )
+                }
+            } ?: postSideEffect(SentEnvelopeSideEffect.PopBackStackWithDeleteFriendId(id))
         }
     }
 
@@ -48,10 +49,9 @@ class SentEnvelopeViewModel @Inject constructor(
         getEnvelopesHistoryListUseCase(
             GetEnvelopesHistoryListUseCase.Param(friendIds = friendsList, include = includeList),
         ).onSuccess { history ->
-            val envelopeHistoryList = history.toPersistentList()
             intent {
                 copy(
-                    envelopeHistoryList = envelopeHistoryList,
+                    envelopeHistoryList = history.toPersistentList(),
                 )
             }
         }

@@ -46,6 +46,7 @@ fun NavController.navigateSentEnvelopeSearch() {
 fun NavGraphBuilder.sentNavGraph(
     padding: PaddingValues,
     popBackStack: () -> Unit,
+    popBackStackWithDeleteFriendId: (Long) -> Unit,
     navigateSentEnvelope: (Long) -> Unit,
     navigateSentEnvelopeDetail: (Long) -> Unit,
     navigateSentEnvelopeEdit: (EnvelopeDetail) -> Unit,
@@ -55,9 +56,11 @@ fun NavGraphBuilder.sentNavGraph(
     onShowDialog: (DialogToken) -> Unit,
     handleException: (Throwable, () -> Unit) -> Unit,
 ) {
-    composable(route = SentRoute.route) {
+    composable(route = SentRoute.route) { navBackStackEntry ->
+        val deletedFriendId = navBackStackEntry.savedStateHandle.get<Long>(SentRoute.FRIEND_ID_ARGUMENT_NAME)
         SentRoute(
             padding = padding,
+            deletedFriendId = deletedFriendId,
             navigateSentEnvelope = navigateSentEnvelope,
             navigateSentEnvelopeAdd = navigateSentEnvelopeAdd,
             navigateSentEnvelopeSearch = navigateSentEnvelopeSearch,
@@ -75,6 +78,7 @@ fun NavGraphBuilder.sentNavGraph(
         SentEnvelopeRoute(
             popBackStack = popBackStack,
             navigateSentEnvelopeDetail = navigateSentEnvelopeDetail,
+            popBackStackWithDeleteFriendId = popBackStackWithDeleteFriendId,
         )
     }
 

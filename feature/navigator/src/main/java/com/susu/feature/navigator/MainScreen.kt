@@ -28,6 +28,7 @@ import com.susu.feature.loginsignup.navigation.loginSignupNavGraph
 import com.susu.feature.mypage.navigation.myPageNavGraph
 import com.susu.feature.received.navigation.ReceivedRoute
 import com.susu.feature.received.navigation.receivedNavGraph
+import com.susu.feature.sent.navigation.SentRoute
 import com.susu.feature.sent.navigation.sentNavGraph
 import com.susu.feature.statistics.navigation.statisticsNavGraph
 import kotlinx.collections.immutable.ImmutableList
@@ -80,6 +81,13 @@ internal fun MainScreen(
                 sentNavGraph(
                     padding = innerPadding,
                     popBackStack = navigator::popBackStackIfNotHome,
+                    popBackStackWithDeleteFriendId = { friendId ->
+                        navigator.navController.previousBackStackEntry?.savedStateHandle?.set(
+                            SentRoute.FRIEND_ID_ARGUMENT_NAME,
+                            friendId,
+                        )
+                        navigator.popBackStackIfNotHome()
+                    },
                     navigateSentEnvelope = navigator::navigateSentEnvelope,
                     navigateSentEnvelopeDetail = navigator::navigateSentEnvelopeDetail,
                     navigateSentEnvelopeEdit = navigator::navigateSentEnvelopeEdit,

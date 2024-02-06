@@ -59,6 +59,15 @@ class SentViewModel @Inject constructor(
         }
     }
 
+    fun deleteEmptyFriendStatistics(id: Long) {
+        val filteredList = currentState.envelopesList.filter {
+            it.friend.id != id
+        }.toPersistentList()
+
+        intent { copy(envelopesList = filteredList) }
+    }
+
     fun navigateSentEnvelope(id: Long) = postSideEffect(SentEffect.NavigateEnvelope(id = id))
     fun navigateSentAdd() = postSideEffect(SentEffect.NavigateEnvelopeAdd)
+    fun navigateSentEnvelopeSearch() = postSideEffect(SentEffect.NavigateEnvelopeSearch)
 }
