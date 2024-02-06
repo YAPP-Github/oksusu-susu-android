@@ -99,7 +99,13 @@ fun SusuStatisticsScreen(
 ) {
     val context = LocalContext.current
     val ageItems = remember {
-        StatisticsAge.entries.map { context.getString(R.string.word_age_unit, it.num) }.toImmutableList()
+        StatisticsAge.entries.map {
+            if (it == StatisticsAge.SEVENTY) {
+                context.getString(R.string.word_age_over_unit, it.num)
+            } else {
+                context.getString(R.string.word_age_unit, it.num)
+            }
+        }.toImmutableList()
     }
 
     Box(modifier = modifier.fillMaxSize()) {
