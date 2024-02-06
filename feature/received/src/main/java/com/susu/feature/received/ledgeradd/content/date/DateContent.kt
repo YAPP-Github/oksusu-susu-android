@@ -19,6 +19,7 @@ import com.susu.core.designsystem.component.bottomsheet.datepicker.SusuLimitDate
 import com.susu.core.designsystem.component.button.GhostButtonColor
 import com.susu.core.designsystem.component.button.SmallButtonStyle
 import com.susu.core.designsystem.component.button.SusuGhostButton
+import com.susu.core.designsystem.component.text.SelectDateRow
 import com.susu.core.designsystem.theme.Gray60
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.model.Category
@@ -27,7 +28,7 @@ import com.susu.core.ui.util.AnnotatedText
 import com.susu.core.ui.util.currentDate
 import com.susu.core.ui.util.minDate
 import com.susu.feature.received.R
-import com.susu.feature.received.ledgeradd.content.date.component.SelectDateRow
+
 import java.time.LocalDateTime
 
 @Composable

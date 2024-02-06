@@ -5,6 +5,7 @@
     <string name="word_year_format">%d년</string>
     <string name="word_month_format">%d월</string>
     <string name="word_day_format">%d일</string>
+    <string name="word_date_format">%d년 %d월 %d일</string>
     <string name="money_unit">원</string>
     <string name="content_description_search_icon">검색 아이콘</string>
     <string name="content_description_back_icon">뒤로가기 아이콘</string>

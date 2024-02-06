@@ -15,13 +15,13 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.susu.core.designsystem.component.bottomsheet.datepicker.SusuDatePickerBottomSheet
+import com.susu.core.designsystem.component.text.SelectDateRow
 import com.susu.core.designsystem.theme.Gray60
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.core.ui.util.AnnotatedText
 import com.susu.core.ui.util.currentDate
 import com.susu.feature.received.R
-import com.susu.feature.received.ledgeradd.content.date.component.SelectDateRow
 import java.time.LocalDateTime
 
 @Composable
