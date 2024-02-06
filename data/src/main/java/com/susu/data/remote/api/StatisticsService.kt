@@ -7,10 +7,10 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface StatisticsService {
-    @GET("statistics/mine")
+    @GET("statistics/mine/envelope")
     suspend fun getMyStatistics(): ApiResult<MyStatisticsResponse>
 
-    @GET("statistics/susu")
+    @GET("statistics/susu/envelope")
     suspend fun getSusuStatistics(
         @Query("age") age: String,
         @Query("relationshipId") relationshipId: Int,
