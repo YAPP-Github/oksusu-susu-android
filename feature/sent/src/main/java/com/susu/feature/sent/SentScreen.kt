@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -50,6 +51,9 @@ import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.core.ui.extension.toMoneyFormat
 import com.susu.core.ui.util.to_yyyy_dot_MM_dot_dd
 import com.susu.feature.sent.component.SentCard
+import me.onebone.toolbar.CollapsingToolbarScaffold
+import me.onebone.toolbar.ScrollStrategy
+import me.onebone.toolbar.rememberCollapsingToolbarScaffoldState
 
 @Composable
 fun SentRoute(
@@ -138,43 +142,60 @@ fun SentScreen(
                 },
             )
 
-            FilterSection(
-                uiState = uiState,
-                padding = PaddingValues(
-                    top = SusuTheme.spacing.spacing_m,
-                ),
-                onClickAlignButton = onClickAlignButton,
-                onClickFilterButton = onClickFilterButton,
-                onClickFriendClose = onClickFriendClose,
-                onClickMoneyClose = onClickMoneyClose,
-            )
+            val state = rememberCollapsingToolbarScaffoldState()
+            CollapsingToolbarScaffold(
+                modifier = Modifier.fillMaxSize(),
+                state = state,
+                scrollStrategy = ScrollStrategy.EnterAlways,
+                toolbar = {
+                    Spacer(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(32.dp),
+                    )
 
-            LazyColumn(
-                modifier = modifier.fillMaxSize(),
-                state = envelopesListState,
-                verticalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxs),
-                contentPadding = PaddingValues(SusuTheme.spacing.spacing_m),
+                    FilterSection(
+                        modifier = Modifier.graphicsLayer {
+                            alpha = state.toolbarState.progress
+                        },
+                        uiState = uiState,
+                        padding = PaddingValues(
+                            top = SusuTheme.spacing.spacing_m,
+                        ),
+                        onClickAlignButton = onClickAlignButton,
+                        onClickFilterButton = onClickFilterButton,
+                        onClickFriendClose = onClickFriendClose,
+                        onClickMoneyClose = onClickMoneyClose,
+                    )
+                },
             ) {
-                items(
-                    items = uiState.envelopesList,
-                    key = { it.friend.id },
+                LazyColumn(
+                    modifier = modifier.fillMaxSize(),
+                    state = envelopesListState,
+                    verticalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxs),
+                    contentPadding = PaddingValues(SusuTheme.spacing.spacing_m),
                 ) {
-                    SentCard(
-                        uiState = it,
-                        friend = it.friend,
-                        totalAmounts = it.totalAmounts,
-                        sentAmounts = it.sentAmounts,
-                        receivedAmounts = it.receivedAmounts,
-                        onClickHistory = onClickHistory,
-                        onClickHistoryShowAll = onClickHistoryShowAll,
+                    items(
+                        items = uiState.envelopesList,
+                        key = { it.friend.id },
+                    ) {
+                        SentCard(
+                            uiState = it,
+                            friend = it.friend,
+                            totalAmounts = it.totalAmounts,
+                            sentAmounts = it.sentAmounts,
+                            receivedAmounts = it.receivedAmounts,
+                            onClickHistory = onClickHistory,
+                            onClickHistoryShowAll = onClickHistoryShowAll,
+                        )
+                    }
+                }
+
+                if (uiState.showEmptyEnvelopes) {
+                    EmptyView(
+                        onClickAddEnvelope = onClickAddEnvelope,
                     )
                 }
-            }
-
-            if (uiState.showEmptyEnvelopes) {
-                EmptyView(
-                    onClickAddEnvelope = onClickAddEnvelope,
-                )
             }
         }
 
@@ -189,6 +210,7 @@ fun SentScreen(
 
 @Composable
 fun FilterSection(
+    modifier: Modifier,
     uiState: SentState = SentState(),
     padding: PaddingValues,
     onClickAlignButton: () -> Unit,
@@ -197,7 +219,7 @@ fun FilterSection(
     onClickMoneyClose: () -> Unit,
 ) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .padding(
                 padding,
             )
