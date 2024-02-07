@@ -6,12 +6,12 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class MyStatisticsResponse(
-    val highestAmountReceived: StatisticsElement,
-    val highestAmountSent: StatisticsElement,
-    val mostCategory: StatisticsElement,
-    val mostRelationship: StatisticsElement,
-    val mostSpentMonth: Int,
-    val recentSpent: List<StatisticsElement>,
+    val highestAmountReceived: StatisticsElement = StatisticsElement(),
+    val highestAmountSent: StatisticsElement = StatisticsElement(),
+    val mostCategory: StatisticsElement = StatisticsElement(),
+    val mostRelationship: StatisticsElement = StatisticsElement(),
+    val mostSpentMonth: Int = 0,
+    val recentSpent: List<StatisticsElement> = emptyList(),
 )
 
 @Serializable
