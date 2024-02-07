@@ -40,7 +40,6 @@ import com.susu.core.designsystem.theme.Gray60
 import com.susu.core.designsystem.theme.Gray90
 import com.susu.core.designsystem.theme.Orange20
 import com.susu.core.designsystem.theme.SusuTheme
-import com.susu.core.model.Friend
 import com.susu.core.ui.extension.susuClickable
 import com.susu.core.ui.extension.toMoneyFormat
 import com.susu.feature.sent.FriendStatisticsState

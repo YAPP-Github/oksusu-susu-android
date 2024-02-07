@@ -1,17 +1,14 @@
 package com.susu.feature.sent
 
-import android.view.WindowInsets.Side
 import androidx.lifecycle.viewModelScope
 import com.susu.core.model.Friend
 import com.susu.core.ui.argument.EnvelopeFilterArgument
 import com.susu.core.ui.base.BaseViewModel
-import com.susu.core.ui.base.SideEffect
 import com.susu.core.ui.extension.decodeFromUri
 import com.susu.core.ui.extension.encodeToUri
 import com.susu.domain.usecase.envelope.GetEnvelopesHistoryListUseCase
 import com.susu.domain.usecase.envelope.GetEnvelopesListUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex

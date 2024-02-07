@@ -50,7 +50,6 @@ import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.model.Friend
 import com.susu.core.ui.extension.OnBottomReached
 import com.susu.core.ui.extension.collectWithLifecycle
-import com.susu.core.ui.extension.susuClickable
 import com.susu.core.ui.extension.toMoneyFormat
 import com.susu.feature.sent.component.SentCard
 import kotlinx.collections.immutable.toPersistentList
@@ -59,7 +58,6 @@ import kotlinx.coroutines.launch
 import me.onebone.toolbar.CollapsingToolbarScaffold
 import me.onebone.toolbar.ScrollStrategy
 import me.onebone.toolbar.rememberCollapsingToolbarScaffoldState
-import timber.log.Timber
 
 @Composable
 fun SentRoute(
