@@ -85,5 +85,5 @@ class SentViewModel @Inject constructor(
     fun navigateSentEnvelope(id: Long) = postSideEffect(SentEffect.NavigateEnvelope(id = id))
     fun navigateSentAdd() = postSideEffect(SentEffect.NavigateEnvelopeAdd)
     fun navigateSentEnvelopeSearch() = postSideEffect(SentEffect.NavigateEnvelopeSearch)
-    fun navigateEnvelopeFilter() = postSideEffect(SentEffect.NavigateEnvelopeFilter(Json.encodeToUri(EnvelopeFilterArgument())))
+    fun navigateEnvelopeFilter() = postSideEffect(SentEffect.NavigateEnvelopeFilter(Json.encodeToUri(EnvelopeFilterArgument(isSent = true))))
 }

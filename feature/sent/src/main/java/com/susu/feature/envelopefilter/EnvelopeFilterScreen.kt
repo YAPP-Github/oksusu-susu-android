@@ -139,7 +139,11 @@ fun EnvelopeFilterScreen(
 
             if (uiState.maxFromAmount != uiState.maxToAmount) {
                 Text(
-                    text = stringResource(R.string.envelope_filter_screen_money),
+                    text = stringResource(
+                        if (uiState.isSent) {
+                            R.string.envelope_filter_total_money
+                        } else R.string.envelope_filter_screen_money,
+                    ),
                     style = SusuTheme.typography.title_xs,
                 )
                 Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_m))
