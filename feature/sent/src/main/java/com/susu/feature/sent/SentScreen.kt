@@ -138,94 +138,95 @@ fun SentScreen(
     onClickAlignBottomSheetItem: (Int) -> Unit = {},
     onDismissAlignBottomSheet: () -> Unit = {},
 ) {
-    Box(
-        modifier = Modifier
-            .background(SusuTheme.colorScheme.background15)
-            .padding(padding)
-            .fillMaxSize()
-            .susuClickable(rippleEnabled = false, onClick = {}),
-    ) {
-        Column {
-            SusuDefaultAppBar(
-                leftIcon = {
-                    Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_xs))
-                    LogoIcon()
-                },
-                title = stringResource(R.string.sent_screen_appbar_title),
-                actions = {
-                    SearchIcon(onClickSearchIcon)
-                },
-            )
+    Surface {
+        Box(
+            modifier = Modifier
+                .background(SusuTheme.colorScheme.background15)
+                .padding(padding)
+                .fillMaxSize(),
+        ) {
+            Column {
+                SusuDefaultAppBar(
+                    leftIcon = {
+                        Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_xs))
+                        LogoIcon()
+                    },
+                    title = stringResource(R.string.sent_screen_appbar_title),
+                    actions = {
+                        SearchIcon(onClickSearchIcon)
+                    },
+                )
 
-            val state = rememberCollapsingToolbarScaffoldState()
-            CollapsingToolbarScaffold(
-                modifier = Modifier.fillMaxSize(),
-                state = state,
-                scrollStrategy = ScrollStrategy.EnterAlways,
-                toolbar = {
-                    Spacer(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(32.dp),
-                    )
+                val state = rememberCollapsingToolbarScaffoldState()
+                CollapsingToolbarScaffold(
+                    modifier = Modifier.fillMaxSize(),
+                    state = state,
+                    scrollStrategy = ScrollStrategy.EnterAlways,
+                    toolbar = {
+                        Spacer(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(32.dp),
+                        )
 
-                    FilterSection(
-                        modifier = Modifier.graphicsLayer {
-                            alpha = state.toolbarState.progress
-                        },
-                        uiState = uiState,
-                        padding = PaddingValues(
-                            top = SusuTheme.spacing.spacing_m,
-                        ),
-                        onClickAlignButton = onClickAlignButton,
-                        onClickFilterButton = onClickFilterButton,
-                        onClickFriendClose = onClickFriendClose,
-                        onClickMoneyClose = onClickMoneyClose,
-                    )
-                },
-            ) {
-                if (uiState.showEmptyEnvelopes) {
-                    EmptyView(
-                        onClickAddEnvelope = onClickAddEnvelope,
-                    )
-                } else {
-                    LazyColumn(
-                        modifier = Modifier.fillMaxSize(),
-                        state = envelopesListState,
-                        verticalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxs),
-                        contentPadding = PaddingValues(SusuTheme.spacing.spacing_m),
-                    ) {
-                        items(
-                            items = uiState.envelopesList,
-                            key = { it.friend.id },
+                        FilterSection(
+                            modifier = Modifier.graphicsLayer {
+                                alpha = state.toolbarState.progress
+                            },
+                            uiState = uiState,
+                            padding = PaddingValues(
+                                top = SusuTheme.spacing.spacing_m,
+                            ),
+                            onClickAlignButton = onClickAlignButton,
+                            onClickFilterButton = onClickFilterButton,
+                            onClickFriendClose = onClickFriendClose,
+                            onClickMoneyClose = onClickMoneyClose,
+                        )
+                    },
+                ) {
+                    if (uiState.showEmptyEnvelopes) {
+                        EmptyView(
+                            onClickAddEnvelope = onClickAddEnvelope,
+                        )
+                    } else {
+                        LazyColumn(
+                            modifier = Modifier.fillMaxSize(),
+                            state = envelopesListState,
+                            verticalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxs),
+                            contentPadding = PaddingValues(SusuTheme.spacing.spacing_m),
                         ) {
-                            SentCard(
-                                state = it,
-                                onClickHistory = onClickHistory,
-                                onClickHistoryShowAll = onClickHistoryShowAll,
-                            )
+                            items(
+                                items = uiState.envelopesList,
+                                key = { it.friend.id },
+                            ) {
+                                SentCard(
+                                    state = it,
+                                    onClickHistory = onClickHistory,
+                                    onClickHistoryShowAll = onClickHistoryShowAll,
+                                )
+                            }
                         }
                     }
                 }
             }
-        }
 
-        if (uiState.showAlignBottomSheet) {
-            SusuSelectionBottomSheet(
-                onDismissRequest = onDismissAlignBottomSheet,
-                containerHeight = 250.dp,
-                items = EnvelopeAlign.entries.map { stringResource(id = it.stringResId) }.toPersistentList(),
-                selectedItemPosition = uiState.selectedAlignPosition,
-                onClickItem = onClickAlignBottomSheetItem,
+            if (uiState.showAlignBottomSheet) {
+                SusuSelectionBottomSheet(
+                    onDismissRequest = onDismissAlignBottomSheet,
+                    containerHeight = 250.dp,
+                    items = EnvelopeAlign.entries.map { stringResource(id = it.stringResId) }.toPersistentList(),
+                    selectedItemPosition = uiState.selectedAlignPosition,
+                    onClickItem = onClickAlignBottomSheetItem,
+                )
+            }
+
+            SusuFloatingButton(
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(SusuTheme.spacing.spacing_l),
+                onClick = onClickAddEnvelope,
             )
         }
-
-        SusuFloatingButton(
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(SusuTheme.spacing.spacing_l),
-            onClick = onClickAddEnvelope,
-        )
     }
 }
 
