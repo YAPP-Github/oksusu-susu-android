@@ -70,6 +70,7 @@ fun NavGraphBuilder.sentNavGraph(
         val refresh = navBackStackEntry.savedStateHandle.get<Boolean>(SentRoute.SENT_REFRESH_ARGUMENT_NAME)
         val filter = navBackStackEntry.savedStateHandle.get<String>(SentRoute.FILTER_ENVELOPE_ARGUMENT)
         navBackStackEntry.savedStateHandle.set<String>(SentRoute.FILTER_ENVELOPE_ARGUMENT, null)
+        navBackStackEntry.savedStateHandle.set<Boolean>(SentRoute.SENT_REFRESH_ARGUMENT_NAME, null)
 
         SentRoute(
             padding = padding,

@@ -20,8 +20,8 @@ class EnvelopesRepositoryImpl @Inject constructor(
 ) : EnvelopesRepository {
     override suspend fun getEnvelopesList(
         friendIds: List<Long>?,
-        fromTotalAmounts: Int?,
-        toTotalAmounts: Int?,
+        fromTotalAmounts: Long?,
+        toTotalAmounts: Long?,
         page: Int?,
         size: Int?,
         sort: String?,

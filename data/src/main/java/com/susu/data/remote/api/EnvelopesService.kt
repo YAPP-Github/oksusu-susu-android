@@ -21,8 +21,8 @@ interface EnvelopesService {
     @GET("envelopes/friend-statistics")
     suspend fun getEnvelopesList(
         @Query("friendIds") friendIds: List<Long>?,
-        @Query("fromTotalAmounts") fromTotalAmounts: Int?,
-        @Query("toTotalAmounts") toTotalAmounts: Int?,
+        @Query("fromTotalAmounts") fromTotalAmounts: Long?,
+        @Query("toTotalAmounts") toTotalAmounts: Long?,
         @Query("page") page: Int?,
         @Query("size") size: Int?,
         @Query("sort") sort: String?,
