@@ -29,8 +29,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.susu.core.designsystem.component.appbar.SusuDefaultAppBar
 import com.susu.core.designsystem.component.appbar.icon.BackIcon
-import com.susu.core.designsystem.component.appbar.icon.NotificationIcon
-import com.susu.core.designsystem.component.appbar.icon.SearchIcon
 import com.susu.core.designsystem.component.badge.BadgeColor
 import com.susu.core.designsystem.component.badge.BadgeStyle
 import com.susu.core.designsystem.component.badge.SusuBadge
@@ -86,8 +84,6 @@ fun SentEnvelopeScreen(
     uiState: SentEnvelopeState = SentEnvelopeState(),
     historyListState: LazyListState = rememberLazyListState(),
     onClickBackIcon: () -> Unit = {},
-    onClickSearchIcon: () -> Unit = {},
-    onClickNotificationIcon: () -> Unit = {},
     onClickEnvelopeDetail: (Long) -> Unit = {},
 ) {
     Box(
@@ -101,10 +97,6 @@ fun SentEnvelopeScreen(
                     BackIcon(onClickBackIcon)
                 },
                 title = uiState.envelopeInfo.friend.name,
-                actions = {
-                    SearchIcon(onClickSearchIcon)
-                    NotificationIcon(onClickNotificationIcon)
-                },
             )
 
             Column(
