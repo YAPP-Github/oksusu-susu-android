@@ -33,7 +33,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.susu.core.designsystem.component.appbar.SusuDefaultAppBar
 import com.susu.core.designsystem.component.appbar.icon.LogoIcon
-import com.susu.core.designsystem.component.appbar.icon.NotificationIcon
 import com.susu.core.designsystem.component.appbar.icon.SearchIcon
 import com.susu.core.designsystem.component.button.FilledButtonColor
 import com.susu.core.designsystem.component.button.FilterButton
@@ -42,14 +41,12 @@ import com.susu.core.designsystem.component.button.SelectedFilterButton
 import com.susu.core.designsystem.component.button.SmallButtonStyle
 import com.susu.core.designsystem.component.button.SusuFloatingButton
 import com.susu.core.designsystem.component.button.SusuGhostButton
-import com.susu.core.designsystem.theme.Gray100
 import com.susu.core.designsystem.theme.Gray50
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.model.Friend
 import com.susu.core.ui.extension.OnBottomReached
 import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.core.ui.extension.toMoneyFormat
-import com.susu.core.ui.util.to_yyyy_dot_MM_dot_dd
 import com.susu.feature.sent.component.SentCard
 import me.onebone.toolbar.CollapsingToolbarScaffold
 import me.onebone.toolbar.ScrollStrategy
@@ -105,8 +102,8 @@ fun SentRoute(
         },
         onClickAlignButton = {},
         onClickFilterButton = viewModel::navigateEnvelopeFilter,
-        onClickFriendClose = {},
-        onClickMoneyClose = {},
+        onClickFriendClose = viewModel::unselectFriend,
+        onClickMoneyClose = viewModel::removeMoney,
     )
 }
 

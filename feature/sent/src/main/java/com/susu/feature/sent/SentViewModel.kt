@@ -1,6 +1,7 @@
 package com.susu.feature.sent
 
 import androidx.lifecycle.viewModelScope
+import com.susu.core.model.Friend
 import com.susu.core.ui.argument.EnvelopeFilterArgument
 import com.susu.core.ui.base.BaseViewModel
 import com.susu.core.ui.extension.decodeFromUri
@@ -13,7 +14,6 @@ import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
-import kotlinx.datetime.toJavaLocalDateTime
 import kotlinx.serialization.json.Json
 import javax.inject.Inject
 
@@ -131,4 +131,25 @@ class SentViewModel @Inject constructor(
             ),
         ),
     )
+
+    fun unselectFriend(friend: Friend) {
+        intent {
+            copy(
+                selectedFriendList = selectedFriendList.remove(friend),
+            )
+        }
+
+        getEnvelopesList(true)
+    }
+
+    fun removeMoney() {
+        intent {
+            copy(
+                fromAmount = null,
+                toAmount = null,
+            )
+        }
+
+        getEnvelopesList(true)
+    }
 }
