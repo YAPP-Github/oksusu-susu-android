@@ -1,7 +1,6 @@
 package com.susu.feature.sent
 
 import androidx.annotation.StringRes
-import com.susu.core.model.Category
 import com.susu.core.model.EnvelopeSearch
 import com.susu.core.model.Friend
 import com.susu.core.model.FriendStatistics
@@ -67,4 +66,5 @@ sealed interface SentEffect : SideEffect {
     data object NavigateEnvelopeAdd : SentEffect
     data object NavigateEnvelopeSearch : SentEffect
     data class NavigateEnvelopeFilter(val filter: String) : SentEffect
+    data object ScrollToTop : SentEffect
 }

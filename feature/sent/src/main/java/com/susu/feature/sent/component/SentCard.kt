@@ -48,19 +48,14 @@ import com.susu.feature.sent.R
 
 @Composable
 fun SentCard(
-    modifier: Modifier = Modifier,
-    uiState: FriendStatisticsState = FriendStatisticsState(),
-    friend: Friend,
-    totalAmounts: Int = 0,
-    sentAmounts: Int = 0,
-    receivedAmounts: Int = 0,
+    state: FriendStatisticsState = FriendStatisticsState(),
     onClickHistory: (Long) -> Unit = {},
     onClickHistoryShowAll: (Long) -> Unit = {},
 ) {
-    val degrees by animateFloatAsState(if (uiState.expand) 180f else 0f, label = "")
+    val degrees by animateFloatAsState(if (state.expand) 180f else 0f, label = "")
 
     Box(
-        modifier = modifier
+        modifier = Modifier
             .clip(shape = RoundedCornerShape(4.dp))
             .fillMaxWidth()
             .background(SusuTheme.colorScheme.background10),
@@ -69,45 +64,45 @@ fun SentCard(
             painter = painterResource(id = R.drawable.img_envelope),
             contentDescription = null,
             contentScale = ContentScale.Crop,
-            modifier = modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
         )
         Column(
-            modifier = modifier
+            modifier = Modifier
                 .padding(SusuTheme.spacing.spacing_m),
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
-                    text = friend.name,
+                    text = state.friend.name,
                     style = SusuTheme.typography.title_xs,
                     color = Gray100,
                 )
-                Spacer(modifier = modifier.size(SusuTheme.spacing.spacing_s))
+                Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_s))
                 SusuBadge(
                     color = BadgeColor.Gray20,
-                    text = stringResource(R.string.sent_envelope_card_monee_total) + totalAmounts.toMoneyFormat() +
+                    text = stringResource(R.string.sent_envelope_card_monee_total) + state.totalAmounts.toMoneyFormat() +
                         stringResource(R.string.sent_envelope_card_money_won),
                     padding = BadgeStyle.smallBadge,
                 )
-                Spacer(modifier = modifier.weight(1f))
+                Spacer(modifier = Modifier.weight(1f))
                 Icon(
                     painter = painterResource(id = R.drawable.ic_arrow_down),
                     contentDescription = stringResource(R.string.content_description_envelope_show_history),
                     tint = Gray100,
-                    modifier = modifier
+                    modifier = Modifier
                         .clip(CircleShape)
                         .susuClickable(
                             onClick = {
-                                onClickHistory(friend.id)
+                                onClickHistory(state.friend.id)
                             },
                         )
                         .rotate(degrees = degrees),
                 )
             }
-            Spacer(modifier = modifier.size(SusuTheme.spacing.spacing_m))
+            Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_m))
             Row(
-                modifier = modifier
+                modifier = Modifier
                     .fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -124,8 +119,8 @@ fun SentCard(
                 )
             }
             LinearProgressIndicator(
-                progress = { sentAmounts.toFloat() / totalAmounts },
-                modifier = modifier
+                progress = { state.sentAmounts.toFloat() / state.totalAmounts },
+                modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = SusuTheme.spacing.spacing_xxxxs),
                 color = SusuTheme.colorScheme.primary,
@@ -133,18 +128,18 @@ fun SentCard(
                 strokeCap = StrokeCap.Round,
             )
             Row(
-                modifier = modifier
+                modifier = Modifier
                     .fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 Text(
-                    text = sentAmounts.toMoneyFormat() + stringResource(R.string.sent_envelope_card_money_won),
+                    text = state.sentAmounts.toMoneyFormat() + stringResource(R.string.sent_envelope_card_money_won),
                     style = SusuTheme.typography.title_xxxs,
                     color = Gray90,
                 )
                 Text(
-                    text = receivedAmounts.toMoneyFormat() + stringResource(R.string.sent_envelope_card_money_won),
+                    text = state.receivedAmounts.toMoneyFormat() + stringResource(R.string.sent_envelope_card_money_won),
                     style = SusuTheme.typography.title_xxxs,
                     color = Gray60,
                 )
@@ -152,13 +147,13 @@ fun SentCard(
         }
     }
     AnimatedVisibility(
-        visible = uiState.expand,
+        visible = state.expand,
         enter = fadeIn() + expandVertically(),
         exit = fadeOut() + shrinkVertically(),
     ) {
         SentHistoryCard(
-            envelopeHistoryList = uiState.envelopesHistoryList,
-            friendId = friend.id,
+            envelopeHistoryList = state.envelopesHistoryList,
+            friendId = state.friend.id,
             onClickHistoryShowAll = onClickHistoryShowAll,
         )
     }

@@ -142,7 +142,9 @@ fun EnvelopeFilterScreen(
                     text = stringResource(
                         if (uiState.isSent) {
                             R.string.envelope_filter_total_money
-                        } else R.string.envelope_filter_screen_money,
+                        } else {
+                            R.string.envelope_filter_screen_money
+                        },
                     ),
                     style = SusuTheme.typography.title_xs,
                 )

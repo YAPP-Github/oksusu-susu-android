@@ -20,9 +20,11 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
@@ -48,12 +50,16 @@ import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.model.Friend
 import com.susu.core.ui.extension.OnBottomReached
 import com.susu.core.ui.extension.collectWithLifecycle
+import com.susu.core.ui.extension.susuClickable
 import com.susu.core.ui.extension.toMoneyFormat
 import com.susu.feature.sent.component.SentCard
 import kotlinx.collections.immutable.toPersistentList
+import kotlinx.coroutines.android.awaitFrame
+import kotlinx.coroutines.launch
 import me.onebone.toolbar.CollapsingToolbarScaffold
 import me.onebone.toolbar.ScrollStrategy
 import me.onebone.toolbar.rememberCollapsingToolbarScaffoldState
+import timber.log.Timber
 
 @Composable
 fun SentRoute(
@@ -69,6 +75,7 @@ fun SentRoute(
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
     val envelopesListState = rememberLazyListState()
+    val scope = rememberCoroutineScope()
 
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
@@ -76,6 +83,10 @@ fun SentRoute(
             is SentEffect.NavigateEnvelope -> navigateSentEnvelope(sideEffect.id)
             SentEffect.NavigateEnvelopeSearch -> navigateSentEnvelopeSearch()
             is SentEffect.NavigateEnvelopeFilter -> navigateEnvelopeFilter(sideEffect.filter)
+            SentEffect.ScrollToTop -> scope.launch {
+                awaitFrame()
+                envelopesListState.animateScrollToItem(0)
+            }
         }
     }
 
@@ -88,9 +99,7 @@ fun SentRoute(
     }
 
     envelopesListState.OnBottomReached {
-        if (uiState.envelopesList.isNotEmpty()) {
-            viewModel.getEnvelopesList(refresh = false)
-        }
+        viewModel.getEnvelopesList(refresh = false)
     }
 
     SentScreen(
@@ -115,7 +124,6 @@ fun SentRoute(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SentScreen(
-    modifier: Modifier = Modifier,
     uiState: SentState = SentState(),
     envelopesListState: LazyListState = rememberLazyListState(),
     padding: PaddingValues,
@@ -134,12 +142,13 @@ fun SentScreen(
         modifier = Modifier
             .background(SusuTheme.colorScheme.background15)
             .padding(padding)
-            .fillMaxSize(),
+            .fillMaxSize()
+            .susuClickable(rippleEnabled = false, onClick = {}),
     ) {
         Column {
             SusuDefaultAppBar(
                 leftIcon = {
-                    Spacer(modifier = modifier.size(SusuTheme.spacing.spacing_xs))
+                    Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_xs))
                     LogoIcon()
                 },
                 title = stringResource(R.string.sent_screen_appbar_title),
@@ -175,32 +184,28 @@ fun SentScreen(
                     )
                 },
             ) {
-                LazyColumn(
-                    modifier = modifier.fillMaxSize(),
-                    state = envelopesListState,
-                    verticalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxs),
-                    contentPadding = PaddingValues(SusuTheme.spacing.spacing_m),
-                ) {
-                    items(
-                        items = uiState.envelopesList,
-                        key = { it.friend.id },
-                    ) {
-                        SentCard(
-                            uiState = it,
-                            friend = it.friend,
-                            totalAmounts = it.totalAmounts,
-                            sentAmounts = it.sentAmounts,
-                            receivedAmounts = it.receivedAmounts,
-                            onClickHistory = onClickHistory,
-                            onClickHistoryShowAll = onClickHistoryShowAll,
-                        )
-                    }
-                }
-
                 if (uiState.showEmptyEnvelopes) {
                     EmptyView(
                         onClickAddEnvelope = onClickAddEnvelope,
                     )
+                } else {
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize(),
+                        state = envelopesListState,
+                        verticalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxs),
+                        contentPadding = PaddingValues(SusuTheme.spacing.spacing_m),
+                    ) {
+                        items(
+                            items = uiState.envelopesList,
+                            key = { it.friend.id },
+                        ) {
+                            SentCard(
+                                state = it,
+                                onClickHistory = onClickHistory,
+                                onClickHistoryShowAll = onClickHistoryShowAll,
+                            )
+                        }
+                    }
                 }
             }
         }
@@ -216,7 +221,7 @@ fun SentScreen(
         }
 
         SusuFloatingButton(
-            modifier = modifier
+            modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .padding(SusuTheme.spacing.spacing_l),
             onClick = onClickAddEnvelope,

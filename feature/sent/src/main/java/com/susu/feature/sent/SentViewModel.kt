@@ -1,9 +1,11 @@
 package com.susu.feature.sent
 
+import android.view.WindowInsets.Side
 import androidx.lifecycle.viewModelScope
 import com.susu.core.model.Friend
 import com.susu.core.ui.argument.EnvelopeFilterArgument
 import com.susu.core.ui.base.BaseViewModel
+import com.susu.core.ui.base.SideEffect
 import com.susu.core.ui.extension.decodeFromUri
 import com.susu.core.ui.extension.encodeToUri
 import com.susu.domain.usecase.envelope.GetEnvelopesHistoryListUseCase
@@ -31,11 +33,11 @@ class SentViewModel @Inject constructor(
 
     fun getEnvelopesList(refresh: Boolean?) = viewModelScope.launch {
         mutex.withLock {
-            intent { copy(isLoading = true) }
-
-            if (refresh == true) {
-                intent { copy(envelopesList = persistentListOf()) }
+            val currentList = if (refresh == true) {
                 page = 0
+                emptyList()
+            } else {
+                currentState.envelopesList
             }
 
             getEnvelopesListUseCase(
@@ -48,7 +50,7 @@ class SentViewModel @Inject constructor(
                 ),
             ).onSuccess { envelopesList ->
                 page++
-                val newEnvelopesList = currentState.envelopesList.plus(envelopesList.map { it.toState() }).toPersistentList()
+                val newEnvelopesList = currentList.plus(envelopesList.map { it.toState() }).toPersistentList()
                 intent {
                     copy(
                         envelopesList = newEnvelopesList,
@@ -63,7 +65,7 @@ class SentViewModel @Inject constructor(
                 }
             }
 
-            intent { copy(isLoading = false) }
+            if (refresh == true) postSideEffect(SentEffect.ScrollToTop)
         }
     }
 

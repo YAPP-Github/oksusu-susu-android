@@ -10,7 +10,6 @@ import androidx.navigation.navArgument
 import com.susu.core.model.EnvelopeDetail
 import com.susu.core.ui.DialogToken
 import com.susu.core.ui.SnackbarToken
-import com.susu.core.ui.argument.EnvelopeFilterArgument
 import com.susu.core.ui.extension.encodeToUri
 import com.susu.feature.envelope.SentEnvelopeRoute
 import com.susu.feature.envelopeadd.SentEnvelopeAddRoute
