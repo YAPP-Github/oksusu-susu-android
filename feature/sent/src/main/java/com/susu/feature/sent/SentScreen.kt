@@ -89,11 +89,11 @@ fun SentRoute(
     }
 
     LaunchedEffect(key1 = Unit) {
-        viewModel.getEnvelopesList(refresh)
-        viewModel.filterIfNeed(filter)
         if (deletedFriendId != null) {
             viewModel.deleteEmptyFriendStatistics(deletedFriendId)
         }
+        viewModel.getEnvelopesList(refresh)
+        viewModel.filterIfNeed(filter)
     }
 
     envelopesListState.OnBottomReached {
