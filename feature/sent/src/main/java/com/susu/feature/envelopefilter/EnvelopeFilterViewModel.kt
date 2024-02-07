@@ -53,6 +53,7 @@ class EnvelopeFilterViewModel @Inject constructor(
                         maxToAmount = maxToAmount,
                         fromAmount = filter.fromAmount,
                         toAmount = filter.toAmount,
+                        isSent = filter.isSent,
                     )
                 }
             }

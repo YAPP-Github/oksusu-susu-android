@@ -107,6 +107,7 @@ internal fun MainScreen(
                         navigator.popBackStackIfNotHome()
                     },
                     navigateSentEnvelopeSearch = navigator::navigateSentEnvelopeSearch,
+                    navigateEnvelopeFilter = navigator::navigateEnvelopeFilter,
                     handleException = viewModel::handleException,
                     onShowSnackbar = viewModel::onShowSnackbar,
                     onShowDialog = viewModel::onShowDialog,

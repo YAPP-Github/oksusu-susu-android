@@ -22,8 +22,8 @@ class GetEnvelopesListUseCase @Inject constructor(
 
     data class Param(
         val friendIds: List<Long>? = emptyList(),
-        val fromTotalAmounts: Int? = null,
-        val toTotalAmounts: Int? = null,
+        val fromTotalAmounts: Long? = null,
+        val toTotalAmounts: Long? = null,
         val page: Int? = null,
         val size: Int? = null,
         val sort: String? = null,

@@ -56,4 +56,5 @@
     <string name="sent_envelope_detail_delete_description">삭제한 봉투는 다시 복구할 수 없어요</string>
     <string name="sent_envelope_detail_delete_snackbar">봉투가 삭제됐어요</string>
     <string name="sent_add_more_step_phone">받은 이의 연락처</string>
+    <string name="envelope_filter_total_money">전체 금액</string>
 </resources>
