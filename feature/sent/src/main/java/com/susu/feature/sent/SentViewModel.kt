@@ -1,13 +1,16 @@
 package com.susu.feature.sent
 
 import androidx.lifecycle.viewModelScope
+import com.susu.core.ui.argument.EnvelopeFilterArgument
 import com.susu.core.ui.base.BaseViewModel
+import com.susu.core.ui.extension.encodeToUri
 import com.susu.domain.usecase.envelope.GetEnvelopesHistoryListUseCase
 import com.susu.domain.usecase.envelope.GetEnvelopesListUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
+import kotlinx.serialization.json.Json
 import javax.inject.Inject
 
 @HiltViewModel
@@ -82,4 +85,5 @@ class SentViewModel @Inject constructor(
     fun navigateSentEnvelope(id: Long) = postSideEffect(SentEffect.NavigateEnvelope(id = id))
     fun navigateSentAdd() = postSideEffect(SentEffect.NavigateEnvelopeAdd)
     fun navigateSentEnvelopeSearch() = postSideEffect(SentEffect.NavigateEnvelopeSearch)
+    fun navigateEnvelopeFilter() = postSideEffect(SentEffect.NavigateEnvelopeFilter(Json.encodeToUri(EnvelopeFilterArgument())))
 }

@@ -1,8 +1,11 @@
 package com.susu.feature.sent
 
+import androidx.annotation.StringRes
+import com.susu.core.model.Category
 import com.susu.core.model.EnvelopeSearch
 import com.susu.core.model.Friend
 import com.susu.core.model.FriendStatistics
+import com.susu.core.ui.R
 import com.susu.core.ui.base.SideEffect
 import com.susu.core.ui.base.UiState
 import kotlinx.collections.immutable.PersistentList
@@ -12,7 +15,13 @@ data class SentState(
     val isLoading: Boolean = false,
     val envelopesList: PersistentList<FriendStatisticsState> = persistentListOf(),
     val showEmptyEnvelopes: Boolean = false,
-) : UiState
+    val selectedFriendList: PersistentList<Friend> = persistentListOf(),
+    val fromAmount: Long? = null,
+    val toAmount: Long? = null,
+    val selectedAlignPosition: Int = EnvelopeAlign.RECENT.ordinal,
+) : UiState {
+    val isFiltered = fromAmount != null || toAmount != null || selectedFriendList.isNotEmpty()
+}
 
 data class FriendStatisticsState(
     val friend: Friend = Friend(),
@@ -30,8 +39,31 @@ internal fun FriendStatistics.toState() = FriendStatisticsState(
     totalAmounts = totalAmounts,
 )
 
+enum class EnvelopeAlign(
+    @StringRes val stringResId: Int,
+    val query: String,
+) {
+    RECENT(
+        stringResId = R.string.word_align_recently,
+        query = "createdAt,desc",
+    ),
+    OUTDATED(
+        stringResId = R.string.word_align_outdated,
+        query = "createdAt,asc",
+    ),
+    HIGH_AMOUNT(
+        stringResId = R.string.word_align_high_amount,
+        query = "totalSentAmounts,desc",
+    ),
+    LOW_AMOUNT(
+        stringResId = R.string.word_align_low_amount,
+        query = "totalSentAmounts,asc",
+    ),
+}
+
 sealed interface SentEffect : SideEffect {
     data class NavigateEnvelope(val id: Long) : SentEffect
     data object NavigateEnvelopeAdd : SentEffect
     data object NavigateEnvelopeSearch : SentEffect
+    data class NavigateEnvelopeFilter(val filter: String) : SentEffect
 }

@@ -1,6 +1,7 @@
 package com.susu.feature.sent
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,12 +16,14 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -31,15 +34,21 @@ import com.susu.core.designsystem.component.appbar.SusuDefaultAppBar
 import com.susu.core.designsystem.component.appbar.icon.LogoIcon
 import com.susu.core.designsystem.component.appbar.icon.NotificationIcon
 import com.susu.core.designsystem.component.appbar.icon.SearchIcon
+import com.susu.core.designsystem.component.button.FilledButtonColor
+import com.susu.core.designsystem.component.button.FilterButton
 import com.susu.core.designsystem.component.button.GhostButtonColor
+import com.susu.core.designsystem.component.button.SelectedFilterButton
 import com.susu.core.designsystem.component.button.SmallButtonStyle
 import com.susu.core.designsystem.component.button.SusuFloatingButton
 import com.susu.core.designsystem.component.button.SusuGhostButton
 import com.susu.core.designsystem.theme.Gray100
 import com.susu.core.designsystem.theme.Gray50
 import com.susu.core.designsystem.theme.SusuTheme
+import com.susu.core.model.Friend
 import com.susu.core.ui.extension.OnBottomReached
 import com.susu.core.ui.extension.collectWithLifecycle
+import com.susu.core.ui.extension.toMoneyFormat
+import com.susu.core.ui.util.to_yyyy_dot_MM_dot_dd
 import com.susu.feature.sent.component.SentCard
 
 @Composable
@@ -47,10 +56,12 @@ fun SentRoute(
     viewModel: SentViewModel = hiltViewModel(),
     deletedFriendId: Long?,
     refresh: Boolean?,
+    filter: String?,
     padding: PaddingValues,
     navigateSentEnvelope: (Long) -> Unit,
     navigateSentEnvelopeAdd: () -> Unit,
     navigateSentEnvelopeSearch: () -> Unit,
+    navigateEnvelopeFilter: (String) -> Unit,
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
     val envelopesListState = rememberLazyListState()
@@ -60,6 +71,7 @@ fun SentRoute(
             SentEffect.NavigateEnvelopeAdd -> navigateSentEnvelopeAdd()
             is SentEffect.NavigateEnvelope -> navigateSentEnvelope(sideEffect.id)
             SentEffect.NavigateEnvelopeSearch -> navigateSentEnvelopeSearch()
+            is SentEffect.NavigateEnvelopeFilter -> navigateEnvelopeFilter(sideEffect.filter)
         }
     }
 
@@ -86,6 +98,10 @@ fun SentRoute(
         onClickHistory = { friendId ->
             viewModel.getEnvelopesHistoryList(friendId)
         },
+        onClickAlignButton = {},
+        onClickFilterButton = viewModel::navigateEnvelopeFilter,
+        onClickFriendClose = {},
+        onClickMoneyClose = {},
     )
 }
 
@@ -96,10 +112,13 @@ fun SentScreen(
     envelopesListState: LazyListState = rememberLazyListState(),
     padding: PaddingValues,
     onClickSearchIcon: () -> Unit = {},
-    onClickNotificationIcon: () -> Unit = {},
     onClickHistory: (Long) -> Unit = {},
     onClickHistoryShowAll: (Long) -> Unit = {},
     onClickAddEnvelope: () -> Unit = {},
+    onClickAlignButton: () -> Unit = {},
+    onClickFilterButton: () -> Unit = {},
+    onClickFriendClose: (Friend) -> Unit = {},
+    onClickMoneyClose: () -> Unit = {},
 ) {
     Box(
         modifier = Modifier
@@ -116,8 +135,18 @@ fun SentScreen(
                 title = stringResource(R.string.sent_screen_appbar_title),
                 actions = {
                     SearchIcon(onClickSearchIcon)
-                    NotificationIcon(onClickNotificationIcon)
                 },
+            )
+
+            FilterSection(
+                uiState = uiState,
+                padding = PaddingValues(
+                    top = SusuTheme.spacing.spacing_m,
+                ),
+                onClickAlignButton = onClickAlignButton,
+                onClickFilterButton = onClickFilterButton,
+                onClickFriendClose = onClickFriendClose,
+                onClickMoneyClose = onClickMoneyClose,
             )
 
             LazyColumn(
@@ -126,14 +155,6 @@ fun SentScreen(
                 verticalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxs),
                 contentPadding = PaddingValues(SusuTheme.spacing.spacing_m),
             ) {
-                item {
-                    FilterSection(
-                        padding = PaddingValues(
-                            bottom = SusuTheme.spacing.spacing_xxs,
-                        ),
-                    )
-                }
-
                 items(
                     items = uiState.envelopesList,
                     key = { it.friend.id },
@@ -151,9 +172,6 @@ fun SentScreen(
             }
 
             if (uiState.showEmptyEnvelopes) {
-                FilterSection(
-                    padding = PaddingValues(SusuTheme.spacing.spacing_m),
-                )
                 EmptyView(
                     onClickAddEnvelope = onClickAddEnvelope,
                 )
@@ -171,41 +189,57 @@ fun SentScreen(
 
 @Composable
 fun FilterSection(
-    modifier: Modifier = Modifier,
+    uiState: SentState = SentState(),
     padding: PaddingValues,
+    onClickAlignButton: () -> Unit,
+    onClickFilterButton: () -> Unit,
+    onClickFriendClose: (Friend) -> Unit,
+    onClickMoneyClose: () -> Unit,
 ) {
     Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(padding),
+        modifier = Modifier
+            .padding(
+                padding,
+            )
+            .horizontalScroll(rememberScrollState()),
         horizontalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxs),
     ) {
+        Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_xxs))
+
         SusuGhostButton(
             color = GhostButtonColor.Black,
             style = SmallButtonStyle.height32,
-            text = stringResource(com.susu.core.ui.R.string.word_align_recently),
+            text = stringResource(id = EnvelopeAlign.entries[uiState.selectedAlignPosition].stringResId),
             leftIcon = {
                 Icon(
-                    painter = painterResource(id = R.drawable.ic_sort),
-                    contentDescription = stringResource(com.susu.core.ui.R.string.word_align_recently),
-                    tint = Gray100,
-                    modifier = modifier.size(16.dp),
+                    painter = painterResource(id = com.susu.core.ui.R.drawable.ic_align),
+                    contentDescription = null,
                 )
             },
+            onClick = onClickAlignButton,
         )
-        SusuGhostButton(
-            color = GhostButtonColor.Black,
-            style = SmallButtonStyle.height32,
-            text = stringResource(com.susu.core.ui.R.string.word_filter),
-            leftIcon = {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_filter),
-                    contentDescription = stringResource(com.susu.core.ui.R.string.word_filter),
-                    tint = Gray100,
-                    modifier = modifier.size(16.dp),
-                )
-            },
-        )
+
+        FilterButton(uiState.isFiltered, onClickFilterButton)
+
+        uiState.selectedFriendList.forEach { friend ->
+            SelectedFilterButton(
+                color = FilledButtonColor.Black,
+                style = SmallButtonStyle.height32,
+                name = friend.name,
+                onClickCloseIcon = { onClickFriendClose(friend) },
+            )
+        }
+
+        if (uiState.fromAmount != null || uiState.toAmount != null) {
+            SelectedFilterButton(
+                color = FilledButtonColor.Black,
+                style = SmallButtonStyle.height32,
+                name = "${uiState.fromAmount?.toMoneyFormat() ?: ""}~${uiState.toAmount?.toMoneyFormat() ?: ""}",
+                onClickCloseIcon = onClickMoneyClose,
+            )
+        }
+
+        Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_xxs))
     }
 }
 
