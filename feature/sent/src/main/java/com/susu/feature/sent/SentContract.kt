@@ -19,6 +19,7 @@ data class SentState(
     val fromAmount: Long? = null,
     val toAmount: Long? = null,
     val selectedAlignPosition: Int = EnvelopeAlign.RECENT.ordinal,
+    val showAlignBottomSheet: Boolean = false,
 ) : UiState {
     val isFiltered = fromAmount != null || toAmount != null || selectedFriendList.isNotEmpty()
 }

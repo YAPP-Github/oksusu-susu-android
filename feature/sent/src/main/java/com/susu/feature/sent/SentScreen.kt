@@ -18,6 +18,7 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -34,6 +35,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.susu.core.designsystem.component.appbar.SusuDefaultAppBar
 import com.susu.core.designsystem.component.appbar.icon.LogoIcon
 import com.susu.core.designsystem.component.appbar.icon.SearchIcon
+import com.susu.core.designsystem.component.bottomsheet.SusuSelectionBottomSheet
 import com.susu.core.designsystem.component.button.FilledButtonColor
 import com.susu.core.designsystem.component.button.FilterButton
 import com.susu.core.designsystem.component.button.GhostButtonColor
@@ -48,6 +50,7 @@ import com.susu.core.ui.extension.OnBottomReached
 import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.core.ui.extension.toMoneyFormat
 import com.susu.feature.sent.component.SentCard
+import kotlinx.collections.immutable.toPersistentList
 import me.onebone.toolbar.CollapsingToolbarScaffold
 import me.onebone.toolbar.ScrollStrategy
 import me.onebone.toolbar.rememberCollapsingToolbarScaffoldState
@@ -100,13 +103,16 @@ fun SentRoute(
         onClickHistory = { friendId ->
             viewModel.getEnvelopesHistoryList(friendId)
         },
-        onClickAlignButton = {},
         onClickFilterButton = viewModel::navigateEnvelopeFilter,
         onClickFriendClose = viewModel::unselectFriend,
         onClickMoneyClose = viewModel::removeMoney,
+        onClickAlignButton = viewModel::showAlignBottomSheet,
+        onClickAlignBottomSheetItem = viewModel::updateAlignPosition,
+        onDismissAlignBottomSheet = viewModel::hideAlignBottomSheet,
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SentScreen(
     modifier: Modifier = Modifier,
@@ -117,10 +123,12 @@ fun SentScreen(
     onClickHistory: (Long) -> Unit = {},
     onClickHistoryShowAll: (Long) -> Unit = {},
     onClickAddEnvelope: () -> Unit = {},
-    onClickAlignButton: () -> Unit = {},
     onClickFilterButton: () -> Unit = {},
     onClickFriendClose: (Friend) -> Unit = {},
     onClickMoneyClose: () -> Unit = {},
+    onClickAlignButton: () -> Unit = {},
+    onClickAlignBottomSheetItem: (Int) -> Unit = {},
+    onDismissAlignBottomSheet: () -> Unit = {},
 ) {
     Box(
         modifier = Modifier
@@ -195,6 +203,16 @@ fun SentScreen(
                     )
                 }
             }
+        }
+
+        if (uiState.showAlignBottomSheet) {
+            SusuSelectionBottomSheet(
+                onDismissRequest = onDismissAlignBottomSheet,
+                containerHeight = 250.dp,
+                items = EnvelopeAlign.entries.map { stringResource(id = it.stringResId) }.toPersistentList(),
+                selectedItemPosition = uiState.selectedAlignPosition,
+                onClickItem = onClickAlignBottomSheetItem,
+            )
         }
 
         SusuFloatingButton(

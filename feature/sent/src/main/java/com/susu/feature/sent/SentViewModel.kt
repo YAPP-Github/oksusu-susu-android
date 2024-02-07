@@ -44,7 +44,7 @@ class SentViewModel @Inject constructor(
                     friendIds = currentState.selectedFriendList.map { it.id },
                     fromTotalAmounts = currentState.fromAmount,
                     toTotalAmounts = currentState.toAmount,
-                    sort = null,
+                    sort = EnvelopeAlign.entries[currentState.selectedAlignPosition].query,
                 ),
             ).onSuccess { envelopesList ->
                 page++
@@ -53,6 +53,12 @@ class SentViewModel @Inject constructor(
                     copy(
                         envelopesList = newEnvelopesList,
                         showEmptyEnvelopes = newEnvelopesList.isEmpty(),
+                    )
+                }
+            }.onFailure {
+                intent {
+                    copy(
+                        showEmptyEnvelopes = true,
                     )
                 }
             }
@@ -150,6 +156,22 @@ class SentViewModel @Inject constructor(
             )
         }
 
+        getEnvelopesList(true)
+    }
+
+    fun showAlignBottomSheet() = intent {
+        copy(showAlignBottomSheet = true)
+    }
+
+    fun hideAlignBottomSheet() = intent {
+        copy(showAlignBottomSheet = false)
+    }
+
+    fun updateAlignPosition(position: Int) {
+        hideAlignBottomSheet()
+        intent {
+            copy(selectedAlignPosition = position)
+        }
         getEnvelopesList(true)
     }
 }
