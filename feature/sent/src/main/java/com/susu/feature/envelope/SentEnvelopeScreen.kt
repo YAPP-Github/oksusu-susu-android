@@ -1,5 +1,6 @@
 package com.susu.feature.envelope
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -50,6 +51,8 @@ fun SentEnvelopeRoute(
     viewModel: SentEnvelopeViewModel = hiltViewModel(),
     popBackStack: () -> Unit,
     popBackStackWithDeleteFriendId: (Long) -> Unit,
+    popBackStackWithEditedFriendId: (Long) -> Unit,
+    editedFriendId: Long?,
     navigateSentEnvelopeDetail: (Long) -> Unit,
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
@@ -57,7 +60,10 @@ fun SentEnvelopeRoute(
 
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
-            SentEnvelopeSideEffect.PopBackStack -> popBackStack()
+            SentEnvelopeSideEffect.PopBackStack -> {
+                editedFriendId?.let { popBackStackWithEditedFriendId(it) } ?: popBackStack()
+            }
+
             is SentEnvelopeSideEffect.NavigateEnvelopeDetail -> navigateSentEnvelopeDetail(sideEffect.id)
             is SentEnvelopeSideEffect.PopBackStackWithDeleteFriendId -> popBackStackWithDeleteFriendId(sideEffect.id)
         }
@@ -69,6 +75,10 @@ fun SentEnvelopeRoute(
 
     historyListState.OnBottomReached {
         viewModel.getEnvelopeHistoryList()
+    }
+
+    BackHandler {
+        editedFriendId?.let { popBackStackWithEditedFriendId(it) } ?: popBackStack()
     }
 
     SentEnvelopeScreen(

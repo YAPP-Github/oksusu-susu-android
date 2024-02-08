@@ -1,5 +1,6 @@
 package com.susu.feature.envelopedetail
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -38,6 +39,8 @@ import kotlinx.datetime.toJavaLocalDateTime
 fun SentEnvelopeDetailRoute(
     viewModel: SentEnvelopeDetailViewModel = hiltViewModel(),
     popBackStack: () -> Unit,
+    popBackStackWithEditedFriendId: (Long) -> Unit,
+    editedFriendId: Long?,
     navigateSentEnvelopeEdit: (EnvelopeDetail) -> Unit,
     onShowSnackbar: (SnackbarToken) -> Unit,
     onShowDialog: (DialogToken) -> Unit,
@@ -48,7 +51,9 @@ fun SentEnvelopeDetailRoute(
 
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
-            SentEnvelopeDetailEffect.PopBackStack -> popBackStack()
+            SentEnvelopeDetailEffect.PopBackStack -> {
+                editedFriendId?.let { popBackStackWithEditedFriendId(it) } ?: popBackStack()
+            }
             is SentEnvelopeDetailEffect.NavigateEnvelopeEdit -> navigateSentEnvelopeEdit(sideEffect.envelopeDetail)
             SentEnvelopeDetailEffect.ShowDeleteDialog -> onShowDialog(
                 DialogToken(
@@ -72,6 +77,10 @@ fun SentEnvelopeDetailRoute(
 
     LaunchedEffect(key1 = Unit) {
         viewModel.getEnvelopeDetail()
+    }
+
+    BackHandler {
+        editedFriendId?.let { popBackStackWithEditedFriendId(it) } ?: popBackStack()
     }
 
     SentEnvelopeDetailScreen(

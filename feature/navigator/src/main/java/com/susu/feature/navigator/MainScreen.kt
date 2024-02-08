@@ -88,6 +88,13 @@ internal fun MainScreen(
                         )
                         navigator.popBackStackIfNotHome()
                     },
+                    popBackStackWithEditedFriendId = { friendId ->
+                        navigator.navController.previousBackStackEntry?.savedStateHandle?.set(
+                            SentRoute.EDITED_FRIEND_ID_ARGUMENT_NAME,
+                            friendId,
+                        )
+                        navigator.popBackStackIfNotHome()
+                    },
                     popBackStackWithRefresh = {
                         navigator.navController.previousBackStackEntry?.savedStateHandle?.set(
                             SentRoute.SENT_REFRESH_ARGUMENT_NAME,

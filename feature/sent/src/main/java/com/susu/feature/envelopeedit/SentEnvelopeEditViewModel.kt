@@ -89,7 +89,7 @@ class SentEnvelopeEditViewModel @Inject constructor(
                     )
                 },
             ).onSuccess {
-                popBackStack()
+                postSideEffect(SentEnvelopeEditSideEffect.PopBackStackWithEditedFriendId(it.friend.id))
             }.onFailure {
                 postSideEffect(SentEnvelopeEditSideEffect.HandleException(it, ::editEnvelope))
             }

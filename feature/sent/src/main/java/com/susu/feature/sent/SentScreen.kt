@@ -63,6 +63,7 @@ import me.onebone.toolbar.rememberCollapsingToolbarScaffoldState
 fun SentRoute(
     viewModel: SentViewModel = hiltViewModel(),
     deletedFriendId: Long?,
+    editedFriendId: Long?,
     refresh: Boolean?,
     filter: String?,
     padding: PaddingValues,
