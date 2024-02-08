@@ -18,7 +18,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -52,7 +54,6 @@ fun LoginRoute(
     navigateToSignUp: () -> Unit,
 ) {
     val context = LocalContext.current
-    // TODO: Loading 처리
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val transitionState = remember {
         MutableTransitionState(false).apply {
@@ -97,6 +98,7 @@ fun LoginScreen(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
                     .padding(horizontal = SusuTheme.spacing.spacing_m),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
@@ -123,7 +125,7 @@ fun LoginScreen(
                 }
                 Spacer(modifier = Modifier.height(64.dp))
                 KakaoLoginButton(onClick = onLoginClick)
-                Spacer(modifier = Modifier.weight(1f))
+                Spacer(modifier = Modifier.height(24.dp))
                 Image(
                     modifier = Modifier.align(Alignment.CenterHorizontally),
                     painter = painterResource(id = com.susu.core.designsystem.R.drawable.ic_susu_logo_weak),
