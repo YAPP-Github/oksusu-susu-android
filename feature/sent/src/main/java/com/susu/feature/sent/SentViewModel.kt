@@ -113,6 +113,20 @@ class SentViewModel @Inject constructor(
         }
     }
 
+    fun hideEnvelopesHistoryList(id: Long) {
+        intent {
+            copy(
+                envelopesList = envelopesList.map {
+                    if (it.friend.id == id) {
+                        it.copy(expand = false)
+                    } else {
+                        it
+                    }
+                }.toPersistentList(),
+            )
+        }
+    }
+
     fun deleteEmptyFriendStatistics(id: Long) {
         val filteredList = currentState.envelopesList.filter {
             it.friend.id != id

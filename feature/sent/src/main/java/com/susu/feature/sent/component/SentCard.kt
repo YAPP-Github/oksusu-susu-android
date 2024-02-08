@@ -48,7 +48,7 @@ import com.susu.feature.sent.R
 @Composable
 fun SentCard(
     state: FriendStatisticsState = FriendStatisticsState(),
-    onClickHistory: (Long) -> Unit = {},
+    onClickHistory: (Boolean, Long) -> Unit = { _, _ -> },
     onClickHistoryShowAll: (Long) -> Unit = {},
 ) {
     val degrees by animateFloatAsState(if (state.expand) 180f else 0f, label = "")
@@ -92,7 +92,7 @@ fun SentCard(
                         .clip(CircleShape)
                         .susuClickable(
                             onClick = {
-                                onClickHistory(state.friend.id)
+                                onClickHistory(state.expand, state.friend.id)
                             },
                         )
                         .rotate(degrees = degrees),
