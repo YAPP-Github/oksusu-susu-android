@@ -53,11 +53,11 @@ enum class EnvelopeAlign(
     ),
     HIGH_AMOUNT(
         stringResId = R.string.word_align_high_amount,
-        query = "totalSentAmounts,desc",
+        query = "amount,desc",
     ),
     LOW_AMOUNT(
         stringResId = R.string.word_align_low_amount,
-        query = "totalSentAmounts,asc",
+        query = "amount,asc",
     ),
 }
 
