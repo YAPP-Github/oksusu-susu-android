@@ -52,7 +52,6 @@ fun SentCard(
     onClickHistoryShowAll: (Long) -> Unit = {},
 ) {
     val degrees by animateFloatAsState(if (state.expand) 180f else 0f, label = "")
-
     Box(
         modifier = Modifier
             .clip(shape = RoundedCornerShape(4.dp))

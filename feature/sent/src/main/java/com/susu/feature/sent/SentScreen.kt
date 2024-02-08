@@ -95,6 +95,9 @@ fun SentRoute(
         }
         viewModel.getEnvelopesList(refresh)
         viewModel.filterIfNeed(filter)
+        if (editedFriendId != null) {
+            viewModel.editFriendStatistics(editedFriendId)
+        }
     }
 
     envelopesListState.OnBottomReached {
