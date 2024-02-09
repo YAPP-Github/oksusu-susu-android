@@ -13,6 +13,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -38,6 +40,7 @@ import com.susu.core.designsystem.component.button.SusuFilledButton
 import com.susu.core.designsystem.component.screen.LoadingScreen
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.ui.SnackbarToken
+import com.susu.core.ui.USER_BIRTH_RANGE
 import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.feature.loginsignup.signup.content.AdditionalContent
 import com.susu.feature.loginsignup.signup.content.NameContent
@@ -167,6 +170,8 @@ fun SignUpRoute(
 
         if (showDatePicker) {
             SusuYearPickerBottomSheet(
+                yearRange = USER_BIRTH_RANGE,
+                reverseItemOrder = true,
                 maximumContainerHeight = 322.dp,
                 onDismissRequest = {
                     viewModel.updateBirth(it)
