@@ -114,10 +114,6 @@ fun SusuTextFieldFillMaxButton(
                         modifier = Modifier.weight(1f),
                         contentAlignment = Alignment.Center,
                     ) {
-                        if (isSaved.not()) {
-                            innerTextField()
-                        }
-
                         /**
                          * Problem : innerTextField 수정 중에 saved가 되면 underline이 생기는 현상.
                          * Solution : saved 상태에서는 Text 컴포저블 함수가 보이게 함.
@@ -144,6 +140,10 @@ fun SusuTextFieldFillMaxButton(
                                 maxLines = maxLines,
                                 minLines = minLines,
                             )
+                        }
+
+                        if (isSaved.not()) {
+                            innerTextField()
                         }
                     }
 
@@ -213,6 +213,18 @@ fun SusuTextFieldWrapContentButton(
             Box(
                 contentAlignment = Alignment.Center,
             ) {
+                if (text.isEmpty()) {
+                    Text(
+                        text = placeholder,
+                        color = color.placeholderColor,
+                        style = textStyle,
+                        textAlign = TextAlign.Center,
+                        overflow = overflow,
+                        maxLines = maxLines,
+                        minLines = minLines,
+                    )
+                }
+
                 BasicTextField(
                     modifier = Modifier
                         .disabledHorizontalPointerInputScroll()
@@ -254,18 +266,6 @@ fun SusuTextFieldWrapContentButton(
                         innerTextField()
                     },
                 )
-
-                if (text.isEmpty()) {
-                    Text(
-                        text = placeholder,
-                        color = color.placeholderColor,
-                        style = textStyle,
-                        textAlign = TextAlign.Center,
-                        overflow = overflow,
-                        maxLines = maxLines,
-                        minLines = minLines,
-                    )
-                }
             }
 
             InnerButtons(
