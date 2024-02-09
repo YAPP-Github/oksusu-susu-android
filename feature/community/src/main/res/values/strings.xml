@@ -25,7 +25,7 @@
     <string name="delete_vote_success_toast">투표가 삭제되었어요</string>
     <string name="snackbar_can_not_change_option">시작된 투표는 보기를 편집할 수 없어요</string>
     <string name="dialog_report_title">해당 글을 신고할까요?</string>
-    <string name="dialog_report_body">신고된 글은 수수에서 확인한 후에 모두에게 제재돼요\n이 작성자의 글을 보고 싶지 않다면 작성자를 차단해주세요</string>
+    <string name="dialog_report_body">신고된 글은 수수의 확인 후 제재됩니다.\n이 작성자의 글을 더 이상 보고 싶지 않다면\n작성자를 바로 차단해 주세요.</string>
     <string name="dialog_report_confirm_text">신고하기</string>
     <string name="dialog_report_dismiss_text">닫기</string>
     <string name="dialog_report_checkbox_text">작성자도 바로 차단하기</string>
