@@ -57,7 +57,7 @@ import com.susu.feature.mypage.main.component.MyPageMenuItem
 fun MyPageDefaultRoute(
     padding: PaddingValues,
     viewModel: MyPageViewModel = hiltViewModel(),
-    navigateToLogin: () -> Unit,
+    restartMainActivity: () -> Unit,
     navigateToInfo: () -> Unit,
     navigateToSocial: () -> Unit,
     navigateToPrivacyPolicy: () -> Unit,
@@ -77,7 +77,7 @@ fun MyPageDefaultRoute(
 
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
-            MyPageEffect.NavigateToLogin -> navigateToLogin()
+            MyPageEffect.NavigateToLogin -> restartMainActivity()
             MyPageEffect.NavigateToInfo -> navigateToInfo()
             MyPageEffect.NavigateToSocial -> navigateToSocial()
             is MyPageEffect.ShowSnackbar -> onShowSnackbar(SnackbarToken(message = sideEffect.msg))

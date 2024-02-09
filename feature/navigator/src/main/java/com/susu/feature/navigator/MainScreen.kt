@@ -1,5 +1,6 @@
 package com.susu.feature.navigator
 
+import android.content.Intent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
@@ -226,7 +227,12 @@ internal fun MainScreen(
 
                 myPageNavGraph(
                     padding = innerPadding,
-                    navigateToLogin = navigator::navigateLogin,
+                    restartMainActivity = {
+                        val intent = Intent(context, MainActivity::class.java).apply {
+                            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+                        }
+                        context.startActivity(intent)
+                    },
                     navigateToInfo = navigator::navigateMyPageInfo,
                     navigateToSocial = navigator::navigateMyPageSocial,
                     navigateToPrivacyPolicy = navigator::navigateMyPagePrivacyPolicy,
