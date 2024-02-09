@@ -32,11 +32,12 @@ data class FriendStatisticsState(
     val expand: Boolean = false,
 )
 
-internal fun FriendStatistics.toState() = FriendStatisticsState(
+internal fun FriendStatistics.toState(expand: Boolean = false) = FriendStatisticsState(
     friend = friend,
     receivedAmounts = receivedAmounts,
     sentAmounts = sentAmounts,
     totalAmounts = totalAmounts,
+    expand = expand,
 )
 
 enum class EnvelopeAlign(

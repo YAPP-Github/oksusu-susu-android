@@ -62,6 +62,7 @@ import kotlinx.coroutines.launch
 fun SentEnvelopeEditRoute(
     viewModel: SentEnvelopeEditViewModel = hiltViewModel(),
     popBackStack: () -> Unit,
+    popBackStackWithEditedFriendId: (Long) -> Unit,
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
     val categoryFocusRequester = remember { FocusRequester() }
@@ -85,6 +86,8 @@ fun SentEnvelopeEditRoute(
                     relationshipFocusRequester.requestFocus()
                 }
             }
+
+            is SentEnvelopeEditSideEffect.PopBackStackWithEditedFriendId -> popBackStackWithEditedFriendId(sideEffect.id)
         }
     }
 

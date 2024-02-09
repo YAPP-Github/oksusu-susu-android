@@ -63,6 +63,7 @@ import me.onebone.toolbar.rememberCollapsingToolbarScaffoldState
 fun SentRoute(
     viewModel: SentViewModel = hiltViewModel(),
     deletedFriendId: Long?,
+    editedFriendId: Long?,
     refresh: Boolean?,
     filter: String?,
     padding: PaddingValues,
@@ -94,6 +95,9 @@ fun SentRoute(
         }
         viewModel.getEnvelopesList(refresh)
         viewModel.filterIfNeed(filter)
+        if (editedFriendId != null) {
+            viewModel.editFriendStatistics(editedFriendId)
+        }
     }
 
     envelopesListState.OnBottomReached {
@@ -107,8 +111,12 @@ fun SentRoute(
         onClickHistoryShowAll = viewModel::navigateSentEnvelope,
         onClickAddEnvelope = viewModel::navigateSentAdd,
         onClickSearchIcon = viewModel::navigateSentEnvelopeSearch,
-        onClickHistory = { friendId ->
-            viewModel.getEnvelopesHistoryList(friendId)
+        onClickHistory = { expand, friendId ->
+            if (expand) {
+                viewModel.hideEnvelopesHistoryList(friendId)
+            } else { // history 열려 있을 경우 데이터 요청
+                viewModel.getEnvelopesHistoryList(friendId)
+            }
         },
         onClickFilterButton = viewModel::navigateEnvelopeFilter,
         onClickFriendClose = viewModel::unselectFriend,
@@ -126,7 +134,7 @@ fun SentScreen(
     envelopesListState: LazyListState = rememberLazyListState(),
     padding: PaddingValues,
     onClickSearchIcon: () -> Unit = {},
-    onClickHistory: (Long) -> Unit = {},
+    onClickHistory: (Boolean, Long) -> Unit = { _, _ -> },
     onClickHistoryShowAll: (Long) -> Unit = {},
     onClickAddEnvelope: () -> Unit = {},
     onClickFilterButton: () -> Unit = {},

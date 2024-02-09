@@ -102,7 +102,7 @@ class SentViewModel @Inject constructor(
                         if (it.friend.id == id) {
                             it.copy(
                                 envelopesHistoryList = newEnvelopesHistoryList,
-                                expand = !it.expand,
+                                expand = true,
                             )
                         } else {
                             it
@@ -113,12 +113,54 @@ class SentViewModel @Inject constructor(
         }
     }
 
+    fun hideEnvelopesHistoryList(id: Long) {
+        intent {
+            copy(
+                envelopesList = envelopesList.map {
+                    if (it.friend.id == id) {
+                        it.copy(expand = false)
+                    } else {
+                        it
+                    }
+                }.toPersistentList(),
+            )
+        }
+    }
+
     fun deleteEmptyFriendStatistics(id: Long) {
         val filteredList = currentState.envelopesList.filter {
             it.friend.id != id
         }.toPersistentList()
 
         intent { copy(envelopesList = filteredList) }
+    }
+
+    fun editFriendStatistics(id: Long) = viewModelScope.launch {
+        getEnvelopesListUseCase(
+            GetEnvelopesListUseCase.Param(
+                friendIds = listOf(id),
+            ),
+        ).onSuccess { list ->
+            val friendStatistics = list.firstOrNull() ?: return@launch
+            val editedEnvelopeList = currentState.envelopesList.map {
+                if (it.friend.id == id) {
+                    it.copy(
+                        receivedAmounts = friendStatistics.receivedAmounts,
+                        sentAmounts = friendStatistics.sentAmounts,
+                        totalAmounts = friendStatistics.totalAmounts,
+                        expand = true,
+                    )
+                } else {
+                    it
+                }
+            }.toPersistentList()
+
+            intent {
+                copy(envelopesList = editedEnvelopeList)
+            }
+
+            getEnvelopesHistoryList(id)
+        }
     }
 
     fun navigateSentEnvelope(id: Long) = postSideEffect(SentEffect.NavigateEnvelope(id = id))

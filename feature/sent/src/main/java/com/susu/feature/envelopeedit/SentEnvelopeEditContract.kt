@@ -33,6 +33,7 @@ data class SentEnvelopeEditState(
 
 sealed interface SentEnvelopeEditSideEffect : SideEffect {
     data object PopBackStack : SentEnvelopeEditSideEffect
+    data class PopBackStackWithEditedFriendId(val id: Long) : SentEnvelopeEditSideEffect
     data class HandleException(val throwable: Throwable, val retry: () -> Unit) : SentEnvelopeEditSideEffect
     data object FocusCustomCategory : SentEnvelopeEditSideEffect
     data object FocusCustomRelationship : SentEnvelopeEditSideEffect

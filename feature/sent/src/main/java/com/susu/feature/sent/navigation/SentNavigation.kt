@@ -52,6 +52,7 @@ fun NavGraphBuilder.sentNavGraph(
     padding: PaddingValues,
     popBackStack: () -> Unit,
     popBackStackWithDeleteFriendId: (Long) -> Unit,
+    popBackStackWithEditedFriendId: (Long) -> Unit,
     popBackStackWithRefresh: () -> Unit,
     navigateSentEnvelope: (Long) -> Unit,
     navigateSentEnvelopeDetail: (Long) -> Unit,
@@ -66,15 +67,18 @@ fun NavGraphBuilder.sentNavGraph(
 ) {
     composable(route = SentRoute.route) { navBackStackEntry ->
         val deletedFriendId = navBackStackEntry.savedStateHandle.get<Long>(SentRoute.FRIEND_ID_ARGUMENT_NAME)
+        val editedFriendId = navBackStackEntry.savedStateHandle.get<Long>(SentRoute.EDITED_FRIEND_ID_ARGUMENT_NAME)
         val refresh = navBackStackEntry.savedStateHandle.get<Boolean>(SentRoute.SENT_REFRESH_ARGUMENT_NAME)
         val filter = navBackStackEntry.savedStateHandle.get<String>(SentRoute.FILTER_ENVELOPE_ARGUMENT)
         navBackStackEntry.savedStateHandle.set<String>(SentRoute.FILTER_ENVELOPE_ARGUMENT, null)
         navBackStackEntry.savedStateHandle.set<Boolean>(SentRoute.SENT_REFRESH_ARGUMENT_NAME, null)
+        navBackStackEntry.savedStateHandle.set<Long>(SentRoute.EDITED_FRIEND_ID_ARGUMENT_NAME, null)
 
         SentRoute(
             padding = padding,
             filter = filter,
             deletedFriendId = deletedFriendId,
+            editedFriendId = editedFriendId,
             refresh = refresh,
             navigateSentEnvelope = navigateSentEnvelope,
             navigateSentEnvelopeAdd = navigateSentEnvelopeAdd,
@@ -90,9 +94,12 @@ fun NavGraphBuilder.sentNavGraph(
                 type = NavType.LongType
             },
         ),
-    ) {
+    ) { navBackStackEntry ->
+        val editedFriendId = navBackStackEntry.savedStateHandle.get<Long>(SentRoute.EDITED_FRIEND_ID_ARGUMENT_NAME)
         SentEnvelopeRoute(
             popBackStack = popBackStack,
+            editedFriendId = editedFriendId,
+            popBackStackWithEditedFriendId = popBackStackWithEditedFriendId,
             navigateSentEnvelopeDetail = navigateSentEnvelopeDetail,
             popBackStackWithDeleteFriendId = popBackStackWithDeleteFriendId,
         )
@@ -105,9 +112,13 @@ fun NavGraphBuilder.sentNavGraph(
                 type = NavType.LongType
             },
         ),
-    ) {
+    ) { navBackStackEntry ->
+        val editedFriendId = navBackStackEntry.savedStateHandle.get<Long>(SentRoute.EDITED_FRIEND_ID_ARGUMENT_NAME)
+
         SentEnvelopeDetailRoute(
             popBackStack = popBackStack,
+            editedFriendId = editedFriendId,
+            popBackStackWithEditedFriendId = popBackStackWithEditedFriendId,
             navigateSentEnvelopeEdit = navigateSentEnvelopeEdit,
             onShowSnackbar = onShowSnackbar,
             onShowDialog = onShowDialog,
@@ -118,6 +129,7 @@ fun NavGraphBuilder.sentNavGraph(
     composable(route = SentRoute.sentEnvelopeEditRoute("{${SentRoute.ENVELOPE_DETAIL_ARGUMENT_NAME}}")) {
         SentEnvelopeEditRoute(
             popBackStack = popBackStack,
+            popBackStackWithEditedFriendId = popBackStackWithEditedFriendId,
         )
     }
 
@@ -153,6 +165,7 @@ object SentRoute {
     const val SENT_REFRESH_ARGUMENT_NAME = "sent-refresh"
     fun sentEnvelopeRoute(id: String) = "sent-envelope/$id"
     const val FRIEND_ID_ARGUMENT_NAME = "sent-envelope-id"
+    const val EDITED_FRIEND_ID_ARGUMENT_NAME = "edited-friend-id"
 
     fun sentEnvelopeDetailRoute(id: String) = "sent-envelope-detail/$id"
     const val ENVELOPE_ID_ARGUMENT_NAME = "sent-envelope-detail-id"
