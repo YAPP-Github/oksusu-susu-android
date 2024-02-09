@@ -45,6 +45,7 @@ import com.susu.core.designsystem.component.button.SelectedFilterButton
 import com.susu.core.designsystem.component.button.SmallButtonStyle
 import com.susu.core.designsystem.component.button.SusuFloatingButton
 import com.susu.core.designsystem.component.button.SusuGhostButton
+import com.susu.core.designsystem.theme.Gray15
 import com.susu.core.designsystem.theme.Gray50
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.model.Category
@@ -146,18 +147,7 @@ fun ReceiveScreen(
             .fillMaxSize(),
     ) {
         Column {
-            SusuDefaultAppBar(
-                modifier = Modifier.padding(horizontal = SusuTheme.spacing.spacing_xs),
-                leftIcon = {
-                    LogoIcon()
-                },
-                title = stringResource(R.string.received_screen_appbar_title),
-                actions = {
-                    Row {
-                        SearchIcon(onClickSearchIcon)
-                    }
-                },
-            )
+            Spacer(modifier = Modifier.size(44.dp))
 
             val state = rememberCollapsingToolbarScaffoldState()
 
@@ -166,19 +156,11 @@ fun ReceiveScreen(
                 state = state,
                 scrollStrategy = ScrollStrategy.EnterAlways,
                 toolbar = {
-                    Spacer(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(32.dp),
-                    )
                     Row(
                         modifier = Modifier
                             .padding(
                                 vertical = SusuTheme.spacing.spacing_m,
                             )
-                            .graphicsLayer {
-                                alpha = state.toolbarState.progress
-                            }
                             .horizontalScroll(rememberScrollState()),
                         horizontalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxs),
                     ) {
@@ -256,6 +238,19 @@ fun ReceiveScreen(
                 }
             }
         }
+
+        SusuDefaultAppBar(
+            modifier = Modifier.background(Gray15).padding(horizontal = SusuTheme.spacing.spacing_xs),
+            leftIcon = {
+                LogoIcon()
+            },
+            title = stringResource(R.string.received_screen_appbar_title),
+            actions = {
+                Row {
+                    SearchIcon(onClickSearchIcon)
+                }
+            },
+        )
 
         if (uiState.showEmptyLedger) {
             Text(
