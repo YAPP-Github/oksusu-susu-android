@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.susu.core.designsystem.component.badge.BadgeColor
@@ -55,6 +56,8 @@ fun LedgerCard(
         Text(
             text = title,
             style = SusuTheme.typography.title_m,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
         )
 
         Spacer(modifier = Modifier.weight(1f))
@@ -81,7 +84,7 @@ fun LedgerCardPreview() {
     SusuTheme {
         LedgerCard(
             ledgerType = "결혼식",
-            title = "나의 결혼식",
+            title = "나의 결혼식 나의 결혼식 나의 결혼식 나의 결혼식 나의 결혼식",
             style = "",
             count = 164,
             money = 10000,
