@@ -159,6 +159,7 @@ fun SignUpRoute(
                         Text(
                             modifier = Modifier
                                 .fillMaxSize()
+                                .verticalScroll(rememberScrollState())
                                 .padding(SusuTheme.spacing.spacing_m),
                             text = termState.currentTerm.description,
                             style = SusuTheme.typography.text_xxxs,
