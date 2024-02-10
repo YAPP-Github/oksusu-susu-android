@@ -43,7 +43,6 @@ class MainActivity : ComponentActivity() {
         if (uiState.isNavigating) {
             KakaoLoginHelper.getAccessToken { accessToken ->
                 viewModel.navigate(
-                    hasKakaoLoginHistory = KakaoLoginHelper.hasKakaoLoginHistory,
                     kakaoAccessToken = accessToken,
                 )
             }
