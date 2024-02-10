@@ -14,7 +14,12 @@ class StatisticsRepositoryImpl @Inject constructor(
     override suspend fun getMyStatistics(): MyStatistics {
         val originalStatistic = statisticsService.getMyStatistics().getOrThrow().toModel()
         val sortedRecentSpent = originalStatistic.recentSpent.sortedBy { it.title.toInt() }
-            .map { StatisticsElement(title = it.title.substring(it.title.length - 2).toInt().toString(), value = it.value) }
+            .map {
+                StatisticsElement(
+                    title = it.title.substring(it.title.length - 2).toInt().toString(),
+                    value = it.value / 10000,
+                )
+            }
 
         return MyStatistics(
             highestAmountReceived = originalStatistic.highestAmountReceived,
@@ -23,8 +28,8 @@ class StatisticsRepositoryImpl @Inject constructor(
             mostRelationship = originalStatistic.mostRelationship,
             mostSpentMonth = originalStatistic.mostSpentMonth % 100,
             recentSpent = sortedRecentSpent,
-            recentTotalSpent = originalStatistic.recentTotalSpent,
-            recentMaximumSpent = originalStatistic.recentMaximumSpent,
+            recentTotalSpent = sortedRecentSpent.sumOf { it.value },
+            recentMaximumSpent = sortedRecentSpent.maxOfOrNull { it.value } ?: 0,
         )
     }
 
@@ -35,7 +40,12 @@ class StatisticsRepositoryImpl @Inject constructor(
             categoryId = categoryId,
         ).getOrThrow().toModel()
         val sortedRecentSpent = originalStatistic.recentSpent.sortedBy { it.title.toInt() }
-            .map { StatisticsElement(title = it.title.substring(it.title.length - 2).toInt().toString(), value = it.value) }
+            .map {
+                StatisticsElement(
+                    title = it.title.substring(it.title.length - 2).toInt().toString(),
+                    value = it.value / 10000,
+                )
+            }
 
         return SusuStatistics(
             averageSent = originalStatistic.averageSent,
@@ -45,8 +55,8 @@ class StatisticsRepositoryImpl @Inject constructor(
             mostSpentMonth = originalStatistic.mostSpentMonth % 100,
             mostRelationship = originalStatistic.mostRelationship,
             mostCategory = originalStatistic.mostCategory,
-            recentTotalSpent = originalStatistic.recentTotalSpent,
-            recentMaximumSpent = originalStatistic.recentMaximumSpent,
+            recentTotalSpent = sortedRecentSpent.sumOf { it.value },
+            recentMaximumSpent = sortedRecentSpent.maxOfOrNull { it.value } ?: 0,
         )
     }
 }
