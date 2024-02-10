@@ -3,7 +3,6 @@ package com.susu.feature.received.ledgeradd.content.date
 import androidx.lifecycle.viewModelScope
 import com.susu.core.model.Category
 import com.susu.core.ui.base.BaseViewModel
-import com.susu.core.ui.util.currentDate
 import com.susu.core.ui.util.getSafeLocalDateTime
 import com.susu.domain.usecase.ledger.GetCreateLedgerConfigUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel

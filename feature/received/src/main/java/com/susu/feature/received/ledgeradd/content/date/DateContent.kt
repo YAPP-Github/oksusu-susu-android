@@ -28,7 +28,6 @@ import com.susu.core.ui.util.AnnotatedText
 import com.susu.core.ui.util.currentDate
 import com.susu.core.ui.util.minDate
 import com.susu.feature.received.R
-import kotlinx.coroutines.delay
 import java.time.LocalDateTime
 
 @Composable

@@ -3,7 +3,6 @@ package com.susu.feature.received.ledgeradd.content.date
 import com.susu.core.ui.base.SideEffect
 import com.susu.core.ui.base.UiState
 import com.susu.core.ui.util.currentDate
-import com.susu.feature.received.ledgeradd.content.name.NameSideEffect
 import java.time.LocalDateTime
 
 data class DateState(

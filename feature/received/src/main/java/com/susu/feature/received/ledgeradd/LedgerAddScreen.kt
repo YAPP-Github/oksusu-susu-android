@@ -3,7 +3,6 @@ package com.susu.feature.received.ledgeradd
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -34,7 +33,6 @@ import com.susu.core.ui.extension.susuDefaultAnimatedContentTransitionSpec
 import com.susu.feature.received.ledgeradd.content.category.CategoryContentRoute
 import com.susu.feature.received.ledgeradd.content.date.DateContentRoute
 import com.susu.feature.received.ledgeradd.content.name.NameContentRoute
-import kotlinx.coroutines.android.awaitFrame
 import java.time.LocalDateTime
 
 @Composable
@@ -151,7 +149,6 @@ fun LedgerAddScreen(
             onClick = onClickNextButton,
         )
     }
-
 
     if (uiState.isLoading) {
         LoadingScreen()
