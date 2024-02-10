@@ -337,12 +337,16 @@ fun SusuYearPickerBottomSheet(
     val currentYear = remember { LocalDate.now().year }
     var selectedYear by remember { mutableIntStateOf(initialYear ?: currentYear) }
     val yearList = if (reverseItemOrder) {
-        (yearRange.reversed()
-            .map { stringResource(id = R.string.word_year_format, it) } +
-            listOf(stringResource(R.string.word_not_select))).toImmutableList()
+        (
+            yearRange.reversed()
+                .map { stringResource(id = R.string.word_year_format, it) } +
+                listOf(stringResource(R.string.word_not_select))
+            ).toImmutableList()
     } else {
-        (yearRange.map { stringResource(id = R.string.word_year_format, it) } +
-            listOf(stringResource(R.string.word_not_select))).toImmutableList()
+        (
+            yearRange.map { stringResource(id = R.string.word_year_format, it) } +
+                listOf(stringResource(R.string.word_not_select))
+            ).toImmutableList()
     }
 
     SusuBottomSheet(
