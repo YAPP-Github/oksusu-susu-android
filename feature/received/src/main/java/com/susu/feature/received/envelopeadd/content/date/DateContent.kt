@@ -27,6 +27,7 @@ import java.time.LocalDateTime
 @Composable
 fun DateContentRoute(
     viewModel: DateViewModel = hiltViewModel(),
+    initDate: LocalDateTime,
     friendName: String,
     updateParentDate: (LocalDateTime?) -> Unit,
 ) {
@@ -39,7 +40,7 @@ fun DateContentRoute(
 
     LaunchedEffect(key1 = Unit) {
         viewModel.updateName(friendName)
-        updateParentDate(uiState.date)
+        viewModel.updateInitDate(initDate)
     }
 
     DateContent(

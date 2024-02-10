@@ -28,6 +28,7 @@ import com.susu.core.model.Relationship
 import com.susu.core.ui.SnackbarToken
 import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.core.ui.extension.susuDefaultAnimatedContentTransitionSpec
+import com.susu.core.ui.util.currentDate
 import com.susu.feature.received.envelopeadd.content.date.DateContentRoute
 import com.susu.feature.received.envelopeadd.content.memo.MemoContentRoute
 import com.susu.feature.received.envelopeadd.content.money.MoneyContentRoute
@@ -77,6 +78,7 @@ fun ReceivedEnvelopeAddRoute(
         updateParentFriendId = viewModel::updateFriendId,
         updateParentSelectedRelationShip = viewModel::updateSelectedRelationShip,
         updateParentMoreStep = viewModel::updateMoreStep,
+        initDate = viewModel.initDate,
         updateParentDate = viewModel::updateDate,
         categoryName = viewModel.categoryName,
         updateParentVisited = viewModel::updateHasVisited,
@@ -96,6 +98,7 @@ fun ReceivedEnvelopeAddScreen(
     updateParentName: (String) -> Unit = {},
     updateParentFriendId: (Long?) -> Unit = {},
     updateParentSelectedRelationShip: (Relationship?) -> Unit = {},
+    initDate: LocalDateTime = currentDate,
     updateParentDate: (LocalDateTime?) -> Unit = {},
     updateParentMoreStep: (List<EnvelopeAddStep>) -> Unit = {},
     categoryName: String = "",
@@ -143,6 +146,7 @@ fun ReceivedEnvelopeAddScreen(
                 )
                 EnvelopeAddStep.DATE -> DateContentRoute(
                     friendName = friendName,
+                    initDate = initDate,
                     updateParentDate = updateParentDate,
                 )
                 EnvelopeAddStep.MORE -> MoreContentRoute(

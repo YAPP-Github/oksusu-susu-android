@@ -3,7 +3,6 @@ package com.susu.feature.received.ledgeradd
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,6 +14,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -43,11 +43,13 @@ fun LedgerAddRoute(
     handleException: (Throwable, () -> Unit) -> Unit,
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
+    val keyboardController = LocalSoftwareKeyboardController.current
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
             LedgerAddSideEffect.PopBackStack -> popBackStack()
             is LedgerAddSideEffect.HandleException -> handleException(sideEffect.throwable, sideEffect.retry)
             is LedgerAddSideEffect.PopBackStackWithLedger -> popBackStackWithLedger(sideEffect.ledger)
+            LedgerAddSideEffect.HideKeyboard -> keyboardController?.hide()
         }
     }
 
@@ -94,60 +96,58 @@ fun LedgerAddScreen(
     dateContentName: String = "",
     updateParentDate: (LocalDateTime?, LocalDateTime?) -> Unit = { _, _ -> },
 ) {
-    Box(
+    Column(
         modifier = Modifier
             .background(SusuTheme.colorScheme.background15)
             .fillMaxSize(),
     ) {
-        Column {
-            SusuProgressAppBar(
-                leftIcon = {
-                    BackIcon(onClickBack)
-                },
-                entireStep = LedgerAddStep.entries.size,
-                currentStep = uiState.currentStep.ordinal + 1,
-            )
+        SusuProgressAppBar(
+            leftIcon = {
+                BackIcon(onClickBack)
+            },
+            entireStep = LedgerAddStep.entries.size,
+            currentStep = uiState.currentStep.ordinal + 1,
+        )
 
-            AnimatedContent(
-                modifier = Modifier.weight(1f),
-                targetState = uiState.currentStep,
-                label = "LedgerAddScreen",
-                transitionSpec = {
-                    susuDefaultAnimatedContentTransitionSpec(
-                        leftDirectionCondition = targetState.ordinal > initialState.ordinal,
-                    )
-                },
-            ) { targetState ->
-                when (targetState) {
-                    LedgerAddStep.CATEGORY -> CategoryContentRoute(
-                        updateParentSelectedCategory = updateParentSelectedCategory,
-                    )
+        AnimatedContent(
+            modifier = Modifier.weight(1f),
+            targetState = uiState.currentStep,
+            label = "LedgerAddScreen",
+            transitionSpec = {
+                susuDefaultAnimatedContentTransitionSpec(
+                    leftDirectionCondition = targetState.ordinal > initialState.ordinal,
+                )
+            },
+        ) { targetState ->
+            when (targetState) {
+                LedgerAddStep.CATEGORY -> CategoryContentRoute(
+                    updateParentSelectedCategory = updateParentSelectedCategory,
+                )
 
-                    LedgerAddStep.NAME -> NameContentRoute(
-                        updateParentName = updateParentName,
-                    )
+                LedgerAddStep.NAME -> NameContentRoute(
+                    updateParentName = updateParentName,
+                )
 
-                    LedgerAddStep.DATE -> DateContentRoute(
-                        name = dateContentName,
-                        category = dateContentCategory,
-                        updateParentDate = updateParentDate,
-                    )
-                }
+                LedgerAddStep.DATE -> DateContentRoute(
+                    name = dateContentName,
+                    category = dateContentCategory,
+                    updateParentDate = updateParentDate,
+                )
             }
-
-            SusuFilledButton(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .imePadding(),
-                shape = RectangleShape,
-                color = FilledButtonColor.Black,
-                style = MediumButtonStyle.height60,
-                text = stringResource(id = R.string.word_save),
-                isClickable = uiState.buttonEnabled,
-                isActive = uiState.buttonEnabled,
-                onClick = onClickNextButton,
-            )
         }
+
+        SusuFilledButton(
+            modifier = Modifier
+                .fillMaxWidth()
+                .imePadding(),
+            shape = RectangleShape,
+            color = FilledButtonColor.Black,
+            style = MediumButtonStyle.height60,
+            text = stringResource(id = R.string.word_save),
+            isClickable = uiState.buttonEnabled,
+            isActive = uiState.buttonEnabled,
+            onClick = onClickNextButton,
+        )
     }
 
     if (uiState.isLoading) {

@@ -12,6 +12,7 @@ import com.susu.domain.usecase.envelope.CreateReceivedEnvelopeUseCase
 import com.susu.feature.received.navigation.ReceivedRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import kotlinx.datetime.toJavaLocalDateTime
 import kotlinx.datetime.toKotlinLocalDateTime
 import kotlinx.serialization.json.Json
 import java.time.LocalDateTime
@@ -28,13 +29,15 @@ class ReceivedEnvelopeAddViewModel @Inject constructor(
         Json.decodeFromUri<Ledger>(savedStateHandle.get<String>(ReceivedRoute.LEDGER_ARGUMENT_NAME)!!)
     }
     val categoryName = ledger.category.customCategory ?: ledger.category.name
+    val initDate = ledger.startAt.toJavaLocalDateTime()
+
     private val ledgerId = ledger.id
 
     private var money: Long = 0
     private var name: String = ""
     private var friendId: Long? = null
     private var relationShip: Relationship? = null
-    private var date: LocalDateTime? = null
+    private var date: LocalDateTime? = initDate
     private var moreStep: List<EnvelopeAddStep> = emptyList()
     private var hasVisited: Boolean? = null
     private var present: String? = null

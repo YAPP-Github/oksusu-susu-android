@@ -6,6 +6,7 @@ import com.susu.core.ui.base.BaseViewModel
 import com.susu.core.ui.util.getSafeLocalDateTime
 import com.susu.domain.usecase.ledger.GetCreateLedgerConfigUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import javax.inject.Inject
@@ -20,11 +21,18 @@ class DateViewModel @Inject constructor(
 
     fun setScreenType(category: Category) = viewModelScope.launch {
         if (this@DateViewModel.category == category) return@launch
+        this@DateViewModel.category = category
 
         getCreateLedgerConfigUseCase()
             .onSuccess { onlyStartAtCategoryIdList ->
-                intent { copy(showOnlyStartAt = category.id in onlyStartAtCategoryIdList) }
+                intent {
+                    copy(
+                        showOnlyStartAt = category.id in onlyStartAtCategoryIdList,
+                    )
+                }
             }
+        delay(400L)
+        showStartDateBottomSheet()
     }
 
     fun updateNameAndCategory(name: String, categoryName: String) = intent {

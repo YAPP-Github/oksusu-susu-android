@@ -16,6 +16,7 @@ enum class LedgerAddStep {
 }
 
 sealed interface LedgerAddSideEffect : SideEffect {
+    data object HideKeyboard : LedgerAddSideEffect
     data object PopBackStack : LedgerAddSideEffect
     data class PopBackStackWithLedger(val ledger: String) : LedgerAddSideEffect
     data class HandleException(val throwable: Throwable, val retry: () -> Unit) : LedgerAddSideEffect
