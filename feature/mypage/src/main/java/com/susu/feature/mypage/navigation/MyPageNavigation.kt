@@ -30,7 +30,7 @@ fun NavController.navigateMyPagePrivacyPolicy() {
 
 fun NavGraphBuilder.myPageNavGraph(
     padding: PaddingValues,
-    navigateToLogin: () -> Unit,
+    restartMainActivity: () -> Unit,
     navigateToInfo: () -> Unit,
     navigateToSocial: () -> Unit,
     navigateToPrivacyPolicy: () -> Unit,
@@ -42,7 +42,7 @@ fun NavGraphBuilder.myPageNavGraph(
     composable(route = MyPageRoute.defaultRoute) {
         MyPageDefaultRoute(
             padding = padding,
-            navigateToLogin = navigateToLogin,
+            restartMainActivity = restartMainActivity,
             navigateToInfo = navigateToInfo,
             navigateToSocial = navigateToSocial,
             navigateToPrivacyPolicy = navigateToPrivacyPolicy,

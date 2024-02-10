@@ -1,7 +1,6 @@
 package com.susu.feature.loginsignup.social
 
 import android.content.Context
-import com.kakao.sdk.auth.AuthApiClient
 import com.kakao.sdk.auth.TokenManagerProvider
 import com.kakao.sdk.common.model.AuthError
 import com.kakao.sdk.common.model.ClientError
@@ -10,8 +9,6 @@ import com.kakao.sdk.user.UserApiClient
 import timber.log.Timber
 
 object KakaoLoginHelper {
-    val hasKakaoLoginHistory
-        get() = AuthApiClient.instance.hasToken()
 
     fun login(
         context: Context,

@@ -6,6 +6,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.susu.core.model.User
 import com.susu.core.model.exception.UserNotFoundException
+import com.susu.data.Constants.showOnboardingVoteKey
 import com.susu.data.remote.api.AuthService
 import com.susu.data.remote.api.UserService
 import com.susu.data.remote.model.request.UserPatchRequest
@@ -63,6 +64,7 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun withdraw() {
         dataStore.edit { preferences ->
             preferences.remove(userKey)
+            preferences.remove(showOnboardingVoteKey)
         }
         authService.withdraw().getOrThrow()
     }

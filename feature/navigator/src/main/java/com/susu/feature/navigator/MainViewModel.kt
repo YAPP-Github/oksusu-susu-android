@@ -9,6 +9,7 @@ import com.susu.core.ui.SnsProviders
 import com.susu.core.ui.base.BaseViewModel
 import com.susu.domain.usecase.categoryconfig.GetCategoryConfigUseCase
 import com.susu.domain.usecase.loginsignup.CheckCanRegisterUseCase
+import com.susu.domain.usecase.loginsignup.CheckShowOnboardVoteUseCase
 import com.susu.domain.usecase.loginsignup.LoginUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
@@ -22,6 +23,7 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     private val loginUseCase: LoginUseCase,
     private val checkCanRegisterUseCase: CheckCanRegisterUseCase,
+    private val checkShowOnboardVoteUseCase: CheckShowOnboardVoteUseCase,
     private val getCategoryConfigUseCase: GetCategoryConfigUseCase,
 ) : BaseViewModel<MainState, MainSideEffect>(MainState()) {
     companion object {
@@ -59,8 +61,8 @@ class MainViewModel @Inject constructor(
         intent { copy(isInitializing = false) }
     }
 
-    fun navigate(hasKakaoLoginHistory: Boolean, kakaoAccessToken: String?) = viewModelScope.launch {
-        if (hasKakaoLoginHistory.not()) {
+    fun navigate(kakaoAccessToken: String?) = viewModelScope.launch {
+        if (checkShowOnboardVoteUseCase() == null) {
             intent { copy(isNavigating = false) }
             return@launch
         }

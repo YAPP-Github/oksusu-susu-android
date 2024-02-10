@@ -1,7 +1,7 @@
 package com.susu.data.remote.di
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
-import com.susu.data.remote.Constants.RETROFIT_TAG
+import com.susu.data.Constants.RETROFIT_TAG
 import com.susu.data.remote.network.TokenAuthenticator
 import com.susu.data.remote.network.TokenInterceptor
 import com.susu.data.remote.retrofit.ResultCallAdapterFactory
