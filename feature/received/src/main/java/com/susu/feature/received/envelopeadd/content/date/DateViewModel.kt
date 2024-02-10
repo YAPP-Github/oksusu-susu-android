@@ -9,7 +9,14 @@ import javax.inject.Inject
 class DateViewModel @Inject constructor() : BaseViewModel<DateState, DateSideEffect>(
     DateState(),
 ) {
-    fun updateName(name: String) = intent { copy(name = name) }
+    fun updateName(name: String) = intent { copy(name = name,) }
+
+    fun updateInitDate(date: LocalDateTime) = intent {
+        if (this.date != null) return@intent this
+        copy(
+            date = date
+        )
+    }
 
     fun updateDate(year: Int, month: Int, day: Int) = intent {
         val toUpdateDate = LocalDateTime.of(year, month, day, 0, 0)
