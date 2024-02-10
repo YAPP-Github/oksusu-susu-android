@@ -13,13 +13,17 @@ class StatisticsRepositoryImpl @Inject constructor(
 ) : StatisticsRepository {
     override suspend fun getMyStatistics(): MyStatistics {
         val originalStatistic = statisticsService.getMyStatistics().getOrThrow().toModel()
-        val sortedRecentSpent = originalStatistic.recentSpent.sortedBy { it.title.toInt() }
+        val sortedRecentSpent = originalStatistic.recentSpent
+            .filter {
+                currentYear == it.title.substring(0 until 4).toInt()
+            }
             .map {
                 StatisticsElement(
                     title = it.title.substring(it.title.length - 2).toInt().toString(),
                     value = it.value / 10000,
                 )
             }
+            .sortedBy { it.title.toInt() }
 
         return MyStatistics(
             highestAmountReceived = originalStatistic.highestAmountReceived,
@@ -39,13 +43,17 @@ class StatisticsRepositoryImpl @Inject constructor(
             relationshipId = relationshipId,
             categoryId = categoryId,
         ).getOrThrow().toModel()
-        val sortedRecentSpent = originalStatistic.recentSpent.sortedBy { it.title.toInt() }
+        val sortedRecentSpent = originalStatistic.recentSpent
+            .filter {
+                currentYear == it.title.substring(0 until 4).toInt()
+            }
             .map {
                 StatisticsElement(
                     title = it.title.substring(it.title.length - 2).toInt().toString(),
                     value = it.value / 10000,
                 )
             }
+            .sortedBy { it.title.toInt() }
 
         return SusuStatistics(
             averageSent = originalStatistic.averageSent,
@@ -58,5 +66,9 @@ class StatisticsRepositoryImpl @Inject constructor(
             recentTotalSpent = sortedRecentSpent.sumOf { it.value },
             recentMaximumSpent = sortedRecentSpent.maxOfOrNull { it.value } ?: 0,
         )
+    }
+
+    companion object {
+        private val currentYear = java.time.LocalDate.now().year
     }
 }
