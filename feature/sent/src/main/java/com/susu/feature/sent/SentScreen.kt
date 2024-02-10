@@ -9,8 +9,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -27,7 +25,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -45,6 +42,7 @@ import com.susu.core.designsystem.component.button.SelectedFilterButton
 import com.susu.core.designsystem.component.button.SmallButtonStyle
 import com.susu.core.designsystem.component.button.SusuFloatingButton
 import com.susu.core.designsystem.component.button.SusuGhostButton
+import com.susu.core.designsystem.theme.Gray15
 import com.susu.core.designsystem.theme.Gray50
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.model.Friend
@@ -152,36 +150,18 @@ fun SentScreen(
                 .fillMaxSize(),
         ) {
             Column {
-                SusuDefaultAppBar(
-                    leftIcon = {
-                        Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_xs))
-                        LogoIcon()
-                    },
-                    title = stringResource(R.string.sent_screen_appbar_title),
-                    actions = {
-                        SearchIcon(onClickSearchIcon)
-                    },
-                )
+                Spacer(modifier = Modifier.size(44.dp))
 
                 val state = rememberCollapsingToolbarScaffoldState()
                 CollapsingToolbarScaffold(
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = Modifier.weight(1f),
                     state = state,
                     scrollStrategy = ScrollStrategy.EnterAlways,
                     toolbar = {
-                        Spacer(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(32.dp),
-                        )
-
                         FilterSection(
-                            modifier = Modifier.graphicsLayer {
-                                alpha = state.toolbarState.progress
-                            },
                             uiState = uiState,
                             padding = PaddingValues(
-                                top = SusuTheme.spacing.spacing_m,
+                                vertical = SusuTheme.spacing.spacing_m,
                             ),
                             onClickAlignButton = onClickAlignButton,
                             onClickFilterButton = onClickFilterButton,
@@ -199,7 +179,11 @@ fun SentScreen(
                             modifier = Modifier.fillMaxSize(),
                             state = envelopesListState,
                             verticalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxs),
-                            contentPadding = PaddingValues(SusuTheme.spacing.spacing_m),
+                            contentPadding = PaddingValues(
+                                start = SusuTheme.spacing.spacing_m,
+                                end = SusuTheme.spacing.spacing_m,
+                                bottom = SusuTheme.spacing.spacing_m,
+                            ),
                         ) {
                             items(
                                 items = uiState.envelopesList,
@@ -215,6 +199,18 @@ fun SentScreen(
                     }
                 }
             }
+
+            SusuDefaultAppBar(
+                modifier = Modifier.background(Gray15),
+                leftIcon = {
+                    Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_xs))
+                    LogoIcon()
+                },
+                title = stringResource(R.string.sent_screen_appbar_title),
+                actions = {
+                    SearchIcon(onClickSearchIcon)
+                },
+            )
 
             if (uiState.showAlignBottomSheet) {
                 SusuSelectionBottomSheet(
@@ -238,7 +234,7 @@ fun SentScreen(
 
 @Composable
 fun FilterSection(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     uiState: SentState = SentState(),
     padding: PaddingValues,
     onClickAlignButton: () -> Unit,
