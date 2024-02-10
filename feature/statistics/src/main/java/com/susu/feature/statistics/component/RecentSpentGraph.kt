@@ -86,12 +86,11 @@ fun RecentSpentGraph(
                     number = totalAmount,
                     style = SusuTheme.typography.title_xs,
                     color = Blue60,
-                    prefix = stringResource(id = R.string.statistics_total_man_prefix),
                     postfix = stringResource(id = R.string.statistics_total_man_postfix),
                 )
             } else {
                 Text(
-                    text = stringResource(R.string.statistics_total_man_format, stringResource(R.string.word_unknown)),
+                    text = stringResource(R.string.statistics_man_format, stringResource(R.string.word_unknown)),
                     style = SusuTheme.typography.title_xs,
                     color = Gray40,
                 )
