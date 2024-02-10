@@ -79,10 +79,14 @@ fun TermListItem(
     isEssential: Boolean = true,
     canRead: Boolean = true,
     onCheckClick: (Boolean) -> Unit = {},
-    onDetailClick: () -> Unit = {},
+    onDetailClick: (() -> Unit)? = null,
 ) {
     Row(
-        modifier = modifier.padding(vertical = SusuTheme.spacing.spacing_m),
+        modifier = if (onDetailClick != null) {
+            modifier.susuClickable(onClick = onDetailClick).padding(vertical = SusuTheme.spacing.spacing_m)
+        } else {
+            modifier.padding(vertical = SusuTheme.spacing.spacing_m)
+        },
         verticalAlignment = Alignment.CenterVertically,
     ) {
         CheckCircle(isChecked = checked, onCheckedChange = onCheckClick)
@@ -103,9 +107,7 @@ fun TermListItem(
         if (canRead) {
             Spacer(modifier = Modifier.width(SusuTheme.spacing.spacing_m))
             Image(
-                modifier = Modifier
-                    .size(20.dp)
-                    .susuClickable(rippleEnabled = false, onClick = onDetailClick),
+                modifier = Modifier.size(20.dp),
                 painter = painterResource(id = R.drawable.ic_arrow_right),
                 contentDescription = "약관 보기",
             )

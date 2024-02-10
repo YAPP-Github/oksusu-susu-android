@@ -194,7 +194,7 @@ fun MyPageInfoScreen(
                             onClick = onBirthClick,
                         ),
                         text = if (uiState.editBirth in USER_BIRTH_RANGE) {
-                            uiState.editBirth.toString()
+                            stringResource(id = com.susu.core.designsystem.R.string.word_year_format, uiState.editBirth)
                         } else {
                             stringResource(id = com.susu.core.ui.R.string.word_not_select)
                         },
@@ -204,7 +204,7 @@ fun MyPageInfoScreen(
                 } else {
                     Text(
                         text = if (uiState.userBirth in USER_BIRTH_RANGE) {
-                            uiState.userBirth.toString()
+                            stringResource(id = com.susu.core.designsystem.R.string.word_year_format, uiState.userBirth)
                         } else {
                             stringResource(id = com.susu.core.ui.R.string.word_not_select)
                         },
@@ -262,6 +262,8 @@ fun MyPageInfoScreen(
         if (uiState.showDatePicker) {
             SusuYearPickerBottomSheet(
                 maximumContainerHeight = 322.dp,
+                yearRange = USER_BIRTH_RANGE,
+                reverseItemOrder = true,
                 onDismissRequest = { onBirthSelect(it) },
             )
         }
