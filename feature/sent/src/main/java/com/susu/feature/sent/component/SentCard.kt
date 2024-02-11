@@ -57,7 +57,10 @@ fun SentCard(
         modifier = Modifier
             .clip(shape = RoundedCornerShape(4.dp))
             .fillMaxWidth()
-            .background(SusuTheme.colorScheme.background10),
+            .background(SusuTheme.colorScheme.background10)
+            .susuClickable {
+                onClickHistoryShowAll(state.friend.id)
+            },
     ) {
         Image(
             painter = painterResource(id = R.drawable.img_envelope),
