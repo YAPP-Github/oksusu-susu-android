@@ -31,6 +31,7 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.susu.core.designsystem.component.badge.BadgeColor
 import com.susu.core.designsystem.component.badge.BadgeStyle
@@ -72,9 +73,11 @@ fun SentCard(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
-                    text = state.friend.name,
+                    text = if (state.friend.name.length >= 10) "${state.friend.name.take(10)}..." else state.friend.name,
                     style = SusuTheme.typography.title_xs,
                     color = Gray100,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
                 )
                 Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_s))
                 SusuBadge(
