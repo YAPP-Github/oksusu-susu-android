@@ -83,7 +83,7 @@ fun ReceivedRoute(
     val ledgerListState = rememberLazyGridState()
     val scope = rememberCoroutineScope()
     val refreshState = rememberPullToRefreshState(
-        positionalThreshold = 100.dp
+        positionalThreshold = 100.dp,
     )
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {

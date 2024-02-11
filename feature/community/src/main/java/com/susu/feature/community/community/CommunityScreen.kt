@@ -89,7 +89,7 @@ fun CommunityRoute(
     val context = LocalContext.current
 
     val refreshState = rememberPullToRefreshState(
-        positionalThreshold = 100.dp
+        positionalThreshold = 100.dp,
     )
 
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->

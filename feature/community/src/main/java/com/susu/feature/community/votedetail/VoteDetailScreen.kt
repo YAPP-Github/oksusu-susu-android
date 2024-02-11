@@ -325,7 +325,6 @@ fun VoteDetailScreen(
         )
     }
 
-
     if (uiState.isLoading) {
         LoadingScreen()
     }

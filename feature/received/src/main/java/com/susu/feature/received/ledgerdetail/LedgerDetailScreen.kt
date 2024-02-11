@@ -87,7 +87,7 @@ fun LedgerDetailRoute(
     val listState = rememberLazyListState()
     val context = LocalContext.current
     val refreshState = rememberPullToRefreshState(
-        positionalThreshold = 100.dp
+        positionalThreshold = 100.dp,
     )
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {

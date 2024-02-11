@@ -67,7 +67,7 @@ fun SentEnvelopeRoute(
     val historyListState = rememberLazyListState()
 
     val refreshState = rememberPullToRefreshState(
-        positionalThreshold = 100.dp
+        positionalThreshold = 100.dp,
     )
 
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
