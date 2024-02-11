@@ -73,8 +73,11 @@ fun SentCard(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
-                    text = if (state.friend.name.length >= 10) stringResource(R.string.sent_envelope_card_name_overflow, state.friend.name.take(10))
-                    else state.friend.name,
+                    text = if (state.friend.name.length >= 10) {
+                        stringResource(R.string.sent_envelope_card_name_overflow, state.friend.name.take(10))
+                    } else {
+                        state.friend.name
+                    },
                     style = SusuTheme.typography.title_xs,
                     color = Gray100,
                     maxLines = 1,

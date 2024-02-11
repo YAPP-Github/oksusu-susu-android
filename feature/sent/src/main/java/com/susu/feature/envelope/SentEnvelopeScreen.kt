@@ -124,8 +124,10 @@ fun SentEnvelopeScreen(
                 Spacer(modifier = modifier.size(SusuTheme.spacing.spacing_xxs))
                 SusuBadge(
                     color = BadgeColor.Gray30,
-                    text = stringResource(R.string.sent_envelope_card_money_sent_received,
-                        (uiState.envelopeInfo.receivedAmounts - uiState.envelopeInfo.sentAmounts).toMoneyFormat()),
+                    text = stringResource(
+                        R.string.sent_envelope_card_money_sent_received,
+                        (uiState.envelopeInfo.receivedAmounts - uiState.envelopeInfo.sentAmounts).toMoneyFormat(),
+                    ),
                     padding = BadgeStyle.smallBadge,
                 )
                 Spacer(modifier = modifier.size(SusuTheme.spacing.spacing_xl))
