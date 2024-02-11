@@ -49,7 +49,9 @@
     <string name="sent_envelope_add_date_to">님에게</string>
     <string name="sent_envelope_add_phone_to">"님의 "</string>
     <string name="sent_envelope_add_visited_to">"을 "</string>
-    <string name="sent_envelope_card_monee_total">"전체 "</string>
+    <string name="sent_envelope_card_money_total">전체 %1$s원</string>
+    <string name="sent_envelope_card_name_overflow">%1$s...</string>
+    <string name="sent_envelope_card_money_sent_received">%1$s원</string>
     <string name="sent_envelope_card_money_won">원</string>
 
     <string name="sent_envelope_detail_delete_title">봉투를 삭제할까요?</string>

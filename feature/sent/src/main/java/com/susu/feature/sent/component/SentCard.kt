@@ -73,7 +73,8 @@ fun SentCard(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
-                    text = if (state.friend.name.length >= 10) "${state.friend.name.take(10)}..." else state.friend.name,
+                    text = if (state.friend.name.length >= 10) stringResource(R.string.sent_envelope_card_name_overflow, state.friend.name.take(10))
+                    else state.friend.name,
                     style = SusuTheme.typography.title_xs,
                     color = Gray100,
                     maxLines = 1,
@@ -82,8 +83,7 @@ fun SentCard(
                 Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_s))
                 SusuBadge(
                     color = BadgeColor.Gray20,
-                    text = stringResource(R.string.sent_envelope_card_monee_total) + state.totalAmounts.toMoneyFormat() +
-                        stringResource(R.string.sent_envelope_card_money_won),
+                    text = stringResource(R.string.sent_envelope_card_money_total, state.totalAmounts.toMoneyFormat()),
                     padding = BadgeStyle.smallBadge,
                 )
                 Spacer(modifier = Modifier.weight(1f))
@@ -135,12 +135,12 @@ fun SentCard(
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 Text(
-                    text = state.sentAmounts.toMoneyFormat() + stringResource(R.string.sent_envelope_card_money_won),
+                    text = stringResource(R.string.sent_envelope_card_money_sent_received, state.sentAmounts.toMoneyFormat()),
                     style = SusuTheme.typography.title_xxxs,
                     color = Gray90,
                 )
                 Text(
-                    text = state.receivedAmounts.toMoneyFormat() + stringResource(R.string.sent_envelope_card_money_won),
+                    text = stringResource(R.string.sent_envelope_card_money_sent_received, state.receivedAmounts.toMoneyFormat()),
                     style = SusuTheme.typography.title_xxxs,
                     color = Gray60,
                 )
