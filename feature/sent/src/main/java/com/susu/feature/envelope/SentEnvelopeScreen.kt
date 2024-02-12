@@ -45,6 +45,7 @@ import com.susu.core.ui.extension.toMoneyFormat
 import com.susu.feature.envelope.component.EnvelopeHistoryItem
 import com.susu.feature.sent.R
 import kotlinx.datetime.toJavaLocalDateTime
+import kotlin.math.abs
 
 @Composable
 fun SentEnvelopeRoute(
@@ -96,6 +97,10 @@ fun SentEnvelopeScreen(
     onClickBackIcon: () -> Unit = {},
     onClickEnvelopeDetail: (Long) -> Unit = {},
 ) {
+    val sent = uiState.envelopeInfo.sentAmounts
+    val received = uiState.envelopeInfo.receivedAmounts
+    val moneyDiff = abs(sent - received).toMoneyFormat()
+
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -125,8 +130,13 @@ fun SentEnvelopeScreen(
                 Spacer(modifier = modifier.size(SusuTheme.spacing.spacing_xxs))
                 SusuBadge(
                     color = BadgeColor.Gray30,
-                    text = (uiState.envelopeInfo.receivedAmounts - uiState.envelopeInfo.sentAmounts).toMoneyFormat() +
-                        stringResource(R.string.sent_envelope_card_money_won),
+                    text = if (sent > received) {
+                        stringResource(R.string.sent_envelope_money_diff_minus, moneyDiff)
+                    } else if (sent < received) {
+                        stringResource(R.string.sent_envelope_money_diff_plus, moneyDiff)
+                    } else {
+                        stringResource(R.string.sent_envelope_money_diff_same, moneyDiff)
+                    },
                     padding = BadgeStyle.smallBadge,
                 )
                 Spacer(modifier = modifier.size(SusuTheme.spacing.spacing_xl))
