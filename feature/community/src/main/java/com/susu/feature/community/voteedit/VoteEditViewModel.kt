@@ -10,7 +10,6 @@ import com.susu.domain.usecase.vote.EditVoteUseCase
 import com.susu.domain.usecase.vote.GetPostCategoryConfigUseCase
 import com.susu.feature.community.VOTE_CONTENT_MAX_LENGTH
 import com.susu.feature.community.navigation.CommunityRoute
-import com.susu.feature.community.voteadd.VoteAddSideEffect
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
