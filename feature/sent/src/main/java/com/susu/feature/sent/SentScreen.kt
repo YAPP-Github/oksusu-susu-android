@@ -20,11 +20,15 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.pulltorefresh.PullToRefreshContainer
+import androidx.compose.material3.pulltorefresh.PullToRefreshState
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -42,6 +46,7 @@ import com.susu.core.designsystem.component.button.SelectedFilterButton
 import com.susu.core.designsystem.component.button.SmallButtonStyle
 import com.susu.core.designsystem.component.button.SusuFloatingButton
 import com.susu.core.designsystem.component.button.SusuGhostButton
+import com.susu.core.designsystem.theme.Gray10
 import com.susu.core.designsystem.theme.Gray15
 import com.susu.core.designsystem.theme.Gray50
 import com.susu.core.designsystem.theme.SusuTheme
@@ -57,6 +62,7 @@ import me.onebone.toolbar.CollapsingToolbarScaffold
 import me.onebone.toolbar.ScrollStrategy
 import me.onebone.toolbar.rememberCollapsingToolbarScaffoldState
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SentRoute(
     viewModel: SentViewModel = hiltViewModel(),
@@ -74,6 +80,10 @@ fun SentRoute(
     val envelopesListState = rememberLazyListState()
     val scope = rememberCoroutineScope()
 
+    val refreshState = rememberPullToRefreshState(
+        positionalThreshold = 100.dp,
+    )
+
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
             SentEffect.NavigateEnvelopeAdd -> navigateSentEnvelopeAdd()
@@ -84,6 +94,14 @@ fun SentRoute(
                 awaitFrame()
                 envelopesListState.animateScrollToItem(0)
             }
+        }
+    }
+
+    LaunchedEffect(key1 = refreshState.isRefreshing) {
+        if (refreshState.isRefreshing.not()) return@LaunchedEffect
+
+        viewModel.getEnvelopesList(refresh = true) {
+            refreshState.endRefresh()
         }
     }
 
@@ -105,6 +123,7 @@ fun SentRoute(
     SentScreen(
         uiState = uiState,
         envelopesListState = envelopesListState,
+        refreshState = refreshState,
         padding = padding,
         onClickHistoryShowAll = viewModel::navigateSentEnvelope,
         onClickAddEnvelope = viewModel::navigateSentAdd,
@@ -130,6 +149,7 @@ fun SentRoute(
 fun SentScreen(
     uiState: SentState = SentState(),
     envelopesListState: LazyListState = rememberLazyListState(),
+    refreshState: PullToRefreshState = rememberPullToRefreshState(),
     padding: PaddingValues,
     onClickSearchIcon: () -> Unit = {},
     onClickHistory: (Boolean, Long) -> Unit = { _, _ -> },
@@ -147,7 +167,8 @@ fun SentScreen(
             modifier = Modifier
                 .background(SusuTheme.colorScheme.background15)
                 .padding(padding)
-                .fillMaxSize(),
+                .fillMaxSize()
+                .nestedScroll(refreshState.nestedScrollConnection),
         ) {
             Column {
                 Spacer(modifier = Modifier.size(44.dp))
@@ -210,6 +231,12 @@ fun SentScreen(
                 actions = {
                     SearchIcon(onClickSearchIcon)
                 },
+            )
+
+            PullToRefreshContainer(
+                modifier = Modifier.align(Alignment.TopCenter),
+                state = refreshState,
+                containerColor = Gray10,
             )
 
             if (uiState.showAlignBottomSheet) {
@@ -314,6 +341,7 @@ fun EmptyView(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable
 fun SentScreenPreview() {
