@@ -35,6 +35,7 @@ import com.susu.core.ui.SnackbarToken
 import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.core.ui.extension.susuClickable
 import com.susu.feature.community.R
+import com.susu.feature.community.VOTE_CONTENT_MAX_LENGTH
 import com.susu.feature.community.votedetail.component.VoteItem
 
 @Composable
@@ -52,6 +53,15 @@ fun VoteEditRoute(
             VoteEditSideEffect.PopBackStack -> popBackStack()
             VoteEditSideEffect.ShowCanNotChangeOptionSnackbar -> onShowSnackbar(
                 SnackbarToken(message = context.getString(R.string.snackbar_can_not_change_option)),
+            )
+
+            VoteEditSideEffect.ShowInvalidContentSnackbar -> onShowSnackbar(
+                SnackbarToken(
+                    message = context.getString(
+                        R.string.snackbar_invalid_vote_content,
+                        VOTE_CONTENT_MAX_LENGTH,
+                    ),
+                ),
             )
         }
     }
