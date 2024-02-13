@@ -21,6 +21,7 @@ data class SignUpState(
     val isNameValid: Boolean = true,
     val gender: Gender = Gender.NONE,
     val birth: Int = -1,
+    val showDatePicker: Boolean = false,
 ) : UiState
 
 enum class SignUpStep(

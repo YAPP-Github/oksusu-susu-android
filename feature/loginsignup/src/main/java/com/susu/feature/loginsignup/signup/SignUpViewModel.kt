@@ -19,6 +19,9 @@ class SignUpViewModel @Inject constructor(
     private val signUpUseCase: SignUpUseCase,
 ) : BaseViewModel<SignUpState, SignUpEffect>(SignUpState()) {
 
+    fun showDatePicker() = intent { copy(showDatePicker = true) }
+    fun hideDatePicker() = intent { copy(showDatePicker = false) }
+
     fun updateName(name: String) {
         val trimmedName = name.trim()
         if (trimmedName.length > USER_NAME_MAX_LENGTH) return

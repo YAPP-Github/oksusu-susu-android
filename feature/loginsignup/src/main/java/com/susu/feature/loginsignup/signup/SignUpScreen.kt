@@ -19,8 +19,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -61,8 +59,6 @@ fun SignUpRoute(
     val context = LocalContext.current
     val uiState: SignUpState by viewModel.uiState.collectAsStateWithLifecycle()
     val termState: TermState by termViewModel.uiState.collectAsStateWithLifecycle()
-
-    var showDatePicker by remember { mutableStateOf(false) }
 
     BackHandler {
         viewModel.goPreviousStep()
@@ -159,7 +155,7 @@ fun SignUpRoute(
                             selectedGender = uiState.gender,
                             selectedYear = uiState.birth,
                             onGenderSelect = viewModel::updateGender,
-                            onYearClick = { showDatePicker = true },
+                            onYearClick = viewModel::showDatePicker,
                         )
                     }
 
@@ -177,14 +173,14 @@ fun SignUpRoute(
             }
         }
 
-        if (showDatePicker) {
+        if (uiState.showDatePicker) {
             SusuYearPickerBottomSheet(
                 yearRange = USER_BIRTH_RANGE,
                 reverseItemOrder = true,
                 maximumContainerHeight = 322.dp,
                 onDismissRequest = {
                     viewModel.updateBirth(it)
-                    showDatePicker = false
+                    viewModel.hideDatePicker()
                 },
             )
         }
