@@ -44,7 +44,7 @@ class DateViewModel @Inject constructor(
 
     fun updateStartDate(year: Int, month: Int, day: Int) = intent {
         val toUpdateStartAt = LocalDateTime.of(year, month, day, 0, 0)
-        val toUpdateEndAt = if (showOnlyStartAt) toUpdateStartAt else endAt
+        val toUpdateEndAt = if (showOnlyStartAt) null else endAt
         postSideEffect(DateSideEffect.UpdateParentDate(toUpdateStartAt, toUpdateEndAt))
         copy(
             startAt = toUpdateStartAt,
