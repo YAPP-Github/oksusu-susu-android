@@ -49,7 +49,7 @@ class VoteEditViewModel @Inject constructor(
         intent { copy(isLoading = true) }
         editVoteUseCase(
             param = EditVoteUseCase.Param(
-                content = currentState.content,
+                content = currentState.content.trim(),
                 boardId = currentState.selectedBoardId,
                 id = voteId,
             ),
@@ -86,7 +86,7 @@ class VoteEditViewModel @Inject constructor(
             return@intent this
         }
 
-        copy(content = content.trim())
+        copy(content = content)
     }
 
     fun showCannotChangeOptionSnackbar() = postSideEffect(VoteEditSideEffect.ShowCanNotChangeOptionSnackbar)

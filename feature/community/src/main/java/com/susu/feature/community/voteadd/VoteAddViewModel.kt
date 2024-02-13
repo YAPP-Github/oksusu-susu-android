@@ -26,8 +26,8 @@ class VoteAddViewModel @Inject constructor(
         intent { copy(isLoading = true) }
         createVoteUseCase(
             param = CreateVoteUseCase.Param(
-                content = currentState.content,
-                optionList = currentState.voteOptionStateList.map { it.content },
+                content = currentState.content.trim(),
+                optionList = currentState.voteOptionStateList.map { it.content.trim() },
                 categoryId = currentState.selectedCategory.id,
             ),
         ).onSuccess {
@@ -63,7 +63,7 @@ class VoteAddViewModel @Inject constructor(
             return@intent this
         }
 
-        copy(content = content.trim())
+        copy(content = content)
     }
 
     fun updateOptionContent(index: Int, content: String) = intent {
@@ -75,7 +75,7 @@ class VoteAddViewModel @Inject constructor(
         copy(
             voteOptionStateList = voteOptionStateList.mapIndexed { voteIndex, voteOptionState ->
                 if (index == voteIndex) {
-                    voteOptionState.copy(content = content.trim())
+                    voteOptionState.copy(content = content)
                 } else {
                     voteOptionState
                 }
