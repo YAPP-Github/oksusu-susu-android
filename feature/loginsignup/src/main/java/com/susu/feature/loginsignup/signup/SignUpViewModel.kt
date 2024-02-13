@@ -26,7 +26,11 @@ class SignUpViewModel @Inject constructor(
     }
 
     fun updateGender(gender: Gender) {
-        intent { copy(gender = gender) }
+        if (currentState.gender == gender) {
+            intent { copy(gender = Gender.NONE) }
+        } else {
+            intent { copy(gender = gender) }
+        }
     }
 
     fun updateBirth(birth: Int) {
