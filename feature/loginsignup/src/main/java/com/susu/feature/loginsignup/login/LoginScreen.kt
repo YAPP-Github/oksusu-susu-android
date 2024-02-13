@@ -1,6 +1,5 @@
 package com.susu.feature.loginsignup.login
 
-import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.animation.core.tween
@@ -24,7 +23,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -37,11 +35,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.kakao.sdk.common.model.AuthError
+import com.kakao.sdk.common.model.AuthErrorCause
+import com.kakao.sdk.common.model.ClientError
+import com.kakao.sdk.common.model.ClientErrorCause
 import com.susu.core.designsystem.component.screen.LoadingScreen
 import com.susu.core.designsystem.theme.Gray10
 import com.susu.core.designsystem.theme.Gray50
 import com.susu.core.designsystem.theme.Orange60
 import com.susu.core.designsystem.theme.SusuTheme
+import com.susu.core.ui.SnackbarToken
 import com.susu.core.ui.SnsProviders
 import com.susu.core.ui.extension.susuClickable
 import com.susu.feature.loginsignup.R
@@ -50,11 +53,12 @@ import com.susu.feature.loginsignup.social.KakaoLoginHelper
 @Composable
 fun LoginRoute(
     viewModel: LoginViewModel = hiltViewModel(),
+    onShowSnackBar: (SnackbarToken) -> Unit,
     navigateToReceived: () -> Unit,
     navigateToSignUp: () -> Unit,
 ) {
     val context = LocalContext.current
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
     val transitionState = remember {
         MutableTransitionState(false).apply {
             targetState = true
@@ -64,9 +68,9 @@ fun LoginRoute(
     LaunchedEffect(key1 = viewModel.sideEffect) {
         viewModel.sideEffect.collect { sideEffect ->
             when (sideEffect) {
-                is LoginContract.LoginEffect.ShowToast -> Toast.makeText(context, sideEffect.msg, Toast.LENGTH_SHORT).show()
-                LoginContract.LoginEffect.NavigateToReceived -> navigateToReceived()
-                LoginContract.LoginEffect.NavigateToSignUp -> navigateToSignUp()
+                is LoginEffect.ShowSnackBar -> onShowSnackBar(SnackbarToken(message = sideEffect.message))
+                LoginEffect.NavigateToReceived -> navigateToReceived()
+                LoginEffect.NavigateToSignUp -> navigateToSignUp()
             }
         }
     }
@@ -78,7 +82,27 @@ fun LoginRoute(
             KakaoLoginHelper.login(
                 context = context,
                 onSuccess = { viewModel.login(SnsProviders.Kakao, it) },
-                onFailed = { viewModel.showToast(it) },
+                onFailed = {
+                    val message = when (it) {
+                        is ClientError -> {
+                            when (it.reason) {
+                                ClientErrorCause.NotSupported -> context.getString(R.string.login_snackbar_kakaotalk_broswer_not_found)
+                                ClientErrorCause.Cancelled -> context.getString(R.string.login_snackbar_login_cancelled)
+                                else -> context.getString(R.string.login_snackbar_unknown_error)
+                            }
+                        }
+
+                        is AuthError -> {
+                            when (it.reason) {
+                                AuthErrorCause.ServerError -> context.getString(R.string.login_snackbar_kakao_server_error)
+                                else -> context.getString(R.string.login_snackbar_unknown_error)
+                            }
+                        }
+
+                        else -> context.getString(R.string.login_snackbar_unknown_error)
+                    }
+                    viewModel.showSnackBar(message)
+                },
             )
         },
     )
@@ -86,7 +110,7 @@ fun LoginRoute(
 
 @Composable
 fun LoginScreen(
-    uiState: LoginContract.LoginState = LoginContract.LoginState(),
+    uiState: LoginState = LoginState(),
     transitionState: MutableTransitionState<Boolean> = MutableTransitionState(true),
     onLoginClick: () -> Unit = {},
 ) {

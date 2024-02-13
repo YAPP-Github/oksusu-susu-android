@@ -79,7 +79,7 @@ internal fun MainScreen(
                     navigateToReceived = navigator::navigateSent,
                     navigateToLogin = navigator::navigateLogin,
                     navigateToSignUp = navigator::navigateSignup,
-                    onShowToast = viewModel::onShowSnackbar,
+                    onShowSnackBar = viewModel::onShowSnackbar,
                     padding = innerPadding,
                 )
 

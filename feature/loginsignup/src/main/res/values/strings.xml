@@ -25,4 +25,8 @@
     <string name="signup_term_agree">동의하기</string>
     <string name="signup_name_description">반가워요!\n이름을 알려주세요</string>
     <string name="signup_additional_description">아래 정보들을 알려주시면\n통계를 알려드릴 수 있어요</string>
+    <string name="login_snackbar_kakaotalk_broswer_not_found">카카오톡 또는 브라우저를 설치해주세요</string>
+    <string name="login_snackbar_login_cancelled">로그인을 취소했습니다</string>
+    <string name="login_snackbar_unknown_error">알 수 없는 에러가 발생했어요</string>
+    <string name="login_snackbar_kakao_server_error">카카오톡 서버에서 에러가 발생했어요</string>
 </resources>

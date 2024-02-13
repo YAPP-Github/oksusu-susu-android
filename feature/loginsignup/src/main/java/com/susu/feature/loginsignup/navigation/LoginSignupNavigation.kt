@@ -20,7 +20,7 @@ fun NavGraphBuilder.loginSignupNavGraph(
     navigateToLogin: () -> Unit,
     navigateToSignUp: () -> Unit,
     navigateToReceived: () -> Unit,
-    onShowToast: (SnackbarToken) -> Unit,
+    onShowSnackBar: (SnackbarToken) -> Unit,
 ) {
     composable(route = LoginSignupRoute.Parent.Vote.route) {
         VoteRoute(
@@ -31,6 +31,7 @@ fun NavGraphBuilder.loginSignupNavGraph(
         LoginRoute(
             navigateToReceived = navigateToReceived,
             navigateToSignUp = navigateToSignUp,
+            onShowSnackBar = onShowSnackBar
         )
     }
     composable(route = LoginSignupRoute.Parent.SignUp.route) {
@@ -38,7 +39,7 @@ fun NavGraphBuilder.loginSignupNavGraph(
             padding = padding,
             navigateToReceived = navigateToReceived,
             navigateToLogin = navigateToLogin,
-            onShowToast = onShowToast,
+            onShowToast = onShowSnackBar,
         )
     }
 }
