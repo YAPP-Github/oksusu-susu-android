@@ -141,16 +141,17 @@ fun SentEnvelopeScreen(
                     ),
             ) {
                 Text(
-                    text = stringResource(R.string.sent_envelope_card_monee_total) + uiState.envelopeInfo.totalAmounts.toMoneyFormat() +
-                        stringResource(R.string.sent_envelope_card_money_won),
+                    text = stringResource(R.string.sent_envelope_card_money_total, uiState.envelopeInfo.totalAmounts.toMoneyFormat()),
                     style = SusuTheme.typography.title_m,
                     color = Gray100,
                 )
                 Spacer(modifier = modifier.size(SusuTheme.spacing.spacing_xxs))
                 SusuBadge(
                     color = BadgeColor.Gray30,
-                    text = (uiState.envelopeInfo.receivedAmounts - uiState.envelopeInfo.sentAmounts).toMoneyFormat() +
-                        stringResource(R.string.sent_envelope_card_money_won),
+                    text = stringResource(
+                        R.string.sent_envelope_card_money_sent_received,
+                        (uiState.envelopeInfo.receivedAmounts - uiState.envelopeInfo.sentAmounts).toMoneyFormat(),
+                    ),
                     padding = BadgeStyle.smallBadge,
                 )
                 Spacer(modifier = modifier.size(SusuTheme.spacing.spacing_xl))
@@ -183,12 +184,12 @@ fun SentEnvelopeScreen(
                     horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
                     Text(
-                        text = uiState.envelopeInfo.sentAmounts.toMoneyFormat() + stringResource(R.string.sent_envelope_card_money_won),
+                        text = stringResource(R.string.sent_envelope_card_money_sent_received, uiState.envelopeInfo.sentAmounts.toMoneyFormat()),
                         style = SusuTheme.typography.title_xxxxs,
                         color = Gray90,
                     )
                     Text(
-                        text = uiState.envelopeInfo.receivedAmounts.toMoneyFormat() + stringResource(R.string.sent_envelope_card_money_won),
+                        text = stringResource(R.string.sent_envelope_card_money_sent_received, uiState.envelopeInfo.receivedAmounts.toMoneyFormat()),
                         style = SusuTheme.typography.title_xxxxs,
                         color = Gray60,
                     )
