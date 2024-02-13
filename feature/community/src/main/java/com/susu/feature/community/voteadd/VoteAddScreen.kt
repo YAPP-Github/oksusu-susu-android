@@ -19,6 +19,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -41,23 +42,42 @@ import com.susu.core.designsystem.theme.Gray40
 import com.susu.core.designsystem.theme.Orange60
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.model.Category
+import com.susu.core.ui.SnackbarToken
 import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.core.ui.extension.susuClickable
 import com.susu.feature.community.R
+import com.susu.feature.community.VOTE_CONTENT_MAX_LENGTH
+import com.susu.feature.community.VOTE_OPTION_MAX_LENGTH
 
 @Composable
 fun VoteAddRoute(
     viewModel: VoteAddViewModel = hiltViewModel(),
     popBackStack: () -> Unit,
     popBackStackWithVote: (String) -> Unit,
+    onShowSnackbar: (SnackbarToken) -> Unit,
     handleException: (Throwable, () -> Unit) -> Unit,
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
+    val context = LocalContext.current
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
             is VoteAddSideEffect.HandleException -> handleException(sideEffect.throwable, sideEffect.retry)
             VoteAddSideEffect.PopBackStack -> popBackStack()
             is VoteAddSideEffect.PopBackStackWithVote -> popBackStackWithVote(sideEffect.vote)
+            VoteAddSideEffect.ShowInvalidContentSnackbar -> onShowSnackbar(
+                SnackbarToken(
+                    message = context.getString(
+                        R.string.snackbar_invalid_vote_content,
+                        VOTE_CONTENT_MAX_LENGTH,
+                    ),
+                ),
+            )
+
+            VoteAddSideEffect.ShowInvalidVoteOptionSnackbar -> onShowSnackbar(
+                SnackbarToken(
+                    message = context.getString(R.string.snackbar_invalid_vote_option, VOTE_OPTION_MAX_LENGTH),
+                ),
+            )
         }
     }
 

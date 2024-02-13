@@ -18,9 +18,13 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
+import androidx.compose.material3.pulltorefresh.PullToRefreshContainer
+import androidx.compose.material3.pulltorefresh.PullToRefreshState
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -30,6 +34,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -64,6 +69,7 @@ import com.susu.feature.community.community.component.VoteCard
 import kotlinx.coroutines.delay
 import java.time.LocalDateTime
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CommunityRoute(
     padding: PaddingValues,
@@ -81,6 +87,11 @@ fun CommunityRoute(
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
     val context = LocalContext.current
+
+    val refreshState = rememberPullToRefreshState(
+        positionalThreshold = 100.dp,
+    )
+
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
             is CommunitySideEffect.HandleException -> handleException(sideEffect.throwable, sideEffect.retry)
@@ -116,6 +127,14 @@ fun CommunityRoute(
 
     val voteListState = rememberLazyListState()
 
+    LaunchedEffect(key1 = refreshState.isRefreshing) {
+        if (refreshState.isRefreshing.not()) return@LaunchedEffect
+
+        viewModel.refreshData {
+            refreshState.endRefresh()
+        }
+    }
+
     LaunchedEffect(key1 = Unit) {
         viewModel.initData()
         viewModel.getCategoryConfig()
@@ -132,6 +151,7 @@ fun CommunityRoute(
 
     CommunityScreen(
         padding = padding,
+        refreshState = refreshState,
         uiState = uiState,
         currentTime = currentTime,
         voteListState = voteListState,
@@ -145,11 +165,12 @@ fun CommunityRoute(
     )
 }
 
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun CommunityScreen(
     padding: PaddingValues,
     uiState: CommunityState = CommunityState(),
+    refreshState: PullToRefreshState = rememberPullToRefreshState(),
     currentTime: LocalDateTime = LocalDateTime.now(),
     voteListState: LazyListState = rememberLazyListState(),
     onClickSearchIcon: () -> Unit = {},
@@ -163,7 +184,8 @@ fun CommunityScreen(
     Box(
         modifier = Modifier
             .padding(padding)
-            .fillMaxSize(),
+            .fillMaxSize()
+            .nestedScroll(refreshState.nestedScrollConnection),
     ) {
         Column(
             modifier = Modifier
@@ -340,6 +362,12 @@ fun CommunityScreen(
             }
         }
 
+        PullToRefreshContainer(
+            modifier = Modifier.align(Alignment.TopCenter),
+            state = refreshState,
+            containerColor = Gray10,
+        )
+
         SusuFloatingButton(
             modifier = Modifier
                 .align(Alignment.BottomEnd)
@@ -350,6 +378,7 @@ fun CommunityScreen(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable
 fun CommunityScreenPreview() {

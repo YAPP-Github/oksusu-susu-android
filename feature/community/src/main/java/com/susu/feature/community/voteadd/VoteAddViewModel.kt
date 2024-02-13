@@ -6,6 +6,8 @@ import com.susu.core.ui.base.BaseViewModel
 import com.susu.core.ui.extension.encodeToUri
 import com.susu.domain.usecase.vote.CreateVoteUseCase
 import com.susu.domain.usecase.vote.GetPostCategoryConfigUseCase
+import com.susu.feature.community.VOTE_CONTENT_MAX_LENGTH
+import com.susu.feature.community.VOTE_OPTION_MAX_LENGTH
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
@@ -56,14 +58,24 @@ class VoteAddViewModel @Inject constructor(
     }
 
     fun updateContent(content: String) = intent {
-        copy(content = content)
+        if (content.length > VOTE_CONTENT_MAX_LENGTH) {
+            postSideEffect(VoteAddSideEffect.ShowInvalidContentSnackbar)
+            return@intent this
+        }
+
+        copy(content = content.trim())
     }
 
     fun updateOptionContent(index: Int, content: String) = intent {
+        if (content.length > VOTE_OPTION_MAX_LENGTH) {
+            postSideEffect(VoteAddSideEffect.ShowInvalidVoteOptionSnackbar)
+            return@intent this
+        }
+
         copy(
             voteOptionStateList = voteOptionStateList.mapIndexed { voteIndex, voteOptionState ->
                 if (index == voteIndex) {
-                    voteOptionState.copy(content = content)
+                    voteOptionState.copy(content = content.trim())
                 } else {
                     voteOptionState
                 }

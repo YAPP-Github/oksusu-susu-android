@@ -18,6 +18,7 @@ import com.susu.domain.usecase.ledger.GetLedgerUseCase
 import com.susu.feature.received.navigation.ReceivedRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toPersistentList
+import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
 import kotlinx.datetime.toJavaLocalDateTime
 import kotlinx.serialization.json.Json
@@ -42,6 +43,11 @@ class LedgerDetailViewModel @Inject constructor(
     private var filterUri: String? = null
 
     private var isFirstVisited: Boolean = true
+
+    fun refreshData(onFinish: () -> Unit) = viewModelScope.launch {
+        joinAll(getLedger(), getReceivedEnvelopeList(true))
+        onFinish()
+    }
 
     fun filterIfNeed(filterUri: String?) {
         if (filterUri == null) return

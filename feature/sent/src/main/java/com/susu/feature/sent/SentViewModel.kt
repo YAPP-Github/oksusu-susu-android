@@ -28,7 +28,7 @@ class SentViewModel @Inject constructor(
     private var filter: EnvelopeFilterArgument = EnvelopeFilterArgument()
     private var filterUri: String? = null
 
-    fun getEnvelopesList(refresh: Boolean?) = viewModelScope.launch {
+    fun getEnvelopesList(refresh: Boolean?, onFinish: () -> Unit = {}) = viewModelScope.launch {
         mutex.withLock {
             val currentList = if (refresh == true) {
                 page = 0
@@ -63,6 +63,8 @@ class SentViewModel @Inject constructor(
             }
 
             if (refresh == true) postSideEffect(SentEffect.ScrollToTop)
+
+            onFinish()
         }
     }
 

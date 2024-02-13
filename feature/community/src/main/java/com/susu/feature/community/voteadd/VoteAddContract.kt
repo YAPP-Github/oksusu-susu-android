@@ -13,8 +13,8 @@ data class VoteAddState(
     val content: String = "",
     val isLoading: Boolean = false,
 ) : UiState {
-    val buttonEnabled = content.length in 1..50 &&
-        voteOptionStateList.all { it.content.length in 1..10 }
+    val buttonEnabled = content.isNotBlank() &&
+        voteOptionStateList.all { it.content.isNotBlank() }
 }
 
 data class VoteOptionState(
@@ -23,6 +23,8 @@ data class VoteOptionState(
 )
 
 sealed interface VoteAddSideEffect : SideEffect {
+    data object ShowInvalidContentSnackbar : VoteAddSideEffect
+    data object ShowInvalidVoteOptionSnackbar : VoteAddSideEffect
     data object PopBackStack : VoteAddSideEffect
     data class PopBackStackWithVote(val vote: String) : VoteAddSideEffect
     data class HandleException(val throwable: Throwable, val retry: () -> Unit) : VoteAddSideEffect

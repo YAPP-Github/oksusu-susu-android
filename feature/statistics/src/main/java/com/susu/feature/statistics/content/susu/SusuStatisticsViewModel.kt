@@ -47,7 +47,7 @@ class SusuStatisticsViewModel @Inject constructor(
         }
     }
 
-    fun getSusuStatistics() {
+    fun getSusuStatistics(onFinish: () -> Unit = {}) {
         if (currentState.relationship !in currentState.relationshipConfig &&
             currentState.category !in currentState.categoryConfig
         ) {
@@ -64,6 +64,8 @@ class SusuStatisticsViewModel @Inject constructor(
             }.onFailure {
                 postSideEffect(SusuStatisticsEffect.HandleException(it, ::getSusuStatistics))
             }
+
+            onFinish()
         }
     }
 

@@ -15,6 +15,7 @@ import com.susu.domain.usecase.vote.GetVoteListUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -164,6 +165,11 @@ class CommunityViewModel @Inject constructor(
             .onFailure {
                 postSideEffect(CommunitySideEffect.HandleException(it, ::getPopularVoteList))
             }
+    }
+
+    fun refreshData(onFinish: () -> Unit = {}) = viewModelScope.launch {
+        joinAll(getVoteList(true), getPopularVoteList())
+        onFinish()
     }
 
     fun selectCategory(category: Category?) {
