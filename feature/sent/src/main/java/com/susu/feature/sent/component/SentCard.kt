@@ -76,7 +76,7 @@ fun SentCard(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Row(
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
                 ) {
                     Text(
                         text = state.friend.name,
@@ -84,7 +84,7 @@ fun SentCard(
                         color = Gray100,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
-                        modifier = Modifier.weight(1f, false)
+                        modifier = Modifier.weight(1f, false),
                     )
                     Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_s))
                     SusuBadge(
