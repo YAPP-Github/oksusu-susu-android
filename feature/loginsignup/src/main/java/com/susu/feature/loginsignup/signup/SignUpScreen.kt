@@ -19,12 +19,10 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -42,6 +40,7 @@ import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.ui.SnackbarToken
 import com.susu.core.ui.USER_BIRTH_RANGE
 import com.susu.core.ui.extension.collectWithLifecycle
+import com.susu.feature.loginsignup.R
 import com.susu.feature.loginsignup.signup.content.AdditionalContent
 import com.susu.feature.loginsignup.signup.content.NameContent
 import com.susu.feature.loginsignup.signup.content.TermsContent
@@ -54,12 +53,11 @@ fun SignUpRoute(
     termViewModel: TermViewModel = hiltViewModel(),
     navigateToReceived: () -> Unit,
     navigateToLogin: () -> Unit,
-    onShowToast: (SnackbarToken) -> Unit = {},
+    onShowSnackbar: (SnackbarToken) -> Unit = {},
 ) {
+    val context = LocalContext.current
     val uiState: SignUpState by viewModel.uiState.collectAsStateWithLifecycle()
     val termState: TermState by termViewModel.uiState.collectAsStateWithLifecycle()
-
-    var showDatePicker by remember { mutableStateOf(false) }
 
     BackHandler {
         viewModel.goPreviousStep()
@@ -69,7 +67,12 @@ fun SignUpRoute(
         when (sideEffect) {
             SignUpEffect.NavigateToLogin -> navigateToLogin()
             SignUpEffect.NavigateToReceived -> navigateToReceived()
-            is SignUpEffect.ShowToast -> onShowToast(SnackbarToken(message = sideEffect.msg))
+            is SignUpEffect.ShowSnackbar -> onShowSnackbar(SnackbarToken(message = sideEffect.msg))
+            SignUpEffect.ShowKakaoErrorSnackbar -> onShowSnackbar(
+                SnackbarToken(
+                    message = context.getString(R.string.signup_snackbar_kakao_login_error),
+                ),
+            )
         }
     }
 
@@ -151,7 +154,7 @@ fun SignUpRoute(
                             selectedGender = uiState.gender,
                             selectedYear = uiState.birth,
                             onGenderSelect = viewModel::updateGender,
-                            onYearClick = { showDatePicker = true },
+                            onYearClick = viewModel::showDatePicker,
                         )
                     }
 
@@ -169,14 +172,14 @@ fun SignUpRoute(
             }
         }
 
-        if (showDatePicker) {
+        if (uiState.showDatePicker) {
             SusuYearPickerBottomSheet(
                 yearRange = USER_BIRTH_RANGE,
                 reverseItemOrder = true,
                 maximumContainerHeight = 322.dp,
                 onDismissRequest = {
                     viewModel.updateBirth(it)
-                    showDatePicker = false
+                    viewModel.hideDatePicker()
                 },
             )
         }

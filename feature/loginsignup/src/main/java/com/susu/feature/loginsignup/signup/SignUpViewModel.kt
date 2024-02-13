@@ -2,6 +2,7 @@ package com.susu.feature.loginsignup.signup
 
 import androidx.lifecycle.viewModelScope
 import com.susu.core.model.SignUpUser
+import com.susu.core.model.exception.UnknownException
 import com.susu.core.ui.Gender
 import com.susu.core.ui.SnsProviders
 import com.susu.core.ui.USER_NAME_MAX_LENGTH
@@ -17,6 +18,9 @@ import javax.inject.Inject
 class SignUpViewModel @Inject constructor(
     private val signUpUseCase: SignUpUseCase,
 ) : BaseViewModel<SignUpState, SignUpEffect>(SignUpState()) {
+
+    fun showDatePicker() = intent { copy(showDatePicker = true) }
+    fun hideDatePicker() = intent { copy(showDatePicker = false) }
 
     fun updateName(name: String) {
         val trimmedName = name.trim()
@@ -92,10 +96,10 @@ class SignUpViewModel @Inject constructor(
                     ).onSuccess {
                         postSideEffect(SignUpEffect.NavigateToReceived)
                     }.onFailure {
-                        postSideEffect(SignUpEffect.ShowToast(it.message ?: "에러 발생"))
+                        postSideEffect(SignUpEffect.ShowSnackbar(it.message ?: UnknownException().message))
                     }
                 } else {
-                    postSideEffect(SignUpEffect.ShowToast("카카오톡 로그인 에러 발생"))
+                    postSideEffect(SignUpEffect.ShowKakaoErrorSnackbar)
                 }
                 intent { copy(isLoading = false) }
             }
