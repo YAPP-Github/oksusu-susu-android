@@ -36,6 +36,7 @@ import com.susu.core.designsystem.theme.Gray50
 import com.susu.core.designsystem.theme.Gray70
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.ui.SUSU_GOOGLE_FROM_URL
+import com.susu.core.ui.SnackbarToken
 import com.susu.core.ui.SnsProviders
 import com.susu.feature.mypage.R
 
@@ -43,13 +44,19 @@ import com.susu.feature.mypage.R
 fun MyPageSocialRoute(
     padding: PaddingValues,
     popBackStack: () -> Unit,
+    onShowSnackbar: (SnackbarToken) -> Unit,
 ) {
-    MyPageSocialScreen(padding = padding, popBackStack = popBackStack)
+    MyPageSocialScreen(
+        padding = padding,
+        popBackStack = popBackStack,
+        onShowSnackbar = onShowSnackbar,
+    )
 }
 
 @Composable
 fun MyPageSocialScreen(
     padding: PaddingValues = PaddingValues(),
+    onShowSnackbar: (SnackbarToken) -> Unit = {},
     popBackStack: () -> Unit = {},
 ) {
     val context = LocalContext.current
@@ -89,7 +96,13 @@ fun MyPageSocialScreen(
             style = XSmallButtonStyle.height36,
             isActive = false,
             isClickable = true,
-            onClick = { context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(SUSU_GOOGLE_FROM_URL))) },
+            onClick = {
+                runCatching {
+                    context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(SUSU_GOOGLE_FROM_URL)))
+                }.onFailure {
+                    onShowSnackbar(SnackbarToken(message = context.getString(R.string.snackbar_browser_not_found)))
+                }
+            },
         )
     }
 }

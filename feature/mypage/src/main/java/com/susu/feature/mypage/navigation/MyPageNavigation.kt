@@ -60,10 +60,14 @@ fun NavGraphBuilder.myPageNavGraph(
         )
     }
     composable(route = MyPageRoute.socialRoute) {
-        MyPageSocialRoute(padding = padding, popBackStack = popBackStack)
+        MyPageSocialRoute(
+            padding = padding,
+            popBackStack = popBackStack,
+            onShowSnackbar = onShowSnackbar,
+        )
     }
     composable(route = MyPageRoute.privacyPolicyRoute) {
-        MyPagePrivacyPolicyScreen()
+        MyPagePrivacyPolicyScreen(popBackStack = popBackStack)
     }
 }
 
