@@ -9,7 +9,8 @@ import com.susu.feature.loginsignup.R
 sealed interface SignUpEffect : SideEffect {
     data object NavigateToLogin : SignUpEffect
     data object NavigateToReceived : SignUpEffect
-    data class ShowToast(val msg: String) : SignUpEffect
+    data class ShowSnackbar(val msg: String) : SignUpEffect
+    data object ShowKakaoErrorSnackbar : SignUpEffect
 }
 
 data class SignUpState(

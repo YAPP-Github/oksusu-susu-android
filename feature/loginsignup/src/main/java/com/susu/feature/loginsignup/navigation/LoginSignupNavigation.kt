@@ -31,7 +31,7 @@ fun NavGraphBuilder.loginSignupNavGraph(
         LoginRoute(
             navigateToReceived = navigateToReceived,
             navigateToSignUp = navigateToSignUp,
-            onShowSnackBar = onShowSnackBar
+            onShowSnackBar = onShowSnackBar,
         )
     }
     composable(route = LoginSignupRoute.Parent.SignUp.route) {
@@ -39,7 +39,7 @@ fun NavGraphBuilder.loginSignupNavGraph(
             padding = padding,
             navigateToReceived = navigateToReceived,
             navigateToLogin = navigateToLogin,
-            onShowToast = onShowSnackBar,
+            onShowSnackbar = onShowSnackBar,
         )
     }
 }
