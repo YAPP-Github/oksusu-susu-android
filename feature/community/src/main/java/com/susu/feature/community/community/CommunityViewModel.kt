@@ -43,7 +43,7 @@ class CommunityViewModel @Inject constructor(
             Json.decodeFromUri<Vote>(vote)
         } ?: return
 
-        if (toAddVote in currentState.voteList) return
+        if (toAddVote.id in currentState.voteList.map { it.id }) return
 
         if (currentState.selectedCategory != null &&
             currentState.selectedCategory?.id != currentState.categoryConfigList.find { it.name == toAddVote.boardName }?.id
@@ -78,6 +78,7 @@ class CommunityViewModel @Inject constructor(
                             it
                         }
                     }
+                    .distinctBy { it.id }
                     .toPersistentList(),
             )
         }
@@ -90,9 +91,11 @@ class CommunityViewModel @Inject constructor(
             copy(
                 voteList = voteList
                     .filter { it.id != toDeleteVoteId }
+                    .distinctBy { it.id }
                     .toPersistentList(),
                 popularVoteList = popularVoteList
                     .filter { it.id != toDeleteVoteId }
+                    .distinctBy { it.id }
                     .toPersistentList(),
             )
         }
@@ -147,7 +150,7 @@ class CommunityViewModel @Inject constructor(
             ).onSuccess { voteList ->
                 isLast = voteList.isEmpty()
                 page++
-                val newVoteList = currentList.plus(voteList).toPersistentList()
+                val newVoteList = currentList.plus(voteList).distinctBy { it.id }.toPersistentList()
                 intent {
                     copy(
                         voteList = newVoteList,
