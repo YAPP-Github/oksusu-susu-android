@@ -75,24 +75,25 @@ fun SentCard(
             Row(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                Text(
-                    text = if (state.friend.name.length >= 10) {
-                        stringResource(R.string.sent_envelope_card_name_overflow, state.friend.name.take(10))
-                    } else {
-                        state.friend.name
-                    },
-                    style = SusuTheme.typography.title_xs,
-                    color = Gray100,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                )
-                Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_s))
-                SusuBadge(
-                    color = BadgeColor.Gray20,
-                    text = stringResource(R.string.sent_envelope_card_money_total, state.totalAmounts.toMoneyFormat()),
-                    padding = BadgeStyle.smallBadge,
-                )
-                Spacer(modifier = Modifier.weight(1f))
+                Row(
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Text(
+                        text = state.friend.name,
+                        style = SusuTheme.typography.title_xs,
+                        color = Gray100,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier.weight(1f, false)
+                    )
+                    Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_s))
+                    SusuBadge(
+                        color = BadgeColor.Gray20,
+                        text = stringResource(R.string.sent_envelope_card_money_total, state.totalAmounts.toMoneyFormat()),
+                        padding = BadgeStyle.smallBadge,
+                    )
+                }
+                Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_xxs))
                 Icon(
                     painter = painterResource(id = R.drawable.ic_arrow_down),
                     contentDescription = stringResource(R.string.content_description_envelope_show_history),
