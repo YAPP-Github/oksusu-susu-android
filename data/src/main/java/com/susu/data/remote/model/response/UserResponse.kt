@@ -8,7 +8,7 @@ data class UserResponse(
     val id: Int,
     val name: String,
     val gender: String = "",
-    val birth: Int,
+    val birth: Int = 0,
 )
 
 fun UserResponse.toModel() = User(
