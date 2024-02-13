@@ -17,7 +17,7 @@
 
 ## Tech Stack
 
-| Teck Stack    |                                                     |
+| Tech Stack    |                                                     |
 |:--------------|:----------------------------------------------------|
 | Architecture  | MVI, Clean Architecture                             |
 | Compose       | Navigation, Kotlinx.Immutable                       |
