@@ -147,7 +147,7 @@ fun LoginScreen(
 fun LoginBlankText(
     modifier: Modifier = Modifier,
     text: String = "",
-    delay: Int = 2000,
+    delay: Int = 1200,
     duration: Int = 1000,
     state: MutableTransitionState<Boolean>,
 ) {
