@@ -182,7 +182,7 @@ fun MyPageDefaultScreen(
             .padding(padding),
     ) {
         SusuDefaultAppBar(
-            modifier = Modifier.padding(SusuTheme.spacing.spacing_xs),
+            modifier = Modifier.padding(horizontal = SusuTheme.spacing.spacing_xs),
             leftIcon = { LogoIcon() },
         )
 
