@@ -15,6 +15,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.daangn.www.betterkoreankotlin.JosaType
 import com.susu.core.designsystem.component.bottomsheet.datepicker.SusuLimitDatePickerBottomSheet
 import com.susu.core.designsystem.component.button.GhostButtonColor
 import com.susu.core.designsystem.component.button.SmallButtonStyle
@@ -28,6 +29,7 @@ import com.susu.core.ui.util.AnnotatedText
 import com.susu.core.ui.util.currentDate
 import com.susu.core.ui.util.minDate
 import com.susu.feature.received.R
+import strings.appendJosa
 import java.time.LocalDateTime
 
 @Composable
@@ -50,7 +52,7 @@ fun DateContentRoute(
 
     LaunchedEffect(key1 = Unit) {
         viewModel.setScreenType(category ?: Category())
-        viewModel.updateNameAndCategory(name, category?.customCategory ?: category?.name ?: "")
+        viewModel.updateName(name)
     }
 
     DateContent(
@@ -92,14 +94,16 @@ fun DateContent(
                 end = SusuTheme.spacing.spacing_m,
             ),
     ) {
-        AnnotatedText(
-            originalText = stringResource(R.string.date_content_title, uiState.name, uiState.categoryName),
-            originalTextStyle = SusuTheme.typography.title_m,
-            targetTextList = listOf(uiState.name, uiState.categoryName),
-            spanStyle = SusuTheme.typography.title_m.copy(
-                color = Gray60,
-            ).toSpanStyle(),
-        )
+        if (uiState.name.isNotBlank()) {
+            AnnotatedText(
+                originalText = stringResource(R.string.date_content_title, uiState.name.append은는Josa()),
+                originalTextStyle = SusuTheme.typography.title_m,
+                targetTextList = listOf(uiState.name.append은는Josa()),
+                spanStyle = SusuTheme.typography.title_m.copy(
+                    color = Gray60,
+                ).toSpanStyle(),
+            )
+        }
 
         Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_m))
 

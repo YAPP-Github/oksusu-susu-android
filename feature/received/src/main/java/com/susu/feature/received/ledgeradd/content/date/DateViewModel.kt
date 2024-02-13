@@ -35,10 +35,9 @@ class DateViewModel @Inject constructor(
         showStartDateBottomSheet()
     }
 
-    fun updateNameAndCategory(name: String, categoryName: String) = intent {
+    fun updateName(name: String) = intent {
         copy(
             name = name,
-            categoryName = categoryName,
         )
     }
 
