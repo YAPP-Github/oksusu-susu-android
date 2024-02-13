@@ -179,6 +179,7 @@ fun MyPageDefaultScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(SusuTheme.colorScheme.background10)
             .padding(padding),
     ) {
         SusuDefaultAppBar(

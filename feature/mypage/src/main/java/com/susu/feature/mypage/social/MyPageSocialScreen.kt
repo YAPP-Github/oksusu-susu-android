@@ -55,7 +55,7 @@ fun MyPageSocialScreen(
     val context = LocalContext.current
 
     Column(
-        modifier = Modifier.fillMaxSize().padding(padding),
+        modifier = Modifier.fillMaxSize().background(SusuTheme.colorScheme.background10).padding(padding),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         SusuDefaultAppBar(
