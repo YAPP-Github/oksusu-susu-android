@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
@@ -132,23 +134,20 @@ fun LedgerEditScreen(
             .background(SusuTheme.colorScheme.background15)
             .fillMaxSize(),
     ) {
-        Column(
-            modifier = Modifier
-                .background(SusuTheme.colorScheme.background15)
-                .fillMaxSize(),
-        ) {
+        Column {
             SusuDefaultAppBar(
                 leftIcon = {
                     BackIcon(onClickBack)
                 },
             )
-
-            Spacer(modifier = Modifier.size(23.dp))
-
             Column(
                 modifier = Modifier
+                    .verticalScroll(rememberScrollState())
+                    .weight(1f)
                     .padding(horizontal = SusuTheme.spacing.spacing_m),
             ) {
+                Spacer(modifier = Modifier.size(23.dp))
+
                 LedgerEditContainer(
                     name = stringResource(id = com.susu.core.ui.R.string.word_event_name),
                     verticalAlignment = Alignment.CenterVertically,
@@ -270,21 +269,20 @@ fun LedgerEditScreen(
                     },
                 )
             }
-        }
 
-        SusuFilledButton(
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .fillMaxWidth()
-                .imePadding(),
-            shape = RectangleShape,
-            isActive = uiState.saveButtonEnabled,
-            isClickable = uiState.saveButtonEnabled,
-            color = FilledButtonColor.Black,
-            style = MediumButtonStyle.height60,
-            text = stringResource(id = com.susu.core.ui.R.string.word_save),
-            onClick = onClickSaveButton,
-        )
+            SusuFilledButton(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .imePadding(),
+                shape = RectangleShape,
+                isActive = uiState.saveButtonEnabled,
+                isClickable = uiState.saveButtonEnabled,
+                color = FilledButtonColor.Black,
+                style = MediumButtonStyle.height60,
+                text = stringResource(id = com.susu.core.ui.R.string.word_save),
+                onClick = onClickSaveButton,
+            )
+        }
 
         if (uiState.showStartDateBottomSheet) {
             SusuLimitDatePickerBottomSheet(

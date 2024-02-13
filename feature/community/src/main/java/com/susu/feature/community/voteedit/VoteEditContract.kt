@@ -13,12 +13,12 @@ data class VoteEditState(
     val content: String = "",
     val isLoading: Boolean = false,
 ) : UiState {
-    val buttonEnabled = content.length in 1..50 &&
-        voteOptionStateList.all { it.length in 1..10 }
+    val buttonEnabled = content.isNotBlank()
 }
 
 sealed interface VoteEditSideEffect : SideEffect {
     data object ShowCanNotChangeOptionSnackbar : VoteEditSideEffect
     data object PopBackStack : VoteEditSideEffect
+    data object ShowInvalidContentSnackbar : VoteEditSideEffect
     data class HandleException(val throwable: Throwable, val retry: () -> Unit) : VoteEditSideEffect
 }

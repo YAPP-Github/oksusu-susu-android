@@ -29,4 +29,6 @@
     <string name="dialog_report_confirm_text">신고하기</string>
     <string name="dialog_report_dismiss_text">닫기</string>
     <string name="dialog_report_checkbox_text">작성자도 바로 차단하기</string>
+    <string name="snackbar_invalid_vote_content">글은 %d자 이내로 등록할 수 있어요</string>
+    <string name="snackbar_invalid_vote_option">투표 항목은 %d자 이내로 등록할 수 있어요</string>
 </resources>
