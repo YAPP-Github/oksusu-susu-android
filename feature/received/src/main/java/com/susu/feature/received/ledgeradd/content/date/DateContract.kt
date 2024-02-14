@@ -18,6 +18,7 @@ data class DateState(
     val showOnlyStartAt: Boolean = false,
 ) : UiState
 
+@Suppress("detekt:FunctionNaming")
 fun String.append은는Josa(): String {
     val josa = this.getJosa(JosaType.Type_은는)
     return if (josa.isEmpty()) {
