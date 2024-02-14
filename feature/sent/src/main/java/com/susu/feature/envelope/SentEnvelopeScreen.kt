@@ -99,6 +99,7 @@ fun SentEnvelopeScreen(
 ) {
     val sent = uiState.envelopeInfo.sentAmounts
     val received = uiState.envelopeInfo.receivedAmounts
+    val total = uiState.envelopeInfo.totalAmounts
     val moneyDiff = abs(sent - received).toMoneyFormat()
 
     Box(
@@ -122,7 +123,7 @@ fun SentEnvelopeScreen(
                     ),
             ) {
                 Text(
-                    text = stringResource(R.string.sent_envelope_card_monee_total) + uiState.envelopeInfo.totalAmounts.toMoneyFormat() +
+                    text = stringResource(R.string.sent_envelope_card_monee_total) + total.toMoneyFormat() +
                         stringResource(R.string.sent_envelope_card_money_won),
                     style = SusuTheme.typography.title_m,
                     color = Gray100,
@@ -156,7 +157,7 @@ fun SentEnvelopeScreen(
                     )
                 }
                 LinearProgressIndicator(
-                    progress = { uiState.envelopeInfo.sentAmounts.toFloat() / uiState.envelopeInfo.totalAmounts },
+                    progress = { sent.toFloat() / total },
                     color = SusuTheme.colorScheme.primary,
                     trackColor = Orange20,
                     strokeCap = StrokeCap.Round,
@@ -169,12 +170,12 @@ fun SentEnvelopeScreen(
                     horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
                     Text(
-                        text = uiState.envelopeInfo.sentAmounts.toMoneyFormat() + stringResource(R.string.sent_envelope_card_money_won),
+                        text = sent.toMoneyFormat() + stringResource(R.string.sent_envelope_card_money_won),
                         style = SusuTheme.typography.title_xxxxs,
                         color = Gray90,
                     )
                     Text(
-                        text = uiState.envelopeInfo.receivedAmounts.toMoneyFormat() + stringResource(R.string.sent_envelope_card_money_won),
+                        text = received.toMoneyFormat() + stringResource(R.string.sent_envelope_card_money_won),
                         style = SusuTheme.typography.title_xxxxs,
                         color = Gray60,
                     )
