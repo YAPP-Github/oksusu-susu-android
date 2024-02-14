@@ -31,6 +31,7 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.susu.core.designsystem.component.badge.BadgeColor
 import com.susu.core.designsystem.component.badge.BadgeStyle
@@ -56,7 +57,10 @@ fun SentCard(
         modifier = Modifier
             .clip(shape = RoundedCornerShape(4.dp))
             .fillMaxWidth()
-            .background(SusuTheme.colorScheme.background10),
+            .background(SusuTheme.colorScheme.background10)
+            .susuClickable {
+                onClickHistoryShowAll(state.friend.id)
+            },
     ) {
         Image(
             painter = painterResource(id = R.drawable.img_envelope),
@@ -71,19 +75,25 @@ fun SentCard(
             Row(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                Text(
-                    text = state.friend.name,
-                    style = SusuTheme.typography.title_xs,
-                    color = Gray100,
-                )
-                Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_s))
-                SusuBadge(
-                    color = BadgeColor.Gray20,
-                    text = stringResource(R.string.sent_envelope_card_monee_total) + state.totalAmounts.toMoneyFormat() +
-                        stringResource(R.string.sent_envelope_card_money_won),
-                    padding = BadgeStyle.smallBadge,
-                )
-                Spacer(modifier = Modifier.weight(1f))
+                Row(
+                    modifier = Modifier.weight(1f),
+                ) {
+                    Text(
+                        text = state.friend.name,
+                        style = SusuTheme.typography.title_xs,
+                        color = Gray100,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier.weight(1f, false),
+                    )
+                    Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_s))
+                    SusuBadge(
+                        color = BadgeColor.Gray20,
+                        text = stringResource(R.string.sent_envelope_card_money_total, state.totalAmounts.toMoneyFormat()),
+                        padding = BadgeStyle.smallBadge,
+                    )
+                }
+                Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_xxs))
                 Icon(
                     painter = painterResource(id = R.drawable.ic_arrow_down),
                     contentDescription = stringResource(R.string.content_description_envelope_show_history),
@@ -132,12 +142,12 @@ fun SentCard(
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 Text(
-                    text = state.sentAmounts.toMoneyFormat() + stringResource(R.string.sent_envelope_card_money_won),
+                    text = stringResource(R.string.sent_envelope_card_money_sent_received, state.sentAmounts.toMoneyFormat()),
                     style = SusuTheme.typography.title_xxxs,
                     color = Gray90,
                 )
                 Text(
-                    text = state.receivedAmounts.toMoneyFormat() + stringResource(R.string.sent_envelope_card_money_won),
+                    text = stringResource(R.string.sent_envelope_card_money_sent_received, state.receivedAmounts.toMoneyFormat()),
                     style = SusuTheme.typography.title_xxxs,
                     color = Gray60,
                 )

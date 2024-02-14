@@ -15,6 +15,7 @@ import com.susu.domain.usecase.vote.GetVoteListUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -42,7 +43,7 @@ class CommunityViewModel @Inject constructor(
             Json.decodeFromUri<Vote>(vote)
         } ?: return
 
-        if (toAddVote in currentState.voteList) return
+        if (toAddVote.id in currentState.voteList.map { it.id }) return
 
         if (currentState.selectedCategory != null &&
             currentState.selectedCategory?.id != currentState.categoryConfigList.find { it.name == toAddVote.boardName }?.id
@@ -77,6 +78,7 @@ class CommunityViewModel @Inject constructor(
                             it
                         }
                     }
+                    .distinctBy { it.id }
                     .toPersistentList(),
             )
         }
@@ -89,9 +91,11 @@ class CommunityViewModel @Inject constructor(
             copy(
                 voteList = voteList
                     .filter { it.id != toDeleteVoteId }
+                    .distinctBy { it.id }
                     .toPersistentList(),
                 popularVoteList = popularVoteList
                     .filter { it.id != toDeleteVoteId }
+                    .distinctBy { it.id }
                     .toPersistentList(),
             )
         }
@@ -146,7 +150,7 @@ class CommunityViewModel @Inject constructor(
             ).onSuccess { voteList ->
                 isLast = voteList.isEmpty()
                 page++
-                val newVoteList = currentList.plus(voteList).toPersistentList()
+                val newVoteList = currentList.plus(voteList).distinctBy { it.id }.toPersistentList()
                 intent {
                     copy(
                         voteList = newVoteList,
@@ -164,6 +168,11 @@ class CommunityViewModel @Inject constructor(
             .onFailure {
                 postSideEffect(CommunitySideEffect.HandleException(it, ::getPopularVoteList))
             }
+    }
+
+    fun refreshData(onFinish: () -> Unit = {}) = viewModelScope.launch {
+        joinAll(getVoteList(true), getPopularVoteList())
+        onFinish()
     }
 
     fun selectCategory(category: Category?) {

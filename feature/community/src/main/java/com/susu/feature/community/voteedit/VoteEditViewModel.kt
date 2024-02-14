@@ -8,6 +8,7 @@ import com.susu.core.ui.base.BaseViewModel
 import com.susu.core.ui.extension.decodeFromUri
 import com.susu.domain.usecase.vote.EditVoteUseCase
 import com.susu.domain.usecase.vote.GetPostCategoryConfigUseCase
+import com.susu.feature.community.VOTE_CONTENT_MAX_LENGTH
 import com.susu.feature.community.navigation.CommunityRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toPersistentList
@@ -48,7 +49,7 @@ class VoteEditViewModel @Inject constructor(
         intent { copy(isLoading = true) }
         editVoteUseCase(
             param = EditVoteUseCase.Param(
-                content = currentState.content,
+                content = currentState.content.trim(),
                 boardId = currentState.selectedBoardId,
                 id = voteId,
             ),
@@ -80,6 +81,11 @@ class VoteEditViewModel @Inject constructor(
     }
 
     fun updateContent(content: String) = intent {
+        if (content.length > VOTE_CONTENT_MAX_LENGTH) {
+            postSideEffect(VoteEditSideEffect.ShowInvalidContentSnackbar)
+            return@intent this
+        }
+
         copy(content = content)
     }
 

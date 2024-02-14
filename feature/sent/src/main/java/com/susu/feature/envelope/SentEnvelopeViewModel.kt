@@ -21,9 +21,10 @@ class SentEnvelopeViewModel @Inject constructor(
 ) {
     private val friendId = savedStateHandle.get<Long>(SentRoute.FRIEND_ID_ARGUMENT_NAME)!!
 
-    fun initData() {
+    fun initData(onFinish: () -> Unit = {}) {
         getEnvelopeInfo()
         getEnvelopeHistoryList()
+        onFinish()
     }
 
     private fun getEnvelopeInfo(id: Long = friendId) = viewModelScope.launch {

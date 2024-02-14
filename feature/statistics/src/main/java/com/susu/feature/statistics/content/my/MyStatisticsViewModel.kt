@@ -11,9 +11,9 @@ import javax.inject.Inject
 class MyStatisticsViewModel @Inject constructor(
     private val getMyStatisticsUseCase: GetMyStatisticsUseCase,
 ) : BaseViewModel<MyStatisticsState, MyStatisticsEffect>(MyStatisticsState()) {
-    fun getMyStatistics() {
+    fun getMyStatistics(onFinish: (() -> Unit)? = null) {
         viewModelScope.launch {
-            intent { copy(isLoading = true) }
+            intent { copy(isLoading = onFinish == null) }
             getMyStatisticsUseCase()
                 .onSuccess {
                     intent { copy(statistics = it) }
@@ -21,6 +21,8 @@ class MyStatisticsViewModel @Inject constructor(
                     postSideEffect(MyStatisticsEffect.HandleException(it, ::getMyStatistics))
                 }
             intent { copy(isLoading = false) }
+
+            onFinish?.invoke()
         }
     }
 }

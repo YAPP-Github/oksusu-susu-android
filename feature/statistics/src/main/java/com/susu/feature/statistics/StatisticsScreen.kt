@@ -77,37 +77,42 @@ fun StatisticsScreen(
         modifier = Modifier.fillMaxSize().padding(padding),
     ) {
         Column(
-            modifier = Modifier.fillMaxSize().padding(horizontal = SusuTheme.spacing.spacing_m),
+            modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxs),
         ) {
             SusuDefaultAppBar(
+                modifier = Modifier.padding(horizontal = SusuTheme.spacing.spacing_xs),
                 leftIcon = { LogoIcon() },
                 title = stringResource(R.string.statistics_word),
             )
-            StatisticsTab(
-                modifier = Modifier
-                    .height(52.dp)
-                    .padding(vertical = SusuTheme.spacing.spacing_xxs),
-                selectedTab = uiState.currentTab,
-                onTabSelect = onTabSelected,
-            )
-            when (uiState.currentTab) {
-                StatisticsTab.MY -> MyStatisticsRoute(
-                    isBlind = uiState.isBlind,
-                    modifier = Modifier.fillMaxSize(),
-                    handleException = handleException,
+            Column(
+                modifier = Modifier.padding(horizontal = SusuTheme.spacing.spacing_m),
+            ) {
+                StatisticsTab(
+                    modifier = Modifier
+                        .height(52.dp)
+                        .padding(vertical = SusuTheme.spacing.spacing_xxs),
+                    selectedTab = uiState.currentTab,
+                    onTabSelect = onTabSelected,
                 )
+                when (uiState.currentTab) {
+                    StatisticsTab.MY -> MyStatisticsRoute(
+                        isBlind = uiState.isBlind,
+                        modifier = Modifier.fillMaxSize(),
+                        handleException = handleException,
+                    )
 
-                StatisticsTab.AVERAGE -> SusuStatisticsRoute(
-                    isBlind = uiState.isBlind,
-                    modifier = Modifier.fillMaxSize(),
-                    handleException = handleException,
-                )
+                    StatisticsTab.AVERAGE -> SusuStatisticsRoute(
+                        isBlind = uiState.isBlind,
+                        modifier = Modifier.fillMaxSize(),
+                        handleException = handleException,
+                    )
+                }
             }
         }
 
         if (uiState.isLoading) {
-            LoadingScreen(modifier = Modifier.fillMaxSize().align(Alignment.Center))
+            LoadingScreen(modifier = Modifier.align(Alignment.Center))
         }
     }
 }

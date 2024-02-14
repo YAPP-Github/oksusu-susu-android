@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
@@ -16,12 +17,16 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
+import androidx.compose.material3.pulltorefresh.PullToRefreshContainer
+import androidx.compose.material3.pulltorefresh.PullToRefreshState
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -43,6 +48,7 @@ import com.susu.feature.statistics.component.StatisticsVerticalItem
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toPersistentList
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SusuStatisticsRoute(
     isBlind: Boolean,
@@ -52,9 +58,21 @@ fun SusuStatisticsRoute(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
+    val refreshState = rememberPullToRefreshState(
+        positionalThreshold = 100.dp,
+    )
+
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
             is SusuStatisticsEffect.HandleException -> handleException(sideEffect.throwable, sideEffect.retry)
+        }
+    }
+
+    LaunchedEffect(key1 = refreshState.isRefreshing) {
+        if (refreshState.isRefreshing.not()) return@LaunchedEffect
+
+        viewModel.getSusuStatistics {
+            refreshState.endRefresh()
         }
     }
 
@@ -68,6 +86,7 @@ fun SusuStatisticsRoute(
 
     SusuStatisticsScreen(
         uiState = uiState,
+        refreshState = refreshState,
         isBlind = isBlind,
         modifier = modifier,
         onClickAge = viewModel::showAgeSheet,
@@ -87,6 +106,7 @@ fun SusuStatisticsRoute(
 fun SusuStatisticsScreen(
     modifier: Modifier = Modifier,
     uiState: SusuStatisticsState = SusuStatisticsState(),
+    refreshState: PullToRefreshState = rememberPullToRefreshState(),
     isBlind: Boolean = true,
     onClickAge: () -> Unit = {},
     onClickRelationship: () -> Unit = {},
@@ -109,9 +129,15 @@ fun SusuStatisticsScreen(
         }.toImmutableList()
     }
 
-    Box(modifier = modifier.fillMaxSize()) {
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .nestedScroll(refreshState.nestedScrollConnection),
+    ) {
         Column(
-            modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()),
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxs),
         ) {
             SusuStatisticsOptionSlot(
@@ -188,6 +214,12 @@ fun SusuStatisticsScreen(
             Spacer(modifier = Modifier.height(SusuTheme.spacing.spacing_xxxl))
         }
 
+        PullToRefreshContainer(
+            modifier = Modifier.align(Alignment.TopCenter).offset(y = -(120).dp),
+            state = refreshState,
+            containerColor = Gray10,
+        )
+
         if (uiState.isAgeSheetOpen) {
             SusuSelectionBottomSheet(
                 containerHeight = 322.dp,
@@ -226,6 +258,7 @@ fun SusuStatisticsScreen(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true)
 @Composable
 fun SusuStatisticsScreenPreview() {
@@ -236,6 +269,7 @@ fun SusuStatisticsScreenPreview() {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true)
 @Composable
 fun SusuStatisticsScreenBlindPreview() {

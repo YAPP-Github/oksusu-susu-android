@@ -35,8 +35,8 @@ class VoteDetailViewModel @Inject constructor(
     private var initCount: Long = 0
     private var initIsVoted: Boolean = false
 
-    fun getVoteDetail() = viewModelScope.launch {
-        intent { copy(isLoading = true) }
+    fun getVoteDetail(onFinish: (() -> Unit)? = null) = viewModelScope.launch {
+        intent { copy(isLoading = onFinish == null) }
         getVoteDetailUseCase(
             voteId,
         ).onSuccess {
@@ -48,6 +48,7 @@ class VoteDetailViewModel @Inject constructor(
             postSideEffect(VoteDetailSideEffect.HandleException(it, ::getVoteDetail))
         }
         intent { copy(isLoading = false) }
+        onFinish?.invoke()
     }
 
     fun vote(optionId: Long, isVoted: Boolean) {

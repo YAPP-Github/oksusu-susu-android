@@ -20,6 +20,7 @@ import com.susu.feature.community.navigation.navigateVoteDetail
 import com.susu.feature.community.navigation.navigateVoteEdit
 import com.susu.feature.community.navigation.navigateVoteSearch
 import com.susu.feature.loginsignup.navigation.LoginSignupRoute
+import com.susu.feature.mypage.navigation.MyPageRoute
 import com.susu.feature.mypage.navigation.navigateMyPage
 import com.susu.feature.mypage.navigation.navigateMyPageInfo
 import com.susu.feature.mypage.navigation.navigateMyPagePrivacyPolicy
@@ -64,8 +65,8 @@ internal class MainNavigator(
             in listOf(
                 ReceivedRoute.ledgerSearchRoute,
                 ReceivedRoute.ledgerFilterRoute("{${ReceivedRoute.FILTER_LEDGER_ARGUMENT_NAME}}"),
-                ReceivedRoute.envelopeDetailRoute("{${ReceivedRoute.ENVELOPE_ARGUMENT_NAME}}", "{${ReceivedRoute.LEDGER_ID_ARGUMENT_NAME}}"),
-                ReceivedRoute.envelopeEditRoute("{${ReceivedRoute.ENVELOPE_ARGUMENT_NAME}}", "{${ReceivedRoute.LEDGER_ID_ARGUMENT_NAME}}"),
+                ReceivedRoute.envelopeDetailRoute("{${ReceivedRoute.ENVELOPE_ARGUMENT_NAME}}", "{${ReceivedRoute.LEDGER_ARGUMENT_NAME}}"),
+                ReceivedRoute.envelopeEditRoute("{${ReceivedRoute.ENVELOPE_ARGUMENT_NAME}}", "{${ReceivedRoute.LEDGER_ARGUMENT_NAME}}"),
                 SentRoute.envelopeFilterRoute("{${SentRoute.FILTER_ENVELOPE_ARGUMENT}}"),
                 SentRoute.sentEnvelopeRoute("{${SentRoute.FRIEND_ID_ARGUMENT_NAME}}"),
                 SentRoute.sentEnvelopeDetailRoute("{${SentRoute.ENVELOPE_ID_ARGUMENT_NAME}}"),
@@ -75,6 +76,9 @@ internal class MainNavigator(
                 CommunityRoute.voteSearchRoute,
                 CommunityRoute.voteDetailRoute("{${CommunityRoute.VOTE_ID_ARGUMENT_NAME}}"),
                 CommunityRoute.voteEditRoute("{${CommunityRoute.VOTE_ARGUMENT_NAME}}"),
+                MyPageRoute.defaultRoute,
+                MyPageRoute.infoRoute,
+                MyPageRoute.socialRoute,
             ),
             -> SusuTheme.colorScheme.background10
 

@@ -22,7 +22,7 @@ fun LoginArchGraph(
     outlineWidth: Dp = 8.dp,
     fillFrom: Float = 0f,
     fillUntil: Float = 0.87f,
-    delay: Int = 1500,
+    delay: Int = 1000,
     duration: Int = 1000,
 ) {
     val fillAngle = remember { Animatable(fillFrom) }

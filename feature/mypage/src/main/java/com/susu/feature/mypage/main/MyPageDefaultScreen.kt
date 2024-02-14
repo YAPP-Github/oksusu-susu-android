@@ -153,7 +153,11 @@ fun MyPageDefaultRoute(
         onWithdraw = viewModel::showWithdrawDialog,
         onExport = viewModel::showExportDialog,
         onClickFeedback = {
-            context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(SUSU_GOOGLE_FROM_URL)))
+            runCatching {
+                context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(SUSU_GOOGLE_FROM_URL)))
+            }.onFailure {
+                onShowSnackbar(SnackbarToken(message = context.getString(com.susu.feature.mypage.R.string.snackbar_browser_not_found)))
+            }
         },
         navigateToInfo = navigateToInfo,
         navigateToSocial = navigateToSocial,
@@ -179,10 +183,11 @@ fun MyPageDefaultScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(SusuTheme.colorScheme.background10)
             .padding(padding),
     ) {
         SusuDefaultAppBar(
-            modifier = Modifier.padding(SusuTheme.spacing.spacing_xs),
+            modifier = Modifier.padding(horizontal = SusuTheme.spacing.spacing_xs),
             leftIcon = { LogoIcon() },
         )
 

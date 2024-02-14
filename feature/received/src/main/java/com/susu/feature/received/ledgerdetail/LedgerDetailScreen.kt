@@ -22,10 +22,14 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
+import androidx.compose.material3.pulltorefresh.PullToRefreshContainer
+import androidx.compose.material3.pulltorefresh.PullToRefreshState
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -45,6 +49,7 @@ import com.susu.core.designsystem.component.button.SelectedFilterButton
 import com.susu.core.designsystem.component.button.SmallButtonStyle
 import com.susu.core.designsystem.component.button.SusuFloatingButton
 import com.susu.core.designsystem.component.button.SusuGhostButton
+import com.susu.core.designsystem.theme.Gray10
 import com.susu.core.designsystem.theme.Gray25
 import com.susu.core.designsystem.theme.Gray50
 import com.susu.core.designsystem.theme.SusuTheme
@@ -61,6 +66,7 @@ import com.susu.feature.received.ledgerdetail.component.LedgerDetailEnvelopeCont
 import com.susu.feature.received.ledgerdetail.component.LedgerDetailOverviewColumn
 import kotlinx.collections.immutable.toPersistentList
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LedgerDetailRoute(
     viewModel: LedgerDetailViewModel = hiltViewModel(),
@@ -80,6 +86,9 @@ fun LedgerDetailRoute(
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
     val listState = rememberLazyListState()
     val context = LocalContext.current
+    val refreshState = rememberPullToRefreshState(
+        positionalThreshold = 100.dp,
+    )
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
             is LedgerDetailSideEffect.NavigateLedgerEdit -> navigateLedgerEdit(sideEffect.ledger)
@@ -113,6 +122,14 @@ fun LedgerDetailRoute(
         }
     }
 
+    LaunchedEffect(key1 = refreshState.isRefreshing) {
+        if (refreshState.isRefreshing.not()) return@LaunchedEffect
+
+        viewModel.refreshData {
+            refreshState.endRefresh()
+        }
+    }
+
     LaunchedEffect(key1 = Unit) {
         viewModel.getLedger()
         viewModel.initReceivedEnvelopeList()
@@ -134,6 +151,8 @@ fun LedgerDetailRoute(
 
     LedgerDetailScreen(
         uiState = uiState,
+        listState = listState,
+        refreshState = refreshState,
         onClickEdit = viewModel::navigateLedgerEdit,
         onClickDelete = viewModel::showDeleteDialog,
         onClickBack = viewModel::popBackStackWithLedger,
@@ -154,6 +173,7 @@ fun LedgerDetailRoute(
 fun LedgerDetailScreen(
     uiState: LedgerDetailState = LedgerDetailState(),
     listState: LazyListState = rememberLazyListState(),
+    refreshState: PullToRefreshState = rememberPullToRefreshState(),
     onClickBack: () -> Unit = {},
     onClickEdit: () -> Unit = {},
     onClickDelete: () -> Unit = {},
@@ -170,7 +190,8 @@ fun LedgerDetailScreen(
     Box(
         modifier = Modifier
             .background(SusuTheme.colorScheme.background15)
-            .fillMaxSize(),
+            .fillMaxSize()
+            .nestedScroll(refreshState.nestedScrollConnection),
     ) {
         Column {
             SusuDefaultAppBar(
@@ -294,6 +315,12 @@ fun LedgerDetailScreen(
             }
         }
 
+        PullToRefreshContainer(
+            modifier = Modifier.align(Alignment.TopCenter),
+            state = refreshState,
+            containerColor = Gray10,
+        )
+
         if (uiState.showAlignBottomSheet) {
             SusuSelectionBottomSheet(
                 onDismissRequest = onDismissAlignBottomSheet,
@@ -313,6 +340,7 @@ fun LedgerDetailScreen(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable
 fun LedgerDetailScreenPreview() {

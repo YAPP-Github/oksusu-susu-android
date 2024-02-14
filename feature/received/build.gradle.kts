@@ -11,4 +11,5 @@ android {
 dependencies {
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.compose.toolbar)
+    implementation(libs.better.korean.kotlin)
 }

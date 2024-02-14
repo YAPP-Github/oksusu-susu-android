@@ -16,13 +16,19 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Text
+import androidx.compose.material3.pulltorefresh.PullToRefreshContainer
+import androidx.compose.material3.pulltorefresh.PullToRefreshState
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -33,6 +39,7 @@ import com.susu.core.designsystem.component.appbar.icon.BackIcon
 import com.susu.core.designsystem.component.badge.BadgeColor
 import com.susu.core.designsystem.component.badge.BadgeStyle
 import com.susu.core.designsystem.component.badge.SusuBadge
+import com.susu.core.designsystem.theme.Gray10
 import com.susu.core.designsystem.theme.Gray100
 import com.susu.core.designsystem.theme.Gray20
 import com.susu.core.designsystem.theme.Gray60
@@ -47,6 +54,7 @@ import com.susu.feature.sent.R
 import kotlinx.datetime.toJavaLocalDateTime
 import kotlin.math.abs
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SentEnvelopeRoute(
     viewModel: SentEnvelopeViewModel = hiltViewModel(),
@@ -58,6 +66,10 @@ fun SentEnvelopeRoute(
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
     val historyListState = rememberLazyListState()
+
+    val refreshState = rememberPullToRefreshState(
+        positionalThreshold = 100.dp,
+    )
 
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
@@ -78,20 +90,31 @@ fun SentEnvelopeRoute(
         viewModel.getEnvelopeHistoryList()
     }
 
+    LaunchedEffect(key1 = refreshState.isRefreshing) {
+        if (refreshState.isRefreshing.not()) return@LaunchedEffect
+
+        viewModel.initData {
+            refreshState.endRefresh()
+        }
+    }
+
     BackHandler {
         editedFriendId?.let { popBackStackWithEditedFriendId(it) } ?: popBackStack()
     }
 
     SentEnvelopeScreen(
         uiState = uiState,
+        refreshState = refreshState,
         onClickBackIcon = viewModel::popBackStack,
         onClickEnvelopeDetail = viewModel::navigateSentEnvelopeDetail,
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SentEnvelopeScreen(
     modifier: Modifier = Modifier,
+    refreshState: PullToRefreshState = rememberPullToRefreshState(),
     uiState: SentEnvelopeState = SentEnvelopeState(),
     historyListState: LazyListState = rememberLazyListState(),
     onClickBackIcon: () -> Unit = {},
@@ -105,7 +128,8 @@ fun SentEnvelopeScreen(
     Box(
         modifier = modifier
             .fillMaxSize()
-            .background(SusuTheme.colorScheme.background10),
+            .background(SusuTheme.colorScheme.background10)
+            .nestedScroll(refreshState.nestedScrollConnection),
     ) {
         Column {
             SusuDefaultAppBar(
@@ -123,8 +147,7 @@ fun SentEnvelopeScreen(
                     ),
             ) {
                 Text(
-                    text = stringResource(R.string.sent_envelope_card_monee_total) + total.toMoneyFormat() +
-                        stringResource(R.string.sent_envelope_card_money_won),
+                    text = stringResource(R.string.sent_envelope_card_money_total, uiState.envelopeInfo.totalAmounts.toMoneyFormat()),
                     style = SusuTheme.typography.title_m,
                     color = Gray100,
                 )
@@ -170,12 +193,12 @@ fun SentEnvelopeScreen(
                     horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
                     Text(
-                        text = sent.toMoneyFormat() + stringResource(R.string.sent_envelope_card_money_won),
+                        text = stringResource(R.string.sent_envelope_card_money_sent_received, sent.toMoneyFormat()),
                         style = SusuTheme.typography.title_xxxxs,
                         color = Gray90,
                     )
                     Text(
-                        text = received.toMoneyFormat() + stringResource(R.string.sent_envelope_card_money_won),
+                        text = stringResource(R.string.sent_envelope_card_money_sent_received, received.toMoneyFormat()),
                         style = SusuTheme.typography.title_xxxxs,
                         color = Gray60,
                     )
@@ -205,9 +228,16 @@ fun SentEnvelopeScreen(
                 }
             }
         }
+
+        PullToRefreshContainer(
+            modifier = Modifier.align(Alignment.TopCenter),
+            state = refreshState,
+            containerColor = Gray10,
+        )
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable
 fun SentEnvelopeScreenPreview() {

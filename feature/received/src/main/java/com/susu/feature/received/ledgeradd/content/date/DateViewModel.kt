@@ -35,21 +35,21 @@ class DateViewModel @Inject constructor(
         showStartDateBottomSheet()
     }
 
-    fun updateNameAndCategory(name: String, categoryName: String) = intent {
+    fun updateName(name: String) = intent {
         copy(
             name = name,
-            categoryName = categoryName,
         )
     }
 
     fun updateStartDate(year: Int, month: Int, day: Int) = intent {
         val toUpdateStartAt = LocalDateTime.of(year, month, day, 0, 0)
-        val toUpdateEndAt = if (showOnlyStartAt) toUpdateStartAt else endAt
-        postSideEffect(DateSideEffect.UpdateParentDate(toUpdateStartAt, toUpdateEndAt))
-        copy(
-            startAt = toUpdateStartAt,
-            endAt = toUpdateEndAt,
-        )
+        if (showOnlyStartAt) {
+            postSideEffect(DateSideEffect.UpdateParentDate(toUpdateStartAt, toUpdateStartAt))
+            copy(startAt = toUpdateStartAt)
+        } else {
+            postSideEffect(DateSideEffect.UpdateParentDate(toUpdateStartAt, endAt))
+            copy(startAt = toUpdateStartAt)
+        }
     }
 
     fun updateEndDate(year: Int, month: Int, day: Int) = intent {

@@ -84,7 +84,7 @@ class ReceivedViewModel @Inject constructor(
         getLedgerList(true)
     }
 
-    fun getLedgerList(needClear: Boolean = false) = viewModelScope.launch {
+    fun getLedgerList(needClear: Boolean = false, onFinish: () -> Unit = {}) = viewModelScope.launch {
         mutex.withLock {
             val currentList = if (needClear) {
                 page = 0
@@ -117,6 +117,7 @@ class ReceivedViewModel @Inject constructor(
             }
 
             if (needClear) postSideEffect(ReceivedEffect.ScrollToTop)
+            onFinish()
         }
     }
 
