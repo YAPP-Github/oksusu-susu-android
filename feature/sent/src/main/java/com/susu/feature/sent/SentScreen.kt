@@ -98,6 +98,7 @@ fun SentRoute(
                 awaitFrame()
                 envelopesListState.animateScrollToItem(0)
             }
+
             is SentEffect.FocusToLastEnvelope -> scope.launch {
                 delay(500)
                 envelopesListState.animateScrollToItem(
