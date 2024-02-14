@@ -32,7 +32,7 @@
     <string name="sent_envelope_add_money_title">얼마를 보냈나요</string>
     <string name="sent_envelope_add_money_placeholder">금액을 입력해주세요</string>
     <string name="sent_envelope_add_money_won">원</string>
-    <string name="sent_envelope_add_visited_highlight">"%s을 "</string>
+    <string name="sent_envelope_add_visited_highlight">"%s에 "</string>
     <string name="sent_envelope_add_date_title">%s님에게 언제 보냈나요</string>
     <string name="sent_envelope_add_date_title_highlight">%s님에게 </string>
     <string name="sent_envelope_search_who_envelope">%s의 봉투</string>
