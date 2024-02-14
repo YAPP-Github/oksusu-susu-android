@@ -107,7 +107,12 @@ class EnvelopeAddViewModel @Inject constructor(
         val moreStep = moreStep.filter { uiState.value.currentStep.ordinal > it.ordinal }.maxOrNull()
 
         if (moreStep == null) {
-            intent { copy(currentStep = EnvelopeAddStep.MORE) }
+            intent {
+                copy(
+                    currentStep = EnvelopeAddStep.MORE,
+                    buttonEnabled = true,
+                )
+            }
         } else {
             intent { copy(currentStep = moreStep) }
         }

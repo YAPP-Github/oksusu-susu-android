@@ -20,7 +20,7 @@
     <string name="sent_envelope_add_event_title">어떤 경조사였나요</string>
     <string name="sent_envelope_add_more_title">더 기록할 내용이 있다면 알려주세요</string>
     <string name="sent_envelope_add_more_subtitle">복수로 선택하셔도 좋아요</string>
-    <string name="sent_envelope_add_visited_title">%s을 방문했나요?</string>
+    <string name="sent_envelope_add_visited_title">%s에 방문했나요?</string>
     <string name="sent_envelope_add_present_title">보낸 선물을 알려주세요</string>
     <string name="sent_envelope_add_present_placeholder">무엇을 선물했나요</string>
     <string name="sent_envelope_add_phone_title">%s님의 연락처를 남겨주세요</string>
