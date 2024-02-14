@@ -68,4 +68,5 @@ sealed interface SentEffect : SideEffect {
     data object NavigateEnvelopeSearch : SentEffect
     data class NavigateEnvelopeFilter(val filter: String) : SentEffect
     data object ScrollToTop : SentEffect
+    data class FocusToLastEnvelope(val lastIndex: Int) : SentEffect
 }

@@ -29,6 +29,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -57,6 +58,7 @@ import com.susu.core.ui.extension.toMoneyFormat
 import com.susu.feature.sent.component.SentCard
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.android.awaitFrame
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import me.onebone.toolbar.CollapsingToolbarScaffold
 import me.onebone.toolbar.ScrollStrategy
@@ -79,6 +81,8 @@ fun SentRoute(
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
     val envelopesListState = rememberLazyListState()
     val scope = rememberCoroutineScope()
+    val locale = LocalConfiguration.current
+    val height = locale.screenHeightDp / 2
 
     val refreshState = rememberPullToRefreshState(
         positionalThreshold = 100.dp,
@@ -93,6 +97,13 @@ fun SentRoute(
             SentEffect.ScrollToTop -> scope.launch {
                 awaitFrame()
                 envelopesListState.animateScrollToItem(0)
+            }
+            is SentEffect.FocusToLastEnvelope -> scope.launch {
+                delay(500)
+                envelopesListState.animateScrollToItem(
+                    index = sideEffect.lastIndex,
+                    scrollOffset = height,
+                )
             }
         }
     }
@@ -133,6 +144,9 @@ fun SentRoute(
                 viewModel.hideEnvelopesHistoryList(friendId)
             } else { // history 열려 있을 경우 데이터 요청
                 viewModel.getEnvelopesHistoryList(friendId)
+                if (uiState.envelopesList.last().friend.id == friendId) {
+                    viewModel.moveToBottom(uiState.envelopesList.lastIndex)
+                }
             }
         },
         onClickFilterButton = viewModel::navigateEnvelopeFilter,
