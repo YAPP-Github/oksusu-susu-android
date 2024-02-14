@@ -46,8 +46,8 @@
     <string name="present_content_title">받은 선물을 알려주세요</string>
     <string name="present_content_placeholder">무엇을 선물받았나요</string>
     <string name="relationship_content_title">나와는\n어떤 사이 인가요</string>
-    <string name="visited_content_title">%s을 방문했나요?</string>
-    <string name="visited_content_title_highlight">%s을</string>
+    <string name="visited_content_title">%s에 방문했나요?</string>
+    <string name="visited_content_title_highlight">%s에</string>
     <string name="received_envelope_edit_screen_name">이름</string>
     <string name="received_envelope_edit_screen_name_placeholder">김철수</string>
     <string name="received_envelope_edit_screen_relationship">나와의 관계</string>

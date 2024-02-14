@@ -15,6 +15,7 @@ import kotlinx.coroutines.launch
 import kotlinx.datetime.toJavaLocalDateTime
 import kotlinx.datetime.toKotlinLocalDateTime
 import kotlinx.serialization.json.Json
+import timber.log.Timber
 import java.time.LocalDateTime
 import javax.inject.Inject
 
@@ -97,6 +98,7 @@ class ReceivedEnvelopeAddViewModel @Inject constructor(
 
         copy(
             currentStep = prevStep,
+            buttonEnabled = prevStep == EnvelopeAddStep.MORE,
             lastPage = false,
         )
     }
