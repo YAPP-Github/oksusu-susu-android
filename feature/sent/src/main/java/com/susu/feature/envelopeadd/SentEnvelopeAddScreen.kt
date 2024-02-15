@@ -156,6 +156,7 @@ fun SentEnvelopeAddScreen(
 
                 EnvelopeAddStep.RELATIONSHIP -> RelationshipContentRoute(
                     updateParentSelectedRelation = updateParentSelectedRelation,
+                    onShowSnackbar = onShowSnackbar,
                 )
 
                 EnvelopeAddStep.EVENT -> CategoryContentRoute(
