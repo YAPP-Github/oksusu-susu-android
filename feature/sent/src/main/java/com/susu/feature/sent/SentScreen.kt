@@ -1,6 +1,9 @@
 package com.susu.feature.sent
 
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.animateScrollBy
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -93,6 +96,18 @@ fun SentRoute(
             SentEffect.ScrollToTop -> scope.launch {
                 awaitFrame()
                 envelopesListState.animateScrollToItem(0)
+            }
+
+            is SentEffect.FocusToLastEnvelope -> scope.launch {
+                val lastItem = envelopesListState.layoutInfo.visibleItemsInfo.lastOrNull()
+                lastItem?.let {
+                    envelopesListState.animateScrollBy(
+                        it.offset.toFloat(),
+                        spring(
+                            stiffness = Spring.StiffnessMediumLow,
+                        ),
+                    )
+                }
             }
         }
     }
@@ -197,7 +212,6 @@ fun SentScreen(
                         )
                     } else {
                         LazyColumn(
-                            modifier = Modifier.fillMaxSize(),
                             state = envelopesListState,
                             verticalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxs),
                             contentPadding = PaddingValues(

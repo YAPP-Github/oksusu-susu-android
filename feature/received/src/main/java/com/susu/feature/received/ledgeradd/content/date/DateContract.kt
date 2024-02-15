@@ -4,7 +4,6 @@ import com.daangn.www.betterkoreankotlin.JosaType
 import com.susu.core.ui.base.SideEffect
 import com.susu.core.ui.base.UiState
 import com.susu.core.ui.util.currentDate
-import strings.appendJosa
 import strings.getJosa
 import java.time.LocalDateTime
 
@@ -19,10 +18,14 @@ data class DateState(
     val showOnlyStartAt: Boolean = false,
 ) : UiState
 
+@Suppress("detekt:FunctionNaming")
 fun String.append은는Josa(): String {
     val josa = this.getJosa(JosaType.Type_은는)
-    return if (josa.isEmpty()) "${this}는"
-    else this + josa
+    return if (josa.isEmpty()) {
+        "${this}는"
+    } else {
+        this + josa
+    }
 }
 
 sealed interface DateSideEffect : SideEffect {
