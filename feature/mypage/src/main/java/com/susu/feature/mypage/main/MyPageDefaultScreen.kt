@@ -40,6 +40,7 @@ import com.susu.core.designsystem.component.button.GhostButtonColor
 import com.susu.core.designsystem.component.button.SmallButtonStyle
 import com.susu.core.designsystem.component.button.SusuGhostButton
 import com.susu.core.designsystem.theme.Gray100
+import com.susu.core.designsystem.theme.Gray15
 import com.susu.core.designsystem.theme.Gray20
 import com.susu.core.designsystem.theme.Gray50
 import com.susu.core.designsystem.theme.Gray60
@@ -276,7 +277,7 @@ fun MyPageDefaultScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f)
-                .background(color = Gray20)
+                .background(color = Gray15)
                 .padding(SusuTheme.spacing.spacing_m),
         ) {
             Text(
