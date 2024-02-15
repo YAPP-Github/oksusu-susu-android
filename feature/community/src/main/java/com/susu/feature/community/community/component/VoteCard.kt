@@ -127,11 +127,13 @@ fun VoteCard(
                 color = Blue60,
             )
 
-            Image(
-                modifier = Modifier.clip(CircleShape).susuClickable(onClick = { onClickReport(vote) }),
-                painter = painterResource(id = R.drawable.ic_report),
-                contentDescription = stringResource(com.susu.core.ui.R.string.content_description_report_button),
-            )
+            if (vote.isMine.not()) {
+                Image(
+                    modifier = Modifier.clip(CircleShape).susuClickable(onClick = { onClickReport(vote) }),
+                    painter = painterResource(id = R.drawable.ic_report),
+                    contentDescription = stringResource(com.susu.core.ui.R.string.content_description_report_button),
+                )
+            }
         }
     }
 }

@@ -13,6 +13,7 @@ data class VoteResponse(
     val uid: Long = 0,
     val board: BoardResponse,
     val content: String,
+    val isMine: Boolean,
     val isModified: Boolean,
     val createdAt: LocalDateTime = java.time.LocalDateTime.now().toKotlinLocalDateTime(),
     val count: Long = 0,
@@ -34,6 +35,7 @@ internal fun VoteResponse.toModel() = Vote(
     content = content,
     count = count,
     isModified = isModified,
+    isMine = isMine,
     createdAt = createdAt,
     optionList = optionList.sortedBy { it.seq }.map {
         com.susu.core.model.VoteOption(
