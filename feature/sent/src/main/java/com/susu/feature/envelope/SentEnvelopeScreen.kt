@@ -52,6 +52,7 @@ import com.susu.core.ui.extension.toMoneyFormat
 import com.susu.feature.envelope.component.EnvelopeHistoryItem
 import com.susu.feature.sent.R
 import kotlinx.datetime.toJavaLocalDateTime
+import kotlin.math.abs
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -119,6 +120,11 @@ fun SentEnvelopeScreen(
     onClickBackIcon: () -> Unit = {},
     onClickEnvelopeDetail: (Long) -> Unit = {},
 ) {
+    val sent = uiState.envelopeInfo.sentAmounts
+    val received = uiState.envelopeInfo.receivedAmounts
+    val total = uiState.envelopeInfo.totalAmounts
+    val moneyDiff = abs(sent - received).toMoneyFormat()
+
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -148,10 +154,13 @@ fun SentEnvelopeScreen(
                 Spacer(modifier = modifier.size(SusuTheme.spacing.spacing_xxs))
                 SusuBadge(
                     color = BadgeColor.Gray30,
-                    text = stringResource(
-                        R.string.sent_envelope_card_money_sent_received,
-                        (uiState.envelopeInfo.receivedAmounts - uiState.envelopeInfo.sentAmounts).toMoneyFormat(),
-                    ),
+                    text = if (sent > received) {
+                        stringResource(R.string.sent_envelope_money_diff_minus, moneyDiff)
+                    } else if (sent < received) {
+                        stringResource(R.string.sent_envelope_money_diff_plus, moneyDiff)
+                    } else {
+                        stringResource(R.string.sent_envelope_money_diff_same, moneyDiff)
+                    },
                     padding = BadgeStyle.smallBadge,
                 )
                 Spacer(modifier = modifier.size(SusuTheme.spacing.spacing_xl))
@@ -171,7 +180,7 @@ fun SentEnvelopeScreen(
                     )
                 }
                 LinearProgressIndicator(
-                    progress = { uiState.envelopeInfo.sentAmounts.toFloat() / uiState.envelopeInfo.totalAmounts },
+                    progress = { sent.toFloat() / total },
                     color = SusuTheme.colorScheme.primary,
                     trackColor = Orange20,
                     strokeCap = StrokeCap.Round,
@@ -184,12 +193,12 @@ fun SentEnvelopeScreen(
                     horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
                     Text(
-                        text = stringResource(R.string.sent_envelope_card_money_sent_received, uiState.envelopeInfo.sentAmounts.toMoneyFormat()),
+                        text = stringResource(R.string.sent_envelope_card_money_sent_received, sent.toMoneyFormat()),
                         style = SusuTheme.typography.title_xxxxs,
                         color = Gray90,
                     )
                     Text(
-                        text = stringResource(R.string.sent_envelope_card_money_sent_received, uiState.envelopeInfo.receivedAmounts.toMoneyFormat()),
+                        text = stringResource(R.string.sent_envelope_card_money_sent_received, received.toMoneyFormat()),
                         style = SusuTheme.typography.title_xxxxs,
                         color = Gray60,
                     )
