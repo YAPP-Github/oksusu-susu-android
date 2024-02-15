@@ -161,6 +161,7 @@ fun SentEnvelopeAddScreen(
 
                 EnvelopeAddStep.EVENT -> CategoryContentRoute(
                     updateParentCategory = updateParentCategory,
+                    onShowSnackbar = onShowSnackbar,
                 )
 
                 EnvelopeAddStep.DATE -> DateContentRoute(
