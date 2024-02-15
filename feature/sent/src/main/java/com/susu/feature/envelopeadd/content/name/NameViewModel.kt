@@ -3,7 +3,7 @@ package com.susu.feature.envelopeadd.content.name
 import androidx.lifecycle.viewModelScope
 import com.susu.core.model.FriendSearch
 import com.susu.core.ui.base.BaseViewModel
-import com.susu.core.ui.nameRegex
+import com.susu.core.ui.USER_INPUT_REGEX
 import com.susu.domain.usecase.friend.SearchFriendUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.persistentListOf
@@ -17,7 +17,7 @@ class NameViewModel @Inject constructor(
 ) : BaseViewModel<NameState, NameEffect>(NameState()) {
 
     fun updateName(name: String) {
-        if (!nameRegex.matches(name)) { // 한글, 영문 0~10 글자
+        if (!USER_INPUT_REGEX.matches(name)) { // 한글, 영문 0~10 글자
             if (name.length > 10) { // 길이 넘친 경우
                 postSideEffect(NameEffect.ShowNotValidSnackbar)
             }
