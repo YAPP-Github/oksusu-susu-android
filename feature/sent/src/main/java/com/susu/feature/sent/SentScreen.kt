@@ -222,9 +222,8 @@ fun SentScreen(
             }
 
             SusuDefaultAppBar(
-                modifier = Modifier.background(Gray15),
+                modifier = Modifier.background(Gray15).padding(horizontal = SusuTheme.spacing.spacing_xs),
                 leftIcon = {
-                    Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_xs))
                     LogoIcon()
                 },
                 title = stringResource(R.string.sent_screen_appbar_title),
