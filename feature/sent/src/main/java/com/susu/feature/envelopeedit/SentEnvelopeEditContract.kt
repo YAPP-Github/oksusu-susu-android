@@ -37,4 +37,11 @@ sealed interface SentEnvelopeEditSideEffect : SideEffect {
     data class HandleException(val throwable: Throwable, val retry: () -> Unit) : SentEnvelopeEditSideEffect
     data object FocusCustomCategory : SentEnvelopeEditSideEffect
     data object FocusCustomRelationship : SentEnvelopeEditSideEffect
+    data object ShowMoneyNotValidSnackbar : SentEnvelopeEditSideEffect
+    data object ShowNameNotValidSnackbar : SentEnvelopeEditSideEffect
+    data object ShowRelationshipNotValidSnackbar : SentEnvelopeEditSideEffect
+    data object ShowCategoryNotValidSnackbar : SentEnvelopeEditSideEffect
+    data object ShowPresentNotValidSnackbar : SentEnvelopeEditSideEffect
+    data object ShowMemoNotValidSnackbar : SentEnvelopeEditSideEffect
+    data object ShowPhoneNotValidSnackbar : SentEnvelopeEditSideEffect
 }

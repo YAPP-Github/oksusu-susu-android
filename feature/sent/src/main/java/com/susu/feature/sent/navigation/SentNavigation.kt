@@ -130,6 +130,7 @@ fun NavGraphBuilder.sentNavGraph(
         SentEnvelopeEditRoute(
             popBackStack = popBackStack,
             popBackStackWithEditedFriendId = popBackStackWithEditedFriendId,
+            onShowSnackbar = onShowSnackbar,
         )
     }
 

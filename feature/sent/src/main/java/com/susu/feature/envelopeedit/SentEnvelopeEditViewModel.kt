@@ -3,6 +3,10 @@ package com.susu.feature.envelopeedit
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.susu.core.model.EnvelopeDetail
+import com.susu.core.ui.MONEY_MAX_VALUE
+import com.susu.core.ui.USER_INPUT_REGEX
+import com.susu.core.ui.USER_INPUT_REGEX_INCLUDE_NUMBER
+import com.susu.core.ui.USER_INPUT_REGEX_LONG
 import com.susu.core.ui.base.BaseViewModel
 import com.susu.core.ui.extension.decodeFromUri
 import com.susu.core.ui.util.getSafeLocalDateTime
@@ -100,14 +104,28 @@ class SentEnvelopeEditViewModel @Inject constructor(
     fun popBackStack() = postSideEffect(SentEnvelopeEditSideEffect.PopBackStack)
 
     fun updateAmount(amount: Long) {
+        if (amount > MONEY_MAX_VALUE) {
+            postSideEffect(SentEnvelopeEditSideEffect.ShowMemoNotValidSnackbar)
+            return
+        }
         intent { copy(amount = amount) }
     }
 
     fun updateGift(gift: String?) {
+        if (gift != null && !USER_INPUT_REGEX_LONG.matches(gift)) {
+            if (gift.length > 30) {
+                postSideEffect(SentEnvelopeEditSideEffect.ShowPresentNotValidSnackbar)
+            }
+            return
+        }
         intent { copy(gift = gift?.ifEmpty { null }) }
     }
 
     fun updateMemo(memo: String?) {
+        if (memo != null && memo.length > 30) {
+            postSideEffect(SentEnvelopeEditSideEffect.ShowPresentNotValidSnackbar)
+            return
+        }
         intent { copy(memo = memo?.ifEmpty { null }) }
     }
 
@@ -126,6 +144,12 @@ class SentEnvelopeEditViewModel @Inject constructor(
     }
 
     fun updateFriendName(name: String) {
+        if (!USER_INPUT_REGEX.matches(name)) {
+            if (name.length > 10) {
+                postSideEffect(SentEnvelopeEditSideEffect.ShowNameNotValidSnackbar)
+            }
+            return
+        }
         intent { copy(friendName = name) }
     }
 
@@ -134,10 +158,20 @@ class SentEnvelopeEditViewModel @Inject constructor(
     }
 
     fun updateCustomRelationship(customRelationship: String) {
+        if (!USER_INPUT_REGEX.matches(customRelationship)) {
+            if (customRelationship.length > 10) {
+                postSideEffect(SentEnvelopeEditSideEffect.ShowRelationshipNotValidSnackbar)
+            }
+            return
+        }
         intent { copy(customRelationship = customRelationship) }
     }
 
     fun updatePhoneNumber(phoneNumber: String?) {
+        if (phoneNumber != null && phoneNumber.length > 11) {
+            postSideEffect(SentEnvelopeEditSideEffect.ShowPhoneNotValidSnackbar)
+            return
+        }
         intent { copy(phoneNumber = phoneNumber?.ifEmpty { null }) }
     }
 
@@ -146,6 +180,12 @@ class SentEnvelopeEditViewModel @Inject constructor(
     }
 
     fun updateCustomCategory(customCategory: String?) {
+        if (customCategory != null && !USER_INPUT_REGEX_INCLUDE_NUMBER.matches(customCategory)) {
+            if (customCategory.length > 10) {
+                postSideEffect(SentEnvelopeEditSideEffect.ShowCategoryNotValidSnackbar)
+            }
+            return
+        }
         intent { copy(customCategory = customCategory) }
     }
 
