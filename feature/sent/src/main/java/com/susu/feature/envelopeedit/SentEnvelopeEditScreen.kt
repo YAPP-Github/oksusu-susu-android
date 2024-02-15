@@ -95,38 +95,44 @@ fun SentEnvelopeEditRoute(
             is SentEnvelopeEditSideEffect.PopBackStackWithEditedFriendId -> popBackStackWithEditedFriendId(sideEffect.id)
             SentEnvelopeEditSideEffect.ShowCategoryNotValidSnackbar -> onShowSnackbar(
                 SnackbarToken(
-                    message = context.getString(R.string.sent_snackbar_category_validation)
-                )
+                    message = context.getString(R.string.sent_snackbar_category_validation),
+                ),
             )
+
             SentEnvelopeEditSideEffect.ShowMemoNotValidSnackbar -> onShowSnackbar(
                 SnackbarToken(
-                    message = context.getString(R.string.sent_snackbar_memo_validation)
-                )
+                    message = context.getString(R.string.sent_snackbar_memo_validation),
+                ),
             )
+
             SentEnvelopeEditSideEffect.ShowMoneyNotValidSnackbar -> onShowSnackbar(
                 SnackbarToken(
-                    message = context.getString(R.string.sent_snackbar_money_validation)
-                )
+                    message = context.getString(R.string.sent_snackbar_money_validation),
+                ),
             )
+
             SentEnvelopeEditSideEffect.ShowNameNotValidSnackbar -> onShowSnackbar(
                 SnackbarToken(
-                    message = context.getString(R.string.sent_snackbar_name_validation)
-                )
+                    message = context.getString(R.string.sent_snackbar_name_validation),
+                ),
             )
+
             SentEnvelopeEditSideEffect.ShowPhoneNotValidSnackbar -> onShowSnackbar(
                 SnackbarToken(
-                    message = context.getString(R.string.sent_snackbar_phone_validation)
-                )
+                    message = context.getString(R.string.sent_snackbar_phone_validation),
+                ),
             )
+
             SentEnvelopeEditSideEffect.ShowPresentNotValidSnackbar -> onShowSnackbar(
                 SnackbarToken(
-                    message = context.getString(R.string.sent_snackbar_present_validation)
-                )
+                    message = context.getString(R.string.sent_snackbar_present_validation),
+                ),
             )
+
             SentEnvelopeEditSideEffect.ShowRelationshipNotValidSnackbar -> onShowSnackbar(
                 SnackbarToken(
-                    message = context.getString(R.string.sent_snackbar_relationship_validation)
-                )
+                    message = context.getString(R.string.sent_snackbar_relationship_validation),
+                ),
             )
         }
     }
