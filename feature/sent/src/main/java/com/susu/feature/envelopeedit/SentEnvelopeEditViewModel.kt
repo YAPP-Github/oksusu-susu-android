@@ -105,7 +105,7 @@ class SentEnvelopeEditViewModel @Inject constructor(
 
     fun updateAmount(amount: Long) {
         if (amount > MONEY_MAX_VALUE) {
-            postSideEffect(SentEnvelopeEditSideEffect.ShowMemoNotValidSnackbar)
+            postSideEffect(SentEnvelopeEditSideEffect.ShowMoneyNotValidSnackbar)
             return
         }
         intent { copy(amount = amount) }
