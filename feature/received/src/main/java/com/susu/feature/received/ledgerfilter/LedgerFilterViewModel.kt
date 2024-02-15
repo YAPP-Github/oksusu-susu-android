@@ -76,10 +76,13 @@ class LedgerFilterViewModel @Inject constructor(
     }
 
     fun clearDate() = intent { copy(startAt = null, endAt = null) }
-    fun selectCategory(category: Category) = intent {
-        if (category in selectedCategoryList) return@intent this
+    fun toggleCategory(category: Category) = intent {
         copy(
-            selectedCategoryList = selectedCategoryList.plus(category).toPersistentList(),
+            selectedCategoryList = if (category in selectedCategoryList) {
+                selectedCategoryList.remove(category)
+            } else {
+                selectedCategoryList.add(category)
+            },
         )
     }
 

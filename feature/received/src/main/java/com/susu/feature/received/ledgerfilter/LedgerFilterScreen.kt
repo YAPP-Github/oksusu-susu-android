@@ -72,7 +72,7 @@ fun LedgerFilterRoute(
         onEndDateItemSelected = viewModel::updateEndDate,
         onClickEndDateText = viewModel::showEndDateBottomSheet,
         onDismissEndDateBottomSheet = viewModel::hideEndDateBottomSheet,
-        onClickCategory = viewModel::selectCategory,
+        onClickCategory = viewModel::toggleCategory,
         onClickCategoryClose = viewModel::unselectCategory,
         onClickDateClose = viewModel::clearDate,
         onClickRefreshButton = viewModel::clearFilter,

@@ -73,7 +73,7 @@ fun EnvelopeFilterRoute(
         onClickBackIcon = viewModel::popBackStack,
         onClickApplyFilterButton = viewModel::popBackStackWithFilter,
         onTextChangeSearch = viewModel::updateName,
-        onClickFriendChip = viewModel::selectFriend,
+        onClickFriendChip = viewModel::toggleFriend,
         onCloseFriendChip = viewModel::unselectFriend,
         onMoneyValueChange = viewModel::updateMoneyRange,
         onClickRefreshButton = viewModel::clearFilter,

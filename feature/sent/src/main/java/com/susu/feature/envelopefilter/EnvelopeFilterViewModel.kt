@@ -9,7 +9,6 @@ import com.susu.core.ui.extension.decodeFromUri
 import com.susu.core.ui.extension.encodeToUri
 import com.susu.domain.usecase.envelope.GetEnvelopeFilterConfigUseCase
 import com.susu.domain.usecase.friend.SearchFriendUseCase
-import com.susu.feature.envelopefilter.component.roundToStep
 import com.susu.feature.sent.navigation.SentRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.persistentListOf
@@ -76,10 +75,13 @@ class EnvelopeFilterViewModel @Inject constructor(
             }
     }
 
-    fun selectFriend(friend: Friend) = intent {
-        if (friend in selectedFriendList) return@intent this
+    fun toggleFriend(friend: Friend) = intent {
         copy(
-            selectedFriendList = selectedFriendList.add(friend),
+            selectedFriendList = if (friend in selectedFriendList) {
+                selectedFriendList.remove(friend)
+            } else {
+                selectedFriendList.add(friend)
+            },
         )
     }
 

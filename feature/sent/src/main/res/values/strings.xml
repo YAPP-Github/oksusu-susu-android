@@ -58,6 +58,9 @@
     <string name="sent_envelope_detail_delete_snackbar">봉투가 삭제됐어요</string>
     <string name="sent_add_more_step_phone">받은 이의 연락처</string>
     <string name="envelope_filter_total_money">전체 금액</string>
+    <string name="sent_envelope_money_diff_minus">-%1$s원</string>
+    <string name="sent_envelope_money_diff_plus">+%1$s원</string>
+    <string name="sent_envelope_money_diff_same">%1$s원</string>
 
     <string name="sent_snackbar_money_validation">금액은 20억원까지만 입력 가능해요</string>
     <string name="sent_snackbar_name_validation">이름은 10글자까지만 입력 가능해요</string>

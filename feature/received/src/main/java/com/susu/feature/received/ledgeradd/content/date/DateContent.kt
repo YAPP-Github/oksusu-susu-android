@@ -15,7 +15,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.daangn.www.betterkoreankotlin.JosaType
 import com.susu.core.designsystem.component.bottomsheet.datepicker.SusuLimitDatePickerBottomSheet
 import com.susu.core.designsystem.component.button.GhostButtonColor
 import com.susu.core.designsystem.component.button.SmallButtonStyle
@@ -29,7 +28,6 @@ import com.susu.core.ui.util.AnnotatedText
 import com.susu.core.ui.util.currentDate
 import com.susu.core.ui.util.minDate
 import com.susu.feature.received.R
-import strings.appendJosa
 import java.time.LocalDateTime
 
 @Composable
