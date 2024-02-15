@@ -112,6 +112,10 @@ class SentViewModel @Inject constructor(
                     }.toPersistentList(),
                 )
             }
+
+            if (currentState.envelopesList.last().friend.id == id) {
+                moveToBottom(currentState.envelopesList.lastIndex)
+            }
         }
     }
 
@@ -165,7 +169,7 @@ class SentViewModel @Inject constructor(
         }
     }
 
-    fun moveToBottom(lastIndex: Int) = postSideEffect(SentEffect.FocusToLastEnvelope(lastIndex))
+    private fun moveToBottom(lastIndex: Int) = postSideEffect(SentEffect.FocusToLastEnvelope(lastIndex))
     fun navigateSentEnvelope(id: Long) = postSideEffect(SentEffect.NavigateEnvelope(id = id))
     fun navigateSentAdd() = postSideEffect(SentEffect.NavigateEnvelopeAdd)
     fun navigateSentEnvelopeSearch() = postSideEffect(SentEffect.NavigateEnvelopeSearch)

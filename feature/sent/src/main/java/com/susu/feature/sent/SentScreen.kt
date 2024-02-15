@@ -1,6 +1,9 @@
 package com.susu.feature.sent
 
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.animateScrollBy
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -29,7 +32,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -58,7 +60,6 @@ import com.susu.core.ui.extension.toMoneyFormat
 import com.susu.feature.sent.component.SentCard
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.android.awaitFrame
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import me.onebone.toolbar.CollapsingToolbarScaffold
 import me.onebone.toolbar.ScrollStrategy
@@ -81,8 +82,6 @@ fun SentRoute(
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
     val envelopesListState = rememberLazyListState()
     val scope = rememberCoroutineScope()
-    val locale = LocalConfiguration.current
-    val height = locale.screenHeightDp / 2
 
     val refreshState = rememberPullToRefreshState(
         positionalThreshold = 100.dp,
@@ -100,11 +99,15 @@ fun SentRoute(
             }
 
             is SentEffect.FocusToLastEnvelope -> scope.launch {
-                delay(500)
-                envelopesListState.animateScrollToItem(
-                    index = sideEffect.lastIndex,
-                    scrollOffset = height,
-                )
+                val lastItem = envelopesListState.layoutInfo.visibleItemsInfo.lastOrNull()
+                lastItem?.let {
+                    envelopesListState.animateScrollBy(
+                        it.offset.toFloat(),
+                        spring(
+                            stiffness = Spring.StiffnessMediumLow,
+                        ),
+                    )
+                }
             }
         }
     }
@@ -145,9 +148,6 @@ fun SentRoute(
                 viewModel.hideEnvelopesHistoryList(friendId)
             } else { // history 열려 있을 경우 데이터 요청
                 viewModel.getEnvelopesHistoryList(friendId)
-                if (uiState.envelopesList.last().friend.id == friendId) {
-                    viewModel.moveToBottom(uiState.envelopesList.lastIndex)
-                }
             }
         },
         onClickFilterButton = viewModel::navigateEnvelopeFilter,
@@ -212,7 +212,6 @@ fun SentScreen(
                         )
                     } else {
                         LazyColumn(
-                            modifier = Modifier.fillMaxSize(),
                             state = envelopesListState,
                             verticalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxs),
                             contentPadding = PaddingValues(
