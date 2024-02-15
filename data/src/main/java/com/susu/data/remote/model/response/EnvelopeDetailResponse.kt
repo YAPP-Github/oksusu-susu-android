@@ -17,6 +17,7 @@ internal fun FriendRelationShipInfo.toModel() = FriendRelationship(
     id = id,
     friendId = friendId,
     relationshipId = relationshipId,
+    customRelation = customRelation,
 )
 
 internal fun EnvelopeDetailResponse.toModel() = EnvelopeDetail(
