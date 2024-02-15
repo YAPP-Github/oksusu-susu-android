@@ -1,9 +1,9 @@
 package com.susu.feature.mypage.info
 
 import com.susu.core.ui.Gender
+import com.susu.core.ui.USER_INPUT_REGEX
 import com.susu.core.ui.base.SideEffect
 import com.susu.core.ui.base.UiState
-import com.susu.core.ui.nameRegex
 
 sealed interface MyPageInfoEffect : SideEffect {
     data object PopBackStack : MyPageInfoEffect
@@ -24,5 +24,5 @@ data class MyPageInfoState(
     val editGender: Gender = Gender.NONE,
 ) : UiState {
     val birthEdited: Boolean = userBirth != editBirth
-    val isEditNameValid: Boolean = editName.isNotEmpty() && nameRegex.matches(editName.trim())
+    val isEditNameValid: Boolean = editName.isNotEmpty() && USER_INPUT_REGEX.matches(editName.trim())
 }

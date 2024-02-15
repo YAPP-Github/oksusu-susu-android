@@ -55,6 +55,7 @@ fun SentEnvelopeDetailRoute(
             SentEnvelopeDetailEffect.PopBackStack -> {
                 editedFriendId?.let { popBackStackWithEditedFriendId(it) } ?: popBackStack()
             }
+
             is SentEnvelopeDetailEffect.NavigateEnvelopeEdit -> navigateSentEnvelopeEdit(sideEffect.envelopeDetail)
             SentEnvelopeDetailEffect.ShowDeleteDialog -> onShowDialog(
                 DialogToken(
@@ -145,7 +146,11 @@ fun SentEnvelopeDetailScreen(
                     Column {
                         DetailItem(
                             categoryText = stringResource(com.susu.core.ui.R.string.word_event),
-                            contentText = category.category,
+                            contentText = if (category.customCategory != null) {
+                                category.customCategory!!
+                            } else {
+                                category.category
+                            },
                             isEmptyContent = category.category.isEmpty(),
                         )
                         DetailItem(
@@ -155,7 +160,11 @@ fun SentEnvelopeDetailScreen(
                         )
                         DetailItem(
                             categoryText = stringResource(com.susu.core.ui.R.string.word_relationship),
-                            contentText = relationship.relation,
+                            contentText = if (friendRelationship.customRelation != null) {
+                                friendRelationship.customRelation!!
+                            } else {
+                                relationship.relation
+                            },
                             isEmptyContent = relationship.relation.isEmpty(),
                         )
                         DetailItem(

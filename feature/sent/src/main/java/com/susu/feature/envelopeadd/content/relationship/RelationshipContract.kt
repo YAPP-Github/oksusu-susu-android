@@ -19,4 +19,5 @@ data class RelationShipState(
 sealed interface RelationShipSideEffect : SideEffect {
     data object FocusCustomRelationShip : RelationShipSideEffect
     data class UpdateParentSelectedRelationShip(val relationShip: Relationship?) : RelationShipSideEffect
+    data object ShowNotValidSnackbar : RelationShipSideEffect
 }

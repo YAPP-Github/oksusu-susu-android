@@ -24,6 +24,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
@@ -51,6 +52,7 @@ import com.susu.core.designsystem.theme.Gray70
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.model.Category
 import com.susu.core.model.Relationship
+import com.susu.core.ui.SnackbarToken
 import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.core.ui.extension.susuClickable
 import com.susu.core.ui.util.to_yyyy_korYear_M_korMonth_d_korDay
@@ -64,11 +66,13 @@ fun SentEnvelopeEditRoute(
     viewModel: SentEnvelopeEditViewModel = hiltViewModel(),
     popBackStack: () -> Unit,
     popBackStackWithEditedFriendId: (Long) -> Unit,
+    onShowSnackbar: (SnackbarToken) -> Unit,
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
     val categoryFocusRequester = remember { FocusRequester() }
     val relationshipFocusRequester = remember { FocusRequester() }
     val scope = rememberCoroutineScope()
+    val context = LocalContext.current
 
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
@@ -89,6 +93,47 @@ fun SentEnvelopeEditRoute(
             }
 
             is SentEnvelopeEditSideEffect.PopBackStackWithEditedFriendId -> popBackStackWithEditedFriendId(sideEffect.id)
+            SentEnvelopeEditSideEffect.ShowCategoryNotValidSnackbar -> onShowSnackbar(
+                SnackbarToken(
+                    message = context.getString(R.string.sent_snackbar_category_validation),
+                ),
+            )
+
+            SentEnvelopeEditSideEffect.ShowMemoNotValidSnackbar -> onShowSnackbar(
+                SnackbarToken(
+                    message = context.getString(R.string.sent_snackbar_memo_validation),
+                ),
+            )
+
+            SentEnvelopeEditSideEffect.ShowMoneyNotValidSnackbar -> onShowSnackbar(
+                SnackbarToken(
+                    message = context.getString(R.string.sent_snackbar_money_validation),
+                ),
+            )
+
+            SentEnvelopeEditSideEffect.ShowNameNotValidSnackbar -> onShowSnackbar(
+                SnackbarToken(
+                    message = context.getString(R.string.sent_snackbar_name_validation),
+                ),
+            )
+
+            SentEnvelopeEditSideEffect.ShowPhoneNotValidSnackbar -> onShowSnackbar(
+                SnackbarToken(
+                    message = context.getString(R.string.sent_snackbar_phone_validation),
+                ),
+            )
+
+            SentEnvelopeEditSideEffect.ShowPresentNotValidSnackbar -> onShowSnackbar(
+                SnackbarToken(
+                    message = context.getString(R.string.sent_snackbar_present_validation),
+                ),
+            )
+
+            SentEnvelopeEditSideEffect.ShowRelationshipNotValidSnackbar -> onShowSnackbar(
+                SnackbarToken(
+                    message = context.getString(R.string.sent_snackbar_relationship_validation),
+                ),
+            )
         }
     }
 
@@ -191,6 +236,7 @@ fun SentEnvelopeEditScreen(
                     onTextChange = { onMoneyUpdated(it.toLongOrNull() ?: 0L) },
                     textStyle = SusuTheme.typography.title_xxl,
                     modifier = Modifier.fillMaxWidth(),
+                    maxLines = 2,
                 )
                 Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_m))
                 EditDetailItem(
@@ -237,6 +283,7 @@ fun SentEnvelopeEditScreen(
                         placeholderColor = Gray30,
                         textStyle = SusuTheme.typography.title_s,
                         modifier = Modifier.fillMaxWidth(),
+                        maxLines = 2,
                     )
                 }
                 EditDetailItem(
@@ -321,6 +368,7 @@ fun SentEnvelopeEditScreen(
                         placeholderColor = Gray30,
                         textStyle = SusuTheme.typography.title_s,
                         modifier = Modifier.fillMaxWidth(),
+                        maxLines = 3,
                     )
                 }
                 EditDetailItem(
@@ -336,6 +384,7 @@ fun SentEnvelopeEditScreen(
                         textStyle = SusuTheme.typography.title_s,
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                         modifier = Modifier.fillMaxWidth(),
+                        maxLines = 2,
                     )
                 }
                 EditDetailItem(
@@ -349,7 +398,7 @@ fun SentEnvelopeEditScreen(
                         placeholder = stringResource(R.string.sent_envelope_edit_category_memo_placeholder),
                         placeholderColor = Gray30,
                         textStyle = SusuTheme.typography.title_s,
-                        maxLines = 2,
+                        maxLines = 3,
                         modifier = Modifier.fillMaxWidth(),
                     )
                 }

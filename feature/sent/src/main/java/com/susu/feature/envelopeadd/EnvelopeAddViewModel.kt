@@ -3,6 +3,7 @@ package com.susu.feature.envelopeadd
 import androidx.lifecycle.viewModelScope
 import com.susu.core.model.Category
 import com.susu.core.model.Relationship
+import com.susu.core.ui.MONEY_MAX_VALUE
 import com.susu.core.ui.base.BaseViewModel
 import com.susu.domain.usecase.envelope.CreateSentEnvelopeUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -120,7 +121,7 @@ class EnvelopeAddViewModel @Inject constructor(
 
     fun updateMoney(money: Long) = intent {
         this@EnvelopeAddViewModel.money = money
-        copy(buttonEnabled = money > 0L)
+        copy(buttonEnabled = money in 1L..MONEY_MAX_VALUE)
     }
 
     fun updateName(name: String) = intent {

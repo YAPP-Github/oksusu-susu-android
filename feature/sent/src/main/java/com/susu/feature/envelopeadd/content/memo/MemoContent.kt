@@ -11,6 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -19,6 +20,7 @@ import com.susu.core.designsystem.component.textfield.SusuBasicTextField
 import com.susu.core.designsystem.theme.Gray100
 import com.susu.core.designsystem.theme.Gray40
 import com.susu.core.designsystem.theme.SusuTheme
+import com.susu.core.ui.SnackbarToken
 import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.feature.sent.R
 
@@ -26,11 +28,19 @@ import com.susu.feature.sent.R
 fun MemoContentRoute(
     viewModel: MemoViewModel = hiltViewModel(),
     updateParentMemo: (String?) -> Unit,
+    onShowSnackbar: (SnackbarToken) -> Unit,
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
+    val context = LocalContext.current
+
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
             is MemoSideEffect.UpdateParentMemo -> updateParentMemo(sideEffect.memo)
+            MemoSideEffect.ShowNotValidSnackbar -> onShowSnackbar(
+                SnackbarToken(
+                    message = context.getString(R.string.sent_snackbar_memo_validation),
+                ),
+            )
         }
     }
 
@@ -74,6 +84,7 @@ fun MemoContent(
             placeholder = stringResource(id = R.string.sent_envelope_add_memo_placeholder),
             placeholderColor = Gray40,
             modifier = modifier.fillMaxWidth(),
+            maxLines = 5,
         )
         Spacer(modifier = modifier.size(SusuTheme.spacing.spacing_xl))
     }

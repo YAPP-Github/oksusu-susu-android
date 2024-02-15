@@ -12,9 +12,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -25,6 +24,7 @@ import com.susu.core.designsystem.component.button.SusuFilledButton
 import com.susu.core.designsystem.component.textfield.SusuPriceTextField
 import com.susu.core.designsystem.theme.Gray100
 import com.susu.core.designsystem.theme.SusuTheme
+import com.susu.core.ui.SnackbarToken
 import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.core.ui.extension.toMoneyFormat
 import com.susu.core.ui.moneyList
@@ -34,11 +34,17 @@ import com.susu.feature.sent.R
 fun MoneyContentRoute(
     viewModel: MoneyViewModel = hiltViewModel(),
     updateParentMoney: (Long) -> Unit,
+    onShowSnackbar: (SnackbarToken) -> Unit,
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
+    val context = LocalContext.current
+
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
             is MoneyEffect.UpdateParentMoney -> updateParentMoney(sideEffect.money)
+            MoneyEffect.ShowNotValidSnackbar -> onShowSnackbar(
+                SnackbarToken(message = context.getString(R.string.sent_snackbar_money_validation)),
+            )
         }
     }
 
@@ -81,6 +87,7 @@ fun MoneyContent(
         SusuPriceTextField(
             text = uiState.money,
             onTextChange = onTextChangeMoney,
+            maxLines = 2,
             placeholder = stringResource(R.string.sent_envelope_add_money_placeholder),
         )
         Spacer(

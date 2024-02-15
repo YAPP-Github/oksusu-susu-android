@@ -21,9 +21,12 @@ val alignList
 val moneyList = persistentListOf(10_000, 30_000, 50_000, 100_000, 500_000)
 
 const val USER_NAME_MAX_LENGTH = 10
-val nameRegex = Regex("[a-zA-Z가-힣]{0,10}")
+val USER_INPUT_REGEX = Regex("[a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣]{0,10}")
+val USER_INPUT_REGEX_LONG = Regex("[a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣0-9]{0,30}")
+val USER_INPUT_REGEX_INCLUDE_NUMBER = Regex("[a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣0-9]{0,10}")
 
 val USER_BIRTH_RANGE = 1930..currentDate.year
+const val MONEY_MAX_VALUE = 2_000_000_000L // TODO: 정책 확정 시 99억으로 변경
 
 const val INTENT_ACTION_DOWNLOAD_COMPLETE = "android.intent.action.DOWNLOAD_COMPLETE"
 const val PRIVACY_POLICY_URL = "https://sites.google.com/view/team-oksusu/%ED%99%88"

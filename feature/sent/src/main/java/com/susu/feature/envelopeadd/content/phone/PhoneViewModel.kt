@@ -9,8 +9,15 @@ class PhoneViewModel @Inject constructor() : BaseViewModel<PhoneState, PhoneSide
     PhoneState(),
 ) {
     fun updateName(name: String) = intent { copy(name = name) }
-    fun updatePhone(phone: String?) = intent {
-        postSideEffect(PhoneSideEffect.UpdateParentPhone(phone))
-        copy(phone = phone ?: "")
+    fun updatePhone(phone: String?) {
+        if (phone != null && phone.length > 11) {
+            postSideEffect(PhoneSideEffect.ShowNotValidSnackbar)
+            return
+        }
+
+        intent {
+            postSideEffect(PhoneSideEffect.UpdateParentPhone(phone))
+            copy(phone = phone ?: "")
+        }
     }
 }

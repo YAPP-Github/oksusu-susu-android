@@ -15,11 +15,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -30,6 +30,7 @@ import com.susu.core.designsystem.theme.Gray100
 import com.susu.core.designsystem.theme.Gray40
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.model.FriendSearch
+import com.susu.core.ui.SnackbarToken
 import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.feature.envelopeadd.content.component.FriendListItem
 import com.susu.feature.sent.R
@@ -42,8 +43,10 @@ fun NameContentRoute(
     viewModel: NameViewModel = hiltViewModel(),
     updateParentName: (String) -> Unit,
     updateParentFriendId: (Long?) -> Unit,
+    onShowSnackbar: (SnackbarToken) -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val context = LocalContext.current
     val focusManager = LocalFocusManager.current
     val focusRequester = remember { FocusRequester() }
 
@@ -52,6 +55,11 @@ fun NameContentRoute(
             NameEffect.FocusClear -> focusManager.clearFocus()
             is NameEffect.UpdateParentFriendId -> updateParentFriendId(sideEffect.friendId)
             is NameEffect.UpdateParentName -> updateParentName(sideEffect.name)
+            NameEffect.ShowNotValidSnackbar -> onShowSnackbar(
+                SnackbarToken(
+                    message = context.getString(R.string.sent_snackbar_name_validation),
+                ),
+            )
         }
     }
 
