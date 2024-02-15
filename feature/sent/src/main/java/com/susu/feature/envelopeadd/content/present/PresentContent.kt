@@ -38,7 +38,7 @@ fun PresentContentRoute(
             is PresentSideEffect.UpdateParentPresent -> updateParentPresent(sideEffect.present)
             PresentSideEffect.ShowNotValidSnackbar -> onShowSnackbar(
                 SnackbarToken(
-                    message = context.getString(R.string.sent_add_snackbar_present_validation),
+                    message = context.getString(R.string.sent_snackbar_present_validation),
                 ),
             )
         }

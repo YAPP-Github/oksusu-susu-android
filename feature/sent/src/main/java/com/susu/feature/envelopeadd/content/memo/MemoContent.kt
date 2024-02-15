@@ -38,7 +38,7 @@ fun MemoContentRoute(
             is MemoSideEffect.UpdateParentMemo -> updateParentMemo(sideEffect.memo)
             MemoSideEffect.ShowNotValidSnackbar -> onShowSnackbar(
                 SnackbarToken(
-                    message = context.getString(R.string.sent_add_snackbar_memo_validation),
+                    message = context.getString(R.string.sent_snackbar_memo_validation),
                 ),
             )
         }

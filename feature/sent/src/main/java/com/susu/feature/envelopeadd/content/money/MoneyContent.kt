@@ -43,7 +43,7 @@ fun MoneyContentRoute(
         when (sideEffect) {
             is MoneyEffect.UpdateParentMoney -> updateParentMoney(sideEffect.money)
             MoneyEffect.ShowNotValidSnackbar -> onShowSnackbar(
-                SnackbarToken(message = context.getString(R.string.sent_add_snackbar_money_validation)),
+                SnackbarToken(message = context.getString(R.string.sent_snackbar_money_validation)),
             )
         }
     }

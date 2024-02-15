@@ -58,11 +58,12 @@
     <string name="sent_envelope_detail_delete_snackbar">봉투가 삭제됐어요</string>
     <string name="sent_add_more_step_phone">받은 이의 연락처</string>
     <string name="envelope_filter_total_money">전체 금액</string>
-    <string name="sent_add_snackbar_money_validation">금액은 20억원까지만 입력 가능해요</string>
-    <string name="sent_add_snackbar_name_validation">이름은 10글자까지만 입력 가능해요</string>
-    <string name="sent_add_snackbar_relationship_validation">나와의 관계는 10글자까지만 입력 가능해요</string>
-    <string name="sent_add_snackbar_category_validation">경조사는 10글자까지만 입력 가능해요</string>
-    <string name="sent_add_snackbar_present_validation">선물은 30글자까지만 입력 가능해요</string>
-    <string name="sent_add_snackbar_memo_validation">메모는 30글자까지만 입력 가능해요</string>
-    <string name="sent_add_snackbar_phone_validation">연락처는 11자리까지만 입력 가능해요</string>
+
+    <string name="sent_snackbar_money_validation">금액은 20억원까지만 입력 가능해요</string>
+    <string name="sent_snackbar_name_validation">이름은 10글자까지만 입력 가능해요</string>
+    <string name="sent_snackbar_relationship_validation">나와의 관계는 10글자까지만 입력 가능해요</string>
+    <string name="sent_snackbar_category_validation">경조사는 10글자까지만 입력 가능해요</string>
+    <string name="sent_snackbar_present_validation">선물은 30글자까지만 입력 가능해요</string>
+    <string name="sent_snackbar_memo_validation">메모는 30글자까지만 입력 가능해요</string>
+    <string name="sent_snackbar_phone_validation">연락처는 11자리까지만 입력 가능해요</string>
 </resources>

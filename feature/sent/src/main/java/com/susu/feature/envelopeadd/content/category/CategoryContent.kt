@@ -64,7 +64,7 @@ fun CategoryContentRoute(
 
             CategoryEffect.ShowNotValidSnackbar -> onShowSnackbar(
                 SnackbarToken(
-                    message = context.getString(R.string.sent_add_snackbar_category_validation),
+                    message = context.getString(R.string.sent_snackbar_category_validation),
                 ),
             )
         }

@@ -57,7 +57,7 @@ fun NameContentRoute(
             is NameEffect.UpdateParentName -> updateParentName(sideEffect.name)
             NameEffect.ShowNotValidSnackbar -> onShowSnackbar(
                 SnackbarToken(
-                    message = context.getString(R.string.sent_add_snackbar_name_validation),
+                    message = context.getString(R.string.sent_snackbar_name_validation),
                 ),
             )
         }

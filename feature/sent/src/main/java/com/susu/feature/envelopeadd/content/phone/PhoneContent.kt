@@ -41,7 +41,7 @@ fun PhoneContentRoute(
             is PhoneSideEffect.UpdateParentPhone -> updateParentPhone(sideEffect.phone)
             PhoneSideEffect.ShowNotValidSnackbar -> onShowSnackbar(
                 SnackbarToken(
-                    message = context.getString(R.string.sent_add_snackbar_phone_validation),
+                    message = context.getString(R.string.sent_snackbar_phone_validation),
                 ),
             )
         }
