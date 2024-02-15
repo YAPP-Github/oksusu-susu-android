@@ -190,6 +190,7 @@ fun SentEnvelopeAddScreen(
 
                 EnvelopeAddStep.MEMO -> MemoContentRoute(
                     updateParentMemo = updateParentMemo,
+                    onShowSnackbar = onShowSnackbar,
                 )
             }
         }
