@@ -1,9 +1,9 @@
 package com.susu.feature.mypage.info
 
 import com.susu.core.ui.Gender
+import com.susu.core.ui.USER_INPUT_REGEX
 import com.susu.core.ui.base.SideEffect
 import com.susu.core.ui.base.UiState
-import com.susu.core.ui.USER_INPUT_REGEX
 
 sealed interface MyPageInfoEffect : SideEffect {
     data object PopBackStack : MyPageInfoEffect
