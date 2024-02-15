@@ -55,7 +55,7 @@ class SentEnvelopeEditViewModel @Inject constructor(
                             handedOverAt = envelope.handedOverAt.toJavaLocalDateTime(),
                             friendName = friend.name,
                             relationshipId = relationship.id,
-                            customRelationship = relationship.customRelation,
+                            customRelationship = friendRelationship.customRelation,
                             phoneNumber = friend.phoneNumber.ifEmpty { null },
                             categoryId = category.id,
                             customCategory = category.customCategory,
