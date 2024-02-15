@@ -180,6 +180,7 @@ fun SentEnvelopeAddScreen(
 
                 EnvelopeAddStep.PRESENT -> PresentContentRoute(
                     updateParentPresent = updateParentPresent,
+                    onShowSnackbar = onShowSnackbar,
                 )
 
                 EnvelopeAddStep.PHONE -> PhoneContentRoute(
