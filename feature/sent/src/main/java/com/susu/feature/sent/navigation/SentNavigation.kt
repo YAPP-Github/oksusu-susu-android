@@ -138,6 +138,7 @@ fun NavGraphBuilder.sentNavGraph(
             popBackStack = popBackStack,
             popBackStackWithRefresh = popBackStackWithRefresh,
             handleException = handleException,
+            onShowSnackbar = onShowSnackbar,
         )
     }
 

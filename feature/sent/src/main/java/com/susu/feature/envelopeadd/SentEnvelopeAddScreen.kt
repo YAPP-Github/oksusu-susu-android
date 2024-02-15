@@ -26,6 +26,7 @@ import com.susu.core.designsystem.component.button.SusuFilledButton
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.model.Category
 import com.susu.core.model.Relationship
+import com.susu.core.ui.SnackbarToken
 import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.core.ui.extension.susuDefaultAnimatedContentTransitionSpec
 import com.susu.feature.envelopeadd.content.category.CategoryContentRoute
@@ -45,6 +46,7 @@ fun SentEnvelopeAddRoute(
     viewModel: EnvelopeAddViewModel = hiltViewModel(),
     popBackStack: () -> Unit,
     popBackStackWithRefresh: () -> Unit,
+    onShowSnackbar: (SnackbarToken) -> Unit,
     handleException: (Throwable, () -> Unit) -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -92,6 +94,7 @@ fun SentEnvelopeAddRoute(
         updateParentMemo = viewModel::updateMemo,
         updateParentPhoneNumber = viewModel::updatePhoneNumber,
         updateParentPresent = viewModel::updatePresent,
+        onShowSnackbar = onShowSnackbar,
     )
 }
 
@@ -113,6 +116,7 @@ fun SentEnvelopeAddScreen(
     updateParentMemo: (String?) -> Unit = {},
     updateParentPhoneNumber: (String?) -> Unit = {},
     updateParentPresent: (String?) -> Unit = {},
+    onShowSnackbar: (SnackbarToken) -> Unit = {},
 ) {
     Column(
         modifier = Modifier
@@ -139,7 +143,11 @@ fun SentEnvelopeAddScreen(
             },
         ) { targetState ->
             when (targetState) {
-                EnvelopeAddStep.MONEY -> MoneyContentRoute(updateParentMoney = updateParentMoney)
+                EnvelopeAddStep.MONEY -> MoneyContentRoute(
+                    updateParentMoney = updateParentMoney,
+                    onShowSnackbar = onShowSnackbar,
+                )
+
                 EnvelopeAddStep.NAME -> NameContentRoute(
                     updateParentName = updateParentName,
                     updateParentFriendId = updateParentFriendId,

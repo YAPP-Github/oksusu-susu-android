@@ -24,6 +24,7 @@ const val USER_NAME_MAX_LENGTH = 10
 val nameRegex = Regex("[a-zA-Z가-힣]{0,10}")
 
 val USER_BIRTH_RANGE = 1930..currentDate.year
+const val MONEY_MAX_VALUE = 2_000_000_000L // TODO: 정책 확정 시 99억으로 변경
 
 const val INTENT_ACTION_DOWNLOAD_COMPLETE = "android.intent.action.DOWNLOAD_COMPLETE"
 const val PRIVACY_POLICY_URL = "https://sites.google.com/view/team-oksusu/%ED%99%88"
