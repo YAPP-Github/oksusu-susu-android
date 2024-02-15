@@ -186,6 +186,7 @@ fun SentEnvelopeAddScreen(
                 EnvelopeAddStep.PHONE -> PhoneContentRoute(
                     friendName = friendName,
                     updateParentPhone = updateParentPhoneNumber,
+                    onShowSnackbar = onShowSnackbar,
                 )
 
                 EnvelopeAddStep.MEMO -> MemoContentRoute(

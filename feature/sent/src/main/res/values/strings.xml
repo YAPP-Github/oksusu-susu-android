@@ -64,4 +64,5 @@
     <string name="sent_add_snackbar_category_validation">경조사는 10글자까지만 입력 가능해요</string>
     <string name="sent_add_snackbar_present_validation">선물은 30글자까지만 입력 가능해요</string>
     <string name="sent_add_snackbar_memo_validation">메모는 30글자까지만 입력 가능해요</string>
+    <string name="sent_add_snackbar_phone_validation">연락처는 11자리까지만 입력 가능해요</string>
 </resources>
