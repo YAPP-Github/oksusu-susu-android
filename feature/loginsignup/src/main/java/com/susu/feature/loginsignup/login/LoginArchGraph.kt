@@ -27,7 +27,7 @@ fun LoginArchGraph(
 ) {
     val fillAngle = remember { Animatable(fillFrom) }
 
-    LaunchedEffect(key1 = Unit) {
+    LaunchedEffect(key1 = fillUntil) {
         fillAngle.animateTo(
             targetValue = fillUntil,
             animationSpec = tween(

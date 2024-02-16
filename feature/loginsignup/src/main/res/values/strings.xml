@@ -10,6 +10,9 @@
     <string name="login_statistics_1">수수 가입자</string>
     <string name="login_statistics_2">는</string>
     <string name="login_statistics_3">이 적당하다고 답했어요</string>
+    <string name="login_percentage_format">%s%%</string>
+    <string name="login_statistics_unknown_content">\?만원</string>
+    <string name="login_statistics_unknown_percentage">\?</string>
     <string name="signup_vote_question_1">친구의 결혼식,</string>
     <string name="signup_vote_question_2">축의금</string>
     <string name="signup_vote_question_3">"은 "</string>

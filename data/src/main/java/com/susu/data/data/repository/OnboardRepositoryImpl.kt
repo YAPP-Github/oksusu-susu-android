@@ -14,7 +14,7 @@ class OnboardRepositoryImpl @Inject constructor(
 
         return OnboardVote(
             mostContent = mostOption.content,
-            mostPercentage = mostOption.count / result.sumOf { it.count } * 100,
+            mostPercentage = (mostOption.count.toFloat() / result.sumOf { it.count } * 100).toInt(),
         )
     }
 }
