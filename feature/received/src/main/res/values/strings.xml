@@ -76,4 +76,5 @@
     <string name="money_content_snackbar_validation">금액은 20억원까지만 입력 가능해요</string>
     <string name="name_content_snackbar_validation">이름은 10글자까지만 입력 가능해요</string>
     <string name="present_content_snackbar_validation">선물은 30글자까지만 입력 가능해요</string>
+    <string name="phone_content_snackbar_validation">연락처는 11자리까지만 입력 가능해요</string>
 </resources>

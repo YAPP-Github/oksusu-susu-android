@@ -14,6 +14,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
@@ -23,6 +24,7 @@ import com.susu.core.designsystem.component.textfield.SusuBasicTextField
 import com.susu.core.designsystem.theme.Gray40
 import com.susu.core.designsystem.theme.Gray60
 import com.susu.core.designsystem.theme.SusuTheme
+import com.susu.core.ui.SnackbarToken
 import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.core.ui.util.AnnotatedText
 import com.susu.feature.received.R
@@ -34,10 +36,13 @@ fun PhoneContentRoute(
     viewModel: PhoneViewModel = hiltViewModel(),
     friendName: String,
     updateParentPhone: (String?) -> Unit,
+    onShowSnackbar: (SnackbarToken) -> Unit,
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
     val focusRequester = remember { FocusRequester() }
     val scope = rememberCoroutineScope()
+    val context = LocalContext.current
+
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
             is PhoneSideEffect.UpdateParentPhone -> updateParentPhone(sideEffect.phone)
@@ -45,6 +50,11 @@ fun PhoneContentRoute(
                 awaitFrame()
                 focusRequester.requestFocus()
             }
+            PhoneSideEffect.ShowNotValidSnackbar -> onShowSnackbar(
+                SnackbarToken(
+                    message = context.getString(R.string.phone_content_snackbar_validation),
+                ),
+            )
         }
     }
 

@@ -11,4 +11,5 @@ data class PhoneState(
 sealed interface PhoneSideEffect : SideEffect {
     data class UpdateParentPhone(val phone: String?) : PhoneSideEffect
     data object ShowKeyboard : PhoneSideEffect
+    data object ShowNotValidSnackbar : PhoneSideEffect
 }
