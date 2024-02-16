@@ -9,6 +9,7 @@ import com.susu.data.data.repository.FriendRepositoryImpl
 import com.susu.data.data.repository.LedgerRecentSearchRepositoryImpl
 import com.susu.data.data.repository.LedgerRepositoryImpl
 import com.susu.data.data.repository.LoginRepositoryImpl
+import com.susu.data.data.repository.OnboardRepositoryImpl
 import com.susu.data.data.repository.ReportRepositoryImpl
 import com.susu.data.data.repository.SignUpRepositoryImpl
 import com.susu.data.data.repository.StatisticsRepositoryImpl
@@ -26,6 +27,7 @@ import com.susu.domain.repository.FriendRepository
 import com.susu.domain.repository.LedgerRecentSearchRepository
 import com.susu.domain.repository.LedgerRepository
 import com.susu.domain.repository.LoginRepository
+import com.susu.domain.repository.OnboardRepository
 import com.susu.domain.repository.ReportRepository
 import com.susu.domain.repository.SignUpRepository
 import com.susu.domain.repository.StatisticsRepository
@@ -127,4 +129,9 @@ abstract class RepositoryModule {
     abstract fun bindReportRepository(
         reportRepositoryImpl: ReportRepositoryImpl,
     ): ReportRepository
+
+    @Binds
+    abstract fun bindOnboardRepository(
+        onboardRepositoryImpl: OnboardRepositoryImpl,
+    ): OnboardRepository
 }

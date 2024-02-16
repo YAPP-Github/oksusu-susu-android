@@ -46,6 +46,7 @@ import com.susu.core.designsystem.theme.Orange60
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.ui.SnackbarToken
 import com.susu.core.ui.SnsProviders
+import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.core.ui.extension.susuClickable
 import com.susu.feature.loginsignup.R
 import com.susu.feature.loginsignup.social.KakaoLoginHelper
@@ -65,14 +66,16 @@ fun LoginRoute(
         }
     }
 
-    LaunchedEffect(key1 = viewModel.sideEffect) {
-        viewModel.sideEffect.collect { sideEffect ->
-            when (sideEffect) {
-                is LoginEffect.ShowSnackBar -> onShowSnackBar(SnackbarToken(message = sideEffect.message))
-                LoginEffect.NavigateToReceived -> navigateToReceived()
-                LoginEffect.NavigateToSignUp -> navigateToSignUp()
-            }
+    viewModel.sideEffect.collectWithLifecycle { sideEffect ->
+        when (sideEffect) {
+            is LoginEffect.ShowSnackBar -> onShowSnackBar(SnackbarToken(message = sideEffect.message))
+            LoginEffect.NavigateToReceived -> navigateToReceived()
+            LoginEffect.NavigateToSignUp -> navigateToSignUp()
         }
+    }
+
+    LaunchedEffect(key1 = Unit) {
+        viewModel.initData()
     }
 
     LoginScreen(
