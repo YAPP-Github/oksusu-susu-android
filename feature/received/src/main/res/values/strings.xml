@@ -69,4 +69,6 @@
     <string name="toast_delete_envelope_success">봉투가 삭제됐어요</string>
     <string name="ledger_edit_screen_add_end_date">종료일 추가</string>
     <string name="ledger_edit_screen_add_start_date">시작일만 지정</string>
+
+    <string name="ledger_snackbar_category_validation">경조사는 10글자까지만 입력 가능해요</string>
 </resources>

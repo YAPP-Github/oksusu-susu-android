@@ -19,4 +19,5 @@ data class CategoryState(
 sealed interface CategorySideEffect : SideEffect {
     data object FocusCustomCategory : CategorySideEffect
     data class UpdateParentSelectedCategory(val category: Category?) : CategorySideEffect
+    data object ShowNotValidSnackbar : CategorySideEffect
 }

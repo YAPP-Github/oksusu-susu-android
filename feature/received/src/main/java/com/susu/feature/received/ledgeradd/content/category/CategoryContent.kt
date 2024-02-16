@@ -17,6 +17,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -31,6 +32,7 @@ import com.susu.core.designsystem.component.textfieldbutton.TextFieldButtonColor
 import com.susu.core.designsystem.component.textfieldbutton.style.MediumTextFieldButtonStyle
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.model.Category
+import com.susu.core.ui.SnackbarToken
 import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.feature.received.R
 import kotlinx.coroutines.android.awaitFrame
@@ -40,10 +42,13 @@ import kotlinx.coroutines.launch
 fun CategoryContentRoute(
     viewModel: CategoryViewModel = hiltViewModel(),
     updateParentSelectedCategory: (Category?) -> Unit = {},
+    onShowSnackbar: (SnackbarToken) -> Unit,
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
     val focusRequester = remember { FocusRequester() }
     val scope = rememberCoroutineScope()
+    val context = LocalContext.current
+
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
             is CategorySideEffect.UpdateParentSelectedCategory -> {
@@ -54,6 +59,12 @@ fun CategoryContentRoute(
                 awaitFrame()
                 focusRequester.requestFocus()
             }
+
+            CategorySideEffect.ShowNotValidSnackbar -> onShowSnackbar(
+                SnackbarToken(
+                    message = context.getString(R.string.ledger_snackbar_category_validation),
+                )
+            )
         }
     }
 

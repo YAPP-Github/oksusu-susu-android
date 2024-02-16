@@ -159,6 +159,7 @@ fun NavGraphBuilder.receivedNavGraph(
             popBackStack = popBackStack,
             popBackStackWithLedger = popBackStackWithLedger,
             handleException = handleException,
+            onShowSnackbar = onShowSnackbar,
         )
     }
 
