@@ -134,8 +134,11 @@ fun LoginScreen(
                 Spacer(modifier = Modifier.height(SusuTheme.spacing.spacing_xxxxs))
                 Text(text = stringResource(R.string.login_sub_header), style = SusuTheme.typography.title_m, color = Gray50)
                 Spacer(modifier = Modifier.height(64.dp))
+
                 LoginArchGraph(modifier = Modifier.size(200.dp))
+
                 Spacer(modifier = Modifier.height(SusuTheme.spacing.spacing_xxxxl))
+
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxxxs),
                 ) {
@@ -143,16 +146,22 @@ fun LoginScreen(
                     LoginBlankText(text = "87%", state = transitionState) // TODO: 임시 하드코딩
                     Text(text = stringResource(R.string.login_statistics_2), style = SusuTheme.typography.title_s)
                 }
+
                 Spacer(modifier = Modifier.height(SusuTheme.spacing.spacing_xxs))
+
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxxxs),
                 ) {
                     LoginBlankText(text = "10만원", state = transitionState) // TODO: 임시 하드코딩
                     Text(text = stringResource(R.string.login_statistics_3), style = SusuTheme.typography.title_s)
                 }
+
                 Spacer(modifier = Modifier.height(64.dp))
+
                 KakaoLoginButton(onClick = onLoginClick)
-                Spacer(modifier = Modifier.height(24.dp))
+
+                Spacer(modifier = Modifier.weight(1f))
+
                 Image(
                     modifier = Modifier.align(Alignment.CenterHorizontally),
                     painter = painterResource(id = com.susu.core.designsystem.R.drawable.ic_susu_logo_weak),
