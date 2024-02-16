@@ -1,11 +1,13 @@
 package com.susu.feature.envelopeadd
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.susu.core.model.Category
 import com.susu.core.model.Relationship
 import com.susu.core.ui.MONEY_MAX_VALUE
 import com.susu.core.ui.base.BaseViewModel
 import com.susu.domain.usecase.envelope.CreateSentEnvelopeUseCase
+import com.susu.feature.sent.navigation.SentRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import kotlinx.datetime.toKotlinLocalDateTime
@@ -15,7 +17,9 @@ import javax.inject.Inject
 @HiltViewModel
 class EnvelopeAddViewModel @Inject constructor(
     private val createSentEnvelopeUseCase: CreateSentEnvelopeUseCase,
+    savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<EnvelopeAddState, EnvelopeAddEffect>(EnvelopeAddState()) {
+    private val friendArgument = savedStateHandle.get<String>(SentRoute.FRIEND_ARGUMENT_NAME)
 
     private var money: Long = 0
     private var name: String = ""
@@ -28,6 +32,10 @@ class EnvelopeAddViewModel @Inject constructor(
     private var present: String? = null
     private var phoneNumber: String? = null
     private var memo: String? = null
+
+    fun initData() {
+        println(friendArgument)
+    }
 
     private fun createEnvelope() {
         viewModelScope.launch {
