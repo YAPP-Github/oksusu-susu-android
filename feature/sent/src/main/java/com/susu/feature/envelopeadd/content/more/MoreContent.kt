@@ -34,6 +34,7 @@ import com.susu.feature.sent.R
 @Composable
 fun MoreContentRoute(
     viewModel: MoreViewModel = hiltViewModel(),
+    fromEnvelope: Boolean,
     updateParentMoreStep: (List<EnvelopeAddStep>) -> Unit,
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
@@ -45,6 +46,7 @@ fun MoreContentRoute(
 
     MoreContent(
         uiState = uiState,
+        fromEnvelope = fromEnvelope,
         onClickStepButton = viewModel::toggleStep,
     )
 }
@@ -57,6 +59,7 @@ fun MoreContent(
         vertical = SusuTheme.spacing.spacing_xl,
     ),
     uiState: MoreState = MoreState(),
+    fromEnvelope: Boolean = false,
     onClickStepButton: (EnvelopeAddStep) -> Unit = {},
 ) {
     val scrollState = rememberScrollState()
@@ -88,7 +91,9 @@ fun MoreContent(
         Column(
             verticalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxs),
         ) {
-            moreStep.forEach { (step, stringRes) ->
+            for ((step, stringRes) in moreStep) {
+                if (fromEnvelope && step == EnvelopeAddStep.PHONE) continue
+
                 if (step in uiState.selectedMoreStop) {
                     SusuFilledButton(
                         color = FilledButtonColor.Orange,

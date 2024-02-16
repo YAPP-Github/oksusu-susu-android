@@ -60,10 +60,6 @@ fun SentEnvelopeAddRoute(
         }
     }
 
-    var friendName by remember {
-        mutableStateOf("")
-    }
-
     var categoryName by remember {
         mutableStateOf("")
     }
@@ -78,15 +74,11 @@ fun SentEnvelopeAddRoute(
 
     SentEnvelopeAddScreen(
         uiState = uiState,
-        friendName = friendName,
         categoryName = categoryName,
         onClickBack = viewModel::goPrevStep,
         onClickNext = viewModel::goNextStep,
         updateParentMoney = viewModel::updateMoney,
-        updateParentName = { name ->
-            viewModel.updateName(name)
-            friendName = name
-        },
+        updateParentName = viewModel::updateName,
         updateParentFriendId = viewModel::updateFriendId,
         updateParentSelectedRelation = viewModel::updateSelectedRelationShip,
         updateParentCategory = { category ->
@@ -106,7 +98,6 @@ fun SentEnvelopeAddRoute(
 @Composable
 fun SentEnvelopeAddScreen(
     uiState: EnvelopeAddState = EnvelopeAddState(),
-    friendName: String = "",
     onClickBack: () -> Unit = {},
     onClickNext: () -> Unit = {},
     updateParentMoney: (Long) -> Unit = {},
@@ -170,11 +161,12 @@ fun SentEnvelopeAddScreen(
                 )
 
                 EnvelopeAddStep.DATE -> DateContentRoute(
-                    friendName = friendName,
+                    friendName = uiState.friendName,
                     updateParentDate = updateParentDate,
                 )
 
                 EnvelopeAddStep.MORE -> MoreContentRoute(
+                    fromEnvelope = uiState.fromEnvelope,
                     updateParentMoreStep = updateParentMoreStep,
                 )
 
@@ -189,7 +181,7 @@ fun SentEnvelopeAddScreen(
                 )
 
                 EnvelopeAddStep.PHONE -> PhoneContentRoute(
-                    friendName = friendName,
+                    friendName = uiState.friendName,
                     updateParentPhone = updateParentPhoneNumber,
                     onShowSnackbar = onShowSnackbar,
                 )

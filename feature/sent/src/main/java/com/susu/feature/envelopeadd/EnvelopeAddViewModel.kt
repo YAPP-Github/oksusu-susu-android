@@ -3,14 +3,17 @@ package com.susu.feature.envelopeadd
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.susu.core.model.Category
+import com.susu.core.model.Friend
 import com.susu.core.model.Relationship
 import com.susu.core.ui.MONEY_MAX_VALUE
 import com.susu.core.ui.base.BaseViewModel
+import com.susu.core.ui.extension.decodeFromUri
 import com.susu.domain.usecase.envelope.CreateSentEnvelopeUseCase
 import com.susu.feature.sent.navigation.SentRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import kotlinx.datetime.toKotlinLocalDateTime
+import kotlinx.serialization.json.Json
 import java.time.LocalDateTime
 import javax.inject.Inject
 
@@ -19,10 +22,13 @@ class EnvelopeAddViewModel @Inject constructor(
     private val createSentEnvelopeUseCase: CreateSentEnvelopeUseCase,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<EnvelopeAddState, EnvelopeAddEffect>(EnvelopeAddState()) {
-    private val friendArgument = savedStateHandle.get<String>(SentRoute.FRIEND_ARGUMENT_NAME)
+    private val friendArgument = runCatching {
+        savedStateHandle.get<String>(SentRoute.FRIEND_ARGUMENT_NAME)?.let {
+            Json.decodeFromUri<Friend>(it)
+        }
+    }.getOrNull()
 
     private var money: Long = 0
-    private var name: String = ""
     private var friendId: Long? = null
     private var relationShip: Relationship? = null
     private var category: Category? = null
@@ -34,7 +40,12 @@ class EnvelopeAddViewModel @Inject constructor(
     private var memo: String? = null
 
     fun initData() {
-        println(friendArgument)
+        friendArgument?.let {
+            updateFriendId(it.id)
+            updateName(it.name)
+            updatePhoneNumber(it.phoneNumber.ifEmpty { null })
+            intent { copy(fromEnvelope = true) }
+        } ?: intent { copy(fromEnvelope = false) }
     }
 
     private fun createEnvelope() {
@@ -42,7 +53,7 @@ class EnvelopeAddViewModel @Inject constructor(
             createSentEnvelopeUseCase(
                 param = CreateSentEnvelopeUseCase.Param(
                     friendId = friendId,
-                    friendName = name,
+                    friendName = currentState.friendName,
                     phoneNumber = phoneNumber,
                     relationshipId = relationShip?.id,
                     customRelation = relationShip?.customRelation,
@@ -63,7 +74,14 @@ class EnvelopeAddViewModel @Inject constructor(
 
     fun goNextStep() {
         when (uiState.value.currentStep) {
-            EnvelopeAddStep.MONEY -> intent { copy(currentStep = EnvelopeAddStep.NAME) }
+            EnvelopeAddStep.MONEY -> {
+                if (friendArgument == null) {
+                    intent { copy(currentStep = EnvelopeAddStep.NAME) }
+                } else {
+                    intent { copy(currentStep = EnvelopeAddStep.EVENT) }
+                }
+            }
+
             EnvelopeAddStep.NAME -> {
                 intent {
                     if (friendId == null) {
@@ -97,13 +115,12 @@ class EnvelopeAddViewModel @Inject constructor(
             EnvelopeAddStep.NAME -> intent { copy(currentStep = EnvelopeAddStep.MONEY) }
             EnvelopeAddStep.RELATIONSHIP -> intent { copy(currentStep = EnvelopeAddStep.NAME) }
             EnvelopeAddStep.EVENT -> {
-                intent {
-                    if (friendId == null) {
-                        copy(currentStep = EnvelopeAddStep.RELATIONSHIP)
-                    } else {
-                        copy(currentStep = EnvelopeAddStep.NAME)
-                    }
+                val prevStep = when {
+                    friendId == null -> EnvelopeAddStep.RELATIONSHIP
+                    friendArgument != null -> EnvelopeAddStep.MONEY
+                    else -> EnvelopeAddStep.NAME
                 }
+                intent { copy(currentStep = prevStep) }
             }
 
             EnvelopeAddStep.DATE -> intent { copy(currentStep = EnvelopeAddStep.EVENT) }
@@ -133,8 +150,7 @@ class EnvelopeAddViewModel @Inject constructor(
     }
 
     fun updateName(name: String) = intent {
-        this@EnvelopeAddViewModel.name = name
-        copy(buttonEnabled = name.isNotEmpty())
+        copy(friendName = name, buttonEnabled = name.isNotEmpty())
     }
 
     fun updateFriendId(friendId: Long?) {
