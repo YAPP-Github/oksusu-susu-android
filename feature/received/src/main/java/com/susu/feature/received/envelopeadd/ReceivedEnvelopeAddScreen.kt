@@ -163,6 +163,7 @@ fun ReceivedEnvelopeAddScreen(
 
                 EnvelopeAddStep.PRESENT -> PresentContentRoute(
                     updateParentPresent = updateParentPresent,
+                    onShowSnackbar = onShowSnackbar,
                 )
                 EnvelopeAddStep.PHONE -> PhoneContentRoute(
                     friendName = friendName,
