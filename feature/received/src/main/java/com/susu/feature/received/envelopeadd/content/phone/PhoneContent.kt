@@ -9,7 +9,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
@@ -22,6 +26,8 @@ import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.core.ui.util.AnnotatedText
 import com.susu.feature.received.R
+import kotlinx.coroutines.android.awaitFrame
+import kotlinx.coroutines.launch
 
 @Composable
 fun PhoneContentRoute(
@@ -30,9 +36,15 @@ fun PhoneContentRoute(
     updateParentPhone: (String?) -> Unit,
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
+    val focusRequester = remember { FocusRequester() }
+    val scope = rememberCoroutineScope()
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
             is PhoneSideEffect.UpdateParentPhone -> updateParentPhone(sideEffect.phone)
+            PhoneSideEffect.ShowKeyboard -> scope.launch {
+                awaitFrame()
+                focusRequester.requestFocus()
+            }
         }
     }
 
@@ -41,8 +53,13 @@ fun PhoneContentRoute(
         viewModel.updatePhone(uiState.phone)
     }
 
+    LaunchedEffect(key1 = Unit) {
+        viewModel.showKeyboardIfTextEmpty()
+    }
+
     PhoneContent(
         uiState = uiState,
+        focusRequester = focusRequester,
         onTextChangePhone = viewModel::updatePhone,
     )
 }
@@ -50,6 +67,7 @@ fun PhoneContentRoute(
 @Composable
 fun PhoneContent(
     uiState: PhoneState = PhoneState(),
+    focusRequester: FocusRequester = remember { FocusRequester() },
     onTextChangePhone: (String) -> Unit = {},
 ) {
     Column(
@@ -75,7 +93,7 @@ fun PhoneContent(
             onTextChange = onTextChangePhone,
             placeholder = stringResource(R.string.phone_content_placeholder),
             placeholderColor = Gray40,
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().focusRequester(focusRequester),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
         )
         Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_xl))
