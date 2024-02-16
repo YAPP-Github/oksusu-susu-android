@@ -9,4 +9,5 @@ data class MemoState(
 
 sealed interface MemoSideEffect : SideEffect {
     data class UpdateParentMemo(val memo: String?) : MemoSideEffect
+    data object ShowKeyboard : MemoSideEffect
 }

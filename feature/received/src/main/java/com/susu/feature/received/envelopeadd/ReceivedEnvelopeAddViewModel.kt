@@ -97,7 +97,7 @@ class ReceivedEnvelopeAddViewModel @Inject constructor(
 
         copy(
             currentStep = prevStep,
-            buttonEnabled = prevStep == EnvelopeAddStep.MORE,
+            buttonEnabled = true,
             lastPage = false,
         )
     }

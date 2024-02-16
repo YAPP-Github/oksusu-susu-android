@@ -10,8 +10,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -22,6 +26,8 @@ import com.susu.core.designsystem.theme.Gray40
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.feature.received.R
+import kotlinx.coroutines.android.awaitFrame
+import kotlinx.coroutines.launch
 
 @Composable
 fun MemoContentRoute(
@@ -29,10 +35,20 @@ fun MemoContentRoute(
     updateParentMemo: (String?) -> Unit,
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
+    val focusRequester = remember { FocusRequester() }
+    val scope = rememberCoroutineScope()
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
             is MemoSideEffect.UpdateParentMemo -> updateParentMemo(sideEffect.memo)
+            MemoSideEffect.ShowKeyboard -> scope.launch {
+                awaitFrame()
+                focusRequester.requestFocus()
+            }
         }
+    }
+
+    LaunchedEffect(key1 = Unit) {
+        viewModel.showKeyboardIfTextEmpty()
     }
 
     LaunchedEffect(key1 = Unit) {
@@ -41,6 +57,7 @@ fun MemoContentRoute(
 
     MemoContent(
         uiState = uiState,
+        focusRequester = focusRequester,
         onTextChangeMemo = viewModel::updateMemo,
     )
 }
@@ -48,6 +65,7 @@ fun MemoContentRoute(
 @Composable
 fun MemoContent(
     uiState: MemoState = MemoState(),
+    focusRequester: FocusRequester = remember { FocusRequester() },
     onTextChangeMemo: (String) -> Unit = {},
 ) {
     Column(
@@ -72,7 +90,7 @@ fun MemoContent(
             onTextChange = onTextChangeMemo,
             placeholder = stringResource(R.string.memo_content_placeholder),
             placeholderColor = Gray40,
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().focusRequester(focusRequester),
         )
         Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_xl))
     }

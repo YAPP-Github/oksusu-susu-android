@@ -35,4 +35,10 @@ class MoneyViewModel @Inject constructor() : BaseViewModel<MoneyState, MoneyEffe
             )
         }
     }
+
+    fun showKeyboardIfTextEmpty() {
+        if (currentState.money.isEmpty()) {
+            postSideEffect(MoneyEffect.ShowKeyboard)
+        }
+    }
 }

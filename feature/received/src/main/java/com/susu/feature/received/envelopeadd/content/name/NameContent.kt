@@ -12,9 +12,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -34,7 +33,9 @@ import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.feature.received.R
 import com.susu.feature.received.envelopeadd.content.component.FriendListItem
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.android.awaitFrame
 import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.launch
 
 @OptIn(FlowPreview::class)
 @Composable
@@ -46,12 +47,22 @@ fun NameContentRoute(
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
     val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
+    val scope = rememberCoroutineScope()
+
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
             is NameSideEffect.UpdateParentName -> updateParentName(sideEffect.name)
             is NameSideEffect.UpdateParentFriendId -> updateParentFriendId(sideEffect.friendId)
             NameSideEffect.FocusClear -> focusManager.clearFocus()
+            NameSideEffect.ShowKeyboard -> scope.launch {
+                awaitFrame()
+                focusRequester.requestFocus()
+            }
         }
+    }
+
+    LaunchedEffect(key1 = Unit) {
+        viewModel.showKeyboardIfTextEmpty()
     }
 
     LaunchedEffect(key1 = Unit) {

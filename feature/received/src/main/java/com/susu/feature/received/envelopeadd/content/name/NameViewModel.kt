@@ -53,4 +53,8 @@ class NameViewModel @Inject constructor(
                 }
             }
     }
+
+    fun showKeyboardIfTextEmpty() {
+        if (currentState.name.isEmpty()) postSideEffect(NameSideEffect.ShowKeyboard)
+    }
 }

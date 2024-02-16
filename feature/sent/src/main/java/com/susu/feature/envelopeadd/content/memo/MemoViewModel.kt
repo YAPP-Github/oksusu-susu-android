@@ -19,4 +19,10 @@ class MemoViewModel @Inject constructor() : BaseViewModel<MemoState, MemoSideEff
             copy(memo = memo ?: "")
         }
     }
+
+    fun showKeyboardIfTextEmpty() {
+        if (currentState.memo.isEmpty()) {
+            postSideEffect(MemoSideEffect.ShowKeyboard)
+        }
+    }
 }

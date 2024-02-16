@@ -13,4 +13,10 @@ class PhoneViewModel @Inject constructor() : BaseViewModel<PhoneState, PhoneSide
         postSideEffect(PhoneSideEffect.UpdateParentPhone(phone))
         copy(phone = phone ?: "")
     }
+
+    fun showKeyboardIfTextEmpty() {
+        if (currentState.phone.isEmpty()) {
+            postSideEffect(PhoneSideEffect.ShowKeyboard)
+        }
+    }
 }

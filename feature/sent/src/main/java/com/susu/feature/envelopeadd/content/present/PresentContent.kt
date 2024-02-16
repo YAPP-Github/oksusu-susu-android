@@ -10,7 +10,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -23,6 +27,8 @@ import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.ui.SnackbarToken
 import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.feature.sent.R
+import kotlinx.coroutines.android.awaitFrame
+import kotlinx.coroutines.launch
 
 @Composable
 fun PresentContentRoute(
@@ -32,7 +38,8 @@ fun PresentContentRoute(
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
     val context = LocalContext.current
-
+    val focusRequester = remember { FocusRequester() }
+    val scope = rememberCoroutineScope()
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
             is PresentSideEffect.UpdateParentPresent -> updateParentPresent(sideEffect.present)
@@ -41,7 +48,15 @@ fun PresentContentRoute(
                     message = context.getString(R.string.sent_snackbar_present_validation),
                 ),
             )
+            PresentSideEffect.ShowKeyboard -> scope.launch {
+                awaitFrame()
+                focusRequester.requestFocus()
+            }
         }
+    }
+
+    LaunchedEffect(key1 = Unit) {
+        viewModel.showKeyboardIfTextEmpty()
     }
 
     LaunchedEffect(key1 = Unit) {
@@ -50,6 +65,7 @@ fun PresentContentRoute(
 
     PresentContent(
         uiState = uiState,
+        focusRequester = focusRequester,
         onPresentTextChanged = viewModel::updatePresent,
     )
 }
@@ -57,6 +73,7 @@ fun PresentContentRoute(
 @Composable
 fun PresentContent(
     modifier: Modifier = Modifier,
+    focusRequester: FocusRequester = remember { FocusRequester() },
     padding: PaddingValues = PaddingValues(
         horizontal = SusuTheme.spacing.spacing_m,
         vertical = SusuTheme.spacing.spacing_xl,
@@ -83,7 +100,7 @@ fun PresentContent(
             onTextChange = onPresentTextChanged,
             placeholder = stringResource(id = R.string.sent_envelope_add_present_placeholder),
             placeholderColor = Gray40,
-            modifier = modifier.fillMaxWidth(),
+            modifier = modifier.fillMaxWidth().focusRequester(focusRequester),
             maxLines = 5,
         )
         Spacer(modifier = modifier.size(SusuTheme.spacing.spacing_xl))
