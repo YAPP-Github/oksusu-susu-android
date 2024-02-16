@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -35,7 +36,9 @@ import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.feature.envelopeadd.content.component.FriendListItem
 import com.susu.feature.sent.R
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.android.awaitFrame
 import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.launch
 
 @OptIn(FlowPreview::class)
 @Composable
@@ -49,6 +52,7 @@ fun NameContentRoute(
     val context = LocalContext.current
     val focusManager = LocalFocusManager.current
     val focusRequester = remember { FocusRequester() }
+    val scope = rememberCoroutineScope()
 
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
@@ -60,7 +64,16 @@ fun NameContentRoute(
                     message = context.getString(R.string.sent_snackbar_name_validation),
                 ),
             )
+
+            NameEffect.ShowKeyboard -> scope.launch {
+                awaitFrame()
+                focusRequester.requestFocus()
+            }
         }
+    }
+
+    LaunchedEffect(key1 = Unit) {
+        viewModel.showKeyboardIfTextEmpty()
     }
 
     LaunchedEffect(key1 = Unit) {

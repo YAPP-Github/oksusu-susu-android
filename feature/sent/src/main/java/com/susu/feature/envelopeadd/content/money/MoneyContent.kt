@@ -12,7 +12,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -29,6 +33,8 @@ import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.core.ui.extension.toMoneyFormat
 import com.susu.core.ui.moneyList
 import com.susu.feature.sent.R
+import kotlinx.coroutines.android.awaitFrame
+import kotlinx.coroutines.launch
 
 @Composable
 fun MoneyContentRoute(
@@ -39,13 +45,25 @@ fun MoneyContentRoute(
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
     val context = LocalContext.current
 
+    val focusRequester = remember { FocusRequester() }
+    val scope = rememberCoroutineScope()
+
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
             is MoneyEffect.UpdateParentMoney -> updateParentMoney(sideEffect.money)
             MoneyEffect.ShowNotValidSnackbar -> onShowSnackbar(
                 SnackbarToken(message = context.getString(R.string.sent_snackbar_money_validation)),
             )
+
+            MoneyEffect.ShowKeyboard -> scope.launch {
+                awaitFrame()
+                focusRequester.requestFocus()
+            }
         }
+    }
+
+    LaunchedEffect(key1 = Unit) {
+        viewModel.showKeyboardIfTextEmpty()
     }
 
     LaunchedEffect(key1 = Unit) {
@@ -54,6 +72,7 @@ fun MoneyContentRoute(
 
     MoneyContent(
         uiState = uiState,
+        focusRequester = focusRequester,
         onTextChangeMoney = viewModel::updateMoney,
         onClickMoneyButton = viewModel::addMoney,
     )
@@ -63,6 +82,7 @@ fun MoneyContentRoute(
 @Composable
 fun MoneyContent(
     uiState: MoneyState = MoneyState(),
+    focusRequester: FocusRequester = remember { FocusRequester() },
     padding: PaddingValues = PaddingValues(
         horizontal = SusuTheme.spacing.spacing_m,
         vertical = SusuTheme.spacing.spacing_xl,
@@ -85,6 +105,7 @@ fun MoneyContent(
                 .size(SusuTheme.spacing.spacing_m),
         )
         SusuPriceTextField(
+            modifier = Modifier.focusRequester(focusRequester),
             text = uiState.money,
             onTextChange = onTextChangeMoney,
             maxLines = 2,

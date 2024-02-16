@@ -1,8 +1,11 @@
 package com.susu.feature.envelopeadd.content.money
 
+import androidx.lifecycle.viewModelScope
 import com.susu.core.ui.MONEY_MAX_VALUE
 import com.susu.core.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -33,6 +36,12 @@ class MoneyViewModel @Inject constructor() : BaseViewModel<MoneyState, MoneyEffe
             copy(
                 money = addedMoney.toString(),
             )
+        }
+    }
+
+    fun showKeyboardIfTextEmpty() {
+        if (currentState.money.isEmpty()) {
+            postSideEffect(MoneyEffect.ShowKeyboard)
         }
     }
 }

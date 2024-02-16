@@ -1,6 +1,7 @@
 package com.susu.feature.envelopeadd.content.phone
 
 import com.susu.core.ui.base.BaseViewModel
+import com.susu.feature.envelopeadd.content.name.NameEffect
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -18,6 +19,12 @@ class PhoneViewModel @Inject constructor() : BaseViewModel<PhoneState, PhoneSide
         intent {
             postSideEffect(PhoneSideEffect.UpdateParentPhone(phone))
             copy(phone = phone ?: "")
+        }
+    }
+
+    fun showKeyboardIfTextEmpty() {
+        if (currentState.phone.isEmpty()) {
+            postSideEffect(PhoneSideEffect.ShowKeyboard)
         }
     }
 }

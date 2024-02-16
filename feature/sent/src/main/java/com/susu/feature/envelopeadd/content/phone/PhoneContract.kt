@@ -2,6 +2,7 @@ package com.susu.feature.envelopeadd.content.phone
 
 import com.susu.core.ui.base.SideEffect
 import com.susu.core.ui.base.UiState
+import com.susu.feature.envelopeadd.content.name.NameEffect
 
 data class PhoneState(
     val phone: String = "",
@@ -11,4 +12,5 @@ data class PhoneState(
 sealed interface PhoneSideEffect : SideEffect {
     data class UpdateParentPhone(val phone: String?) : PhoneSideEffect
     data object ShowNotValidSnackbar : PhoneSideEffect
+    data object ShowKeyboard: PhoneSideEffect
 }
