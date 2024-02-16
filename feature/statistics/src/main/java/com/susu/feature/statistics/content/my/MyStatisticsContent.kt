@@ -26,6 +26,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -36,6 +37,7 @@ import com.susu.core.designsystem.theme.Gray10
 import com.susu.core.designsystem.theme.Gray100
 import com.susu.core.designsystem.theme.Gray40
 import com.susu.core.designsystem.theme.SusuTheme
+import com.susu.core.ui.DialogToken
 import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.feature.statistics.R
 import com.susu.feature.statistics.component.RecentSpentGraph
@@ -49,8 +51,10 @@ fun MyStatisticsRoute(
     modifier: Modifier,
     viewModel: MyStatisticsViewModel = hiltViewModel(),
     handleException: (Throwable, () -> Unit) -> Unit,
+    onShowDialog: (DialogToken) -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val context = LocalContext.current
 
     val refreshState = rememberPullToRefreshState(
         positionalThreshold = 100.dp,
@@ -59,6 +63,17 @@ fun MyStatisticsRoute(
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
             is MyStatisticsEffect.HandleException -> handleException(sideEffect.throwable, sideEffect.retry)
+            MyStatisticsEffect.ShowDataNotExistDialog -> onShowDialog(
+                DialogToken(
+                    title = context.getString(R.string.statistics_my_dialog_title),
+                    text = context.getString(R.string.statistics_my_dialog_description),
+                    confirmText = context.getString(R.string.statistics_my_dialog_confirm),
+                    dismissText = context.getString(com.susu.core.ui.R.string.word_close),
+                    onConfirmRequest = {
+                        // TODO: 동작 확인 후 추가
+                    },
+                ),
+            )
         }
     }
 
@@ -77,7 +92,6 @@ fun MyStatisticsRoute(
     MyStatisticsContent(
         uiState = uiState,
         refreshState = refreshState,
-        isBlind = false, //  TODO: 수정
         modifier = modifier,
     )
 }
@@ -88,7 +102,6 @@ fun MyStatisticsContent(
     modifier: Modifier = Modifier,
     uiState: MyStatisticsState,
     refreshState: PullToRefreshState = rememberPullToRefreshState(),
-    isBlind: Boolean,
 ) {
     Box(
         modifier = modifier
@@ -102,7 +115,7 @@ fun MyStatisticsContent(
             verticalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxs),
         ) {
             RecentSpentGraph(
-                isActive = !isBlind,
+                isActive = !uiState.isBlind,
                 spentData = uiState.statistics.recentSpent.toPersistentList(),
                 maximumAmount = uiState.statistics.recentMaximumSpent,
                 totalAmount = uiState.statistics.recentTotalSpent,
@@ -116,7 +129,7 @@ fun MyStatisticsContent(
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 Text(text = stringResource(R.string.statistics_most_spent_month), style = SusuTheme.typography.title_xs, color = Gray100)
-                if (isBlind) {
+                if (uiState.isBlind) {
                     Text(
                         text = stringResource(R.string.word_month_format, stringResource(id = R.string.word_unknown)),
                         style = SusuTheme.typography.title_xs,
@@ -138,7 +151,7 @@ fun MyStatisticsContent(
                     title = stringResource(R.string.statistics_most_susu_relationship),
                     content = uiState.statistics.mostRelationship.title,
                     count = uiState.statistics.mostRelationship.value,
-                    isActive = !isBlind,
+                    isActive = !uiState.isBlind,
                 )
                 Spacer(modifier = Modifier.width(SusuTheme.spacing.spacing_xxs))
                 StatisticsVerticalItem(
@@ -146,20 +159,20 @@ fun MyStatisticsContent(
                     title = stringResource(R.string.statistics_most_susu_event),
                     content = uiState.statistics.mostCategory.title,
                     count = uiState.statistics.mostCategory.value,
-                    isActive = !isBlind,
+                    isActive = !uiState.isBlind,
                 )
             }
             StatisticsHorizontalItem(
                 title = stringResource(R.string.statistics_most_received_money),
                 name = uiState.statistics.highestAmountReceived.title,
                 money = uiState.statistics.highestAmountReceived.value,
-                isActive = !isBlind,
+                isActive = !uiState.isBlind,
             )
             StatisticsHorizontalItem(
                 title = stringResource(R.string.statistics_most_sent_money),
                 name = uiState.statistics.highestAmountSent.title,
                 money = uiState.statistics.highestAmountSent.value,
-                isActive = !isBlind,
+                isActive = !uiState.isBlind,
             )
             Spacer(modifier = Modifier.height(SusuTheme.spacing.spacing_xxxl))
         }

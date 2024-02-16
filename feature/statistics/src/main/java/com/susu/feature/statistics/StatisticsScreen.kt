@@ -87,6 +87,7 @@ fun StatisticsScreen(
                     StatisticsTab.MY -> MyStatisticsRoute(
                         modifier = Modifier.fillMaxSize(),
                         handleException = handleException,
+                        onShowDialog = onShowDialog,
                     )
 
                     StatisticsTab.AVERAGE -> SusuStatisticsRoute(

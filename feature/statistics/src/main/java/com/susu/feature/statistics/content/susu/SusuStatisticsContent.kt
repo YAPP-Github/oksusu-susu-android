@@ -70,10 +70,10 @@ fun SusuStatisticsRoute(
             is SusuStatisticsEffect.HandleException -> handleException(sideEffect.throwable, sideEffect.retry)
             SusuStatisticsEffect.ShowAdditionalInfoDialog -> onShowDialog(
                 DialogToken(
-                    title = context.getString(R.string.statistics_dialog_title),
-                    text = context.getString(R.string.statistics_dialog_description),
+                    title = context.getString(R.string.statistics_susu_dialog_title),
+                    text = context.getString(R.string.statistics_susu_dialog_description),
                     dismissText = context.getString(com.susu.core.ui.R.string.word_close),
-                    confirmText = context.getString(R.string.statistics_dialog_confirm),
+                    confirmText = context.getString(R.string.statistics_susu_dialog_confirm),
                     onConfirmRequest = navigateToMyInfo,
                 ),
             )
