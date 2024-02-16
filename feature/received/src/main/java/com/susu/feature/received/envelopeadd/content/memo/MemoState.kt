@@ -2,7 +2,6 @@ package com.susu.feature.received.envelopeadd.content.memo
 
 import com.susu.core.ui.base.SideEffect
 import com.susu.core.ui.base.UiState
-import com.susu.feature.received.envelopeadd.content.present.PresentSideEffect
 
 data class MemoState(
     val memo: String = "",
@@ -10,5 +9,5 @@ data class MemoState(
 
 sealed interface MemoSideEffect : SideEffect {
     data class UpdateParentMemo(val memo: String?) : MemoSideEffect
-    data object ShowKeyboard: MemoSideEffect
+    data object ShowKeyboard : MemoSideEffect
 }

@@ -28,7 +28,6 @@ import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.ui.SnackbarToken
 import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.core.ui.util.AnnotatedText
-import com.susu.feature.envelopeadd.content.name.NameEffect
 import com.susu.feature.sent.R
 import kotlinx.coroutines.android.awaitFrame
 import kotlinx.coroutines.launch

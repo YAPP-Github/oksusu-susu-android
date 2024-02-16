@@ -1,7 +1,6 @@
 package com.susu.feature.envelopeadd.content.phone
 
 import com.susu.core.ui.base.BaseViewModel
-import com.susu.feature.envelopeadd.content.name.NameEffect
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

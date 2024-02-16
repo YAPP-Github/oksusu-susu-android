@@ -1,11 +1,7 @@
 package com.susu.feature.received.envelopeadd.content.memo
 
-import androidx.lifecycle.viewModelScope
 import com.susu.core.ui.base.BaseViewModel
-import com.susu.feature.received.envelopeadd.content.present.PresentSideEffect
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel

@@ -10,5 +10,5 @@ data class MoneyState(
 sealed interface MoneyEffect : SideEffect {
     data class UpdateParentMoney(val money: Long) : MoneyEffect
     data object ShowNotValidSnackbar : MoneyEffect
-    data object ShowKeyboard: MoneyEffect
+    data object ShowKeyboard : MoneyEffect
 }

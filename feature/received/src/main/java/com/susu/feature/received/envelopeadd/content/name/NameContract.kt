@@ -3,7 +3,6 @@ package com.susu.feature.received.envelopeadd.content.name
 import com.susu.core.model.FriendSearch
 import com.susu.core.ui.base.SideEffect
 import com.susu.core.ui.base.UiState
-import com.susu.feature.received.envelopeadd.content.money.MoneySideEffect
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
 
@@ -17,5 +16,5 @@ sealed interface NameSideEffect : SideEffect {
     data class UpdateParentName(val name: String) : NameSideEffect
     data class UpdateParentFriendId(val friendId: Long?) : NameSideEffect
     data object FocusClear : NameSideEffect
-    data object ShowKeyboard: NameSideEffect
+    data object ShowKeyboard : NameSideEffect
 }

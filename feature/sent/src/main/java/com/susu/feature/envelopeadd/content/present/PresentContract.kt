@@ -10,5 +10,5 @@ data class PresentState(
 sealed interface PresentSideEffect : SideEffect {
     data class UpdateParentPresent(val present: String?) : PresentSideEffect
     data object ShowNotValidSnackbar : PresentSideEffect
-    data object ShowKeyboard: PresentSideEffect
+    data object ShowKeyboard : PresentSideEffect
 }
