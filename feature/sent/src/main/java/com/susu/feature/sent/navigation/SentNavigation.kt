@@ -58,7 +58,7 @@ fun NavGraphBuilder.sentNavGraph(
     navigateSentEnvelope: (Long) -> Unit,
     navigateSentEnvelopeDetail: (Long) -> Unit,
     navigateSentEnvelopeEdit: (EnvelopeDetail) -> Unit,
-    navigateSentEnvelopeAdd: () -> Unit,
+    navigateSentEnvelopeAdd: (Friend?) -> Unit,
     navigateSentEnvelopeSearch: () -> Unit,
     navigateEnvelopeFilter: (String) -> Unit,
     onShowSnackbar: (SnackbarToken) -> Unit,
@@ -82,7 +82,7 @@ fun NavGraphBuilder.sentNavGraph(
             editedFriendId = editedFriendId,
             refresh = refresh,
             navigateSentEnvelope = navigateSentEnvelope,
-            navigateSentEnvelopeAdd = navigateSentEnvelopeAdd,
+            navigateSentEnvelopeAdd = { navigateSentEnvelopeAdd(null) },
             navigateSentEnvelopeSearch = navigateSentEnvelopeSearch,
             navigateEnvelopeFilter = navigateEnvelopeFilter,
         )
@@ -103,6 +103,7 @@ fun NavGraphBuilder.sentNavGraph(
             popBackStackWithEditedFriendId = popBackStackWithEditedFriendId,
             navigateSentEnvelopeDetail = navigateSentEnvelopeDetail,
             popBackStackWithDeleteFriendId = popBackStackWithDeleteFriendId,
+            navigateSentEnvelopeAdd = navigateSentEnvelopeAdd,
         )
     }
 

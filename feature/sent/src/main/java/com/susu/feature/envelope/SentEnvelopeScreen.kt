@@ -39,6 +39,7 @@ import com.susu.core.designsystem.component.appbar.icon.BackIcon
 import com.susu.core.designsystem.component.badge.BadgeColor
 import com.susu.core.designsystem.component.badge.BadgeStyle
 import com.susu.core.designsystem.component.badge.SusuBadge
+import com.susu.core.designsystem.component.button.SusuFloatingButton
 import com.susu.core.designsystem.theme.Gray10
 import com.susu.core.designsystem.theme.Gray100
 import com.susu.core.designsystem.theme.Gray20
@@ -46,6 +47,7 @@ import com.susu.core.designsystem.theme.Gray60
 import com.susu.core.designsystem.theme.Gray90
 import com.susu.core.designsystem.theme.Orange20
 import com.susu.core.designsystem.theme.SusuTheme
+import com.susu.core.model.Friend
 import com.susu.core.ui.extension.OnBottomReached
 import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.core.ui.extension.toMoneyFormat
@@ -63,6 +65,7 @@ fun SentEnvelopeRoute(
     popBackStackWithEditedFriendId: (Long) -> Unit,
     editedFriendId: Long?,
     navigateSentEnvelopeDetail: (Long) -> Unit,
+    navigateSentEnvelopeAdd: (Friend) -> Unit,
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
     val historyListState = rememberLazyListState()
@@ -79,6 +82,7 @@ fun SentEnvelopeRoute(
 
             is SentEnvelopeSideEffect.NavigateEnvelopeDetail -> navigateSentEnvelopeDetail(sideEffect.id)
             is SentEnvelopeSideEffect.PopBackStackWithDeleteFriendId -> popBackStackWithDeleteFriendId(sideEffect.id)
+            is SentEnvelopeSideEffect.NavigateEnvelopeAdd -> navigateSentEnvelopeAdd(sideEffect.friend)
         }
     }
 
@@ -107,6 +111,7 @@ fun SentEnvelopeRoute(
         refreshState = refreshState,
         onClickBackIcon = viewModel::popBackStack,
         onClickEnvelopeDetail = viewModel::navigateSentEnvelopeDetail,
+        onClickAddEnvelope = viewModel::navigateSentEnvelopeAdd,
     )
 }
 
@@ -119,6 +124,7 @@ fun SentEnvelopeScreen(
     historyListState: LazyListState = rememberLazyListState(),
     onClickBackIcon: () -> Unit = {},
     onClickEnvelopeDetail: (Long) -> Unit = {},
+    onClickAddEnvelope: () -> Unit = {},
 ) {
     val sent = uiState.envelopeInfo.sentAmounts
     val received = uiState.envelopeInfo.receivedAmounts
@@ -233,6 +239,13 @@ fun SentEnvelopeScreen(
             modifier = Modifier.align(Alignment.TopCenter),
             state = refreshState,
             containerColor = Gray10,
+        )
+
+        SusuFloatingButton(
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(SusuTheme.spacing.spacing_l),
+            onClick = onClickAddEnvelope,
         )
     }
 }
