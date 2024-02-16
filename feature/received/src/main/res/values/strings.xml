@@ -72,4 +72,6 @@
 
     <string name="ledger_snackbar_category_validation">경조사는 10글자까지만 입력 가능해요</string>
     <string name="ledger_snackbar_category_name_validation">경조사명은 10글자까지만 입력 가능해요</string>
+
+    <string name="money_content_snackbar_validation">금액은 20억원까지만 입력 가능해요</string>
 </resources>

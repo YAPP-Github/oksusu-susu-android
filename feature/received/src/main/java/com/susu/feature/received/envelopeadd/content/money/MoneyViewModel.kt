@@ -8,9 +8,16 @@ import javax.inject.Inject
 class MoneyViewModel @Inject constructor() : BaseViewModel<MoneyState, MoneySideEffect>(
     MoneyState(),
 ) {
-    fun updateMoney(money: String) = intent {
-        postSideEffect(MoneySideEffect.UpdateParentMoney(money.toLongOrNull() ?: 0))
-        copy(money = money)
+    fun updateMoney(money: String) {
+        if (money.length > 10) {
+            postSideEffect(MoneySideEffect.ShowNotValidSnackbar)
+            return
+        }
+
+        intent {
+            postSideEffect(MoneySideEffect.UpdateParentMoney(money.toLongOrNull() ?: 0))
+            copy(money = money)
+        }
     }
 
     fun addMoney(money: Int) = intent {

@@ -86,6 +86,7 @@ fun ReceivedEnvelopeAddRoute(
         friendName = friendName,
         updateParentPhoneNumber = viewModel::updatePhoneNumber,
         updateParentMemo = viewModel::updateMemo,
+        onShowSnackbar = onShowSnackbar,
     )
 }
 
@@ -107,6 +108,7 @@ fun ReceivedEnvelopeAddScreen(
     friendName: String = "",
     updateParentPhoneNumber: (String?) -> Unit = {},
     updateParentMemo: (String?) -> Unit = {},
+    onShowSnackbar: (SnackbarToken) -> Unit = {},
 ) {
     Column(
         modifier = Modifier
@@ -135,6 +137,7 @@ fun ReceivedEnvelopeAddScreen(
             when (targetState) {
                 EnvelopeAddStep.MONEY -> MoneyContentRoute(
                     updateParentMoney = updateParentMoney,
+                    onShowSnackbar = onShowSnackbar,
                 )
 
                 EnvelopeAddStep.NAME -> NameContentRoute(
