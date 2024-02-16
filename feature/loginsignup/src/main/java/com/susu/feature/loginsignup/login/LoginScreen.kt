@@ -46,6 +46,7 @@ import com.susu.core.designsystem.theme.Orange60
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.ui.SnackbarToken
 import com.susu.core.ui.SnsProviders
+import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.core.ui.extension.susuClickable
 import com.susu.feature.loginsignup.R
 import com.susu.feature.loginsignup.social.KakaoLoginHelper
@@ -65,14 +66,16 @@ fun LoginRoute(
         }
     }
 
-    LaunchedEffect(key1 = viewModel.sideEffect) {
-        viewModel.sideEffect.collect { sideEffect ->
-            when (sideEffect) {
-                is LoginEffect.ShowSnackBar -> onShowSnackBar(SnackbarToken(message = sideEffect.message))
-                LoginEffect.NavigateToReceived -> navigateToReceived()
-                LoginEffect.NavigateToSignUp -> navigateToSignUp()
-            }
+    viewModel.sideEffect.collectWithLifecycle { sideEffect ->
+        when (sideEffect) {
+            is LoginEffect.ShowSnackBar -> onShowSnackBar(SnackbarToken(message = sideEffect.message))
+            LoginEffect.NavigateToReceived -> navigateToReceived()
+            LoginEffect.NavigateToSignUp -> navigateToSignUp()
         }
+    }
+
+    LaunchedEffect(key1 = Unit) {
+        viewModel.initData()
     }
 
     LoginScreen(
@@ -131,25 +134,48 @@ fun LoginScreen(
                 Spacer(modifier = Modifier.height(SusuTheme.spacing.spacing_xxxxs))
                 Text(text = stringResource(R.string.login_sub_header), style = SusuTheme.typography.title_m, color = Gray50)
                 Spacer(modifier = Modifier.height(64.dp))
-                LoginArchGraph(modifier = Modifier.size(200.dp))
+
+                LoginArchGraph(
+                    modifier = Modifier.size(200.dp),
+                    fillUntil = uiState.onboardVote?.let { it.mostPercentage.toFloat() / 100f } ?: 0.85f,
+                )
+
                 Spacer(modifier = Modifier.height(SusuTheme.spacing.spacing_xxxxl))
+
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxxxs),
                 ) {
                     Text(text = stringResource(R.string.login_statistics_1), style = SusuTheme.typography.title_s)
-                    LoginBlankText(text = "87%", state = transitionState) // TODO: 임시 하드코딩
+                    LoginBlankText(
+                        text = stringResource(
+                            id = R.string.login_percentage_format,
+                            uiState.onboardVote?.mostPercentage?.toString()
+                                ?: stringResource(id = R.string.login_statistics_unknown_percentage),
+                        ),
+                        state = transitionState,
+                    )
                     Text(text = stringResource(R.string.login_statistics_2), style = SusuTheme.typography.title_s)
                 }
+
                 Spacer(modifier = Modifier.height(SusuTheme.spacing.spacing_xxs))
+
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxxxs),
                 ) {
-                    LoginBlankText(text = "10만원", state = transitionState) // TODO: 임시 하드코딩
+                    LoginBlankText(
+                        text = uiState.onboardVote?.mostContent
+                            ?: stringResource(id = R.string.login_statistics_unknown_content),
+                        state = transitionState,
+                    )
                     Text(text = stringResource(R.string.login_statistics_3), style = SusuTheme.typography.title_s)
                 }
+
                 Spacer(modifier = Modifier.height(64.dp))
+
                 KakaoLoginButton(onClick = onLoginClick)
-                Spacer(modifier = Modifier.height(24.dp))
+
+                Spacer(modifier = Modifier.weight(1f))
+
                 Image(
                     modifier = Modifier.align(Alignment.CenterHorizontally),
                     painter = painterResource(id = com.susu.core.designsystem.R.drawable.ic_susu_logo_weak),

@@ -6,6 +6,7 @@ import com.susu.data.remote.api.CategoryService
 import com.susu.data.remote.api.EnvelopesService
 import com.susu.data.remote.api.FriendService
 import com.susu.data.remote.api.LedgerService
+import com.susu.data.remote.api.OnboardService
 import com.susu.data.remote.api.ReportService
 import com.susu.data.remote.api.SignUpService
 import com.susu.data.remote.api.StatisticsService
@@ -100,5 +101,11 @@ object ApiServiceModule {
     @Provides
     fun providesBlockService(retrofit: Retrofit): BlockService {
         return retrofit.create(BlockService::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun providesOnboardService(retrofit: Retrofit): OnboardService {
+        return retrofit.create(OnboardService::class.java)
     }
 }

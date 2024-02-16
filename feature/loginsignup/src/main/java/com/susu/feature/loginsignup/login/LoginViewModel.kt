@@ -5,6 +5,7 @@ import com.susu.core.model.exception.UnknownException
 import com.susu.core.ui.SnsProviders
 import com.susu.core.ui.base.BaseViewModel
 import com.susu.domain.usecase.loginsignup.CheckCanRegisterUseCase
+import com.susu.domain.usecase.loginsignup.GetOnboardVoteUseCase
 import com.susu.domain.usecase.loginsignup.LoginUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -14,7 +15,16 @@ import javax.inject.Inject
 class LoginViewModel @Inject constructor(
     private val checkCanRegisterUseCase: CheckCanRegisterUseCase,
     private val loginUseCase: LoginUseCase,
+    private val getOnboardVoteUseCase: GetOnboardVoteUseCase,
 ) : BaseViewModel<LoginState, LoginEffect>(LoginState()) {
+
+    fun initData() = viewModelScope.launch {
+        getOnboardVoteUseCase().onSuccess {
+            intent { copy(onboardVote = it) }
+        }.onFailure {
+            intent { copy(onboardVote = null) }
+        }
+    }
 
     fun login(provider: SnsProviders, oauthAccessToken: String) {
         viewModelScope.launch {
