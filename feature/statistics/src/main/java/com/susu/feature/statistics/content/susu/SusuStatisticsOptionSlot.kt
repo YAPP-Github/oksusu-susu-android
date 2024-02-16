@@ -36,6 +36,7 @@ fun SusuStatisticsOptionSlot(
     category: String = "",
     money: Int = 0,
     title: String = "",
+    isBlind: Boolean = false,
     onAgeClick: () -> Unit = {},
     onRelationshipClick: () -> Unit = {},
     onCategoryClick: () -> Unit = {},
@@ -80,12 +81,22 @@ fun SusuStatisticsOptionSlot(
             Row(
                 verticalAlignment = Alignment.Bottom,
             ) {
-                AnimatedCounterText(
-                    number = money,
-                    style = SusuTheme.typography.title_s,
-                    color = Orange60,
-                    postfix = stringResource(id = com.susu.core.designsystem.R.string.money_unit),
-                )
+                if (isBlind) {
+                    Text(
+                        text = stringResource(id = R.string.word_unknown) +
+                            stringResource(id = com.susu.core.designsystem.R.string.money_unit),
+                        style = SusuTheme.typography.title_s,
+                        color = Orange60,
+                    )
+                } else {
+                    AnimatedCounterText(
+                        number = money,
+                        style = SusuTheme.typography.title_s,
+                        color = Orange60,
+                        postfix = stringResource(id = com.susu.core.designsystem.R.string.money_unit),
+                    )
+                }
+
                 Spacer(modifier = Modifier.width(SusuTheme.spacing.spacing_xxs))
                 Text(
                     text = stringResource(R.string.word_statistics_send),

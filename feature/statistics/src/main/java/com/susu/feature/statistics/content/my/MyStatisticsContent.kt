@@ -46,7 +46,6 @@ import kotlinx.collections.immutable.toPersistentList
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyStatisticsRoute(
-    isBlind: Boolean,
     modifier: Modifier,
     viewModel: MyStatisticsViewModel = hiltViewModel(),
     handleException: (Throwable, () -> Unit) -> Unit,
@@ -78,7 +77,7 @@ fun MyStatisticsRoute(
     MyStatisticsContent(
         uiState = uiState,
         refreshState = refreshState,
-        isBlind = isBlind,
+        isBlind = false, //  TODO: 수정
         modifier = modifier,
     )
 }

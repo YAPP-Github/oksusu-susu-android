@@ -7,6 +7,7 @@ import com.susu.core.model.exception.UnknownException
 import com.susu.core.ui.base.BaseViewModel
 import com.susu.domain.usecase.categoryconfig.GetCategoryConfigUseCase
 import com.susu.domain.usecase.envelope.GetRelationShipConfigListUseCase
+import com.susu.domain.usecase.statistics.CheckAdditionalUserInfoUseCase
 import com.susu.domain.usecase.statistics.GetSusuStatisticsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toPersistentList
@@ -15,10 +16,27 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SusuStatisticsViewModel @Inject constructor(
+    private val checkAdditionalUserInfoUseCase: CheckAdditionalUserInfoUseCase,
     private val getCategoryConfigUseCase: GetCategoryConfigUseCase,
     private val getRelationShipConfigListUseCase: GetRelationShipConfigListUseCase,
     private val getSusuStatisticsUseCase: GetSusuStatisticsUseCase,
 ) : BaseViewModel<SusuStatisticsState, SusuStatisticsEffect>(SusuStatisticsState()) {
+
+    fun checkAdditionalInfo() {
+        viewModelScope.launch {
+            intent { copy(isLoading = true) }
+            checkAdditionalUserInfoUseCase()
+                .onSuccess {
+                    if (!it) {
+                        postSideEffect(SusuStatisticsEffect.ShowAdditionalInfoDialog)
+                    }
+                    intent { copy(isBlind = !it) }
+                }.onFailure {
+                    postSideEffect(SusuStatisticsEffect.HandleException(it, ::checkAdditionalInfo))
+                }
+            intent { copy(isLoading = false) }
+        }
+    }
 
     fun getStatisticsOption() {
         viewModelScope.launch {
@@ -48,8 +66,9 @@ class SusuStatisticsViewModel @Inject constructor(
     }
 
     fun getSusuStatistics(onFinish: () -> Unit = {}) {
-        if (currentState.relationship !in currentState.relationshipConfig &&
-            currentState.category !in currentState.categoryConfig
+        if ((currentState.relationship !in currentState.relationshipConfig &&
+                currentState.category !in currentState.categoryConfig) ||
+            currentState.isBlind
         ) {
             return
         }
