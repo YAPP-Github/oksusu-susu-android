@@ -143,6 +143,7 @@ fun ReceivedEnvelopeAddScreen(
                 EnvelopeAddStep.NAME -> NameContentRoute(
                     updateParentName = updateParentName,
                     updateParentFriendId = updateParentFriendId,
+                    onShowSnackbar = onShowSnackbar,
                 )
                 EnvelopeAddStep.RELATIONSHIP -> RelationShipContentRoute(
                     updateParentSelectedRelation = updateParentSelectedRelationShip,

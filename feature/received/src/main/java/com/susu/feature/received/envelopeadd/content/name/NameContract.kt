@@ -17,4 +17,5 @@ sealed interface NameSideEffect : SideEffect {
     data class UpdateParentFriendId(val friendId: Long?) : NameSideEffect
     data object FocusClear : NameSideEffect
     data object ShowKeyboard : NameSideEffect
+    data object ShowNotValidSnackbar : NameSideEffect
 }
