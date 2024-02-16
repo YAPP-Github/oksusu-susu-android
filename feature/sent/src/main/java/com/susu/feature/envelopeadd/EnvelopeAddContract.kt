@@ -9,11 +9,16 @@ sealed interface EnvelopeAddEffect : SideEffect {
     data class HandleException(val throwable: Throwable, val retry: () -> Unit) : EnvelopeAddEffect
 }
 
+/**
+ * @param fromEnvelope 보내요 봉투 화면에서 추가 화면으로 진입할 시 true. MORE STEP에서 전화번호를 감추기 위함.
+ * */
 data class EnvelopeAddState(
     val isLoading: Boolean = false,
     val buttonEnabled: Boolean = false,
     val currentStep: EnvelopeAddStep = EnvelopeAddStep.MONEY,
     val lastPage: Boolean = false,
+    val friendName: String = "",
+    val fromEnvelope: Boolean = false,
 ) : UiState {
     val buttonResId = if (lastPage) {
         com.susu.core.ui.R.string.word_done

@@ -8,6 +8,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.susu.core.model.EnvelopeDetail
+import com.susu.core.model.Friend
 import com.susu.core.ui.DialogToken
 import com.susu.core.ui.SnackbarToken
 import com.susu.core.ui.extension.encodeToUri
@@ -36,8 +37,8 @@ fun NavController.navigateSentEnvelopeEdit(envelopeDetail: EnvelopeDetail) {
     navigate(SentRoute.sentEnvelopeEditRoute(Json.encodeToUri(envelopeDetail)))
 }
 
-fun NavController.navigateSentEnvelopeAdd() {
-    navigate(SentRoute.sentEnvelopeAddRoute)
+fun NavController.navigateSentEnvelopeAdd(friend: Friend?) {
+    navigate(SentRoute.sentEnvelopeAddRoute(Json.encodeToUri(friend)))
 }
 
 fun NavController.navigateSentEnvelopeSearch() {
@@ -57,7 +58,7 @@ fun NavGraphBuilder.sentNavGraph(
     navigateSentEnvelope: (Long) -> Unit,
     navigateSentEnvelopeDetail: (Long) -> Unit,
     navigateSentEnvelopeEdit: (EnvelopeDetail) -> Unit,
-    navigateSentEnvelopeAdd: () -> Unit,
+    navigateSentEnvelopeAdd: (Friend?) -> Unit,
     navigateSentEnvelopeSearch: () -> Unit,
     navigateEnvelopeFilter: (String) -> Unit,
     onShowSnackbar: (SnackbarToken) -> Unit,
@@ -81,7 +82,7 @@ fun NavGraphBuilder.sentNavGraph(
             editedFriendId = editedFriendId,
             refresh = refresh,
             navigateSentEnvelope = navigateSentEnvelope,
-            navigateSentEnvelopeAdd = navigateSentEnvelopeAdd,
+            navigateSentEnvelopeAdd = { navigateSentEnvelopeAdd(null) },
             navigateSentEnvelopeSearch = navigateSentEnvelopeSearch,
             navigateEnvelopeFilter = navigateEnvelopeFilter,
         )
@@ -102,6 +103,7 @@ fun NavGraphBuilder.sentNavGraph(
             popBackStackWithEditedFriendId = popBackStackWithEditedFriendId,
             navigateSentEnvelopeDetail = navigateSentEnvelopeDetail,
             popBackStackWithDeleteFriendId = popBackStackWithDeleteFriendId,
+            navigateSentEnvelopeAdd = navigateSentEnvelopeAdd,
         )
     }
 
@@ -134,7 +136,7 @@ fun NavGraphBuilder.sentNavGraph(
         )
     }
 
-    composable(route = SentRoute.sentEnvelopeAddRoute) {
+    composable(route = SentRoute.sentEnvelopeAddRoute("{${SentRoute.FRIEND_ARGUMENT_NAME}}")) {
         SentEnvelopeAddRoute(
             popBackStack = popBackStack,
             popBackStackWithRefresh = popBackStackWithRefresh,
@@ -163,8 +165,10 @@ fun NavGraphBuilder.sentNavGraph(
 
 object SentRoute {
     const val route = "sent"
-    const val sentEnvelopeAddRoute = "sent-envelope-add"
     const val SENT_REFRESH_ARGUMENT_NAME = "sent-refresh"
+    fun sentEnvelopeAddRoute(friend: String) = "sent-envelope-add/$friend"
+    const val FRIEND_ARGUMENT_NAME = "sent-friend"
+
     fun sentEnvelopeRoute(id: String) = "sent-envelope/$id"
     const val FRIEND_ID_ARGUMENT_NAME = "sent-envelope-id"
     const val EDITED_FRIEND_ID_ARGUMENT_NAME = "edited-friend-id"

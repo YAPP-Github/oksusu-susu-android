@@ -1,6 +1,7 @@
 package com.susu.feature.envelope
 
 import com.susu.core.model.EnvelopeSearch
+import com.susu.core.model.Friend
 import com.susu.core.model.FriendStatistics
 import com.susu.core.ui.base.SideEffect
 import com.susu.core.ui.base.UiState
@@ -15,6 +16,7 @@ data class SentEnvelopeState(
 
 sealed interface SentEnvelopeSideEffect : SideEffect {
     data class NavigateEnvelopeDetail(val id: Long) : SentEnvelopeSideEffect
+    data class NavigateEnvelopeAdd(val friend: Friend) : SentEnvelopeSideEffect
     data object PopBackStack : SentEnvelopeSideEffect
     data class PopBackStackWithDeleteFriendId(val id: Long) : SentEnvelopeSideEffect
 }

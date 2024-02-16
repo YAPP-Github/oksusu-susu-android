@@ -11,6 +11,7 @@ import androidx.navigation.navOptions
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.model.Envelope
 import com.susu.core.model.EnvelopeDetail
+import com.susu.core.model.Friend
 import com.susu.core.model.Ledger
 import com.susu.core.model.Vote
 import com.susu.feature.community.navigation.CommunityRoute
@@ -123,8 +124,8 @@ internal class MainNavigator(
         navController.navigateSentEnvelopeEdit(envelopeDetail)
     }
 
-    fun navigateSentEnvelopeAdd() {
-        navController.navigateSentEnvelopeAdd()
+    fun navigateSentEnvelopeAdd(friend: Friend? = null) {
+        navController.navigateSentEnvelopeAdd(friend)
     }
 
     fun navigateSentEnvelopeSearch() {
