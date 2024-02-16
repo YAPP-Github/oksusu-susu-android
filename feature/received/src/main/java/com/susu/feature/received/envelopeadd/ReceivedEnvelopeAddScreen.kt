@@ -172,6 +172,7 @@ fun ReceivedEnvelopeAddScreen(
                 )
                 EnvelopeAddStep.MEMO -> MemoContentRoute(
                     updateParentMemo = updateParentMemo,
+                    onShowSnackbar = onShowSnackbar,
                 )
             }
         }
