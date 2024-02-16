@@ -137,7 +137,7 @@ fun LoginScreen(
 
                 LoginArchGraph(
                     modifier = Modifier.size(200.dp),
-                    fillUntil = uiState.onboardVote?.let { it.mostPercentage.toFloat() / 100f } ?: 0f,
+                    fillUntil = uiState.onboardVote?.let { it.mostPercentage.toFloat() / 100f } ?: 0.85f,
                 )
 
                 Spacer(modifier = Modifier.height(SusuTheme.spacing.spacing_xxxxl))
