@@ -71,4 +71,5 @@
     <string name="ledger_edit_screen_add_start_date">시작일만 지정</string>
 
     <string name="ledger_snackbar_category_validation">경조사는 10글자까지만 입력 가능해요</string>
+    <string name="ledger_snackbar_category_name_validation">경조사명은 10글자까지만 입력 가능해요</string>
 </resources>

@@ -131,6 +131,7 @@ fun LedgerAddScreen(
 
                 LedgerAddStep.NAME -> NameContentRoute(
                     updateParentName = updateParentName,
+                    onShowSnackbar = onShowSnackbar,
                 )
 
                 LedgerAddStep.DATE -> DateContentRoute(
