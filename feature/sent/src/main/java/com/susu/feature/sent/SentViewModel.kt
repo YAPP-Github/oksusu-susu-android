@@ -28,6 +28,8 @@ class SentViewModel @Inject constructor(
     private var filter: EnvelopeFilterArgument = EnvelopeFilterArgument()
     private var filterUri: String? = null
 
+    fun logSearchIconClickEvent() = postSideEffect(SentEffect.LogSearchIconClickEvent)
+
     fun getEnvelopesList(refresh: Boolean?, onFinish: () -> Unit = {}) = viewModelScope.launch {
         mutex.withLock {
             val currentList = if (refresh == true) {

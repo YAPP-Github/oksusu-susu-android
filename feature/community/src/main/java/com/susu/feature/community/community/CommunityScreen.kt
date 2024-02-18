@@ -30,6 +30,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -40,8 +41,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.os.bundleOf
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.susu.core.designsystem.component.appbar.SusuDefaultAppBar
 import com.susu.core.designsystem.component.appbar.icon.LogoIcon
 import com.susu.core.designsystem.component.appbar.icon.SearchIcon
@@ -67,6 +70,7 @@ import com.susu.feature.community.R
 import com.susu.feature.community.community.component.MostPopularVoteCard
 import com.susu.feature.community.community.component.VoteCard
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -87,7 +91,7 @@ fun CommunityRoute(
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
     val context = LocalContext.current
-
+    val scope = rememberCoroutineScope()
     val refreshState = rememberPullToRefreshState(
         positionalThreshold = 100.dp,
     )
@@ -111,6 +115,14 @@ fun CommunityRoute(
             )
 
             is CommunitySideEffect.ShowSnackbar -> onShowSnackbar(SnackbarToken(message = sideEffect.message))
+            CommunitySideEffect.LogSearchIconClickEvent -> scope.launch {
+                FirebaseAnalytics.getInstance(context).logEvent(
+                    FirebaseAnalytics.Event.SELECT_CONTENT,
+                    bundleOf(
+                        FirebaseAnalytics.Param.CONTENT_TYPE to "community_screen_search_icon"
+                    )
+                )
+            }
         }
     }
 
@@ -160,7 +172,10 @@ fun CommunityRoute(
         onClickShowMine = viewModel::toggleShowMyVote,
         onClickShowVotePopular = viewModel::toggleShowVotePopular,
         onClickVote = viewModel::navigateVoteDetail,
-        onClickSearchIcon = viewModel::navigateVoteSearch,
+        onClickSearchIcon = {
+            viewModel.navigateVoteSearch()
+            viewModel.logSearchIconClickEvent()
+        },
         onClickReport = viewModel::showReportDialog,
     )
 }

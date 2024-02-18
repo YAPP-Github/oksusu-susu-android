@@ -33,6 +33,8 @@ class ReceivedViewModel @Inject constructor(
     private var filterUri: String? = null
     private var isFirstVisit = true
 
+    fun logSearchIconClickEvent() = postSideEffect(ReceivedEffect.LogSearchIconClickEvent)
+
     fun initData() {
         if (isFirstVisit.not()) return
         getLedgerList()

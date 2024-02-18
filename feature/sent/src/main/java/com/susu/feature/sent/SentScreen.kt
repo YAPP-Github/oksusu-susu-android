@@ -32,12 +32,15 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.os.bundleOf
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.susu.core.designsystem.component.appbar.SusuDefaultAppBar
 import com.susu.core.designsystem.component.appbar.icon.LogoIcon
 import com.susu.core.designsystem.component.appbar.icon.SearchIcon
@@ -82,6 +85,7 @@ fun SentRoute(
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
     val envelopesListState = rememberLazyListState()
     val scope = rememberCoroutineScope()
+    val context = LocalContext.current
 
     val refreshState = rememberPullToRefreshState(
         positionalThreshold = 100.dp,
@@ -108,6 +112,15 @@ fun SentRoute(
                         ),
                     )
                 }
+            }
+
+            SentEffect.LogSearchIconClickEvent -> scope.launch {
+                FirebaseAnalytics.getInstance(context).logEvent(
+                    FirebaseAnalytics.Event.SELECT_CONTENT,
+                    bundleOf(
+                        FirebaseAnalytics.Param.CONTENT_TYPE to "sent_screen_search_icon"
+                    )
+                )
             }
         }
     }
@@ -142,7 +155,10 @@ fun SentRoute(
         padding = padding,
         onClickHistoryShowAll = viewModel::navigateSentEnvelope,
         onClickAddEnvelope = viewModel::navigateSentAdd,
-        onClickSearchIcon = viewModel::navigateSentEnvelopeSearch,
+        onClickSearchIcon = {
+            viewModel.navigateSentEnvelopeSearch()
+            viewModel.logSearchIconClickEvent()
+        },
         onClickHistory = { expand, friendId ->
             if (expand) {
                 viewModel.hideEnvelopesHistoryList(friendId)

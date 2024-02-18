@@ -37,6 +37,7 @@ class CommunityViewModel @Inject constructor(
     private var page = 0
     private var isLast = false
     private var isFirstVisit = true
+    fun logSearchIconClickEvent() = postSideEffect(CommunitySideEffect.LogSearchIconClickEvent)
 
     fun addVoteIfNeed(vote: String?) {
         val toAddVote = vote?.let {

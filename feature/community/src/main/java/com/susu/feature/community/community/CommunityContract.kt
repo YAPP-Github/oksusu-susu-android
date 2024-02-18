@@ -24,4 +24,5 @@ sealed interface CommunitySideEffect : SideEffect {
     data object NavigateVoteSearch : CommunitySideEffect
     data class NavigateVoteDetail(val voteId: Long) : CommunitySideEffect
     data class ShowReportDialog(val onConfirmRequest: () -> Unit, val onCheckedAction: () -> Unit) : CommunitySideEffect
+    data object LogSearchIconClickEvent : CommunitySideEffect
 }
