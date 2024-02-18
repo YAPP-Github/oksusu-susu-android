@@ -202,6 +202,7 @@ fun NavGraphBuilder.receivedNavGraph(
         ReceivedEnvelopeEditRoute(
             popBackStack = popBackStack,
             handleException = handleException,
+            onShowSnackbar = onShowSnackbar,
         )
     }
 }
