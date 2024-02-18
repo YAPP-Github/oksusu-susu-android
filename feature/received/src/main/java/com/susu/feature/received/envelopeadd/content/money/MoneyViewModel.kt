@@ -20,13 +20,10 @@ class MoneyViewModel @Inject constructor() : BaseViewModel<MoneyState, MoneySide
         }
     }
 
-    fun addMoney(money: Int) = intent {
-        val currentMoney = this.money.toLongOrNull() ?: 0
-        val addedMoney = money + currentMoney
-        postSideEffect(MoneySideEffect.UpdateParentMoney(addedMoney))
-        copy(
-            money = addedMoney.toString(),
-        )
+    fun addMoney(textFieldMoney: String, buttonMoney: Int) {
+        val currentMoney = textFieldMoney.toLongOrNull() ?: 0
+        val addedMoney = currentMoney + buttonMoney
+        updateMoney(addedMoney.toString())
     }
 
     fun showKeyboardIfMoneyEmpty() {
