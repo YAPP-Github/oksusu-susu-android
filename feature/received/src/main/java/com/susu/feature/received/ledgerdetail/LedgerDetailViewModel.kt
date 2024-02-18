@@ -260,4 +260,12 @@ class LedgerDetailViewModel @Inject constructor(
         getReceivedEnvelopeList(true)
         hideAlignBottomSheet()
     }
+
+    fun logAlignButtonClickEvent() = postSideEffect(LedgerDetailSideEffect.LogAlignButtonClickEvent)
+
+    fun logAlignItemClickEvent() = postSideEffect(
+        LedgerDetailSideEffect.LogAlignItemClickEvent(
+            EnvelopeAlign.entries[currentState.selectedAlignPosition],
+        ),
+    )
 }

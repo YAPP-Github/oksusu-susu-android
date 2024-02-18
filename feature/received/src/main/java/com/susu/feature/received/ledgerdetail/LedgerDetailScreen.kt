@@ -27,6 +27,7 @@ import androidx.compose.material3.pulltorefresh.PullToRefreshState
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -35,8 +36,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.os.bundleOf
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.susu.core.designsystem.component.appbar.SusuDefaultAppBar
 import com.susu.core.designsystem.component.appbar.icon.BackIcon
 import com.susu.core.designsystem.component.appbar.icon.DeleteText
@@ -65,6 +68,7 @@ import com.susu.core.ui.extension.toMoneyFormat
 import com.susu.feature.received.ledgerdetail.component.LedgerDetailEnvelopeContainer
 import com.susu.feature.received.ledgerdetail.component.LedgerDetailOverviewColumn
 import kotlinx.collections.immutable.toPersistentList
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -86,6 +90,7 @@ fun LedgerDetailRoute(
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
     val listState = rememberLazyListState()
     val context = LocalContext.current
+    val scope = rememberCoroutineScope()
     val refreshState = rememberPullToRefreshState(
         positionalThreshold = 100.dp,
     )
@@ -119,6 +124,22 @@ fun LedgerDetailRoute(
             is LedgerDetailSideEffect.NavigateEnvelopeFilter -> navigateEnvelopeFilter(sideEffect.filter)
             is LedgerDetailSideEffect.NavigateEnvelopeAdd -> navigateEnvelopAdd(sideEffect.ledger)
             is LedgerDetailSideEffect.NavigateEnvelopeDetail -> navigateEnvelopeDetail(sideEffect.envelope, sideEffect.ledger)
+            LedgerDetailSideEffect.LogAlignButtonClickEvent -> scope.launch {
+                FirebaseAnalytics.getInstance(context).logEvent(
+                    FirebaseAnalytics.Event.SELECT_CONTENT,
+                    bundleOf(
+                        FirebaseAnalytics.Param.CONTENT_TYPE to "ledger_detail_screen_align_button",
+                    ),
+                )
+            }
+            is LedgerDetailSideEffect.LogAlignItemClickEvent -> scope.launch {
+                FirebaseAnalytics.getInstance(context).logEvent(
+                    FirebaseAnalytics.Event.SELECT_CONTENT,
+                    bundleOf(
+                        FirebaseAnalytics.Param.CONTENT_TYPE to "ledger_detail_screen_align_item_${sideEffect.envelopeAlign}",
+                    ),
+                )
+            }
         }
     }
 
@@ -162,9 +183,15 @@ fun LedgerDetailRoute(
         onClickFilterButton = viewModel::navigateEnvelopeFilter,
         onClickCloseFriend = viewModel::removeFriend,
         onClickCloseAmount = viewModel::clearAmount,
-        onClickAlignButton = viewModel::showAlignBottomSheet,
+        onClickAlignButton = {
+            viewModel.logAlignButtonClickEvent()
+            viewModel.showAlignBottomSheet()
+        },
         onDismissAlignBottomSheet = viewModel::hideAlignBottomSheet,
-        onClickAlignBottomSheetItem = viewModel::updateAlignBottomSheet,
+        onClickAlignBottomSheetItem = {
+            viewModel.logAlignItemClickEvent()
+            viewModel.updateAlignBottomSheet(it)
+        },
     )
 }
 
