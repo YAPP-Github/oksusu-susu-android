@@ -11,18 +11,22 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.os.bundleOf
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.susu.core.designsystem.component.appbar.SusuDefaultAppBar
 import com.susu.core.designsystem.component.appbar.icon.BackIcon
 import com.susu.core.designsystem.component.container.SusuRecentSearchContainer
@@ -37,6 +41,7 @@ import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.launch
 
 @OptIn(FlowPreview::class)
 @Composable
@@ -49,11 +54,30 @@ fun SentEnvelopeSearchRoute(
     val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
 
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
             EnvelopeSearchEffect.FocusClear -> focusManager.clearFocus()
             is EnvelopeSearchEffect.NavigateEnvelopDetail -> navigateSentEnvelopeDetail(sideEffect.envelopeId)
             EnvelopeSearchEffect.PopBackStack -> popBackStack()
+            EnvelopeSearchEffect.LogBackClickEvent -> scope.launch {
+                FirebaseAnalytics.getInstance(context).logEvent(
+                    FirebaseAnalytics.Event.SELECT_CONTENT,
+                    bundleOf(
+                        FirebaseAnalytics.Param.CONTENT_TYPE to "sent_envelope_search_screen_back"
+                    )
+                )
+            }
+            EnvelopeSearchEffect.LogSearchResultClickEvent -> scope.launch {
+                FirebaseAnalytics.getInstance(context).logEvent(
+                    FirebaseAnalytics.Event.SELECT_CONTENT,
+                    bundleOf(
+                        FirebaseAnalytics.Param.CONTENT_TYPE to "sent_envelope_search_screen_search_result"
+                    )
+                )
+            }
         }
     }
 
@@ -78,8 +102,12 @@ fun SentEnvelopeSearchRoute(
             viewModel.updateSearchKeyword(it)
         },
         onDeleteRecentSearch = viewModel::deleteEnvelopeRecentSearch,
-        popBackStack = popBackStack,
+        popBackStack = {
+            viewModel.popBackStack()
+            viewModel.logBackClickEvent()
+        },
         onClickEnvelope = { id, search ->
+            viewModel.logSearchResultClickEvent()
             viewModel.upsertEnvelopeRecentSearch(search)
             viewModel.navigateToEnvelopeDetail(id)
         },

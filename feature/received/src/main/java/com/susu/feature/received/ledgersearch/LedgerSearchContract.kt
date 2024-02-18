@@ -18,4 +18,6 @@ sealed interface LedgerSearchSideEffect : SideEffect {
     data object PopBackStack : LedgerSearchSideEffect
     data class NavigateLedgerDetail(val ledger: Ledger) : LedgerSearchSideEffect
     data object FocusClear : LedgerSearchSideEffect
+    data object LogBackClickEvent : LedgerSearchSideEffect
+    data object LogSearchResultClickEvent : LedgerSearchSideEffect
 }
