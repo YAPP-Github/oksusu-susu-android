@@ -123,6 +123,39 @@ fun CommunityRoute(
                     ),
                 )
             }
+
+            CommunitySideEffect.LogAlignPopularVoteClickEvent -> scope.launch {
+                FirebaseAnalytics.getInstance(context).logEvent(
+                    FirebaseAnalytics.Event.SELECT_CONTENT,
+                    bundleOf(
+                        FirebaseAnalytics.Param.CONTENT_TYPE to "community_screen_align_popular_vote",
+                    ),
+                )
+            }
+            is CommunitySideEffect.LogCategoryClickEvent -> scope.launch {
+                FirebaseAnalytics.getInstance(context).logEvent(
+                    FirebaseAnalytics.Event.SELECT_CONTENT,
+                    bundleOf(
+                        FirebaseAnalytics.Param.CONTENT_TYPE to "community_screen_category_${sideEffect.name}",
+                    ),
+                )
+            }
+            CommunitySideEffect.LogPopularVoteClickEvent -> scope.launch {
+                FirebaseAnalytics.getInstance(context).logEvent(
+                    FirebaseAnalytics.Event.SELECT_CONTENT,
+                    bundleOf(
+                        FirebaseAnalytics.Param.CONTENT_TYPE to "community_screen_popular_vote",
+                    ),
+                )
+            }
+            CommunitySideEffect.LogShowMyVoteClickEvent -> scope.launch {
+                FirebaseAnalytics.getInstance(context).logEvent(
+                    FirebaseAnalytics.Event.SELECT_CONTENT,
+                    bundleOf(
+                        FirebaseAnalytics.Param.CONTENT_TYPE to "community_screen_show_my_vote",
+                    ),
+                )
+            }
         }
     }
 
@@ -168,10 +201,23 @@ fun CommunityRoute(
         currentTime = currentTime,
         voteListState = voteListState,
         onClickFloatingButton = viewModel::navigateVoteAdd,
-        onClickCategory = viewModel::selectCategory,
-        onClickShowMine = viewModel::toggleShowMyVote,
-        onClickShowVotePopular = viewModel::toggleShowVotePopular,
+        onClickCategory = { category ->
+            viewModel.logCategoryClickEvent(category?.name ?: "")
+            viewModel.selectCategory(category)
+        },
+        onClickShowMine = {
+            viewModel.logShowMyVoteClickEvent()
+            viewModel.toggleShowMyVote()
+        },
+        onClickShowVotePopular = {
+            viewModel.logAlignPopularVoteClickEvent()
+            viewModel.toggleShowVotePopular()
+        },
         onClickVote = viewModel::navigateVoteDetail,
+        onClickPopularVote = {
+            viewModel.logPopularVoteClickEvent()
+            viewModel.navigateVoteDetail(it)
+        },
         onClickSearchIcon = {
             viewModel.navigateVoteSearch()
             viewModel.logSearchIconClickEvent()
@@ -191,6 +237,7 @@ fun CommunityScreen(
     onClickSearchIcon: () -> Unit = {},
     onClickFloatingButton: () -> Unit = {},
     onClickVote: (Long) -> Unit = {},
+    onClickPopularVote: (Long) -> Unit = {},
     onClickCategory: (Category?) -> Unit = {},
     onClickShowVotePopular: () -> Unit = {},
     onClickShowMine: () -> Unit = {},
@@ -241,7 +288,7 @@ fun CommunityScreen(
                                 items = uiState.popularVoteList,
                                 key = { it.id },
                             ) { vote ->
-                                MostPopularVoteCard(vote, onClick = { onClickVote(vote.id) })
+                                MostPopularVoteCard(vote, onClick = { onClickPopularVote(vote.id) })
                             }
                         }
                     }
