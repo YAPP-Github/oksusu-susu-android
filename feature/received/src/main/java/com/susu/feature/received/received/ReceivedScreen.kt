@@ -108,6 +108,15 @@ fun ReceivedRoute(
                     ),
                 )
             }
+
+            ReceivedEffect.LogFilterButtonClickEvent -> scope.launch {
+                FirebaseAnalytics.getInstance(context).logEvent(
+                    FirebaseAnalytics.Event.SELECT_CONTENT,
+                    bundleOf(
+                        FirebaseAnalytics.Param.CONTENT_TYPE to "received_screen_filter_button",
+                    ),
+                )
+            }
         }
     }
 
@@ -142,7 +151,10 @@ fun ReceivedRoute(
             viewModel.logSearchIconClickEvent()
         },
         onClickFloatingAddButton = viewModel::navigateLedgerAdd,
-        onClickFilterButton = viewModel::navigateLedgerFilter,
+        onClickFilterButton = {
+            viewModel.logFilterButtonClickEvent()
+            viewModel.navigateLedgerFilter()
+        },
         onClickAlignButton = viewModel::showAlignBottomSheet,
         onClickAlignBottomSheetItem = { position ->
             viewModel.updateSelectedAlignPosition(position)

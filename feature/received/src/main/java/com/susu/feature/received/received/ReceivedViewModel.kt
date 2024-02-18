@@ -34,6 +34,7 @@ class ReceivedViewModel @Inject constructor(
     private var isFirstVisit = true
 
     fun logSearchIconClickEvent() = postSideEffect(ReceivedEffect.LogSearchIconClickEvent)
+    fun logFilterButtonClickEvent() = postSideEffect(ReceivedEffect.LogFilterButtonClickEvent)
 
     fun initData() {
         if (isFirstVisit.not()) return

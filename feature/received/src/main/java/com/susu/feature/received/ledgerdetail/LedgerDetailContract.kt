@@ -62,5 +62,6 @@ sealed interface LedgerDetailSideEffect : SideEffect {
     data class HandleException(val throwable: Throwable, val retry: () -> Unit) : LedgerDetailSideEffect
     data class NavigateEnvelopeFilter(val filter: String) : LedgerDetailSideEffect
     data object LogAlignButtonClickEvent : LedgerDetailSideEffect
+    data object LogFilterButtonClickEvent : LedgerDetailSideEffect
     data class LogAlignItemClickEvent(val envelopeAlign: EnvelopeAlign) : LedgerDetailSideEffect
 }

@@ -262,6 +262,7 @@ class LedgerDetailViewModel @Inject constructor(
     }
 
     fun logAlignButtonClickEvent() = postSideEffect(LedgerDetailSideEffect.LogAlignButtonClickEvent)
+    fun logFilterButtonClickEvent() = postSideEffect(LedgerDetailSideEffect.LogFilterButtonClickEvent)
 
     fun logAlignItemClickEvent() = postSideEffect(
         LedgerDetailSideEffect.LogAlignItemClickEvent(

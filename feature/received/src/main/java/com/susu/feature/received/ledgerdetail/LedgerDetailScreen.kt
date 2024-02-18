@@ -140,6 +140,15 @@ fun LedgerDetailRoute(
                     ),
                 )
             }
+
+            LedgerDetailSideEffect.LogFilterButtonClickEvent -> scope.launch {
+                FirebaseAnalytics.getInstance(context).logEvent(
+                    FirebaseAnalytics.Event.SELECT_CONTENT,
+                    bundleOf(
+                        FirebaseAnalytics.Param.CONTENT_TYPE to "ledger_detail_screen_filter_button",
+                    ),
+                )
+            }
         }
     }
 
@@ -180,7 +189,10 @@ fun LedgerDetailRoute(
         onClickFloatingButton = viewModel::navigateEnvelopeAdd,
         onClickSeeMoreIcon = viewModel::navigateEnvelopeDetail,
         onClickEnvelopeAddButton = viewModel::navigateEnvelopeAdd,
-        onClickFilterButton = viewModel::navigateEnvelopeFilter,
+        onClickFilterButton = {
+            viewModel.logFilterButtonClickEvent()
+            viewModel.navigateEnvelopeFilter()
+        },
         onClickCloseFriend = viewModel::removeFriend,
         onClickCloseAmount = viewModel::clearAmount,
         onClickAlignButton = {
