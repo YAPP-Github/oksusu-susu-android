@@ -24,6 +24,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -50,6 +51,7 @@ import com.susu.core.designsystem.theme.Gray30
 import com.susu.core.designsystem.theme.Gray80
 import com.susu.core.designsystem.theme.Orange60
 import com.susu.core.designsystem.theme.SusuTheme
+import com.susu.core.ui.SnackbarToken
 import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.core.ui.extension.susuClickable
 import com.susu.core.ui.util.AnnotatedText
@@ -63,11 +65,13 @@ import kotlinx.coroutines.launch
 fun LedgerEditRoute(
     viewModel: LedgerEditViewModel = hiltViewModel(),
     popBackStack: () -> Unit,
+    onShowSnackbar: (SnackbarToken) -> Unit,
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
 
     val focusRequester = remember { FocusRequester() }
     val scope = rememberCoroutineScope()
+    val context = LocalContext.current
 
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
@@ -76,6 +80,16 @@ fun LedgerEditRoute(
                 awaitFrame()
                 focusRequester.requestFocus()
             }
+            LedgerEditSideEffect.ShowNotValidSnackbarName -> onShowSnackbar(
+                SnackbarToken(
+                    message = context.getString(R.string.ledger_snackbar_category_name_validation),
+                )
+            )
+            LedgerEditSideEffect.ShowNotValidSnackbarCategory -> onShowSnackbar(
+                SnackbarToken(
+                    message = context.getString(R.string.ledger_snackbar_category_validation)
+                )
+            )
         }
     }
 

@@ -139,6 +139,7 @@ fun NavGraphBuilder.receivedNavGraph(
     ) {
         LedgerEditRoute(
             popBackStack = popBackStack,
+            onShowSnackbar = onShowSnackbar,
         )
     }
 
