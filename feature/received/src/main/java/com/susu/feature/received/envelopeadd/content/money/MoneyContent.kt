@@ -84,7 +84,7 @@ fun MoneyContent(
     uiState: MoneyState = MoneyState(),
     focusRequester: FocusRequester = remember { FocusRequester() },
     onTextChangeMoney: (String) -> Unit = {},
-    onClickMoneyButton: (String, Int) -> Unit = { _, _ -> },
+    onClickMoneyButton: (Int) -> Unit = {},
 ) {
     Column(
         modifier = Modifier
@@ -123,7 +123,7 @@ fun MoneyContent(
                     style = SmallButtonStyle.height32,
                     text = stringResource(id = com.susu.core.ui.R.string.money_unit_format, money.toMoneyFormat()),
                     onClick = {
-                        onClickMoneyButton(uiState.money, money)
+                        onClickMoneyButton(money)
                     },
                 )
             }

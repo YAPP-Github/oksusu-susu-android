@@ -1,5 +1,6 @@
 package com.susu.feature.received.envelopeadd.content.money
 
+import com.susu.core.ui.MONEY_MAX_VALUE
 import com.susu.core.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -20,10 +21,21 @@ class MoneyViewModel @Inject constructor() : BaseViewModel<MoneyState, MoneySide
         }
     }
 
-    fun addMoney(textFieldMoney: String, buttonMoney: Int) {
-        val currentMoney = textFieldMoney.toLongOrNull() ?: 0
-        val addedMoney = currentMoney + buttonMoney
-        updateMoney(addedMoney.toString())
+    fun addMoney(money: Int) {
+        val currentMoney = currentState.money.toLongOrNull() ?: 0
+        val addedMoney = currentMoney + money
+
+        if (addedMoney > MONEY_MAX_VALUE) {
+            postSideEffect(MoneySideEffect.ShowNotValidSnackbar)
+            return
+        }
+        postSideEffect(MoneySideEffect.UpdateParentMoney(addedMoney))
+
+        intent {
+            copy(
+                money = addedMoney.toString(),
+            )
+        }
     }
 
     fun showKeyboardIfMoneyEmpty() {
