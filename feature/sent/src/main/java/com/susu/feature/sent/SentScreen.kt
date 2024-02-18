@@ -118,8 +118,8 @@ fun SentRoute(
                 FirebaseAnalytics.getInstance(context).logEvent(
                     FirebaseAnalytics.Event.SELECT_CONTENT,
                     bundleOf(
-                        FirebaseAnalytics.Param.CONTENT_TYPE to "sent_screen_search_icon"
-                    )
+                        FirebaseAnalytics.Param.CONTENT_TYPE to "sent_screen_search_icon",
+                    ),
                 )
             }
         }

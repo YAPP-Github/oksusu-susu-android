@@ -119,8 +119,8 @@ fun CommunityRoute(
                 FirebaseAnalytics.getInstance(context).logEvent(
                     FirebaseAnalytics.Event.SELECT_CONTENT,
                     bundleOf(
-                        FirebaseAnalytics.Param.CONTENT_TYPE to "community_screen_search_icon"
-                    )
+                        FirebaseAnalytics.Param.CONTENT_TYPE to "community_screen_search_icon",
+                    ),
                 )
             }
         }

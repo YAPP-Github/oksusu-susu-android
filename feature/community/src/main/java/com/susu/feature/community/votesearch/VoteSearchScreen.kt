@@ -65,16 +65,16 @@ fun VoteSearchRoute(
                 FirebaseAnalytics.getInstance(context).logEvent(
                     FirebaseAnalytics.Event.SELECT_CONTENT,
                     bundleOf(
-                        FirebaseAnalytics.Param.CONTENT_TYPE to "vote_search_screen_back"
-                    )
+                        FirebaseAnalytics.Param.CONTENT_TYPE to "vote_search_screen_back",
+                    ),
                 )
             }
             VoteSearchSideEffect.LogSearchResultClickEvent -> scope.launch {
                 FirebaseAnalytics.getInstance(context).logEvent(
                     FirebaseAnalytics.Event.SELECT_CONTENT,
                     bundleOf(
-                        FirebaseAnalytics.Param.CONTENT_TYPE to "vote_search_screen_search_result"
-                    )
+                        FirebaseAnalytics.Param.CONTENT_TYPE to "vote_search_screen_search_result",
+                    ),
                 )
             }
         }

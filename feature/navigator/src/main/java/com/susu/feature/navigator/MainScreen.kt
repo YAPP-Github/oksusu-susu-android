@@ -43,7 +43,6 @@ import com.susu.feature.sent.navigation.sentNavGraph
 import com.susu.feature.statistics.navigation.statisticsNavGraph
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
-import timber.log.Timber
 
 @Composable
 internal fun MainScreen(
@@ -78,8 +77,8 @@ internal fun MainScreen(
             FirebaseAnalytics.Event.SCREEN_VIEW,
             bundleOf(
                 FirebaseAnalytics.Param.SCREEN_NAME to currentDestination?.route,
-                FirebaseAnalytics.Param.SCREEN_CLASS to MainActivity::class.java.simpleName
-            )
+                FirebaseAnalytics.Param.SCREEN_CLASS to MainActivity::class.java.simpleName,
+            ),
         )
     }
 

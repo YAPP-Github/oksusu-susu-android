@@ -68,7 +68,6 @@ import kotlinx.coroutines.launch
 import me.onebone.toolbar.CollapsingToolbarScaffold
 import me.onebone.toolbar.ScrollStrategy
 import me.onebone.toolbar.rememberCollapsingToolbarScaffoldState
-import timber.log.Timber
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -105,8 +104,8 @@ fun ReceivedRoute(
                 FirebaseAnalytics.getInstance(context).logEvent(
                     FirebaseAnalytics.Event.SELECT_CONTENT,
                     bundleOf(
-                        FirebaseAnalytics.Param.CONTENT_TYPE to "received_screen_search_icon"
-                    )
+                        FirebaseAnalytics.Param.CONTENT_TYPE to "received_screen_search_icon",
+                    ),
                 )
             }
         }

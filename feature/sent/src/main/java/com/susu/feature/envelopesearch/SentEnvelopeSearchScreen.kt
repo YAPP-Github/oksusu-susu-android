@@ -66,16 +66,16 @@ fun SentEnvelopeSearchRoute(
                 FirebaseAnalytics.getInstance(context).logEvent(
                     FirebaseAnalytics.Event.SELECT_CONTENT,
                     bundleOf(
-                        FirebaseAnalytics.Param.CONTENT_TYPE to "sent_envelope_search_screen_back"
-                    )
+                        FirebaseAnalytics.Param.CONTENT_TYPE to "sent_envelope_search_screen_back",
+                    ),
                 )
             }
             EnvelopeSearchEffect.LogSearchResultClickEvent -> scope.launch {
                 FirebaseAnalytics.getInstance(context).logEvent(
                     FirebaseAnalytics.Event.SELECT_CONTENT,
                     bundleOf(
-                        FirebaseAnalytics.Param.CONTENT_TYPE to "sent_envelope_search_screen_search_result"
-                    )
+                        FirebaseAnalytics.Param.CONTENT_TYPE to "sent_envelope_search_screen_search_result",
+                    ),
                 )
             }
         }
