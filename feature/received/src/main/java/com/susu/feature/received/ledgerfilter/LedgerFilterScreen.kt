@@ -15,13 +15,17 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.os.bundleOf
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.susu.core.designsystem.component.appbar.SusuDefaultAppBar
 import com.susu.core.designsystem.component.appbar.icon.BackIcon
 import com.susu.core.designsystem.component.bottomsheet.datepicker.SusuLimitDatePickerBottomSheet
@@ -41,6 +45,7 @@ import com.susu.core.ui.util.minDate
 import com.susu.core.ui.util.to_yyyy_dot_MM_dot_dd
 import com.susu.feature.received.R
 import com.susu.feature.received.ledgerfilter.component.DateText
+import kotlinx.coroutines.launch
 
 @Composable
 fun LedgerFilterRoute(
@@ -50,11 +55,23 @@ fun LedgerFilterRoute(
     handleException: (Throwable, () -> Unit) -> Unit,
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
+
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
             is LedgerFilterSideEffect.HandleException -> handleException(sideEffect.throwable, sideEffect.retry)
             LedgerFilterSideEffect.PopBackStack -> popBackStack()
             is LedgerFilterSideEffect.PopBackStackWithFilter -> popBackStackWithFilter(sideEffect.filter)
+            LedgerFilterSideEffect.LogApplyClickEvent -> scope.launch {
+                FirebaseAnalytics.getInstance(context).logEvent(
+                    FirebaseAnalytics.Event.SELECT_CONTENT,
+                    bundleOf(
+                        FirebaseAnalytics.Param.CONTENT_TYPE to "ledger_filter_apply_button",
+                    ),
+                )
+            }
         }
     }
 
@@ -65,7 +82,10 @@ fun LedgerFilterRoute(
     LedgerFilterScreen(
         uiState = uiState,
         onClickBackIcon = viewModel::popBackStack,
-        onClickApplyFilterButton = viewModel::popBackStackWithFilter,
+        onClickApplyFilterButton = {
+            viewModel.logApplyButtonClickEvent()
+            viewModel.popBackStackWithFilter()
+        },
         onStartDateItemSelected = viewModel::updateStartDate,
         onClickStartDateText = viewModel::showStartDateBottomSheet,
         onDismissStartDateBottomSheet = viewModel::hideStartDateBottomSheet,
