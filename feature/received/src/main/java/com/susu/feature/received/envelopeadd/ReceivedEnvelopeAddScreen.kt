@@ -147,6 +147,7 @@ fun ReceivedEnvelopeAddScreen(
                 )
                 EnvelopeAddStep.RELATIONSHIP -> RelationShipContentRoute(
                     updateParentSelectedRelation = updateParentSelectedRelationShip,
+                    onShowSnackbar = onShowSnackbar,
                 )
                 EnvelopeAddStep.DATE -> DateContentRoute(
                     friendName = friendName,

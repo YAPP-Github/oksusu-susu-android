@@ -2,8 +2,10 @@ package com.susu.feature.received.envelopeadd.content.relationship
 
 import androidx.lifecycle.viewModelScope
 import com.susu.core.model.Relationship
+import com.susu.core.ui.USER_INPUT_REGEX
 import com.susu.core.ui.base.BaseViewModel
 import com.susu.domain.usecase.envelope.GetRelationShipConfigListUseCase
+import com.susu.feature.received.envelopeadd.content.name.NameSideEffect
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
@@ -51,11 +53,20 @@ class RelationShipViewModel @Inject constructor(
         copy(selectedRelationship = customRelationship)
     }
 
-    fun updateCustomRelationShipText(text: String) = intent {
-        copy(
-            selectedRelationship = customRelationship.copy(customRelation = text),
-            customRelationship = customRelationship.copy(customRelation = text),
-        )
+    fun updateCustomRelationShipText(text: String) {
+        if (!USER_INPUT_REGEX.matches(text)) { // 한글, 영문 0~10 글자
+            if (text.length > 10) { // 길이 넘친 경우
+                postSideEffect(RelationShipSideEffect.ShowNotValidSnackbar)
+            }
+            return // 특수문자는 입력 안 됨
+        }
+
+        intent {
+            copy(
+                selectedRelationship = customRelationship.copy(customRelation = text),
+                customRelationship = customRelationship.copy(customRelation = text),
+            )
+        }
     }
 
     fun showCustomRelationShipTextField() = intent {
