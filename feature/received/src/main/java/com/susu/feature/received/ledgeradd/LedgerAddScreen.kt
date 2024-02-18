@@ -84,7 +84,7 @@ fun LedgerAddRoute(
         updateParentDate = { startAt, endAt ->
             viewModel.updateDate(startAt, endAt)
         },
-        onShowSnackbar = onShowSnackbar
+        onShowSnackbar = onShowSnackbar,
     )
 }
 

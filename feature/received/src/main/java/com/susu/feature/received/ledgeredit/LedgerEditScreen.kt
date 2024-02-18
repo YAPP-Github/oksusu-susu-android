@@ -83,12 +83,12 @@ fun LedgerEditRoute(
             LedgerEditSideEffect.ShowNotValidSnackbarName -> onShowSnackbar(
                 SnackbarToken(
                     message = context.getString(R.string.ledger_snackbar_category_name_validation),
-                )
+                ),
             )
             LedgerEditSideEffect.ShowNotValidSnackbarCategory -> onShowSnackbar(
                 SnackbarToken(
-                    message = context.getString(R.string.ledger_snackbar_category_validation)
-                )
+                    message = context.getString(R.string.ledger_snackbar_category_validation),
+                ),
             )
         }
     }

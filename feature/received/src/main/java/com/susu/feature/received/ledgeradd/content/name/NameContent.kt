@@ -51,7 +51,7 @@ fun NameContentRoute(
             NameSideEffect.ShowNotValidSnackbar -> onShowSnackbar(
                 SnackbarToken(
                     message = context.getString(R.string.ledger_snackbar_category_name_validation),
-                )
+                ),
             )
         }
     }

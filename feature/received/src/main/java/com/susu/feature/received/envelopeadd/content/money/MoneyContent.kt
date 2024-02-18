@@ -57,7 +57,7 @@ fun MoneyContentRoute(
             MoneySideEffect.ShowNotValidSnackbar -> onShowSnackbar(
                 SnackbarToken(
                     message = context.getString(R.string.money_content_snackbar_validation),
-                )
+                ),
             )
         }
     }

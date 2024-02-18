@@ -64,7 +64,7 @@ fun RelationShipContentRoute(
             RelationShipSideEffect.ShowNotValidSnackbar -> onShowSnackbar(
                 SnackbarToken(
                     message = context.getString(R.string.relationship_content_snackbar_validation),
-                )
+                ),
             )
         }
     }

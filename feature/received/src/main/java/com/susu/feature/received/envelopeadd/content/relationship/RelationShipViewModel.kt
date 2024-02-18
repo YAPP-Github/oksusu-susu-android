@@ -5,7 +5,6 @@ import com.susu.core.model.Relationship
 import com.susu.core.ui.USER_INPUT_REGEX
 import com.susu.core.ui.base.BaseViewModel
 import com.susu.domain.usecase.envelope.GetRelationShipConfigListUseCase
-import com.susu.feature.received.envelopeadd.content.name.NameSideEffect
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch

@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.susu.core.model.Envelope
 import com.susu.core.model.Ledger
 import com.susu.core.model.Relationship
-import com.susu.core.ui.MONEY_MAX_VALUE
 import com.susu.core.ui.USER_INPUT_REGEX
 import com.susu.core.ui.USER_INPUT_REGEX_INCLUDE_NUMBER
 import com.susu.core.ui.USER_INPUT_REGEX_LONG
@@ -13,7 +12,6 @@ import com.susu.core.ui.base.BaseViewModel
 import com.susu.core.ui.extension.decodeFromUri
 import com.susu.domain.usecase.envelope.EditReceivedEnvelopeUseCase
 import com.susu.domain.usecase.envelope.GetRelationShipConfigListUseCase
-import com.susu.feature.received.envelopeadd.content.money.MoneySideEffect
 import com.susu.feature.received.navigation.ReceivedRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toPersistentList

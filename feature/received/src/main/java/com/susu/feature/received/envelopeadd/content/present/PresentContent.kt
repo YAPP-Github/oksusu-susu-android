@@ -51,7 +51,7 @@ fun PresentContentRoute(
             PresentSideEffect.ShowNotValidSnackbar -> onShowSnackbar(
                 SnackbarToken(
                     message = context.getString(R.string.present_content_snackbar_validation),
-                )
+                ),
             )
         }
     }
