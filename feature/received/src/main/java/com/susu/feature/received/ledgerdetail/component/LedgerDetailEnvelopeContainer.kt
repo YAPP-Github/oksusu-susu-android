@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
@@ -18,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.susu.core.designsystem.component.badge.BadgeColor
@@ -86,8 +88,11 @@ fun LedgerDetailEnvelopeContainer(
             Text(
                 text = envelope.friend.name,
                 style = SusuTheme.typography.title_xs,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.weight(1f, false),
             )
-            Spacer(modifier = Modifier.weight(1f))
+            Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_s))
             Text(
                 text = stringResource(id = R.string.money_unit_format, envelope.envelope.amount.toInt().toMoneyFormat()),
                 style = SusuTheme.typography.title_m,
