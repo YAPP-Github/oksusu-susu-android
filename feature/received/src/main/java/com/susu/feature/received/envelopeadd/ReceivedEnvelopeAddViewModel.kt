@@ -221,4 +221,12 @@ class ReceivedEnvelopeAddViewModel @Inject constructor(
             buttonEnabled = date != null,
         )
     }
+
+    fun logBackButtonClickEvent() {
+        postSideEffect(ReceivedEnvelopeAddSideEffect.LogClickBackButton(currentState.currentStep))
+    }
+
+    fun logNextButtonClickEvent() {
+        postSideEffect(ReceivedEnvelopeAddSideEffect.LogClickNextButton(currentState.currentStep))
+    }
 }
