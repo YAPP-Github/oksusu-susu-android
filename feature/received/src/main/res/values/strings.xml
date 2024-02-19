@@ -40,7 +40,7 @@
     <string name="more_content_description">복수로 선택하셔도 좋아요</string>
     <string name="name_content_title">누구에게 받았나요</string>
     <string name="name_content_placeholder">이름을 입력해주세요</string>
-    <string name="phone_content_placeholder">01012345678</string>
+    <string name="phone_content_placeholder">010-1234-5678</string>
     <string name="phone_content_title">%s님의 연락처를 남겨주세요</string>
     <string name="phone_content_title_highlight">%s님의</string>
     <string name="present_content_title">받은 선물을 알려주세요</string>
@@ -54,7 +54,7 @@
     <string name="received_envelope_edit_screen_visited">방문 여부</string>
     <string name="received_envelope_edit_screen_present">선물</string>
     <string name="received_envelope_edit_screen_present_placeholder">한끼 식사</string>
-    <string name="received_envelope_edit_screen_phone_number_placeholder">01012345678</string>
+    <string name="received_envelope_edit_screen_phone_number_placeholder">010-1234-5678</string>
     <string name="received_envelope_edit_screen_memo_placeholder">입력해주세요</string>
     <string name="envelop_add_step_visited">방문여부</string>
     <string name="envelop_add_step_present">선물</string>
@@ -69,10 +69,8 @@
     <string name="toast_delete_envelope_success">봉투가 삭제됐어요</string>
     <string name="ledger_edit_screen_add_end_date">종료일 추가</string>
     <string name="ledger_edit_screen_add_start_date">시작일만 지정</string>
-
     <string name="ledger_snackbar_category_validation">경조사는 10글자까지만 입력 가능해요</string>
     <string name="ledger_snackbar_category_name_validation">경조사명은 10글자까지만 입력 가능해요</string>
-
     <string name="money_content_snackbar_validation">100억 미만의 금액만 입력 가능해요</string>
     <string name="name_content_snackbar_validation">이름은 10글자까지만 입력 가능해요</string>
     <string name="relationship_content_snackbar_validation">나와의 관계는 10글자까지만 입력 가능해요</string>

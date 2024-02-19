@@ -51,6 +51,7 @@ import com.susu.core.model.Relationship
 import com.susu.core.ui.SnackbarToken
 import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.core.ui.extension.susuClickable
+import com.susu.core.ui.util.PhoneVisualTransformation
 import com.susu.feature.received.R
 import com.susu.feature.received.envelopeedit.component.EditDetailItem
 import kotlinx.coroutines.android.awaitFrame
@@ -298,6 +299,7 @@ fun ReceivedEnvelopeEditScreen(
                         textStyle = SusuTheme.typography.title_s,
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                         modifier = Modifier.fillMaxWidth(),
+                        visualTransformation = PhoneVisualTransformation(),
                     )
                 }
                 EditDetailItem(

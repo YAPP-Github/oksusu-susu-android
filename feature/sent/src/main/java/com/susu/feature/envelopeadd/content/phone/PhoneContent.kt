@@ -28,6 +28,7 @@ import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.ui.SnackbarToken
 import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.core.ui.util.AnnotatedText
+import com.susu.core.ui.util.PhoneVisualTransformation
 import com.susu.feature.sent.R
 import kotlinx.coroutines.android.awaitFrame
 import kotlinx.coroutines.launch
@@ -109,6 +110,7 @@ fun PhoneContent(
             placeholderColor = Gray40,
             modifier = modifier.fillMaxWidth().focusRequester(focusRequester),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            visualTransformation = PhoneVisualTransformation(),
         )
         Spacer(modifier = modifier.size(SusuTheme.spacing.spacing_xl))
     }
