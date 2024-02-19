@@ -22,5 +22,5 @@ fun SignUpUser.toData() = UserSignUpRequest(
 data class UserPatchRequest(
     val name: String,
     val gender: String?,
-    val birth: Int,
+    val birth: Int?,
 )

@@ -20,7 +20,7 @@ import com.susu.core.designsystem.component.button.SusuGhostButton
 import com.susu.core.designsystem.theme.Gray60
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.ui.Gender
-import java.time.LocalDate
+import com.susu.core.ui.USER_BIRTH_RANGE
 
 @Composable
 fun AdditionalContent(
@@ -36,7 +36,11 @@ fun AdditionalContent(
     ) {
         Text(text = description, style = SusuTheme.typography.title_m)
         Spacer(modifier = Modifier.height(SusuTheme.spacing.spacing_xxl))
-        Text(text = "성별", style = SusuTheme.typography.title_xxxs, color = Gray60)
+        Text(
+            text = stringResource(id = com.susu.core.ui.R.string.word_gender),
+            style = SusuTheme.typography.title_xxxs,
+            color = Gray60,
+        )
         Spacer(modifier = Modifier.height(SusuTheme.spacing.spacing_xxs))
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -65,10 +69,14 @@ fun AdditionalContent(
         Text(text = stringResource(com.susu.core.ui.R.string.word_birth), style = SusuTheme.typography.title_xxxs, color = Gray60)
         SusuGhostButton(
             modifier = Modifier.fillMaxWidth(),
-            text = stringResource(
-                id = com.susu.core.designsystem.R.string.word_year_format,
-                if (selectedYear < 0) LocalDate.now().year else selectedYear,
-            ),
+            text = if (selectedYear in USER_BIRTH_RANGE) {
+                stringResource(
+                    id = com.susu.core.designsystem.R.string.word_year_format,
+                    selectedYear,
+                )
+            } else {
+                stringResource(id = com.susu.core.designsystem.R.string.word_not_select)
+            },
             color = GhostButtonColor.Black,
             style = MediumButtonStyle.height60,
             isClickable = true,
