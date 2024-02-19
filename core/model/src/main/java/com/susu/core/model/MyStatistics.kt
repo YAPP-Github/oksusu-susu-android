@@ -12,4 +12,8 @@ data class MyStatistics(
     val recentSpent: List<StatisticsElement> = emptyList(),
     val recentTotalSpent: Int = 0,
     val recentMaximumSpent: Int = 0,
-)
+) {
+    companion object {
+        val EMPTY = MyStatistics()
+    }
+}

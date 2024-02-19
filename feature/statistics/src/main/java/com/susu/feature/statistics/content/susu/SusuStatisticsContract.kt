@@ -9,6 +9,7 @@ import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
 
 sealed interface SusuStatisticsEffect : SideEffect {
+    data object ShowAdditionalInfoDialog : SusuStatisticsEffect
     data class HandleException(val throwable: Throwable, val retry: () -> Unit) : SusuStatisticsEffect
     data class LogAgeOption(val age: StatisticsAge) : SusuStatisticsEffect
     data class LogRelationshipOption(val relationship: String) : SusuStatisticsEffect
@@ -17,6 +18,7 @@ sealed interface SusuStatisticsEffect : SideEffect {
 
 data class SusuStatisticsState(
     val isLoading: Boolean = false,
+    val isBlind: Boolean = true,
     val age: StatisticsAge = StatisticsAge.TWENTY,
     val relationship: Relationship = Relationship(),
     val category: Category = Category(),
