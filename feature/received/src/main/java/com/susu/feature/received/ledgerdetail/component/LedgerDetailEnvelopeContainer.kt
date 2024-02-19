@@ -47,6 +47,7 @@ fun LedgerDetailEnvelopeContainer(
             .background(Gray10)
             .fillMaxWidth()
             .height(100.dp)
+            .susuClickable(onClick = onClickSeeMoreIcon)
             .padding(
                 start = SusuTheme.spacing.spacing_m,
                 end = SusuTheme.spacing.spacing_m,
