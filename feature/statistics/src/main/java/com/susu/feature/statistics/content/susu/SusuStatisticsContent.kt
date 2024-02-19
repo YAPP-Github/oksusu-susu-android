@@ -75,8 +75,7 @@ fun SusuStatisticsRoute(
                 FirebaseAnalytics.getInstance(context).logEvent(
                     FirebaseAnalytics.Event.SELECT_CONTENT,
                     bundleOf(
-                        FirebaseAnalytics.Param.CONTENT_TYPE to "statistics_age",
-                        FirebaseAnalytics.Param.VALUE to sideEffect.age,
+                        FirebaseAnalytics.Param.CONTENT_TYPE to "statistics_age_${sideEffect.age}",
                     ),
                 )
             }
@@ -85,8 +84,7 @@ fun SusuStatisticsRoute(
                 FirebaseAnalytics.getInstance(context).logEvent(
                     FirebaseAnalytics.Event.SELECT_CONTENT,
                     bundleOf(
-                        FirebaseAnalytics.Param.CONTENT_TYPE to "statistics_category",
-                        FirebaseAnalytics.Param.VALUE to sideEffect.category,
+                        FirebaseAnalytics.Param.CONTENT_TYPE to "statistics_category_${sideEffect.category}",
                     ),
                 )
             }
@@ -95,8 +93,7 @@ fun SusuStatisticsRoute(
                 FirebaseAnalytics.getInstance(context).logEvent(
                     FirebaseAnalytics.Event.SELECT_CONTENT,
                     bundleOf(
-                        FirebaseAnalytics.Param.CONTENT_TYPE to "statistics_relationship",
-                        FirebaseAnalytics.Param.VALUE to sideEffect.relationship,
+                        FirebaseAnalytics.Param.CONTENT_TYPE to "statistics_relationship_${sideEffect.relationship}",
                     ),
                 )
             }
