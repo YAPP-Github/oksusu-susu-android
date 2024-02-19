@@ -41,7 +41,7 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun patchUserInfo(name: String, gender: String?, birth: Int): User {
+    override suspend fun patchUserInfo(name: String, gender: String?, birth: Int?): User {
         val localUserInfo = dataStore.data.map { preferences ->
             preferences[userKey]
         }.firstOrNull() ?: throw UserNotFoundException()

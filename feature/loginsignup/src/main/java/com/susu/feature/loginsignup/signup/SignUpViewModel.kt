@@ -5,6 +5,7 @@ import com.susu.core.model.SignUpUser
 import com.susu.core.model.exception.UnknownException
 import com.susu.core.ui.Gender
 import com.susu.core.ui.SnsProviders
+import com.susu.core.ui.USER_BIRTH_RANGE
 import com.susu.core.ui.USER_INPUT_REGEX
 import com.susu.core.ui.USER_NAME_MAX_LENGTH
 import com.susu.core.ui.base.BaseViewModel
@@ -90,7 +91,11 @@ class SignUpViewModel @Inject constructor(
                         signUpUser = SignUpUser(
                             name = uiState.value.name,
                             gender = uiState.value.gender.content,
-                            birth = uiState.value.birth,
+                            birth = if (uiState.value.birth in USER_BIRTH_RANGE) {
+                                uiState.value.birth
+                            } else {
+                                null
+                            },
                             termAgreement = uiState.value.agreedTerms,
                         ),
                     ).onSuccess {

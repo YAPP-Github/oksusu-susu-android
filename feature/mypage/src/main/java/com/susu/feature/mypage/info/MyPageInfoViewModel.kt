@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.susu.core.model.exception.NoAuthorityException
 import com.susu.core.model.exception.UserNotFoundException
 import com.susu.core.ui.Gender
+import com.susu.core.ui.USER_BIRTH_RANGE
 import com.susu.core.ui.base.BaseViewModel
 import com.susu.domain.usecase.mypage.GetUserUseCase
 import com.susu.domain.usecase.mypage.PatchUserUseCase
@@ -81,25 +82,32 @@ class MyPageInfoViewModel @Inject constructor(
 
         viewModelScope.launch {
             intent { copy(isLoading = true) }
-            patchUserUseCase(name = uiState.value.editName, gender = uiState.value.editGender.content, birth = uiState.value.editBirth)
-                .onSuccess {
-                    intent {
-                        copy(
-                            userName = it.name,
-                            userBirth = it.birth,
-                            userGender = when (it.gender) {
-                                "M" -> Gender.MALE
-                                "F" -> Gender.FEMALE
-                                else -> Gender.NONE
-                            },
-                        )
-                    }
-                }.onFailure {
-                    when (it) {
-                        is NoAuthorityException -> postSideEffect(MyPageInfoEffect.ShowSnackBar(it.message))
-                        else -> postSideEffect(MyPageInfoEffect.HandleException(it, ::completeEdit))
-                    }
+            patchUserUseCase(
+                name = uiState.value.editName,
+                gender = uiState.value.editGender.content,
+                birth = if (uiState.value.editBirth in USER_BIRTH_RANGE) {
+                    uiState.value.editBirth
+                } else {
+                    null
+                },
+            ).onSuccess {
+                intent {
+                    copy(
+                        userName = it.name,
+                        userBirth = it.birth,
+                        userGender = when (it.gender) {
+                            "M" -> Gender.MALE
+                            "F" -> Gender.FEMALE
+                            else -> Gender.NONE
+                        },
+                    )
                 }
+            }.onFailure {
+                when (it) {
+                    is NoAuthorityException -> postSideEffect(MyPageInfoEffect.ShowSnackBar(it.message))
+                    else -> postSideEffect(MyPageInfoEffect.HandleException(it, ::completeEdit))
+                }
+            }
             intent { copy(isLoading = false, isEditing = false) }
         }
     }
