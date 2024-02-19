@@ -70,4 +70,8 @@ sealed interface SentEffect : SideEffect {
     data object ScrollToTop : SentEffect
     data class FocusToLastEnvelope(val lastIndex: Int) : SentEffect
     data object LogSearchIconClickEvent : SentEffect
+    data object LogFilterButtonClickEvent : SentEffect
+    data object LogAlignButtonClickEvent : SentEffect
+    data class LogAlignItemClickEvent(val align: EnvelopeAlign) : SentEffect
+    data object LogShowHistoryButtonClickEvent : SentEffect
 }
