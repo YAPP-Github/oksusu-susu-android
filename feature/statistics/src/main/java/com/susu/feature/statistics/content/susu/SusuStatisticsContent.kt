@@ -40,6 +40,7 @@ import com.susu.core.designsystem.theme.Gray10
 import com.susu.core.designsystem.theme.Gray100
 import com.susu.core.designsystem.theme.Gray40
 import com.susu.core.designsystem.theme.SusuTheme
+import com.susu.core.ui.DialogToken
 import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.feature.statistics.R
 import com.susu.feature.statistics.component.RecentSpentGraph
@@ -51,12 +52,14 @@ import kotlinx.collections.immutable.toPersistentList
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SusuStatisticsRoute(
-    isBlind: Boolean,
     modifier: Modifier = Modifier,
     viewModel: SusuStatisticsViewModel = hiltViewModel(),
+    navigateToMyInfo: () -> Unit,
+    onShowDialog: (DialogToken) -> Unit,
     handleException: (Throwable, () -> Unit) -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val context = LocalContext.current
 
     val refreshState = rememberPullToRefreshState(
         positionalThreshold = 100.dp,
@@ -65,6 +68,15 @@ fun SusuStatisticsRoute(
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
             is SusuStatisticsEffect.HandleException -> handleException(sideEffect.throwable, sideEffect.retry)
+            SusuStatisticsEffect.ShowAdditionalInfoDialog -> onShowDialog(
+                DialogToken(
+                    title = context.getString(R.string.statistics_susu_dialog_title),
+                    text = context.getString(R.string.statistics_susu_dialog_description),
+                    dismissText = context.getString(com.susu.core.ui.R.string.word_close),
+                    confirmText = context.getString(R.string.statistics_susu_dialog_confirm),
+                    onConfirmRequest = navigateToMyInfo,
+                ),
+            )
         }
     }
 
@@ -77,6 +89,7 @@ fun SusuStatisticsRoute(
     }
 
     LaunchedEffect(key1 = Unit) {
+        viewModel.checkAdditionalInfo()
         viewModel.getStatisticsOption()
     }
 
@@ -87,7 +100,6 @@ fun SusuStatisticsRoute(
     SusuStatisticsScreen(
         uiState = uiState,
         refreshState = refreshState,
-        isBlind = isBlind,
         modifier = modifier,
         onClickAge = viewModel::showAgeSheet,
         onClickRelationship = viewModel::showRelationshipSheet,
@@ -107,7 +119,6 @@ fun SusuStatisticsScreen(
     modifier: Modifier = Modifier,
     uiState: SusuStatisticsState = SusuStatisticsState(),
     refreshState: PullToRefreshState = rememberPullToRefreshState(),
-    isBlind: Boolean = true,
     onClickAge: () -> Unit = {},
     onClickRelationship: () -> Unit = {},
     onClickCategory: () -> Unit = {},
@@ -146,6 +157,7 @@ fun SusuStatisticsScreen(
                 money = uiState.susuStatistics.averageSent,
                 relationship = uiState.relationship.relation,
                 category = uiState.category.name,
+                isBlind = uiState.isBlind,
                 onAgeClick = onClickAge,
                 onCategoryClick = onClickCategory,
                 onRelationshipClick = onClickRelationship,
@@ -154,17 +166,17 @@ fun SusuStatisticsScreen(
                 title = stringResource(R.string.statistics_susu_relationship_average),
                 name = uiState.susuStatistics.averageRelationship.title,
                 money = uiState.susuStatistics.averageRelationship.value,
-                isActive = !isBlind,
+                isActive = !uiState.isBlind,
             )
             StatisticsHorizontalItem(
                 title = stringResource(R.string.statistics_susu_category_average),
                 name = uiState.susuStatistics.averageCategory.title,
                 money = uiState.susuStatistics.averageCategory.value,
-                isActive = !isBlind,
+                isActive = !uiState.isBlind,
             )
 
             RecentSpentGraph(
-                isActive = !isBlind,
+                isActive = !uiState.isBlind,
                 graphTitle = stringResource(R.string.statistics_susu_this_year_spent),
                 spentData = uiState.susuStatistics.recentSpent.toPersistentList(),
                 maximumAmount = uiState.susuStatistics.recentMaximumSpent,
@@ -178,7 +190,7 @@ fun SusuStatisticsScreen(
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 Text(text = stringResource(R.string.statistics_most_spent_month), style = SusuTheme.typography.title_xs, color = Gray100)
-                if (isBlind) {
+                if (uiState.isBlind) {
                     Text(
                         text = stringResource(R.string.word_month_format, stringResource(id = R.string.word_unknown)),
                         style = SusuTheme.typography.title_xs,
@@ -200,7 +212,7 @@ fun SusuStatisticsScreen(
                     title = stringResource(R.string.statistics_most_susu_relationship),
                     content = uiState.susuStatistics.mostRelationship.title,
                     count = uiState.susuStatistics.mostRelationship.value,
-                    isActive = !isBlind,
+                    isActive = !uiState.isBlind,
                 )
                 Spacer(modifier = Modifier.width(SusuTheme.spacing.spacing_xxs))
                 StatisticsVerticalItem(
@@ -208,7 +220,7 @@ fun SusuStatisticsScreen(
                     title = stringResource(R.string.statistics_most_susu_event),
                     content = uiState.susuStatistics.mostCategory.title,
                     count = uiState.susuStatistics.mostCategory.value,
-                    isActive = !isBlind,
+                    isActive = !uiState.isBlind,
                 )
             }
             Spacer(modifier = Modifier.height(SusuTheme.spacing.spacing_xxxl))
@@ -263,19 +275,6 @@ fun SusuStatisticsScreen(
 @Composable
 fun SusuStatisticsScreenPreview() {
     SusuTheme {
-        SusuStatisticsScreen(
-            isBlind = false,
-        )
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Preview(showBackground = true)
-@Composable
-fun SusuStatisticsScreenBlindPreview() {
-    SusuTheme {
-        SusuStatisticsScreen(
-            isBlind = true,
-        )
+        SusuStatisticsScreen()
     }
 }

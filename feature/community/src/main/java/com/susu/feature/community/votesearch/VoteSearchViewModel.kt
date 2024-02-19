@@ -71,4 +71,12 @@ class VoteSearchViewModel @Inject constructor(
             recentSearchKeywordList = searchList.toPersistentList(),
         )
     }
+
+    fun logBackClickEvent() {
+        postSideEffect(VoteSearchSideEffect.LogBackClickEvent)
+    }
+
+    fun logSearchResultClickEvent() {
+        postSideEffect(VoteSearchSideEffect.LogSearchResultClickEvent)
+    }
 }

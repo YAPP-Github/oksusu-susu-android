@@ -107,4 +107,8 @@ class LedgerFilterViewModel @Inject constructor(
 
         postSideEffect(LedgerFilterSideEffect.PopBackStackWithFilter(Json.encodeToUri(filter)))
     }
+
+    fun logApplyButtonClickEvent() {
+        postSideEffect(LedgerFilterSideEffect.LogApplyClickEvent)
+    }
 }

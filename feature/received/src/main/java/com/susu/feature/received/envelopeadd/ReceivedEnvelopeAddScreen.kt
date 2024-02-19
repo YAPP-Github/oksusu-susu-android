@@ -11,13 +11,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.os.bundleOf
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.susu.core.designsystem.component.appbar.SusuProgressAppBar
 import com.susu.core.designsystem.component.appbar.icon.BackIcon
 import com.susu.core.designsystem.component.button.FilledButtonColor
@@ -38,6 +42,7 @@ import com.susu.feature.received.envelopeadd.content.phone.PhoneContentRoute
 import com.susu.feature.received.envelopeadd.content.present.PresentContentRoute
 import com.susu.feature.received.envelopeadd.content.relationship.RelationShipContentRoute
 import com.susu.feature.received.envelopeadd.content.visited.VisitedContentRoute
+import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 
 @Composable
@@ -49,12 +54,32 @@ fun ReceivedEnvelopeAddRoute(
     handleException: (Throwable, () -> Unit) -> Unit,
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
+
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
             is ReceivedEnvelopeAddSideEffect.HandleException -> handleException(sideEffect.throwable, sideEffect.retry)
             ReceivedEnvelopeAddSideEffect.PopBackStack -> popBackStack()
             is ReceivedEnvelopeAddSideEffect.ShowSnackbar -> onShowSnackbar(SnackbarToken(message = sideEffect.message))
             is ReceivedEnvelopeAddSideEffect.PopBackStackWithEnvelope -> popBackStackWithEnvelope(sideEffect.envelope)
+            is ReceivedEnvelopeAddSideEffect.LogClickBackButton -> scope.launch {
+                FirebaseAnalytics.getInstance(context).logEvent(
+                    FirebaseAnalytics.Event.SELECT_CONTENT,
+                    bundleOf(
+                        FirebaseAnalytics.Param.CONTENT_TYPE to "received_envelope_add_screen_back_at_${sideEffect.step}",
+                    ),
+                )
+            }
+            is ReceivedEnvelopeAddSideEffect.LogClickNextButton -> scope.launch {
+                FirebaseAnalytics.getInstance(context).logEvent(
+                    FirebaseAnalytics.Event.SELECT_CONTENT,
+                    bundleOf(
+                        FirebaseAnalytics.Param.CONTENT_TYPE to "received_envelope_add_screen_next_at_${sideEffect.step}",
+                    ),
+                )
+            }
         }
     }
 
@@ -68,8 +93,14 @@ fun ReceivedEnvelopeAddRoute(
 
     ReceivedEnvelopeAddScreen(
         uiState = uiState,
-        onClickBack = viewModel::goToPrevStep,
-        onClickNext = viewModel::goToNextStep,
+        onClickBack = {
+            viewModel.logBackButtonClickEvent()
+            viewModel.goToPrevStep()
+        },
+        onClickNext = {
+            viewModel.logNextButtonClickEvent()
+            viewModel.goToNextStep()
+        },
         updateParentMoney = viewModel::updateMoney,
         updateParentName = { name ->
             viewModel.updateName(name)

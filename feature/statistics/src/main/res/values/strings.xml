@@ -15,9 +15,9 @@
     <string name="statistics_most_susu_event">최다 수수 경조사</string>
     <string name="statistics_most_received_money">가장 많이 받은 금액</string>
     <string name="statistics_most_sent_money">가장 많이 보낸 금액</string>
-    <string name="statistics_dialog_title">통계를 위한 정보를 알려주세요</string>
-    <string name="statistics_dialog_description">나의 평균 거래 상황을 분석하기 위해\n필요한 정보가 있어요</string>
-    <string name="statistics_dialog_confirm">정보 입력하기</string>
+    <string name="statistics_susu_dialog_title">통계를 위한 정보를 알려주세요</string>
+    <string name="statistics_susu_dialog_description">나의 평균 거래 상황을 분석하기 위해\n필요한 정보가 있어요</string>
+    <string name="statistics_susu_dialog_confirm">정보 입력하기</string>
     <string name="word_statistics_is">는</string>
     <string name="word_statistics_to">에</string>
     <string name="word_statistics_send">을 보내고 있어요</string>
@@ -28,4 +28,7 @@
     <string name="statistics_susu_relationship_average">관계 별 평균 수수</string>
     <string name="statistics_susu_category_average">경조사 카테고리 별 평균 수수</string>
     <string name="statistics_susu_this_year_spent">올해 쓴 금액</string>
+    <string name="statistics_my_dialog_title">아직 볼 수 있는 통계가 없어요</string>
+    <string name="statistics_my_dialog_description">작성된 봉투 혹은 장부가 있는 경우 수수가 데이터를 분석해드려요</string>
+    <string name="statistics_my_dialog_confirm">봉투 작성하기</string>
 </resources>
