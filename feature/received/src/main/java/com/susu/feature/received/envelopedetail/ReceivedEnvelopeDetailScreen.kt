@@ -175,8 +175,11 @@ fun ReceivedEnvelopeDetailScreen(
                     )
                     DetailItem(
                         categoryText = stringResource(id = com.susu.core.ui.R.string.word_phone_number),
-                        contentText = if (uiState.envelope.friend.phoneNumber.isNullOrEmpty()) "" else
-                            uiState.envelope.friend.phoneNumber.toPhoneNumber(),
+                        contentText = if (uiState.envelope.friend.phoneNumber.isNullOrEmpty()) {
+                            ""
+                        } else {
+                            uiState.envelope.friend.phoneNumber.toPhoneNumber()
+                        },
                         isEmptyContent = uiState.envelope.friend.phoneNumber.isEmpty(),
                     )
                     DetailItem(
