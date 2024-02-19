@@ -86,18 +86,23 @@ fun LedgerDetailEnvelopeContainer(
         Row(
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Text(
-                text = envelope.friend.name,
-                style = SusuTheme.typography.title_xs,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                modifier = Modifier.weight(1f, false),
-            )
+            Row(
+                modifier = Modifier.weight(1f),
+            ) {
+                Text(
+                    text = envelope.friend.name,
+                    style = SusuTheme.typography.title_xs,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.weight(1f, false),
+                )
+            }
             Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_s))
             Text(
                 text = stringResource(id = R.string.money_unit_format, envelope.envelope.amount.toInt().toMoneyFormat()),
                 style = SusuTheme.typography.title_m,
             )
+            Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_xxs))
             Icon(
                 modifier = Modifier
                     .clip(CircleShape)
