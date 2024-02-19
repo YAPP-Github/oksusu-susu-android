@@ -31,6 +31,7 @@ fun StatisticsRoute(
     padding: PaddingValues,
     viewModel: StatisticsViewModel = hiltViewModel(),
     navigateToMyInfo: () -> Unit,
+    navigateToSent: () -> Unit,
     onShowDialog: (DialogToken) -> Unit,
     handleException: (Throwable, () -> Unit) -> Unit,
 ) {
@@ -47,6 +48,7 @@ fun StatisticsRoute(
         uiState = uiState,
         onTabSelected = viewModel::selectStatisticsTab,
         navigateToMyInfo = navigateToMyInfo,
+        navigateToSent = navigateToSent,
         onShowDialog = onShowDialog,
         handleException = handleException,
     )
@@ -58,6 +60,7 @@ fun StatisticsScreen(
     uiState: StatisticsState = StatisticsState(),
     onTabSelected: (StatisticsTab) -> Unit = {},
     navigateToMyInfo: () -> Unit = {},
+    navigateToSent: () -> Unit = {},
     onShowDialog: (DialogToken) -> Unit = {},
     handleException: (Throwable, () -> Unit) -> Unit = { _, _ -> },
 ) {
@@ -88,6 +91,7 @@ fun StatisticsScreen(
                         modifier = Modifier.fillMaxSize(),
                         handleException = handleException,
                         onShowDialog = onShowDialog,
+                        navigateToSent = navigateToSent,
                     )
 
                     StatisticsTab.AVERAGE -> SusuStatisticsRoute(

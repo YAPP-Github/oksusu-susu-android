@@ -15,6 +15,7 @@ fun NavController.navigateStatistics(navOptions: NavOptions) {
 fun NavGraphBuilder.statisticsNavGraph(
     padding: PaddingValues,
     navigateToMyInfo: () -> Unit,
+    navigateToSent: () -> Unit,
     onShowDialog: (DialogToken) -> Unit,
     handleException: (Throwable, () -> Unit) -> Unit,
 ) {
@@ -22,6 +23,7 @@ fun NavGraphBuilder.statisticsNavGraph(
         StatisticsRoute(
             padding = padding,
             navigateToMyInfo = navigateToMyInfo,
+            navigateToSent = navigateToSent,
             onShowDialog = onShowDialog,
             handleException = handleException,
         )

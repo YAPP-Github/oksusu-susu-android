@@ -181,6 +181,7 @@ internal fun MainScreen(
                 statisticsNavGraph(
                     padding = innerPadding,
                     navigateToMyInfo = navigator::navigateMyPageInfo,
+                    navigateToSent = navigator::navigateSent,
                     onShowDialog = viewModel::onShowDialog,
                     handleException = viewModel::handleException,
                 )

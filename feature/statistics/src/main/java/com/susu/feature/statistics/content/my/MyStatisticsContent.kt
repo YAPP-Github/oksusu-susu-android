@@ -52,6 +52,7 @@ fun MyStatisticsRoute(
     viewModel: MyStatisticsViewModel = hiltViewModel(),
     handleException: (Throwable, () -> Unit) -> Unit,
     onShowDialog: (DialogToken) -> Unit,
+    navigateToSent: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
@@ -69,9 +70,7 @@ fun MyStatisticsRoute(
                     text = context.getString(R.string.statistics_my_dialog_description),
                     confirmText = context.getString(R.string.statistics_my_dialog_confirm),
                     dismissText = context.getString(com.susu.core.ui.R.string.word_close),
-                    onConfirmRequest = {
-                        // TODO: 동작 확인 후 추가
-                    },
+                    onConfirmRequest = navigateToSent,
                 ),
             )
         }
