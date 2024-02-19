@@ -123,7 +123,7 @@ class SentEnvelopeEditViewModel @Inject constructor(
 
     fun updateMemo(memo: String?) {
         if (memo != null && memo.length > 30) {
-            postSideEffect(SentEnvelopeEditSideEffect.ShowPresentNotValidSnackbar)
+            postSideEffect(SentEnvelopeEditSideEffect.ShowMemoNotValidSnackbar)
             return
         }
         intent { copy(memo = memo?.ifEmpty { null }) }

@@ -26,7 +26,7 @@ val USER_INPUT_REGEX_LONG = Regex("[a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣0-9]{0,30}")
 val USER_INPUT_REGEX_INCLUDE_NUMBER = Regex("[a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣0-9]{0,10}")
 
 val USER_BIRTH_RANGE = 1930..currentDate.year
-const val MONEY_MAX_VALUE = 2_000_000_000L // TODO: 정책 확정 시 99억으로 변경
+const val MONEY_MAX_VALUE = 9_999_999_999L
 
 const val INTENT_ACTION_DOWNLOAD_COMPLETE = "android.intent.action.DOWNLOAD_COMPLETE"
 const val PRIVACY_POLICY_URL = "https://sites.google.com/view/team-oksusu/%ED%99%88"

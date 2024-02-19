@@ -117,6 +117,7 @@ fun ReceivedEnvelopeAddRoute(
         friendName = friendName,
         updateParentPhoneNumber = viewModel::updatePhoneNumber,
         updateParentMemo = viewModel::updateMemo,
+        onShowSnackbar = onShowSnackbar,
     )
 }
 
@@ -138,6 +139,7 @@ fun ReceivedEnvelopeAddScreen(
     friendName: String = "",
     updateParentPhoneNumber: (String?) -> Unit = {},
     updateParentMemo: (String?) -> Unit = {},
+    onShowSnackbar: (SnackbarToken) -> Unit = {},
 ) {
     Column(
         modifier = Modifier
@@ -166,14 +168,17 @@ fun ReceivedEnvelopeAddScreen(
             when (targetState) {
                 EnvelopeAddStep.MONEY -> MoneyContentRoute(
                     updateParentMoney = updateParentMoney,
+                    onShowSnackbar = onShowSnackbar,
                 )
 
                 EnvelopeAddStep.NAME -> NameContentRoute(
                     updateParentName = updateParentName,
                     updateParentFriendId = updateParentFriendId,
+                    onShowSnackbar = onShowSnackbar,
                 )
                 EnvelopeAddStep.RELATIONSHIP -> RelationShipContentRoute(
                     updateParentSelectedRelation = updateParentSelectedRelationShip,
+                    onShowSnackbar = onShowSnackbar,
                 )
                 EnvelopeAddStep.DATE -> DateContentRoute(
                     friendName = friendName,
@@ -190,13 +195,16 @@ fun ReceivedEnvelopeAddScreen(
 
                 EnvelopeAddStep.PRESENT -> PresentContentRoute(
                     updateParentPresent = updateParentPresent,
+                    onShowSnackbar = onShowSnackbar,
                 )
                 EnvelopeAddStep.PHONE -> PhoneContentRoute(
                     friendName = friendName,
                     updateParentPhone = updateParentPhoneNumber,
+                    onShowSnackbar = onShowSnackbar,
                 )
                 EnvelopeAddStep.MEMO -> MemoContentRoute(
                     updateParentMemo = updateParentMemo,
+                    onShowSnackbar = onShowSnackbar,
                 )
             }
         }

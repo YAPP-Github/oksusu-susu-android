@@ -31,6 +31,7 @@ import com.susu.core.ui.DialogToken
 import com.susu.core.ui.SnackbarToken
 import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.core.ui.extension.toMoneyFormat
+import com.susu.core.ui.extension.toPhoneNumber
 import com.susu.core.ui.util.to_yyyy_korYear_M_korMonth_d_korDay
 import com.susu.feature.envelopedetail.component.DetailItem
 import com.susu.feature.sent.R
@@ -187,7 +188,7 @@ fun SentEnvelopeDetailScreen(
                         )
                         DetailItem(
                             categoryText = stringResource(com.susu.core.ui.R.string.word_phone_number),
-                            contentText = friend.phoneNumber,
+                            contentText = if (friend.phoneNumber.isNullOrEmpty()) "" else friend.phoneNumber.toPhoneNumber(),
                             isEmptyContent = friend.phoneNumber.isEmpty(),
                         )
                         DetailItem(

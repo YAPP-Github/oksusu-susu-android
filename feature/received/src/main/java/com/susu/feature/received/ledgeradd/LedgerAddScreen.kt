@@ -28,6 +28,7 @@ import com.susu.core.designsystem.component.screen.LoadingScreen
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.model.Category
 import com.susu.core.ui.R
+import com.susu.core.ui.SnackbarToken
 import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.core.ui.extension.susuDefaultAnimatedContentTransitionSpec
 import com.susu.feature.received.ledgeradd.content.category.CategoryContentRoute
@@ -40,6 +41,7 @@ fun LedgerAddRoute(
     viewModel: LedgerAddViewModel = hiltViewModel(),
     popBackStack: () -> Unit,
     popBackStackWithLedger: (String) -> Unit,
+    onShowSnackbar: (SnackbarToken) -> Unit,
     handleException: (Throwable, () -> Unit) -> Unit,
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
@@ -82,6 +84,7 @@ fun LedgerAddRoute(
         updateParentDate = { startAt, endAt ->
             viewModel.updateDate(startAt, endAt)
         },
+        onShowSnackbar = onShowSnackbar,
     )
 }
 
@@ -95,6 +98,7 @@ fun LedgerAddScreen(
     dateContentCategory: Category? = Category(),
     dateContentName: String = "",
     updateParentDate: (LocalDateTime?, LocalDateTime?) -> Unit = { _, _ -> },
+    onShowSnackbar: (SnackbarToken) -> Unit = {},
 ) {
     Column(
         modifier = Modifier
@@ -122,10 +126,12 @@ fun LedgerAddScreen(
             when (targetState) {
                 LedgerAddStep.CATEGORY -> CategoryContentRoute(
                     updateParentSelectedCategory = updateParentSelectedCategory,
+                    onShowSnackbar = onShowSnackbar,
                 )
 
                 LedgerAddStep.NAME -> NameContentRoute(
                     updateParentName = updateParentName,
+                    onShowSnackbar = onShowSnackbar,
                 )
 
                 LedgerAddStep.DATE -> DateContentRoute(

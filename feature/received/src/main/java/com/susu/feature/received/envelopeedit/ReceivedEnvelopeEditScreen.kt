@@ -23,6 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
@@ -47,8 +48,10 @@ import com.susu.core.designsystem.theme.Gray40
 import com.susu.core.designsystem.theme.Gray70
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.model.Relationship
+import com.susu.core.ui.SnackbarToken
 import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.core.ui.extension.susuClickable
+import com.susu.core.ui.util.PhoneVisualTransformation
 import com.susu.feature.received.R
 import com.susu.feature.received.envelopeedit.component.EditDetailItem
 import kotlinx.coroutines.android.awaitFrame
@@ -59,11 +62,12 @@ fun ReceivedEnvelopeEditRoute(
     viewModel: ReceivedEnvelopeEditViewModel = hiltViewModel(),
     popBackStack: () -> Unit,
     handleException: (Throwable, () -> Unit) -> Unit,
+    onShowSnackbar: (SnackbarToken) -> Unit,
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
-
     val focusRequester = remember { FocusRequester() }
     val scope = rememberCoroutineScope()
+    val context = LocalContext.current
 
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
@@ -71,12 +75,41 @@ fun ReceivedEnvelopeEditRoute(
                 sideEffect.throwable,
                 sideEffect.retry,
             )
-
             ReceivedEnvelopeEditSideEffect.PopBackStack -> popBackStack()
             ReceivedEnvelopeEditSideEffect.FocusCustomRelation -> scope.launch {
                 awaitFrame()
                 focusRequester.requestFocus()
             }
+            ReceivedEnvelopeEditSideEffect.ShowMoneyNotValidSnackbar -> onShowSnackbar(
+                SnackbarToken(
+                    message = context.getString(R.string.money_content_snackbar_validation),
+                ),
+            )
+            ReceivedEnvelopeEditSideEffect.ShowNameNotValidSnackbar -> onShowSnackbar(
+                SnackbarToken(
+                    message = context.getString(R.string.name_content_snackbar_validation),
+                ),
+            )
+            ReceivedEnvelopeEditSideEffect.ShowRelationshipNotValidSnackbar -> onShowSnackbar(
+                SnackbarToken(
+                    message = context.getString(R.string.relationship_content_snackbar_validation),
+                ),
+            )
+            ReceivedEnvelopeEditSideEffect.ShowPresentNotValidSnackbar -> onShowSnackbar(
+                SnackbarToken(
+                    message = context.getString(R.string.present_content_snackbar_validation),
+                ),
+            )
+            ReceivedEnvelopeEditSideEffect.ShowPhoneNotValidSnackbar -> onShowSnackbar(
+                SnackbarToken(
+                    message = context.getString(R.string.phone_content_snackbar_validation),
+                ),
+            )
+            ReceivedEnvelopeEditSideEffect.ShowMemoNotValidSnackbar -> onShowSnackbar(
+                SnackbarToken(
+                    message = context.getString(R.string.memo_content_snackbar_validation),
+                ),
+            )
         }
     }
 
@@ -250,6 +283,7 @@ fun ReceivedEnvelopeEditScreen(
                         placeholderColor = Gray30,
                         textStyle = SusuTheme.typography.title_s,
                         modifier = Modifier.fillMaxWidth(),
+                        maxLines = 5,
                     )
                 }
                 EditDetailItem(
@@ -265,6 +299,7 @@ fun ReceivedEnvelopeEditScreen(
                         textStyle = SusuTheme.typography.title_s,
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                         modifier = Modifier.fillMaxWidth(),
+                        visualTransformation = PhoneVisualTransformation(),
                     )
                 }
                 EditDetailItem(
@@ -279,6 +314,7 @@ fun ReceivedEnvelopeEditScreen(
                         placeholderColor = Gray30,
                         textStyle = SusuTheme.typography.title_s,
                         modifier = Modifier.fillMaxWidth(),
+                        maxLines = 5,
                     )
                 }
                 Spacer(modifier = Modifier.height(SusuTheme.spacing.spacing_xxxl))

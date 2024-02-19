@@ -25,4 +25,10 @@ sealed interface ReceivedEnvelopeEditSideEffect : SideEffect {
     data object FocusCustomRelation : ReceivedEnvelopeEditSideEffect
     data object PopBackStack : ReceivedEnvelopeEditSideEffect
     data class HandleException(val throwable: Throwable, val retry: () -> Unit) : ReceivedEnvelopeEditSideEffect
+    data object ShowMoneyNotValidSnackbar : ReceivedEnvelopeEditSideEffect
+    data object ShowNameNotValidSnackbar : ReceivedEnvelopeEditSideEffect
+    data object ShowRelationshipNotValidSnackbar : ReceivedEnvelopeEditSideEffect
+    data object ShowPresentNotValidSnackbar : ReceivedEnvelopeEditSideEffect
+    data object ShowPhoneNotValidSnackbar : ReceivedEnvelopeEditSideEffect
+    data object ShowMemoNotValidSnackbar : ReceivedEnvelopeEditSideEffect
 }

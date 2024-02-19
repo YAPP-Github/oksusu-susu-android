@@ -5,6 +5,9 @@ import androidx.lifecycle.viewModelScope
 import com.susu.core.model.Envelope
 import com.susu.core.model.Ledger
 import com.susu.core.model.Relationship
+import com.susu.core.ui.USER_INPUT_REGEX
+import com.susu.core.ui.USER_INPUT_REGEX_INCLUDE_NUMBER
+import com.susu.core.ui.USER_INPUT_REGEX_LONG
 import com.susu.core.ui.base.BaseViewModel
 import com.susu.core.ui.extension.decodeFromUri
 import com.susu.domain.usecase.envelope.EditReceivedEnvelopeUseCase
@@ -87,16 +90,32 @@ class ReceivedEnvelopeEditViewModel @Inject constructor(
 
     fun popBackStack() = postSideEffect(ReceivedEnvelopeEditSideEffect.PopBackStack)
 
-    fun updateMoney(money: String) = intent {
-        copy(
-            envelope = envelope.copy(amount = money.toLongOrNull() ?: 0L),
-        )
+    fun updateMoney(money: String) {
+        if (money.length > 10) {
+            postSideEffect(ReceivedEnvelopeEditSideEffect.ShowMoneyNotValidSnackbar)
+            return
+        }
+
+        intent {
+            copy(
+                envelope = envelope.copy(amount = money.toLongOrNull() ?: 0L),
+            )
+        }
     }
 
-    fun updateName(name: String) = intent {
-        copy(
-            envelope = envelope.copy(friend = envelope.friend.copy(name = name)),
-        )
+    fun updateName(name: String) {
+        if (!USER_INPUT_REGEX.matches(name)) {
+            if (name.length > 10) {
+                postSideEffect(ReceivedEnvelopeEditSideEffect.ShowNameNotValidSnackbar)
+            }
+            return
+        }
+
+        intent {
+            copy(
+                envelope = envelope.copy(friend = envelope.friend.copy(name = name)),
+            )
+        }
     }
 
     fun updateRelation(relationship: Relationship) = intent {
@@ -105,17 +124,26 @@ class ReceivedEnvelopeEditViewModel @Inject constructor(
         )
     }
 
-    fun updateCustomRelation(customRelation: String?) = intent {
-        copy(
-            envelope = envelope.copy(relationship = envelope.relationship.copy(customRelation = customRelation)),
-            relationshipConfig = relationshipConfig.map {
-                if (it.id == envelope.relationship.id) {
-                    it.copy(customRelation = customRelation)
-                } else {
-                    it
-                }
-            }.toPersistentList(),
-        )
+    fun updateCustomRelation(customRelation: String?) {
+        if (customRelation != null && !USER_INPUT_REGEX_INCLUDE_NUMBER.matches(customRelation)) {
+            if (customRelation.length > 10) {
+                postSideEffect(ReceivedEnvelopeEditSideEffect.ShowRelationshipNotValidSnackbar)
+            }
+            return
+        }
+
+        intent {
+            copy(
+                envelope = envelope.copy(relationship = envelope.relationship.copy(customRelation = customRelation)),
+                relationshipConfig = relationshipConfig.map {
+                    if (it.id == envelope.relationship.id) {
+                        it.copy(customRelation = customRelation)
+                    } else {
+                        it
+                    }
+                }.toPersistentList(),
+            )
+        }
     }
 
     fun closeCustomRelation() = intent {
@@ -164,30 +192,53 @@ class ReceivedEnvelopeEditViewModel @Inject constructor(
         )
     }
 
-    fun updateGift(gift: String) = intent {
-        copy(
-            envelope = envelope.copy(
-                gift = gift.ifEmpty { null },
-            ),
-        )
-    }
+    fun updateGift(gift: String) {
+        if (gift != null && !USER_INPUT_REGEX_LONG.matches(gift)) {
+            if (gift.length > 30) {
+                postSideEffect(ReceivedEnvelopeEditSideEffect.ShowPresentNotValidSnackbar)
+            }
+            return
+        }
 
-    fun updatePhoneNumber(phoneNumber: String) = intent {
-        copy(
-            envelope = envelope.copy(
-                friend = envelope.friend.copy(
-                    phoneNumber = phoneNumber,
+        intent {
+            copy(
+                envelope = envelope.copy(
+                    gift = gift.ifEmpty { null },
                 ),
-            ),
-        )
+            )
+        }
     }
 
-    fun updateMemo(memo: String) = intent {
-        copy(
-            envelope = envelope.copy(
-                memo = memo.ifEmpty { null },
-            ),
-        )
+    fun updatePhoneNumber(phoneNumber: String) {
+        if (phoneNumber != null && phoneNumber.length > 11) {
+            postSideEffect(ReceivedEnvelopeEditSideEffect.ShowPhoneNotValidSnackbar)
+            return
+        }
+
+        intent {
+            copy(
+                envelope = envelope.copy(
+                    friend = envelope.friend.copy(
+                        phoneNumber = phoneNumber,
+                    ),
+                ),
+            )
+        }
+    }
+
+    fun updateMemo(memo: String) {
+        if (memo != null && memo.length > 30) {
+            postSideEffect(ReceivedEnvelopeEditSideEffect.ShowMemoNotValidSnackbar)
+            return
+        }
+
+        intent {
+            copy(
+                envelope = envelope.copy(
+                    memo = memo.ifEmpty { null },
+                ),
+            )
+        }
     }
 
     fun hideDateBottomSheet(year: Int, month: Int, day: Int) = intent {

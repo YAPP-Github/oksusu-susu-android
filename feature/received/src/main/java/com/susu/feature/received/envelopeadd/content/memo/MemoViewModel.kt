@@ -8,9 +8,16 @@ import javax.inject.Inject
 class MemoViewModel @Inject constructor() : BaseViewModel<MemoState, MemoSideEffect>(
     MemoState(),
 ) {
-    fun updateMemo(memo: String?) = intent {
-        postSideEffect(MemoSideEffect.UpdateParentMemo(memo))
-        copy(memo = memo ?: "")
+    fun updateMemo(memo: String?) {
+        if (memo != null && memo.length > 30) {
+            postSideEffect(MemoSideEffect.ShowNotValidSnackbar)
+            return
+        }
+
+        intent {
+            postSideEffect(MemoSideEffect.UpdateParentMemo(memo))
+            copy(memo = memo ?: "")
+        }
     }
 
     fun showKeyboardIfTextEmpty() {

@@ -35,4 +35,6 @@ data class LedgerEditState(
 sealed interface LedgerEditSideEffect : SideEffect {
     data object PopBackStack : LedgerEditSideEffect
     data object FocusCustomCategory : LedgerEditSideEffect
+    data object ShowNotValidSnackbarName : LedgerEditSideEffect
+    data object ShowNotValidSnackbarCategory : LedgerEditSideEffect
 }

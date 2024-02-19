@@ -55,6 +55,7 @@ import com.susu.core.model.Relationship
 import com.susu.core.ui.SnackbarToken
 import com.susu.core.ui.extension.collectWithLifecycle
 import com.susu.core.ui.extension.susuClickable
+import com.susu.core.ui.util.PhoneVisualTransformation
 import com.susu.core.ui.util.to_yyyy_korYear_M_korMonth_d_korDay
 import com.susu.feature.envelopeedit.component.EditDetailItem
 import com.susu.feature.sent.R
@@ -385,6 +386,7 @@ fun SentEnvelopeEditScreen(
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                         modifier = Modifier.fillMaxWidth(),
                         maxLines = 2,
+                        visualTransformation = PhoneVisualTransformation(),
                     )
                 }
                 EditDetailItem(

@@ -139,6 +139,7 @@ fun NavGraphBuilder.receivedNavGraph(
     ) {
         LedgerEditRoute(
             popBackStack = popBackStack,
+            onShowSnackbar = onShowSnackbar,
         )
     }
 
@@ -159,6 +160,7 @@ fun NavGraphBuilder.receivedNavGraph(
             popBackStack = popBackStack,
             popBackStackWithLedger = popBackStackWithLedger,
             handleException = handleException,
+            onShowSnackbar = onShowSnackbar,
         )
     }
 
@@ -200,6 +202,7 @@ fun NavGraphBuilder.receivedNavGraph(
         ReceivedEnvelopeEditRoute(
             popBackStack = popBackStack,
             handleException = handleException,
+            onShowSnackbar = onShowSnackbar,
         )
     }
 }

@@ -2,6 +2,7 @@ package com.susu.feature.received.ledgeradd.content.category
 
 import androidx.lifecycle.viewModelScope
 import com.susu.core.model.Category
+import com.susu.core.ui.USER_INPUT_REGEX_INCLUDE_NUMBER
 import com.susu.core.ui.base.BaseViewModel
 import com.susu.domain.usecase.categoryconfig.GetCategoryConfigUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -46,11 +47,20 @@ class CategoryViewModel @Inject constructor(
         copy(selectedCategory = customCategory)
     }
 
-    fun updateCustomCategoryText(text: String) = intent {
-        copy(
-            selectedCategory = customCategory.copy(customCategory = text),
-            customCategory = customCategory.copy(customCategory = text),
-        )
+    fun updateCustomCategoryText(text: String) {
+        if (!USER_INPUT_REGEX_INCLUDE_NUMBER.matches(text)) { // 한글, 영문 0~10 글자
+            if (text.length > 10) { // 길이 넘친 경우
+                postSideEffect(CategorySideEffect.ShowNotValidSnackbar)
+            }
+            return // 특수문자는 입력 안 됨
+        }
+
+        intent {
+            copy(
+                selectedCategory = customCategory.copy(customCategory = text),
+                customCategory = customCategory.copy(customCategory = text),
+            )
+        }
     }
 
     fun showCustomCategoryTextField() = intent {
