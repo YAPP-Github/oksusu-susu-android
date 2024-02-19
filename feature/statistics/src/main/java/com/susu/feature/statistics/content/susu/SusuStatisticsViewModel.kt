@@ -66,10 +66,10 @@ class SusuStatisticsViewModel @Inject constructor(
     }
 
     fun getSusuStatistics(onFinish: () -> Unit = {}) {
-        if (
-            (currentState.relationship !in currentState.relationshipConfig &&
-                currentState.category !in currentState.categoryConfig) ||
-            currentState.isBlind
+        if (currentState.isBlind) return
+
+        if (currentState.relationship !in currentState.relationshipConfig &&
+            currentState.category !in currentState.categoryConfig
         ) {
             return
         }
