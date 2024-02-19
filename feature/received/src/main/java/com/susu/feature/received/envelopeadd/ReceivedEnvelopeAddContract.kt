@@ -39,4 +39,6 @@ sealed interface ReceivedEnvelopeAddSideEffect : SideEffect {
     data object PopBackStack : ReceivedEnvelopeAddSideEffect
     data class PopBackStackWithEnvelope(val envelope: String) : ReceivedEnvelopeAddSideEffect
     data class HandleException(val throwable: Throwable, val retry: () -> Unit) : ReceivedEnvelopeAddSideEffect
+    data class LogClickNextButton(val step: EnvelopeAddStep) : ReceivedEnvelopeAddSideEffect
+    data class LogClickBackButton(val step: EnvelopeAddStep) : ReceivedEnvelopeAddSideEffect
 }

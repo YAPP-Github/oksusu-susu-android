@@ -71,4 +71,12 @@ class LedgerSearchViewModel @Inject constructor(
             recentSearchKeywordList = searchList.toPersistentList(),
         )
     }
+
+    fun logBackClickEvent() {
+        postSideEffect(LedgerSearchSideEffect.LogBackClickEvent)
+    }
+
+    fun logSearchResultClickEvent() {
+        postSideEffect(LedgerSearchSideEffect.LogSearchResultClickEvent)
+    }
 }

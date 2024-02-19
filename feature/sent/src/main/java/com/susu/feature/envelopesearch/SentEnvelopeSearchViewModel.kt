@@ -90,4 +90,15 @@ class SentEnvelopeSearchViewModel @Inject constructor(
     }
 
     fun clearFocus() = postSideEffect(EnvelopeSearchEffect.FocusClear)
+    fun popBackStack() {
+        postSideEffect(EnvelopeSearchEffect.PopBackStack)
+    }
+
+    fun logBackClickEvent() {
+        postSideEffect(EnvelopeSearchEffect.LogBackClickEvent)
+    }
+
+    fun logSearchResultClickEvent() {
+        postSideEffect(EnvelopeSearchEffect.LogSearchResultClickEvent)
+    }
 }

@@ -11,13 +11,20 @@ import androidx.compose.animation.slideOut
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.IntOffset
+import androidx.core.os.bundleOf
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.currentBackStackEntryAsState
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.susu.core.designsystem.component.dialog.SusuCheckedDialog
 import com.susu.core.designsystem.component.dialog.SusuDialog
 import com.susu.core.designsystem.component.navigation.SusuNavigationBar
@@ -45,6 +52,8 @@ internal fun MainScreen(
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
     val context = LocalContext.current
+    val navBackStackEntry by navigator.navController.currentBackStackEntryAsState()
+    val currentDestination by remember(navBackStackEntry) { derivedStateOf { navBackStackEntry?.destination } }
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
             MainSideEffect.NavigateLogin -> navigator.navigateLogin()
@@ -61,6 +70,16 @@ internal fun MainScreen(
                 )
             }
         }
+    }
+
+    LaunchedEffect(key1 = currentDestination) {
+        FirebaseAnalytics.getInstance(context).logEvent(
+            FirebaseAnalytics.Event.SCREEN_VIEW,
+            bundleOf(
+                FirebaseAnalytics.Param.SCREEN_NAME to currentDestination?.route,
+                FirebaseAnalytics.Param.SCREEN_CLASS to MainActivity::class.java.simpleName,
+            ),
+        )
     }
 
     val systemUiController = rememberSystemUiController()

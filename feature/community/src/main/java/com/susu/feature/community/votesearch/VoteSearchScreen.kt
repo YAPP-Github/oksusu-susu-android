@@ -11,18 +11,22 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.os.bundleOf
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.susu.core.designsystem.component.appbar.SusuDefaultAppBar
 import com.susu.core.designsystem.component.appbar.icon.BackIcon
 import com.susu.core.designsystem.component.container.SusuRecentSearchContainer
@@ -36,6 +40,7 @@ import com.susu.feature.community.R
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.launch
 
 @OptIn(FlowPreview::class)
 @Composable
@@ -47,11 +52,31 @@ fun VoteSearchRoute(
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
     val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
+
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
             VoteSearchSideEffect.PopBackStack -> popBackStack()
             is VoteSearchSideEffect.NavigateVoteDetail -> navigateVoteDetail(sideEffect.voteId)
             VoteSearchSideEffect.FocusClear -> focusManager.clearFocus()
+            VoteSearchSideEffect.LogBackClickEvent -> scope.launch {
+                FirebaseAnalytics.getInstance(context).logEvent(
+                    FirebaseAnalytics.Event.SELECT_CONTENT,
+                    bundleOf(
+                        FirebaseAnalytics.Param.CONTENT_TYPE to "vote_search_screen_back",
+                    ),
+                )
+            }
+            VoteSearchSideEffect.LogSearchResultClickEvent -> scope.launch {
+                FirebaseAnalytics.getInstance(context).logEvent(
+                    FirebaseAnalytics.Event.SELECT_CONTENT,
+                    bundleOf(
+                        FirebaseAnalytics.Param.CONTENT_TYPE to "vote_search_screen_search_result",
+                    ),
+                )
+            }
         }
     }
 
@@ -68,7 +93,10 @@ fun VoteSearchRoute(
     VoteSearchScreen(
         uiState = uiState,
         focusRequester = focusRequester,
-        onClickBackIcon = viewModel::popBackStack,
+        onClickBackIcon = {
+            viewModel.popBackStack()
+            viewModel.logBackClickEvent()
+        },
         onValueChangeSearchBar = viewModel::updateSearch,
         onClickSearchClearIcon = { viewModel.updateSearch("") },
         onClickRecentSearchContainer = { search ->
@@ -79,6 +107,7 @@ fun VoteSearchRoute(
         },
         onClickRecentSearchContainerCloseIcon = viewModel::deleteVoteRecentSearch,
         onClickSearchResultContainer = { vote ->
+            viewModel.logSearchResultClickEvent()
             viewModel.upsertVoteRecentSearch(vote.content)
             viewModel.navigateVoteDetail(vote)
         },

@@ -18,4 +18,6 @@ sealed interface VoteSearchSideEffect : SideEffect {
     data object PopBackStack : VoteSearchSideEffect
     data class NavigateVoteDetail(val voteId: Long) : VoteSearchSideEffect
     data object FocusClear : VoteSearchSideEffect
+    data object LogBackClickEvent : VoteSearchSideEffect
+    data object LogSearchResultClickEvent : VoteSearchSideEffect
 }
