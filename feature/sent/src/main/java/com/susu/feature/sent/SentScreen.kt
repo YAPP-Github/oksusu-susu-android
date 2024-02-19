@@ -122,6 +122,42 @@ fun SentRoute(
                     ),
                 )
             }
+
+            SentEffect.LogAlignButtonClickEvent -> scope.launch {
+                FirebaseAnalytics.getInstance(context).logEvent(
+                    FirebaseAnalytics.Event.SELECT_CONTENT,
+                    bundleOf(
+                        FirebaseAnalytics.Param.CONTENT_TYPE to "sent_screen_align_button",
+                    ),
+                )
+            }
+
+            SentEffect.LogFilterButtonClickEvent -> scope.launch {
+                FirebaseAnalytics.getInstance(context).logEvent(
+                    FirebaseAnalytics.Event.SELECT_CONTENT,
+                    bundleOf(
+                        FirebaseAnalytics.Param.CONTENT_TYPE to "sent_screen_filter_button",
+                    ),
+                )
+            }
+
+            SentEffect.LogShowHistoryButtonClickEvent -> scope.launch {
+                FirebaseAnalytics.getInstance(context).logEvent(
+                    FirebaseAnalytics.Event.SELECT_CONTENT,
+                    bundleOf(
+                        FirebaseAnalytics.Param.CONTENT_TYPE to "sent_screen_show_history_button",
+                    ),
+                )
+            }
+
+            is SentEffect.LogAlignItemClickEvent -> scope.launch {
+                FirebaseAnalytics.getInstance(context).logEvent(
+                    FirebaseAnalytics.Event.SELECT_CONTENT,
+                    bundleOf(
+                        FirebaseAnalytics.Param.CONTENT_TYPE to "sent_screen_align_item_${sideEffect.align}",
+                    ),
+                )
+            }
         }
     }
 
@@ -153,7 +189,10 @@ fun SentRoute(
         envelopesListState = envelopesListState,
         refreshState = refreshState,
         padding = padding,
-        onClickHistoryShowAll = viewModel::navigateSentEnvelope,
+        onClickHistoryShowAll = { id ->
+            viewModel.navigateSentEnvelope(id)
+            viewModel.logShowHistoryButtonClickEvent()
+        },
         onClickAddEnvelope = viewModel::navigateSentAdd,
         onClickSearchIcon = {
             viewModel.navigateSentEnvelopeSearch()
@@ -166,11 +205,20 @@ fun SentRoute(
                 viewModel.getEnvelopesHistoryList(friendId)
             }
         },
-        onClickFilterButton = viewModel::navigateEnvelopeFilter,
+        onClickFilterButton = {
+            viewModel.navigateEnvelopeFilter()
+            viewModel.logFilterButtonClickEvent()
+        },
         onClickFriendClose = viewModel::unselectFriend,
         onClickMoneyClose = viewModel::removeMoney,
-        onClickAlignButton = viewModel::showAlignBottomSheet,
-        onClickAlignBottomSheetItem = viewModel::updateAlignPosition,
+        onClickAlignButton = {
+            viewModel.showAlignBottomSheet()
+            viewModel.logAlignButtonClickEvent()
+        },
+        onClickAlignBottomSheetItem = {
+            viewModel.updateAlignPosition(it)
+            viewModel.logAlignItemClickEvent(it)
+        },
         onDismissAlignBottomSheet = viewModel::hideAlignBottomSheet,
     )
 }

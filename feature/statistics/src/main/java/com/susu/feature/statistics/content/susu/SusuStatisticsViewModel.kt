@@ -89,9 +89,20 @@ class SusuStatisticsViewModel @Inject constructor(
         }
     }
 
-    fun selectAge(age: StatisticsAge) = intent { copy(age = age, isAgeSheetOpen = false) }
-    fun selectRelationship(index: Int) = intent { copy(relationship = relationshipConfig[index], isRelationshipSheetOpen = false) }
-    fun selectCategory(index: Int) = intent { copy(category = categoryConfig[index], isCategorySheetOpen = false) }
+    fun selectAge(age: StatisticsAge) {
+        intent { copy(age = age, isAgeSheetOpen = false) }
+        postSideEffect(SusuStatisticsEffect.LogAgeOption(currentState.age))
+    }
+    fun selectRelationship(index: Int) {
+        intent { copy(relationship = relationshipConfig[index], isRelationshipSheetOpen = false) }
+        postSideEffect(SusuStatisticsEffect.LogRelationshipOption(currentState.relationship.relation))
+    }
+
+    fun selectCategory(index: Int) {
+        intent { copy(category = categoryConfig[index], isCategorySheetOpen = false) }
+        postSideEffect(SusuStatisticsEffect.LogCategoryOption(currentState.category.category))
+    }
+
     fun showAgeSheet() = intent { copy(isAgeSheetOpen = true) }
     fun showRelationshipSheet() = intent { copy(isRelationshipSheetOpen = true) }
     fun showCategorySheet() = intent { copy(isCategorySheetOpen = true) }

@@ -15,12 +15,16 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.os.bundleOf
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.susu.core.designsystem.component.appbar.SusuDefaultAppBar
 import com.susu.core.designsystem.component.appbar.icon.BackIcon
 import com.susu.core.designsystem.component.button.FilledButtonColor
@@ -40,6 +44,7 @@ import com.susu.feature.envelopefilter.component.SearchBar
 import com.susu.feature.sent.R
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.launch
 
 @OptIn(FlowPreview::class)
 @Composable
@@ -50,11 +55,40 @@ fun EnvelopeFilterRoute(
     handleException: (Throwable, () -> Unit) -> Unit,
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
             is EnvelopeFilterSideEffect.HandleException -> handleException(sideEffect.throwable, sideEffect.retry)
             EnvelopeFilterSideEffect.PopBackStack -> popBackStack()
             is EnvelopeFilterSideEffect.PopBackStackWithFilter -> popBackStackWithFilter(sideEffect.filter)
+            EnvelopeFilterSideEffect.LogClickApplyButtonEvent -> scope.launch {
+                FirebaseAnalytics.getInstance(context).logEvent(
+                    FirebaseAnalytics.Event.SELECT_CONTENT,
+                    bundleOf(
+                        FirebaseAnalytics.Param.CONTENT_TYPE to "sent_filter_apply_button",
+                    ),
+                )
+            }
+
+            EnvelopeFilterSideEffect.LogClickFriendButtonEvent -> scope.launch {
+                FirebaseAnalytics.getInstance(context).logEvent(
+                    FirebaseAnalytics.Event.SELECT_CONTENT,
+                    bundleOf(
+                        FirebaseAnalytics.Param.CONTENT_TYPE to "sent_filter_friend_button",
+                    ),
+                )
+            }
+
+            EnvelopeFilterSideEffect.LogClickSliderEvent -> scope.launch {
+                FirebaseAnalytics.getInstance(context).logEvent(
+                    FirebaseAnalytics.Event.SELECT_CONTENT,
+                    bundleOf(
+                        FirebaseAnalytics.Param.CONTENT_TYPE to "sent_filter_slider",
+                    ),
+                )
+            }
         }
     }
 
@@ -68,15 +102,35 @@ fun EnvelopeFilterRoute(
             .collect(viewModel::getFriendList)
     }
 
+    LaunchedEffect(key1 = uiState.fromAmount, key2 = uiState.toAmount) {
+        snapshotFlow { uiState.fromAmount }
+            .debounce(1000L)
+            .collect {
+                viewModel.logSliderClickEvent()
+            }
+
+        snapshotFlow { uiState.toAmount }
+            .debounce(1000L)
+            .collect {
+                viewModel.logSliderClickEvent()
+            }
+    }
+
     EnvelopeFilterScreen(
         uiState = uiState,
         onClickBackIcon = viewModel::popBackStack,
-        onClickApplyFilterButton = viewModel::popBackStackWithFilter,
+        onClickApplyFilterButton = {
+            viewModel.popBackStackWithFilter()
+            viewModel.logApplyClickEvent()
+        },
+        onClickRefreshButton = viewModel::clearFilter,
         onTextChangeSearch = viewModel::updateName,
-        onClickFriendChip = viewModel::toggleFriend,
+        onClickFriendChip = { friend ->
+            viewModel.toggleFriend(friend)
+            viewModel.logFriendClickEvent()
+        },
         onCloseFriendChip = viewModel::unselectFriend,
         onMoneyValueChange = viewModel::updateMoneyRange,
-        onClickRefreshButton = viewModel::clearFilter,
     )
 }
 

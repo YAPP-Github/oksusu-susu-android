@@ -24,6 +24,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -31,8 +32,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.os.bundleOf
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.susu.core.designsystem.component.bottomsheet.SusuSelectionBottomSheet
 import com.susu.core.designsystem.component.screen.LoadingScreen
 import com.susu.core.designsystem.theme.Blue60
@@ -48,6 +51,7 @@ import com.susu.feature.statistics.component.StatisticsHorizontalItem
 import com.susu.feature.statistics.component.StatisticsVerticalItem
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toPersistentList
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -59,6 +63,7 @@ fun SusuStatisticsRoute(
     handleException: (Throwable, () -> Unit) -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val scope = rememberCoroutineScope()
     val context = LocalContext.current
 
     val refreshState = rememberPullToRefreshState(
@@ -68,6 +73,34 @@ fun SusuStatisticsRoute(
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
             is SusuStatisticsEffect.HandleException -> handleException(sideEffect.throwable, sideEffect.retry)
+
+            is SusuStatisticsEffect.LogAgeOption -> scope.launch {
+                FirebaseAnalytics.getInstance(context).logEvent(
+                    FirebaseAnalytics.Event.SELECT_CONTENT,
+                    bundleOf(
+                        FirebaseAnalytics.Param.CONTENT_TYPE to "statistics_age_${sideEffect.age}",
+                    ),
+                )
+            }
+
+            is SusuStatisticsEffect.LogCategoryOption -> scope.launch {
+                FirebaseAnalytics.getInstance(context).logEvent(
+                    FirebaseAnalytics.Event.SELECT_CONTENT,
+                    bundleOf(
+                        FirebaseAnalytics.Param.CONTENT_TYPE to "statistics_category_${sideEffect.category}",
+                    ),
+                )
+            }
+
+            is SusuStatisticsEffect.LogRelationshipOption -> scope.launch {
+                FirebaseAnalytics.getInstance(context).logEvent(
+                    FirebaseAnalytics.Event.SELECT_CONTENT,
+                    bundleOf(
+                        FirebaseAnalytics.Param.CONTENT_TYPE to "statistics_relationship_${sideEffect.relationship}",
+                    ),
+                )
+            }
+
             SusuStatisticsEffect.ShowAdditionalInfoDialog -> onShowDialog(
                 DialogToken(
                     title = context.getString(R.string.statistics_susu_dialog_title),

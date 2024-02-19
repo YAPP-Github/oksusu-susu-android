@@ -11,6 +11,9 @@ import kotlinx.collections.immutable.persistentListOf
 sealed interface SusuStatisticsEffect : SideEffect {
     data object ShowAdditionalInfoDialog : SusuStatisticsEffect
     data class HandleException(val throwable: Throwable, val retry: () -> Unit) : SusuStatisticsEffect
+    data class LogAgeOption(val age: StatisticsAge) : SusuStatisticsEffect
+    data class LogRelationshipOption(val relationship: String) : SusuStatisticsEffect
+    data class LogCategoryOption(val category: String) : SusuStatisticsEffect
 }
 
 data class SusuStatisticsState(
