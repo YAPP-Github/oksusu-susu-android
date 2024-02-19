@@ -123,9 +123,11 @@ fun DateContent(
                 suffix = stringResource(R.string.ledger_add_screen_until),
                 onClick = onClickEndDateText,
             )
+        } else {
+            Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_xxs))
         }
 
-        Spacer(modifier = Modifier.weight(1f))
+        Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_xl))
 
         SusuGhostButton(
             modifier = Modifier.align(Alignment.CenterHorizontally),
