@@ -29,6 +29,10 @@ class SentViewModel @Inject constructor(
     private var filterUri: String? = null
 
     fun logSearchIconClickEvent() = postSideEffect(SentEffect.LogSearchIconClickEvent)
+    fun logFilterButtonClickEvent() = postSideEffect(SentEffect.LogFilterButtonClickEvent)
+    fun logAlignButtonClickEvent() = postSideEffect(SentEffect.LogAlignButtonClickEvent)
+    fun logAlignItemClickEvent(index: Int) = postSideEffect(SentEffect.LogAlignItemClickEvent(EnvelopeAlign.entries[index]))
+    fun logShowHistoryButtonClickEvent() = postSideEffect(SentEffect.LogShowHistoryButtonClickEvent)
 
     fun getEnvelopesList(refresh: Boolean?, onFinish: () -> Unit = {}) = viewModelScope.launch {
         mutex.withLock {

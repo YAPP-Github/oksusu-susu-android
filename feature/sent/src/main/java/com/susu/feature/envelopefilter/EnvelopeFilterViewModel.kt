@@ -126,4 +126,8 @@ class EnvelopeFilterViewModel @Inject constructor(
             toAmount = null,
         )
     }
+
+    fun logApplyClickEvent() = postSideEffect(EnvelopeFilterSideEffect.LogClickApplyButtonEvent)
+    fun logFriendClickEvent() = postSideEffect(EnvelopeFilterSideEffect.LogClickFriendButtonEvent)
+    fun logSliderClickEvent() = postSideEffect(EnvelopeFilterSideEffect.LogClickSliderEvent)
 }
