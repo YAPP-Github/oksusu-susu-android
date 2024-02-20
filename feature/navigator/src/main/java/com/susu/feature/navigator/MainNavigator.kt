@@ -72,6 +72,7 @@ internal class MainNavigator(
                 SentRoute.sentEnvelopeRoute("{${SentRoute.FRIEND_ID_ARGUMENT_NAME}}"),
                 SentRoute.sentEnvelopeDetailRoute("{${SentRoute.ENVELOPE_ID_ARGUMENT_NAME}}"),
                 SentRoute.sentEnvelopeEditRoute("{${SentRoute.ENVELOPE_DETAIL_ARGUMENT_NAME}}"),
+                SentRoute.sentEnvelopeSearchRoute,
                 CommunityRoute.route,
                 CommunityRoute.voteAddRoute,
                 CommunityRoute.voteSearchRoute,

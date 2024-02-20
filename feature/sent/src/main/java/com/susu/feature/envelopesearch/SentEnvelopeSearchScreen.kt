@@ -1,5 +1,6 @@
 package com.susu.feature.envelopesearch
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -126,7 +127,9 @@ fun SentEnvelopeSearchScreen(
     popBackStack: () -> Unit = {},
 ) {
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .background(SusuTheme.colorScheme.background10)
+            .fillMaxSize(),
     ) {
         SusuDefaultAppBar(
             leftIcon = {
