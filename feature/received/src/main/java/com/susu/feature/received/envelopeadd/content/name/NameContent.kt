@@ -1,6 +1,7 @@
 package com.susu.feature.received.envelopeadd.content.name
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -65,6 +66,7 @@ fun NameContentRoute(
             NameSideEffect.ShowNotValidSnackbar -> onShowSnackbar(
                 SnackbarToken(
                     message = context.getString(R.string.name_content_snackbar_validation),
+                    extraPadding = PaddingValues(bottom = 60.dp),
                 ),
             )
         }

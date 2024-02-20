@@ -21,6 +21,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.susu.core.designsystem.component.button.FilledButtonColor
@@ -63,7 +64,10 @@ fun RelationshipContentRoute(
             }
 
             RelationShipSideEffect.ShowNotValidSnackbar -> onShowSnackbar(
-                SnackbarToken(message = context.getString(R.string.sent_snackbar_relationship_validation)),
+                SnackbarToken(
+                    message = context.getString(R.string.sent_snackbar_relationship_validation),
+                    extraPadding = PaddingValues(bottom = 60.dp),
+                ),
             )
         }
     }

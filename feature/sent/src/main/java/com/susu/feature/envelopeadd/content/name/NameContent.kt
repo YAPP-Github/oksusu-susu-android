@@ -62,6 +62,7 @@ fun NameContentRoute(
             NameEffect.ShowNotValidSnackbar -> onShowSnackbar(
                 SnackbarToken(
                     message = context.getString(R.string.sent_snackbar_name_validation),
+                    extraPadding = PaddingValues(bottom = 60.dp),
                 ),
             )
 

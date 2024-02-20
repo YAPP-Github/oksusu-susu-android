@@ -265,7 +265,9 @@ internal fun MainScreen(
 
             with(uiState) {
                 SusuSnackbar(
-                    modifier = Modifier.padding(innerPadding),
+                    modifier = Modifier
+                        .padding(innerPadding)
+                        .padding(snackbarToken.extraPadding),
                     visible = snackbarVisible,
                     message = snackbarToken.message,
                     actionIconId = snackbarToken.actionIcon,

@@ -1,6 +1,7 @@
 package com.susu.core.ui
 
 import androidx.annotation.DrawableRes
+import androidx.compose.foundation.layout.PaddingValues
 
 data class SnackbarToken(
     val message: String = "",
@@ -8,4 +9,5 @@ data class SnackbarToken(
     val actionIconContentDescription: String? = null,
     val actionButtonText: String? = null,
     val onClickActionButton: () -> Unit = {},
+    val extraPadding: PaddingValues = PaddingValues(),
 )
