@@ -8,6 +8,7 @@ import com.susu.domain.usecase.friend.SearchFriendUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -63,8 +64,9 @@ class NameViewModel @Inject constructor(
             }
     }
 
-    fun showKeyboardIfTextEmpty() {
+    fun showKeyboardIfTextEmpty() = viewModelScope.launch {
         if (currentState.name.isEmpty()) {
+            delay(500L)
             postSideEffect(NameEffect.ShowKeyboard)
         }
     }
