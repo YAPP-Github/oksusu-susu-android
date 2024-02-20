@@ -27,7 +27,7 @@ private val downward = slideInVertically { -it } togetherWith slideOutVertically
 
 @Composable
 fun AnimatedCounterText(
-    number: Int,
+    number: Long,
     modifier: Modifier = Modifier,
     prefix: String? = null,
     postfix: String? = null,
@@ -87,7 +87,7 @@ fun AnimatedCounterText(
 @Composable
 fun AnimatedCounterTextPreview() {
     SusuTheme {
-        var number by remember { mutableStateOf(10000) }
+        var number by remember { mutableStateOf(10000L) }
         Column {
             Button(onClick = { number += 6000 }) {
                 Text(text = "증가")

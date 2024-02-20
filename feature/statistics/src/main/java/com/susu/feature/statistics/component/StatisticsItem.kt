@@ -35,7 +35,7 @@ import com.susu.feature.statistics.R
 fun StatisticsVerticalItem(
     title: String,
     content: String,
-    count: Int,
+    count: Long,
     modifier: Modifier = Modifier,
     isActive: Boolean = true,
 ) {
@@ -85,7 +85,7 @@ fun StatisticsVerticalItem(
 fun StatisticsHorizontalItem(
     title: String,
     name: String,
-    money: Int,
+    money: Long,
     modifier: Modifier = Modifier,
     isActive: Boolean = true,
 ) {

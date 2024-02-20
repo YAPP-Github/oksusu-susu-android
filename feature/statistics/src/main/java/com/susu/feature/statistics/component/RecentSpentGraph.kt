@@ -59,8 +59,8 @@ fun RecentSpentGraph(
     modifier: Modifier = Modifier,
     isActive: Boolean = true,
     spentData: PersistentList<StatisticsElement> = persistentListOf(),
-    totalAmount: Int = 0,
-    maximumAmount: Int = 0,
+    totalAmount: Long = 0L,
+    maximumAmount: Long = 0L,
     graphTitle: String = "",
 ) {
     Column(

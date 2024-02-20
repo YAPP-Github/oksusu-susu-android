@@ -10,23 +10,23 @@ data class MyStatisticsResponse(
     val highestAmountSent: StatisticsElement = StatisticsElement(),
     val mostCategory: StatisticsElement = StatisticsElement(),
     val mostRelationship: StatisticsElement = StatisticsElement(),
-    val mostSpentMonth: Int = 0,
+    val mostSpentMonth: Long = 0L,
     val recentSpent: List<StatisticsElement> = emptyList(),
 )
 
 @Serializable
 data class StatisticsElement(
     val title: String = "",
-    val value: Int = 0,
+    val value: Long = 0L,
 )
 
 @Serializable
 data class SusuStatisticsResponse(
-    val averageSent: Int = 0,
+    val averageSent: Long = 0L,
     val averageRelationship: StatisticsElement = StatisticsElement(),
     val averageCategory: StatisticsElement = StatisticsElement(),
     val recentSpent: List<StatisticsElement> = emptyList(),
-    val mostSpentMonth: Int = 0,
+    val mostSpentMonth: Long = 0L,
     val mostRelationship: StatisticsElement = StatisticsElement(),
     val mostCategory: StatisticsElement = StatisticsElement(),
 )
@@ -38,7 +38,7 @@ fun MyStatisticsResponse.toModel() = MyStatistics(
     mostRelationship = mostRelationship.toModel(),
     mostSpentMonth = mostSpentMonth,
     recentSpent = recentSpent.map { it.toModel() },
-    recentMaximumSpent = recentSpent.maxOfOrNull { it.value } ?: 0,
+    recentMaximumSpent = recentSpent.maxOfOrNull { it.value } ?: 0L,
     recentTotalSpent = recentSpent.sumOf { it.value },
 )
 

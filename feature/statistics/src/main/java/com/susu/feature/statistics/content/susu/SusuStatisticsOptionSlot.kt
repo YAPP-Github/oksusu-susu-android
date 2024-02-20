@@ -34,7 +34,7 @@ fun SusuStatisticsOptionSlot(
     age: String = "",
     relationship: String = "",
     category: String = "",
-    money: Int = 0,
+    money: Long = 0L,
     title: String = "",
     isBlind: Boolean = false,
     onAgeClick: () -> Unit = {},

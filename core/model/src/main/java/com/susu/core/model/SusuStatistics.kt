@@ -4,13 +4,13 @@ import androidx.compose.runtime.Stable
 
 @Stable
 data class SusuStatistics(
-    val averageSent: Int = 0,
+    val averageSent: Long = 0L,
     val averageRelationship: StatisticsElement = StatisticsElement(),
     val averageCategory: StatisticsElement = StatisticsElement(),
     val recentSpent: List<StatisticsElement> = emptyList(),
-    val recentTotalSpent: Int = 0,
-    val recentMaximumSpent: Int = 0,
-    val mostSpentMonth: Int = 0,
+    val recentTotalSpent: Long = 0L,
+    val recentMaximumSpent: Long = 0L,
+    val mostSpentMonth: Long = 0L,
     val mostRelationship: StatisticsElement = StatisticsElement(),
     val mostCategory: StatisticsElement = StatisticsElement(),
 )

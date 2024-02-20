@@ -5,5 +5,5 @@ import androidx.compose.runtime.Stable
 @Stable
 data class StatisticsElement(
     val title: String = "",
-    val value: Int = 0,
+    val value: Long = 0L,
 )
