@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -25,7 +24,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
@@ -40,9 +38,7 @@ import com.susu.core.designsystem.component.text.AnimatedCounterText
 import com.susu.core.designsystem.theme.Blue60
 import com.susu.core.designsystem.theme.Gray10
 import com.susu.core.designsystem.theme.Gray100
-import com.susu.core.designsystem.theme.Gray30
 import com.susu.core.designsystem.theme.Gray40
-import com.susu.core.designsystem.theme.Gray60
 import com.susu.core.designsystem.theme.Gray90
 import com.susu.core.designsystem.theme.Orange30
 import com.susu.core.designsystem.theme.Orange60
@@ -63,17 +59,75 @@ fun RecentSpentGraph(
     maximumAmount: Long = 0L,
     graphTitle: String = "",
 ) {
-    Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .background(color = Gray10, shape = RoundedCornerShape(4.dp))
-            .padding(SusuTheme.spacing.spacing_xxs),
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-        Row(
-            modifier = Modifier
+    if (isActive) {
+        Column(
+            modifier = modifier
                 .fillMaxWidth()
+                .background(color = Gray10, shape = RoundedCornerShape(4.dp))
                 .padding(SusuTheme.spacing.spacing_xxs),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(SusuTheme.spacing.spacing_xxs),
+                horizontalArrangement = Arrangement.SpaceBetween,
+            ) {
+                Text(
+                    text = graphTitle,
+                    style = SusuTheme.typography.title_xs,
+                    color = Gray100,
+                )
+                AnimatedCounterText(
+                    number = totalAmount,
+                    style = SusuTheme.typography.title_xs,
+                    color = Blue60,
+                    postfix = stringResource(id = R.string.statistics_total_man_postfix),
+                )
+            }
+            Spacer(modifier = Modifier.height(SusuTheme.spacing.spacing_xxs))
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(SusuTheme.spacing.spacing_xxs),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                if (maximumAmount > 0) {
+                    spentData.forEachIndexed { i, data ->
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                        ) {
+                            StickGraph(
+                                ratio = data.value.toFloat() / maximumAmount,
+                                color = if (i == spentData.lastIndex) {
+                                    Orange60
+                                } else {
+                                    Orange30
+                                },
+                            )
+                            Spacer(modifier = Modifier.height(SusuTheme.spacing.spacing_xxxxs))
+                            Text(
+                                text = stringResource(id = R.string.word_month_format, data.title),
+                                style = SusuTheme.typography.title_xxxs,
+                                color = if (i == spentData.lastIndex) {
+                                    Gray90
+                                } else {
+                                    Gray40
+                                },
+                            )
+                        }
+                        Spacer(modifier = Modifier.width(SusuTheme.spacing.spacing_s))
+                    }
+                }
+            }
+        }
+    } else {
+        Row(
+            modifier = modifier
+                .fillMaxWidth()
+                .background(color = Gray10, shape = RoundedCornerShape(4.dp))
+                .padding(SusuTheme.spacing.spacing_m),
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             Text(
@@ -81,74 +135,11 @@ fun RecentSpentGraph(
                 style = SusuTheme.typography.title_xs,
                 color = Gray100,
             )
-            if (isActive) {
-                AnimatedCounterText(
-                    number = totalAmount,
-                    style = SusuTheme.typography.title_xs,
-                    color = Blue60,
-                    postfix = stringResource(id = R.string.statistics_total_man_postfix),
-                )
-            } else {
-                Text(
-                    text = stringResource(R.string.statistics_man_format, stringResource(R.string.word_unknown)),
-                    style = SusuTheme.typography.title_xs,
-                    color = Gray40,
-                )
-            }
-        }
-        Spacer(modifier = Modifier.height(SusuTheme.spacing.spacing_xxs))
-        Row(
-            modifier = if (isActive) {
-                Modifier
-                    .fillMaxWidth()
-                    .padding(SusuTheme.spacing.spacing_xxs)
-            } else {
-                Modifier
-                    .fillMaxWidth()
-                    .blur(8.dp)
-                    .padding(SusuTheme.spacing.spacing_xxs)
-            },
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            if (maximumAmount > 0) {
-                spentData.forEachIndexed { i, data ->
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                    ) {
-                        StickGraph(
-                            ratio = data.value.toFloat() / maximumAmount,
-                            color = if (isActive) {
-                                if (i == spentData.lastIndex) {
-                                    Orange60
-                                } else {
-                                    Orange30
-                                }
-                            } else {
-                                if (i == spentData.lastIndex) {
-                                    Gray60
-                                } else {
-                                    Gray30
-                                }
-                            },
-                        )
-                        Spacer(modifier = Modifier.height(SusuTheme.spacing.spacing_xxxxs))
-                        Text(
-                            text = stringResource(id = R.string.word_month_format, data.title),
-                            style = SusuTheme.typography.title_xxxs,
-                            color = if (i == spentData.lastIndex) {
-                                Gray90
-                            } else {
-                                Gray40
-                            },
-                        )
-                    }
-                    Spacer(modifier = Modifier.width(SusuTheme.spacing.spacing_s))
-                }
-            } else {
-                // TODO: 데이터가 없을 땐?
-                Spacer(modifier = Modifier.fillMaxSize())
-            }
+            Text(
+                text = stringResource(R.string.statistics_man_format, stringResource(R.string.word_unknown)),
+                style = SusuTheme.typography.title_xs,
+                color = Gray40,
+            )
         }
     }
 }
