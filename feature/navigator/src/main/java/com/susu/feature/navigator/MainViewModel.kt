@@ -34,6 +34,8 @@ class MainViewModel @Inject constructor(
     private val mutex = Mutex()
 
     fun onShowSnackbar(snackbarToken: SnackbarToken) = viewModelScope.launch {
+        if (snackbarToken == currentState.snackbarToken) return@launch
+
         mutex.withLock {
             intent { copy(snackbarToken = snackbarToken, snackbarVisible = true) }
             delay(SHOW_TOAST_LENGTH)
