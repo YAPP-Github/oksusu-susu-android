@@ -17,9 +17,6 @@ class MyStatisticsViewModel @Inject constructor(
             intent { copy(isLoading = onFinish == null) }
             getMyStatisticsUseCase()
                 .onSuccess {
-                    if (it == MyStatistics.EMPTY) {
-                        postSideEffect(MyStatisticsEffect.ShowDataNotExistDialog)
-                    }
                     intent { copy(statistics = it, isBlind = it == MyStatistics.EMPTY) }
                 }.onFailure {
                     postSideEffect(MyStatisticsEffect.HandleException(it, ::getMyStatistics))
@@ -29,4 +26,6 @@ class MyStatisticsViewModel @Inject constructor(
             onFinish?.invoke()
         }
     }
+
+    fun showDataNotExistDialog() = postSideEffect(MyStatisticsEffect.ShowDataNotExistDialog)
 }

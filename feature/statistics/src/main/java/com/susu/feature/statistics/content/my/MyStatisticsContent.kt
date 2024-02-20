@@ -39,6 +39,7 @@ import com.susu.core.designsystem.theme.Gray40
 import com.susu.core.designsystem.theme.SusuTheme
 import com.susu.core.ui.DialogToken
 import com.susu.core.ui.extension.collectWithLifecycle
+import com.susu.core.ui.extension.susuClickable
 import com.susu.feature.statistics.R
 import com.susu.feature.statistics.component.RecentSpentGraph
 import com.susu.feature.statistics.component.StatisticsHorizontalItem
@@ -92,6 +93,7 @@ fun MyStatisticsRoute(
         uiState = uiState,
         refreshState = refreshState,
         modifier = modifier,
+        onShowDataNotExistDialog = viewModel::showDataNotExistDialog,
     )
 }
 
@@ -101,6 +103,7 @@ fun MyStatisticsContent(
     modifier: Modifier = Modifier,
     uiState: MyStatisticsState,
     refreshState: PullToRefreshState = rememberPullToRefreshState(),
+    onShowDataNotExistDialog: () -> Unit,
 ) {
     Box(
         modifier = modifier
@@ -114,6 +117,11 @@ fun MyStatisticsContent(
             verticalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxs),
         ) {
             RecentSpentGraph(
+                modifier = Modifier.susuClickable(
+                    rippleEnabled = false,
+                    onClick = onShowDataNotExistDialog,
+                    runIf = uiState.isBlind,
+                ),
                 isActive = !uiState.isBlind,
                 spentData = uiState.statistics.recentSpent.toPersistentList(),
                 maximumAmount = uiState.statistics.recentMaximumSpent,
@@ -123,6 +131,11 @@ fun MyStatisticsContent(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .susuClickable(
+                        rippleEnabled = false,
+                        onClick = onShowDataNotExistDialog,
+                        runIf = uiState.isBlind,
+                    )
                     .background(color = Gray10, shape = RoundedCornerShape(4.dp))
                     .padding(SusuTheme.spacing.spacing_m),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -146,7 +159,12 @@ fun MyStatisticsContent(
                 modifier = Modifier.fillMaxWidth(),
             ) {
                 StatisticsVerticalItem(
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier.weight(1f)
+                        .susuClickable(
+                            rippleEnabled = false,
+                            onClick = onShowDataNotExistDialog,
+                            runIf = uiState.isBlind,
+                        ),
                     title = stringResource(R.string.statistics_most_susu_relationship),
                     content = uiState.statistics.mostRelationship.title,
                     count = uiState.statistics.mostRelationship.value,
@@ -154,7 +172,12 @@ fun MyStatisticsContent(
                 )
                 Spacer(modifier = Modifier.width(SusuTheme.spacing.spacing_xxs))
                 StatisticsVerticalItem(
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier.weight(1f)
+                        .susuClickable(
+                            rippleEnabled = false,
+                            onClick = onShowDataNotExistDialog,
+                            runIf = uiState.isBlind,
+                        ),
                     title = stringResource(R.string.statistics_most_susu_event),
                     content = uiState.statistics.mostCategory.title,
                     count = uiState.statistics.mostCategory.value,
@@ -162,12 +185,22 @@ fun MyStatisticsContent(
                 )
             }
             StatisticsHorizontalItem(
+                modifier = Modifier.susuClickable(
+                    rippleEnabled = false,
+                    onClick = onShowDataNotExistDialog,
+                    runIf = uiState.isBlind,
+                ),
                 title = stringResource(R.string.statistics_most_received_money),
                 name = uiState.statistics.highestAmountReceived.title,
                 money = uiState.statistics.highestAmountReceived.value,
                 isActive = !uiState.isBlind,
             )
             StatisticsHorizontalItem(
+                modifier = Modifier.susuClickable(
+                    rippleEnabled = false,
+                    onClick = onShowDataNotExistDialog,
+                    runIf = uiState.isBlind,
+                ),
                 title = stringResource(R.string.statistics_most_sent_money),
                 name = uiState.statistics.highestAmountSent.title,
                 money = uiState.statistics.highestAmountSent.value,
