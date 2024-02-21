@@ -79,6 +79,7 @@ fun SignUpRoute(
     Box(modifier = Modifier.fillMaxSize().padding(padding)) {
         SignUpScreen(
             uiState = uiState,
+            termState = termState,
             isNextStepActive = when (uiState.currentStep) {
                 SignUpStep.TERMS -> uiState.agreedTerms.containsAll(termState.terms.filter { it.isEssential }.map { it.id })
                 SignUpStep.TERM_DETAIL -> true
@@ -193,6 +194,7 @@ fun SignUpRoute(
 @Composable
 fun SignUpScreen(
     modifier: Modifier = Modifier,
+    termState: TermState = TermState(),
     uiState: SignUpState = SignUpState(),
     isNextStepActive: Boolean = false,
     onPreviousPressed: () -> Unit = {},
@@ -202,25 +204,40 @@ fun SignUpScreen(
     Column(
         modifier = modifier.fillMaxSize(),
     ) {
-        if (uiState.currentStep == SignUpStep.TERMS || uiState.currentStep == SignUpStep.TERM_DETAIL) {
-            SusuDefaultAppBar(
-                leftIcon = {
-                    BackIcon(
-                        onClick = onPreviousPressed,
-                    )
-                },
-                title = uiState.currentStep.appBarTitle?.let { stringResource(id = it) } ?: "",
-            )
-        } else {
-            SusuProgressAppBar(
-                leftIcon = {
-                    BackIcon(
-                        onClick = onPreviousPressed,
-                    )
-                },
-                currentStep = SignUpStep.entries.indexOf(uiState.currentStep) - 1,
-                entireStep = SignUpStep.entries.size - 2,
-            )
+        when (uiState.currentStep) {
+            SignUpStep.TERMS -> {
+                SusuDefaultAppBar(
+                    leftIcon = {
+                        BackIcon(
+                            onClick = onPreviousPressed,
+                        )
+                    },
+                    title = uiState.currentStep.appBarTitle?.let { stringResource(id = it) } ?: "",
+                )
+            }
+
+            SignUpStep.TERM_DETAIL -> {
+                SusuDefaultAppBar(
+                    leftIcon = {
+                        BackIcon(
+                            onClick = onPreviousPressed,
+                        )
+                    },
+                    title = termState.currentTerm.title,
+                )
+            }
+
+            SignUpStep.NAME, SignUpStep.ADDITIONAL -> {
+                SusuProgressAppBar(
+                    leftIcon = {
+                        BackIcon(
+                            onClick = onPreviousPressed,
+                        )
+                    },
+                    currentStep = SignUpStep.entries.indexOf(uiState.currentStep) - 1,
+                    entireStep = SignUpStep.entries.size - 2,
+                )
+            }
         }
         content()
         SusuFilledButton(
