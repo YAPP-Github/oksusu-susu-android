@@ -65,7 +65,7 @@ fun SusuDatePickerBottomSheet(
             InfiniteColumn(
                 modifier = Modifier.width(100.dp),
                 items = yearList,
-                initialItem = stringResource(R.string.word_year_format, currentDate.year),
+                initialItem = stringResource(R.string.word_year_format, selectedYear),
                 itemHeight = itemHeight,
                 numberOfDisplayedItems = numberOfDisplayedItems,
                 onItemSelected = { _, item ->
@@ -85,7 +85,7 @@ fun SusuDatePickerBottomSheet(
             InfiniteColumn(
                 modifier = Modifier.width(100.dp),
                 items = monthList,
-                initialItem = stringResource(R.string.word_month_format, currentDate.monthValue),
+                initialItem = stringResource(R.string.word_month_format, selectedMonth),
                 itemHeight = itemHeight,
                 numberOfDisplayedItems = numberOfDisplayedItems,
                 onItemSelected = { _, item ->
@@ -113,7 +113,7 @@ fun SusuDatePickerBottomSheet(
                     onItemSelected(selectedYear, selectedMonth, selectedDay)
                 },
                 onItemClicked = { item ->
-                    selectedMonth = item.dropLast(1).toIntOrNull() ?: 1
+                    selectedDay = item.dropLast(1).toIntOrNull() ?: 1
                 },
             )
         }
