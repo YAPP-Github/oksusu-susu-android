@@ -1,9 +1,11 @@
 package com.susu.feature.envelopeadd.content.component
 
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -28,6 +30,7 @@ fun FriendListItem(
     Row(
         modifier = modifier
             .fillMaxWidth()
+            .horizontalScroll(rememberScrollState())
             .susuClickable(onClick = onClick)
             .padding(
                 vertical = SusuTheme.spacing.spacing_s,
@@ -39,21 +42,25 @@ fun FriendListItem(
             text = name,
             style = SusuTheme.typography.title_xs,
             color = Gray100,
+            maxLines = 1,
         )
         Text(
             text = relationship,
             style = SusuTheme.typography.title_xs,
             color = Gray60,
+            maxLines = 1,
         )
         Text(
             text = category ?: "",
             style = SusuTheme.typography.text_xs,
             color = Gray40,
+            maxLines = 1,
         )
         Text(
             text = visitedAt?.to_yyyy_dot_MM_dot_dd() ?: "",
             style = SusuTheme.typography.text_xs,
             color = Gray40,
+            maxLines = 1,
         )
     }
 }
