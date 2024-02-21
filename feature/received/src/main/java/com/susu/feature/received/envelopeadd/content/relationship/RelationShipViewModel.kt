@@ -84,10 +84,21 @@ class RelationShipViewModel @Inject constructor(
         )
     }
 
-    fun toggleTextFieldSaved() = intent {
-        copy(
-            isSavedCustomRelationShip = !isSavedCustomRelationShip,
-        )
+    fun toggleTextFieldSaved() {
+        intent {
+            if (isSavedCustomRelationShip) {
+                copy(
+                    isSavedCustomRelationShip = false,
+                )
+            } else {
+                copy(
+                    isSavedCustomRelationShip = true,
+                    customRelationship = customRelationship.copy(
+                        customRelation = customRelationship.customRelation?.trim(),
+                    ),
+                )
+            }
+        }
     }
 
     fun updateParentSelectedRelationShip(relationShip: Relationship? = parentSelectedRelationShip) = postSideEffect(

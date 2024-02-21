@@ -88,7 +88,7 @@ class CategoryViewModel @Inject constructor(
                 customCategory = customCategory.copy(
                     name = customCategory.name.trim(),
                     customCategory = customCategory.customCategory?.trim(),
-                )
+                ),
             )
         }
     }
