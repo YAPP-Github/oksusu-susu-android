@@ -11,6 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.susu.core.designsystem.theme.SusuTheme
@@ -21,6 +22,8 @@ fun SusuBadge(
     shape: Shape = RoundedCornerShape(4.dp),
     color: BadgeColor,
     text: String,
+    overflow: TextOverflow = TextOverflow.Ellipsis,
+    maxLines: Int = 100,
     padding: @Composable () -> BadgePadding,
 ) {
     with(padding()) {
@@ -31,6 +34,8 @@ fun SusuBadge(
                 text = text,
                 style = SusuTheme.typography.title_xxxs,
                 color = color.textColor,
+                overflow = overflow,
+                maxLines = maxLines,
                 modifier = modifier.padding(
                     horizontal = horizontalPadding,
                     vertical = verticalPadding,
