@@ -28,6 +28,10 @@ import com.susu.core.designsystem.component.badge.SusuBadge
 import com.susu.core.designsystem.theme.Gray10
 import com.susu.core.designsystem.theme.Gray50
 import com.susu.core.designsystem.theme.SusuTheme
+import com.susu.core.model.Category
+import com.susu.core.model.Envelope
+import com.susu.core.model.Friend
+import com.susu.core.model.Relationship
 import com.susu.core.model.SearchEnvelope
 import com.susu.core.ui.R
 import com.susu.core.ui.extension.susuClickable
@@ -78,6 +82,7 @@ fun LedgerDetailEnvelopeContainer(
                 SusuBadge(
                     color = BadgeColor.Gray90,
                     text = it,
+                    maxLines = 1,
                     padding = BadgeStyle.smallBadge,
                 )
             }
@@ -119,7 +124,33 @@ fun LedgerDetailEnvelopeContainer(
 @Composable
 fun LedgerDetailEnvelopeContainerPreview() {
     SusuTheme {
-        LedgerDetailEnvelopeContainer {
+        LedgerDetailEnvelopeContainer(
+            SearchEnvelope(
+                envelope = Envelope(
+                    id = 0,
+                    uid = 0,
+                    amount = 0,
+                    gift = "선물선물선물선물선물선물선물선물선물선물선물선물선물선물선물선물선물선물선물선물",
+                    memo = "null",
+                    hasVisited = true,
+                ),
+                category = Category(
+                    id = 0,
+                    seq = 0,
+                ),
+                friend = Friend(
+                    id = 0,
+                    uid = 0,
+                    name = "친구 이름",
+                ),
+                relation = Relationship(
+                    id = 0,
+                    relation = "관계관계관계",
+                    customRelation = null,
+                    description = null,
+                )
+            )
+        ) {
         }
     }
 }

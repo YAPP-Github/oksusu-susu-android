@@ -181,7 +181,7 @@ class LedgerDetailViewModel @Inject constructor(
         ).onSuccess { envelopeList ->
             isLast = envelopeList.isEmpty()
             page++
-            val newEnvelopeList = currentList.plus(envelopeList).toPersistentList()
+            val newEnvelopeList = currentList.plus(envelopeList).distinctBy { it.envelope.id }.toPersistentList()
             intent {
                 copy(
                     envelopeList = newEnvelopeList,
