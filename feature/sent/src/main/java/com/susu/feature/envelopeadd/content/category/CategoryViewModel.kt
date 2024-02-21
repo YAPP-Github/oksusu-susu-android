@@ -78,9 +78,19 @@ class CategoryViewModel @Inject constructor(
     }
 
     fun toggleTextFieldSaved() = intent {
-        copy(
-            isSavedCustomCategory = !isSavedCustomCategory,
-        )
+        if (isSavedCustomCategory) {
+            copy(
+                isSavedCustomCategory = false,
+            )
+        } else {
+            copy(
+                isSavedCustomCategory = true,
+                customCategory = customCategory.copy(
+                    name = customCategory.name.trim(),
+                    customCategory = customCategory.customCategory?.trim(),
+                )
+            )
+        }
     }
 
     fun updateParentCategory(category: Category? = parentSelectedCategory) {

@@ -18,7 +18,7 @@ class MemoViewModel @Inject constructor() : BaseViewModel<MemoState, MemoSideEff
         }
 
         intent {
-            postSideEffect(MemoSideEffect.UpdateParentMemo(memo))
+            postSideEffect(MemoSideEffect.UpdateParentMemo(memo?.trim()))
             copy(memo = memo ?: "")
         }
     }
