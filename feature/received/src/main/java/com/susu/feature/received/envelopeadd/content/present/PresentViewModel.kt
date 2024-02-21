@@ -21,7 +21,7 @@ class PresentViewModel @Inject constructor() : BaseViewModel<PresentState, Prese
         }
 
         intent {
-            postSideEffect(PresentSideEffect.UpdateParentPresent(present))
+            postSideEffect(PresentSideEffect.UpdateParentPresent(present?.trim()))
             copy(present = present ?: "")
         }
     }

@@ -1,6 +1,7 @@
 package com.susu.feature.envelopeadd.content.phone
 
 import androidx.lifecycle.viewModelScope
+import com.susu.core.ui.PHONE_NUM_REGEX
 import com.susu.core.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
@@ -13,9 +14,12 @@ class PhoneViewModel @Inject constructor() : BaseViewModel<PhoneState, PhoneSide
 ) {
     fun updateName(name: String) = intent { copy(name = name) }
     fun updatePhone(phone: String?) {
-        if (phone != null && phone.length > 11) {
-            postSideEffect(PhoneSideEffect.ShowNotValidSnackbar)
-            return
+        if (phone != null) {
+            if (!PHONE_NUM_REGEX.matches(phone)) return
+            if (phone.length > 11) {
+                postSideEffect(PhoneSideEffect.ShowNotValidSnackbar)
+                return
+            }
         }
 
         intent {

@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.susu.core.model.Envelope
 import com.susu.core.model.Ledger
 import com.susu.core.model.Relationship
+import com.susu.core.ui.PHONE_NUM_REGEX
 import com.susu.core.ui.USER_INPUT_REGEX
 import com.susu.core.ui.USER_INPUT_REGEX_INCLUDE_NUMBER
 import com.susu.core.ui.USER_INPUT_REGEX_LONG
@@ -67,16 +68,16 @@ class ReceivedEnvelopeEditViewModel @Inject constructor(
                 EditReceivedEnvelopeUseCase.Param(
                     envelopeId = envelope.id,
                     friendId = envelope.friend.id,
-                    friendName = envelope.friend.name,
+                    friendName = envelope.friend.name.trim(),
                     categoryId = ledger.category.id.toLong(),
-                    customCategory = ledger.category.customCategory,
+                    customCategory = ledger.category.customCategory?.trim(),
                     phoneNumber = envelope.friend.phoneNumber.ifEmpty { null },
                     relationshipId = envelope.relationship.id,
-                    customRelation = envelope.relationship.customRelation,
+                    customRelation = envelope.relationship.customRelation?.trim(),
                     ledgerId = ledger.id,
                     amount = envelope.amount,
-                    gift = envelope.gift,
-                    memo = envelope.memo,
+                    gift = envelope.gift?.trim(),
+                    memo = envelope.memo?.trim(),
                     handedOverAt = envelope.handedOverAt,
                     hasVisited = envelope.hasVisited,
                 )
@@ -210,10 +211,11 @@ class ReceivedEnvelopeEditViewModel @Inject constructor(
     }
 
     fun updatePhoneNumber(phoneNumber: String) {
-        if (phoneNumber != null && phoneNumber.length > 11) {
+        if (phoneNumber.length > 11) {
             postSideEffect(ReceivedEnvelopeEditSideEffect.ShowPhoneNotValidSnackbar)
             return
         }
+        if (!PHONE_NUM_REGEX.matches(phoneNumber)) return
 
         intent {
             copy(

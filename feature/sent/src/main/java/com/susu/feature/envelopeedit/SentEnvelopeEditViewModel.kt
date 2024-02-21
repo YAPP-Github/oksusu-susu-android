@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.susu.core.model.EnvelopeDetail
 import com.susu.core.ui.MONEY_MAX_VALUE
+import com.susu.core.ui.PHONE_NUM_REGEX
 import com.susu.core.ui.USER_INPUT_REGEX
 import com.susu.core.ui.USER_INPUT_REGEX_INCLUDE_NUMBER
 import com.susu.core.ui.USER_INPUT_REGEX_LONG
@@ -79,15 +80,15 @@ class SentEnvelopeEditViewModel @Inject constructor(
                         envelopeId = envelopeDetail.envelope.id,
                         envelopeType = envelopeDetail.envelope.type,
                         friendId = envelopeDetail.friend.id,
-                        friendName = friendName,
+                        friendName = friendName.trim(),
                         phoneNumber = phoneNumber,
-                        relationshipId = relationshipId,
-                        customRelation = customRelationship,
-                        categoryId = categoryId,
-                        customCategory = customCategory,
+                        relationshipId = relationshipId!!,
+                        customRelation = customRelationship?.trim(),
+                        categoryId = categoryId!!,
+                        customCategory = customCategory?.trim(),
                         amount = amount,
-                        gift = gift,
-                        memo = memo,
+                        gift = gift?.trim(),
+                        memo = memo?.trim(),
                         handedOverAt = handedOverAt.toKotlinLocalDateTime(),
                         hasVisited = hasVisited,
                     )
@@ -168,9 +169,12 @@ class SentEnvelopeEditViewModel @Inject constructor(
     }
 
     fun updatePhoneNumber(phoneNumber: String?) {
-        if (phoneNumber != null && phoneNumber.length > 11) {
-            postSideEffect(SentEnvelopeEditSideEffect.ShowPhoneNotValidSnackbar)
-            return
+        if (phoneNumber != null) {
+            if (phoneNumber.length > 11) {
+                postSideEffect(SentEnvelopeEditSideEffect.ShowPhoneNotValidSnackbar)
+                return
+            }
+            if (!PHONE_NUM_REGEX.matches(phoneNumber)) return
         }
         intent { copy(phoneNumber = phoneNumber?.ifEmpty { null }) }
     }
@@ -208,6 +212,9 @@ class SentEnvelopeEditViewModel @Inject constructor(
 
     fun hideCustomCategoryInput() {
         intent { copy(showCustomCategory = false) }
+        if (currentState.categoryId == currentState.categoryConfig.last().id) {
+            intent { copy(categoryId = null) }
+        }
     }
 
     fun showCustomRelationshipInput() {
@@ -229,6 +236,9 @@ class SentEnvelopeEditViewModel @Inject constructor(
 
     fun hideCustomRelationshipInput() {
         intent { copy(showCustomRelationship = false) }
+        if (currentState.relationshipId == currentState.relationshipConfig.last().id) {
+            intent { copy(relationshipId = null) }
+        }
     }
 
     fun showDatePickerSheet() {

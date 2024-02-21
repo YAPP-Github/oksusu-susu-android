@@ -21,7 +21,7 @@ class NameViewModel @Inject constructor() : BaseViewModel<NameState, NameSideEff
         }
 
         intent {
-            postSideEffect(NameSideEffect.UpdateParentName(name))
+            postSideEffect(NameSideEffect.UpdateParentName(name.trim()))
             copy(name = name)
         }
     }

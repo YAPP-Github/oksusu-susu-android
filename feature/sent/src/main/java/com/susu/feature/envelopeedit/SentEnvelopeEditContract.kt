@@ -19,17 +19,28 @@ data class SentEnvelopeEditState(
     val hasVisited: Boolean? = null,
     val handedOverAt: LocalDateTime = currentDate,
     val friendName: String = "",
-    val relationshipId: Long = 0,
+    val relationshipId: Long? = null,
     val customRelationship: String? = null,
     val customRelationshipSaved: Boolean = false,
     val phoneNumber: String? = null,
-    val categoryId: Int = 0,
+    val categoryId: Int? = null,
     val customCategory: String? = null,
     val customCategorySaved: Boolean = false,
     val showCustomCategory: Boolean = false,
     val showCustomRelationship: Boolean = false,
     val showDatePickerSheet: Boolean = false,
-) : UiState
+) : UiState {
+    val isSaveAvailable
+        get() = amount > 0L && relationshipId != null && friendName.isNotEmpty() && categoryId != null &&
+            (
+                categoryId != categoryConfig.lastOrNull()?.id ||
+                    (categoryId == categoryConfig.lastOrNull()?.id && customCategorySaved)
+                ) &&
+            (
+                relationshipId != relationshipConfig.lastOrNull()?.id ||
+                    (relationshipId == relationshipConfig.lastOrNull()?.id && customRelationshipSaved)
+                )
+}
 
 sealed interface SentEnvelopeEditSideEffect : SideEffect {
     data object PopBackStack : SentEnvelopeEditSideEffect

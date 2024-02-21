@@ -1,6 +1,7 @@
 package com.susu.feature.received.envelopeadd.content.money
 
 import com.susu.core.ui.MONEY_MAX_VALUE
+import com.susu.core.ui.MONEY_REGEX
 import com.susu.core.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -10,8 +11,10 @@ class MoneyViewModel @Inject constructor() : BaseViewModel<MoneyState, MoneySide
     MoneyState(),
 ) {
     fun updateMoney(money: String) {
-        if (money.length > 10) {
-            postSideEffect(MoneySideEffect.ShowNotValidSnackbar)
+        if (!MONEY_REGEX.matches(money)) {
+            if (money.length > 10) {
+                postSideEffect(MoneySideEffect.ShowNotValidSnackbar)
+            }
             return
         }
 

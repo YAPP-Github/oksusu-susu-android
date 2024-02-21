@@ -28,7 +28,7 @@ class NameViewModel @Inject constructor(
 
         intent {
             postSideEffect(
-                NameSideEffect.UpdateParentName(name),
+                NameSideEffect.UpdateParentName(name.trim()),
                 NameSideEffect.UpdateParentFriendId(null),
             )
             copy(
