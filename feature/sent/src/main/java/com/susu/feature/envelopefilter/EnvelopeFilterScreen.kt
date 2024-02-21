@@ -12,12 +12,15 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -149,7 +152,7 @@ fun EnvelopeFilterScreen(
     Column(
         modifier = Modifier
             .background(SusuTheme.colorScheme.background10)
-            .fillMaxSize(),
+            .fillMaxSize()
     ) {
         SusuDefaultAppBar(
             leftIcon = {
@@ -159,12 +162,14 @@ fun EnvelopeFilterScreen(
         )
 
         Column(
-            modifier = Modifier.padding(
-                top = SusuTheme.spacing.spacing_xl,
-                start = SusuTheme.spacing.spacing_m,
-                end = SusuTheme.spacing.spacing_m,
-                bottom = SusuTheme.spacing.spacing_xxs,
-            ),
+            modifier = Modifier
+                .padding(
+                    top = SusuTheme.spacing.spacing_xl,
+                    start = SusuTheme.spacing.spacing_m,
+                    end = SusuTheme.spacing.spacing_m,
+                )
+                .weight(1f)
+                .verticalScroll(rememberScrollState()),
         ) {
             Text(text = stringResource(R.string.envelope_filter_screen_friend), style = SusuTheme.typography.title_xs)
             Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_m))
@@ -222,46 +227,52 @@ fun EnvelopeFilterScreen(
                 )
             }
 
-            Spacer(modifier = Modifier.weight(1f))
+            Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_s))
+        }
 
-            Column(
-                modifier = Modifier.imePadding(),
-                verticalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_m),
+        Column(
+            modifier = Modifier
+                .padding(
+                    start = SusuTheme.spacing.spacing_m,
+                    end = SusuTheme.spacing.spacing_m,
+                    bottom = SusuTheme.spacing.spacing_xxs,
+                )
+                .imePadding(),
+            verticalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_m),
+        ) {
+            FlowRow(
+                verticalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxs),
+                horizontalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxs),
             ) {
-                FlowRow(
-                    verticalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxs),
-                    horizontalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_xxs),
-                ) {
-                    uiState.selectedFriendList.forEach { friend ->
-                        SelectedFilterButton(
-                            name = friend.name,
-                            onClickCloseIcon = { onCloseFriendChip(friend) },
-                        )
-                    }
-
-                    if (uiState.fromAmount != null) {
-                        SelectedFilterButton(
-                            name = "${uiState.sliderValue.start.toMoneyFormat()}~${uiState.sliderValue.endInclusive.toMoneyFormat()}",
-                            onClickCloseIcon = { onMoneyValueChange(null, null) },
-                        )
-                    }
-                }
-
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_m),
-                ) {
-                    RefreshButton(onClick = onClickRefreshButton)
-
-                    SusuFilledButton(
-                        modifier = Modifier.fillMaxWidth(),
-                        color = FilledButtonColor.Black,
-                        style = SmallButtonStyle.height48,
-                        isActive = true,
-                        text = stringResource(com.susu.core.ui.R.string.word_apply_filter),
-                        onClick = onClickApplyFilterButton,
+                uiState.selectedFriendList.forEach { friend ->
+                    SelectedFilterButton(
+                        name = friend.name,
+                        onClickCloseIcon = { onCloseFriendChip(friend) },
                     )
                 }
+
+                if (uiState.fromAmount != null) {
+                    SelectedFilterButton(
+                        name = "${uiState.sliderValue.start.toMoneyFormat()}~${uiState.sliderValue.endInclusive.toMoneyFormat()}",
+                        onClickCloseIcon = { onMoneyValueChange(null, null) },
+                    )
+                }
+            }
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(SusuTheme.spacing.spacing_m),
+            ) {
+                RefreshButton(onClick = onClickRefreshButton)
+
+                SusuFilledButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    color = FilledButtonColor.Black,
+                    style = SmallButtonStyle.height48,
+                    isActive = true,
+                    text = stringResource(com.susu.core.ui.R.string.word_apply_filter),
+                    onClick = onClickApplyFilterButton,
+                )
             }
         }
     }
