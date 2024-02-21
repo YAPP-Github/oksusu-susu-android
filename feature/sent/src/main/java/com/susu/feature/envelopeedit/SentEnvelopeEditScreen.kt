@@ -415,6 +415,7 @@ fun SentEnvelopeEditScreen(
                 shape = RectangleShape,
                 text = stringResource(com.susu.core.ui.R.string.word_save),
                 onClick = onClickSave,
+                isActive = uiState.isSaveAvailable,
             )
         }
 

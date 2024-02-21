@@ -81,9 +81,9 @@ class SentEnvelopeEditViewModel @Inject constructor(
                         friendId = envelopeDetail.friend.id,
                         friendName = friendName.trim(),
                         phoneNumber = phoneNumber,
-                        relationshipId = relationshipId,
+                        relationshipId = relationshipId!!,
                         customRelation = customRelationship?.trim(),
-                        categoryId = categoryId,
+                        categoryId = categoryId!!,
                         customCategory = customCategory?.trim(),
                         amount = amount,
                         gift = gift?.trim(),
@@ -208,6 +208,9 @@ class SentEnvelopeEditViewModel @Inject constructor(
 
     fun hideCustomCategoryInput() {
         intent { copy(showCustomCategory = false) }
+        if (currentState.categoryId == currentState.categoryConfig.last().id) {
+            intent { copy(categoryId = null) }
+        }
     }
 
     fun showCustomRelationshipInput() {
@@ -229,6 +232,9 @@ class SentEnvelopeEditViewModel @Inject constructor(
 
     fun hideCustomRelationshipInput() {
         intent { copy(showCustomRelationship = false) }
+        if (currentState.relationshipId == currentState.relationshipConfig.last().id) {
+            intent { copy(relationshipId = null) }
+        }
     }
 
     fun showDatePickerSheet() {
