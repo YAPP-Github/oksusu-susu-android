@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.susu.core.model.Envelope
 import com.susu.core.model.Ledger
 import com.susu.core.model.Relationship
+import com.susu.core.ui.PHONE_NUM_REGEX
 import com.susu.core.ui.USER_INPUT_REGEX
 import com.susu.core.ui.USER_INPUT_REGEX_INCLUDE_NUMBER
 import com.susu.core.ui.USER_INPUT_REGEX_LONG
@@ -210,10 +211,11 @@ class ReceivedEnvelopeEditViewModel @Inject constructor(
     }
 
     fun updatePhoneNumber(phoneNumber: String) {
-        if (phoneNumber != null && phoneNumber.length > 11) {
+        if (phoneNumber.length > 11) {
             postSideEffect(ReceivedEnvelopeEditSideEffect.ShowPhoneNotValidSnackbar)
             return
         }
+        if (!PHONE_NUM_REGEX.matches(phoneNumber)) return
 
         intent {
             copy(

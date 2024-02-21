@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.susu.core.model.EnvelopeDetail
 import com.susu.core.ui.MONEY_MAX_VALUE
+import com.susu.core.ui.PHONE_NUM_REGEX
 import com.susu.core.ui.USER_INPUT_REGEX
 import com.susu.core.ui.USER_INPUT_REGEX_INCLUDE_NUMBER
 import com.susu.core.ui.USER_INPUT_REGEX_LONG
@@ -168,9 +169,12 @@ class SentEnvelopeEditViewModel @Inject constructor(
     }
 
     fun updatePhoneNumber(phoneNumber: String?) {
-        if (phoneNumber != null && phoneNumber.length > 11) {
-            postSideEffect(SentEnvelopeEditSideEffect.ShowPhoneNotValidSnackbar)
-            return
+        if (phoneNumber != null) {
+            if (phoneNumber.length > 11) {
+                postSideEffect(SentEnvelopeEditSideEffect.ShowPhoneNotValidSnackbar)
+                return
+            }
+            if (!PHONE_NUM_REGEX.matches(phoneNumber)) return
         }
         intent { copy(phoneNumber = phoneNumber?.ifEmpty { null }) }
     }
