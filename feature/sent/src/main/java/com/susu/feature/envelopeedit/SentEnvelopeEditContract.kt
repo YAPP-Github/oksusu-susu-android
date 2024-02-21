@@ -32,10 +32,14 @@ data class SentEnvelopeEditState(
 ) : UiState {
     val isSaveAvailable
         get() = amount > 0L && relationshipId != null && friendName.isNotEmpty() && categoryId != null &&
-            (categoryId != categoryConfig.lastOrNull()?.id ||
-                (categoryId == categoryConfig.lastOrNull()?.id && customCategorySaved)) &&
-            (relationshipId != relationshipConfig.lastOrNull()?.id ||
-                (relationshipId == relationshipConfig.lastOrNull()?.id && customRelationshipSaved))
+            (
+                categoryId != categoryConfig.lastOrNull()?.id ||
+                    (categoryId == categoryConfig.lastOrNull()?.id && customCategorySaved)
+                ) &&
+            (
+                relationshipId != relationshipConfig.lastOrNull()?.id ||
+                    (relationshipId == relationshipConfig.lastOrNull()?.id && customRelationshipSaved)
+                )
 }
 
 sealed interface SentEnvelopeEditSideEffect : SideEffect {
