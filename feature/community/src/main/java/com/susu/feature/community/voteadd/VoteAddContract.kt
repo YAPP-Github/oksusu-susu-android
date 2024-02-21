@@ -13,8 +13,11 @@ data class VoteAddState(
     val content: String = "",
     val isLoading: Boolean = false,
 ) : UiState {
+//    val buttonEnabled = content.isNotBlank() &&
+//        voteOptionStateList.all { it.content.isNotBlank() }
+
     val buttonEnabled = content.isNotBlank() &&
-        voteOptionStateList.all { it.content.isNotBlank() }
+        (voteOptionStateList.count { it.content.isNotBlank() } >= 2)
 }
 
 data class VoteOptionState(

@@ -27,7 +27,7 @@ class VoteAddViewModel @Inject constructor(
         createVoteUseCase(
             param = CreateVoteUseCase.Param(
                 content = currentState.content.trim(),
-                optionList = currentState.voteOptionStateList.map { it.content.trim() },
+                optionList = currentState.voteOptionStateList.map { it.content.trim() }.filter { it.isNotBlank() },
                 categoryId = currentState.selectedCategory.id,
             ),
         ).onSuccess {
