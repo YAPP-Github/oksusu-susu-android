@@ -29,6 +29,6 @@
     <string name="statistics_susu_category_average">경조사 카테고리 별 평균 수수</string>
     <string name="statistics_susu_this_year_spent">올해 쓴 금액</string>
     <string name="statistics_my_dialog_title">아직 볼 수 있는 통계가 없어요</string>
-    <string name="statistics_my_dialog_description">작성된 봉투 혹은 장부가 있는 경우 수수가 데이터를 분석해드려요</string>
+    <string name="statistics_my_dialog_description">작성된 봉투가 있는 경우 통계를 볼 수 있어요!\n정확한 데이터를 위해 약 3분 정도의 시간이 소요될 수 있어요</string>
     <string name="statistics_my_dialog_confirm">봉투 작성하기</string>
 </resources>
