@@ -274,7 +274,7 @@ fun ReceivedEnvelopeEditScreen(
                 EditDetailItem(
                     categoryText = stringResource(R.string.received_envelope_edit_screen_present),
                     categoryTextColor = if (!uiState.envelope.gift.isNullOrEmpty()) Gray70 else Gray40,
-                    categoryTextAlign = Alignment.CenterVertically,
+                    categoryTextAlign = Alignment.Top,
                 ) {
                     SusuBasicTextField(
                         text = uiState.envelope.gift ?: "",

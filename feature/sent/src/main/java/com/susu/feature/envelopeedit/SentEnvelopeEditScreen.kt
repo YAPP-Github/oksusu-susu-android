@@ -360,7 +360,7 @@ fun SentEnvelopeEditScreen(
                 EditDetailItem(
                     categoryText = stringResource(com.susu.core.ui.R.string.word_gift),
                     categoryTextColor = if (uiState.gift != null) Gray70 else Gray40,
-                    categoryTextAlign = Alignment.CenterVertically,
+                    categoryTextAlign = Alignment.Top,
                 ) {
                     SusuBasicTextField(
                         text = uiState.gift ?: "",
