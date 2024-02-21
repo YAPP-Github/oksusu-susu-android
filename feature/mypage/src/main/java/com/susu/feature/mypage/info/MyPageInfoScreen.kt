@@ -263,6 +263,7 @@ fun MyPageInfoScreen(
         if (uiState.showDatePicker) {
             SusuYearPickerBottomSheet(
                 maximumContainerHeight = 322.dp,
+                initialYear = uiState.userBirth,
                 yearRange = USER_BIRTH_RANGE,
                 reverseItemOrder = true,
                 onDismissRequest = { onBirthSelect(it) },

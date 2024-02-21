@@ -360,7 +360,7 @@ fun SusuYearPickerBottomSheet(
                 .fillMaxWidth()
                 .align(Alignment.CenterHorizontally),
             items = yearList,
-            initialItem = stringResource(id = R.string.word_year_format, currentYear),
+            initialItem = stringResource(id = R.string.word_year_format, selectedYear),
             itemHeight = itemHeight,
             numberOfDisplayedItems = numberOfDisplayedItems,
             onItemSelected = { _, item ->
