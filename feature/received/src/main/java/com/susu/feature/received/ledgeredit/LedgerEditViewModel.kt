@@ -44,12 +44,17 @@ class LedgerEditViewModel @Inject constructor(
         }
 
     fun editLedger() = viewModelScope.launch {
-        editLedgerUseCase(toEditLedger)
-            .onSuccess {
-                popBackStack()
-            }
-            .onFailure {
-            }
+        editLedgerUseCase(
+            toEditLedger.copy(
+                title = toEditLedger.title.trim(),
+                category = toEditLedger.category.copy(
+                    customCategory = toEditLedger.category.customCategory?.trim(),
+                ),
+            ),
+        ).onSuccess {
+            popBackStack()
+        }.onFailure {
+        }
     }
 
     fun initData() = viewModelScope.launch {
