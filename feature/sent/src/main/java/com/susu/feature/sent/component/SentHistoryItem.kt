@@ -68,7 +68,7 @@ fun SentHistoryItem(
         )
         Spacer(modifier = modifier.weight(1f))
         Text(
-            text = money.toInt().toMoneyFormat() + stringResource(R.string.sent_envelope_card_money_won),
+            text = money.toMoneyFormat() + stringResource(R.string.sent_envelope_card_money_won),
             style = SusuTheme.typography.title_xxs,
             color = if (type == EnvelopeType.SENT.name) Gray100 else Gray50,
         )
