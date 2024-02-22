@@ -23,7 +23,7 @@ import com.susu.core.ui.extension.toMoneyFormat
 
 @Composable
 fun LedgerDetailOverviewColumn(
-    money: Int,
+    money: Long,
     count: Int,
     eventCategory: String,
     eventName: String,

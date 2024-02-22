@@ -13,7 +13,7 @@ import kotlinx.collections.immutable.persistentListOf
 
 data class LedgerDetailState(
     val name: String = "",
-    val money: Int = 0,
+    val money: Long = 0,
     val count: Int = 0,
     val category: String = "",
     val startDate: String = "",

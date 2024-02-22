@@ -7,9 +7,9 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class FriendStatisticsResponse(
     val friend: FriendInfo,
-    val receivedAmounts: Int,
-    val sentAmounts: Int,
-    val totalAmounts: Int,
+    val receivedAmounts: Long,
+    val sentAmounts: Long,
+    val totalAmounts: Long,
 )
 
 @Serializable

@@ -31,7 +31,7 @@ fun LedgerCard(
     ledgerType: String,
     style: String,
     title: String,
-    money: Int,
+    money: Long,
     count: Int,
     onClick: () -> Unit = {},
 ) {

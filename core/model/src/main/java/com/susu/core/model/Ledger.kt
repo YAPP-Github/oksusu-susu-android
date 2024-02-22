@@ -14,6 +14,6 @@ data class Ledger(
     val startAt: LocalDateTime = java.time.LocalDateTime.now().toKotlinLocalDateTime(),
     val endAt: LocalDateTime = java.time.LocalDateTime.now().toKotlinLocalDateTime(),
     val category: Category = Category(),
-    val totalAmounts: Int = 0,
+    val totalAmounts: Long = 0,
     val totalCounts: Int = 0,
 )

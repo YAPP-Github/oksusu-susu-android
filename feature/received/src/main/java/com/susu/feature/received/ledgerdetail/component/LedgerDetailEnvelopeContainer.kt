@@ -104,7 +104,7 @@ fun LedgerDetailEnvelopeContainer(
             }
             Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_s))
             Text(
-                text = stringResource(id = R.string.money_unit_format, envelope.envelope.amount.toInt().toMoneyFormat()),
+                text = stringResource(id = R.string.money_unit_format, envelope.envelope.amount.toMoneyFormat()),
                 style = SusuTheme.typography.title_m,
             )
             Spacer(modifier = Modifier.size(SusuTheme.spacing.spacing_xxs))

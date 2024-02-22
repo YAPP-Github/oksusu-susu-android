@@ -25,9 +25,9 @@ data class SentState(
 
 data class FriendStatisticsState(
     val friend: Friend = Friend(),
-    val receivedAmounts: Int = 0,
-    val sentAmounts: Int = 0,
-    val totalAmounts: Int = 0,
+    val receivedAmounts: Long = 0,
+    val sentAmounts: Long = 0,
+    val totalAmounts: Long = 0,
     val envelopesHistoryList: PersistentList<EnvelopeSearch> = persistentListOf(),
     val expand: Boolean = false,
 )

@@ -11,7 +11,7 @@ data class LedgerResponse(
     @SerialName("ledger")
     val info: LedgerInfo,
     val category: CategoryInfo,
-    val totalAmounts: Int = 0,
+    val totalAmounts: Long = 0,
     val totalCounts: Int = 0,
 )
 
