@@ -21,9 +21,9 @@ val alignList
 val moneyList = persistentListOf(10_000, 30_000, 50_000, 100_000, 500_000)
 
 const val USER_NAME_MAX_LENGTH = 10
-val USER_INPUT_REGEX = Regex("[a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣 ]{0,10}")
-val USER_INPUT_REGEX_LONG = Regex("[a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣0-9 ]{0,30}")
-val USER_INPUT_REGEX_INCLUDE_NUMBER = Regex("[a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣0-9 ]{0,10}")
+val USER_INPUT_REGEX = Regex("[a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣ㆍᆞᆢ ]{0,10}")
+val USER_INPUT_REGEX_LONG = Regex("[a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣ㆍᆞᆢ0-9 ]{0,30}")
+val USER_INPUT_REGEX_INCLUDE_NUMBER = Regex("[a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣ㆍᆞᆢ0-9 ]{0,10}")
 val PHONE_NUM_REGEX = Regex("[0-9]{0,11}")
 val MONEY_REGEX = Regex("[0-9]{0,11}")
 
