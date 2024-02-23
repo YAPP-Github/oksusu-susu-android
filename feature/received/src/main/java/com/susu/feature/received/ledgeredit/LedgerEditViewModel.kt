@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.susu.core.model.Category
 import com.susu.core.model.Ledger
 import com.susu.core.ui.USER_INPUT_REGEX
+import com.susu.core.ui.USER_INPUT_REGEX_INCLUDE_NUMBER
 import com.susu.core.ui.base.BaseViewModel
 import com.susu.core.ui.extension.decodeFromUri
 import com.susu.domain.usecase.categoryconfig.GetCategoryConfigUseCase
@@ -94,7 +95,7 @@ class LedgerEditViewModel @Inject constructor(
     }
 
     fun updateName(name: String) {
-        if (!USER_INPUT_REGEX.matches(name)) { // 한글, 영문 0~10 글자
+        if (!USER_INPUT_REGEX_INCLUDE_NUMBER.matches(name)) { // 한글, 영문, 숫자 0~10 글자
             if (name.length > 10) { // 길이 넘친 경우
                 postSideEffect(LedgerEditSideEffect.ShowNotValidSnackbarName)
             }
